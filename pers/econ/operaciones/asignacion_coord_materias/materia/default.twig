@@ -1,0 +1,76 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+    <div class="titulo_operacion">
+		<h2 class="clearfix">
+            <button class='btn btn-primary btn-small pull-left js-history-back' alt="Volver"><span class="icon-chevron-left icon-white"></span></button>
+			<span class="pull-left">{{"asignacion_coord_materias"|trans|capitalize}}</span>
+		</h2>
+	</div>
+    {% if (this.data.encabezado) %}
+    <table class="table table-condensed" summary="Informacion de materias">
+		<tr>
+			<td><strong>{{"asignacion_coord_materias.materia.encabezado.materia"|trans|capitalize}}:</strong></td>
+			<td>{{this.data.encabezado.NOMBRE_MATERIA}}</td>
+                </tr>
+                <tr>
+			<td><strong>{{"asignacion_coord_materias.materia.encabezado.carrera"|trans|capitalize}}:</strong></td>
+			<td>{{this.data.encabezado.CARRERA_NOMBRE}}</td>
+                </tr>
+                <tr>
+			<td><strong>{{"asignacion_coord_materias.materia.encabezado.anio_academico"|trans|capitalize}}:</strong></td>
+			<td>{{this.data.encabezado.ANIO_ACADEMICO}}</td>
+		</tr>
+                <tr>
+			<td><strong>{{"asignacion_coord_materias.materia.encabezado.periodo"|trans|capitalize}}: </strong></td>
+			<td>{{this.data.encabezado.PERIODO}}</td>
+		</tr>
+	</table>
+    {% endif %}
+    
+    {% if (this.data.docentes) %}
+    
+        <form name="coord_seleccionado" method="post" action="{{this.data.form_url}}">
+            <input type="hidden" name="materia" value="{{this.data.encabezado.MATERIA}}">
+            <input type="hidden" name="anio_academico" value="{{this.data.encabezado.ANIO_ACADEMICO}}">
+            <input type="hidden" name="periodo" value="{{this.data.encabezado.PERIODO}}">
+            <input type="hidden" name="anio_academico_hash" value="{{this.data.encabezado.anio_academico_hash}}">
+            <input type="hidden" name="periodo_hash" value="{{this.data.encabezado.periodo_hash}}">
+            
+            <table class="table table-striped table-bordered table-condensed" summary="Docentes asignados en las comisiones de la materia">
+
+                <thead>
+                    <td><strong>{{"asignacion_coord_materias.materia.encabezado.docente"|trans|capitalize}}</strong></td>
+                    <tr>
+                        <th>Legajo</th>
+                        <th>Docente</th>
+                        <th>Es Coordinador</th>
+                    </tr>
+                </thead>
+            
+                <body>
+                   {% for docente in this.data.docentes %}
+                        <tr>
+                           <td>{{docente.LEGAJO}}</td>
+                           <td>{{docente.DOCENTE}}</td>
+                           <td><input type="radio" name="coord" value={{docente.LEGAJO}} 
+                                      {% if (docente.LEGAJO == this.data.coordinador) %} 
+                                            checked="true" 
+                                      {% endif %}
+                                >
+                           </td>
+                        </tr>
+                    {% endfor %}
+                </body>
+            
+            </table>
+            
+            <button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>
+        </form>
+    
+    {% else %}
+        <div role="alert" class="alert">
+            {{"asignacion_coord_materias.materia.sin_resultados"|trans|capitalize}}
+        </div>
+    {% endif %}
+    
+{% endblock %}
