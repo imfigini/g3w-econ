@@ -45,11 +45,13 @@ kernel.renderer.registrar_pagelet('lista_materias', function(info) {
 			
 			$(id + ' .comision-nombre').on('click', '.crear', function(evt) {
 				comision_popup = $(this).parents('.comision').data('comision-id');
-				parciales = $(this).parents('.comision').find('.parciales-comision');
+                                console.log(comision_popup);
+                                parciales = $(this).parents('.comision').find('.parciales-comision');
 				console.log(parciales);
 				btn_crear = $(this);
 				kernel.ui.prompt({
-					title: info.titulo_crear_parcial,
+//					title: info.titulo_crear_parcial,
+                                        title: 'prueba',
 					msg: info.html_popup,
 					msg_ok: info.boton_crear_parcial,
 					ok: function() {

@@ -9,7 +9,7 @@
 	<div class="titulo_operacion">
 		<h2 class="clearfix">
 			<span class="pull-left">
-				{{"definicion_cursos"|trans|capitalize}}
+				{{"periodos_evaluacion"|trans|capitalize}}
 			</span>
 			<span class="pull-right">
 			{{ vista_form.render_acciones() | raw }}
@@ -33,11 +33,11 @@
                             <input type="hidden" name="materia" value="{{materia.MATERIA}}">
                             <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
                             <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
-                            <table class="table table-striped table-condensed" tabindex="0">
-                                <tr>
+{#                            <table class="table table-striped table-condensed" tabindex="0">#}
+{#                                <tr>#}
                                     <td scope="row" colspan="4">Ciclo: {{ materia.ciclo.ciclo_nombre }}</td>
-                                </tr>
-                                <tr>
+{#                                </tr>#}
+{#                                <tr>
                                     <td>{% if (materia.ciclo.es_ciclo_fundamento) %}
                                                     % en Parciales/recup.: 
                                                 {% else %}
@@ -55,7 +55,7 @@
                                             <p style="font-size:12px;">Aplicar a todas las comisiones promocionables</p>
                                         </td>
                                 </tr>
-                            </table>
+                            </table>#}
                         </form>
                     </div>
                 {% if (materia.comisiones) %}
@@ -78,19 +78,35 @@
                                         {% if (comision.CARRERA) %}
                                             <li>Carrera: {{comision.CARRERA}}</li>
                                         {% endif %}
-                                        <li>{% if (materia.ciclo.es_ciclo_fundamento) %}
-                                                Porcentaje en Parciales/recuperatorio: 
-                                            {% else %}
-                                                Porcentaje en Parciales: 
+                                        {% if (comision.ESCALA_NOTAS == 6 or comision.ESCALA_NOTAS == 4) %} {#Promocion o PyR#}
+                                            <li>1º Parcial Promo: 
+                                                <input type="number" min="0" max="100" name="1_parcial_promo_{{comision.COMISION}}" id="porc_integrador_{{comision.COMISION}}" onchange="actualiza_porcentaje(this)" value="{{comision.PORC_INTEGRADOR}}"></li>
+                                            </li>
+                                            <li>2º Parcial Promo: 
+                                                <input type="number" min="0" max="100" name="2_parcial_promo_{{comision.COMISION}}" id="porc_trabajos_{{comision.COMISION}}" readonly value="{{comision.PORC_TRABAJOS}}">
+                                            </li>                                        
+                                            {% if (materia.ciclo.es_ciclo_fundamento) %}
+                                                <li>Recuperatorio Unico: 
+                                                    <input type="number" min="0" max="100" name="recup_unico_{{comision.COMISION}}" id="porc_trabajos_{{comision.COMISION}}" readonly value="{{comision.PORC_TRABAJOS}}">
+                                                </li>                                        
                                             {% endif %}
-                                            <input type="number" min="0" max="100" name="porc_parciales_{{comision.COMISION}}" id="porc_parciales_{{comision.COMISION}}" onchange="actualiza_porcentaje(this)" value="{{comision.PORC_PARCIALES}}">
-                                        </li>
-                                        <li>Porcentaje en Integrador: 
-                                            <input type="number" min="0" max="100" name="porc_integrador_{{comision.COMISION}}" id="porc_integrador_{{comision.COMISION}}" onchange="actualiza_porcentaje(this)" value="{{comision.PORC_INTEGRADOR}}"></li>
-                                        </li>
-                                        <li>Porcentaje en Trabajos: 
-                                            <input type="number" min="0" max="100" name="porc_trabajos_{{comision.COMISION}}" id="porc_trabajos_{{comision.COMISION}}" readonly value="{{comision.PORC_TRABAJOS}}">
-                                        </li>
+                                            <li>Integrador: 
+                                                <input type="number" min="0" max="100" name="integrador_{{comision.COMISION}}" id="porc_trabajos_{{comision.COMISION}}" readonly value="{{comision.PORC_TRABAJOS}}">
+                                            </li>                                        
+                                        {% endif %}
+                                        
+                                        {% if (comision.ESCALA_NOTAS == 3 or comision.ESCALA_NOTAS == 4) %} {#Regular o PyR#}
+                                            <li>1º Parcial Regular: 
+                                                <input type="number" min="0" max="100" name="porc_integrador_{{comision.COMISION}}" id="porc_integrador_{{comision.COMISION}}" onchange="actualiza_porcentaje(this)" value="{{comision.PORC_INTEGRADOR}}"></li>
+                                            </li>
+                                            <li>1º Recuperatorio Regular: 
+                                                <input type="number" min="0" max="100" name="porc_trabajos_{{comision.COMISION}}" id="porc_trabajos_{{comision.COMISION}}" readonly value="{{comision.PORC_TRABAJOS}}">
+                                            </li>                                        
+                                            <li>2º Recuperatorio Regular: 
+                                                <input type="number" min="0" max="100" name="porc_trabajos_{{comision.COMISION}}" id="porc_trabajos_{{comision.COMISION}}" readonly value="{{comision.PORC_TRABAJOS}}">
+                                            </li>                                        
+                                        {% endif %}
+                                        
                                     </ul>
 
                                     <button class="btn btn-info btn-lg" type="submit" id="boton_guardar" style="align-self:center;">Guardar</button>
@@ -104,7 +120,7 @@
         </div>
     {% else %}
         <div role="alert" class="alert">
-            {{"definicion_cursos.filtro.sin_resultados"|trans|capitalize}}
+            {{"periodos_evaluacion.sin_resultados"|trans|capitalize}}
         </div>
     {% endif %}
 {% endblock %}

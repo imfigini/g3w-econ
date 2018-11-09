@@ -1,8 +1,8 @@
 <?php
-namespace econ\operaciones\definicion_cursos;
+namespace econ\operaciones\periodos_evaluacion;
 
 use kernel\interfaz\pagelet;
-use siu\modelo\datos\catalogo;
+//use siu\modelo\datos\catalogo;
 use kernel\kernel;
 
 class pagelet_filtro extends pagelet {
@@ -69,14 +69,20 @@ class pagelet_filtro extends pagelet {
             $this->data['periodo_hash'] = $periodo_hash;
             $this->data['anio_academico_hash'] = $anio_academico_hash;
 
-            $materias = $this->controlador->get_materias_cincuentenario();
+            $datos = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
+            $this->data['datos'] = $datos;
+            $this->data['lectivo'] = $this->controlador->get_periodo_lectivo($anio_academico_hash, $periodo_hash);
+            $this->data['feriados'] = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
+            $this->data['cant_feriados'] = count($this->data['feriados']);
             
-            $datos = array();
-            $cant = count($materias);
+            $link_form_evaluacion = kernel::vinculador()->crear('periodos_evaluacion', 'grabar_periodo_evaluacion');
+            $this->data['form_url'] = $link_form_evaluacion;
+            
+            /*$cant = count($materias);
             for ($i=0; $i<$cant; $i++)
             {
                 $materias[$i]['ciclo'] = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materias[$i]['MATERIA'])); 
-                $comisiones = $this->controlador->get_comisiones_promo($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
+                $comisiones = $this->controlador->get_comisiones($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
                 if (count($comisiones) > 0)
                 {
                     $materias[$i]['comisiones'] = $comisiones;
@@ -86,11 +92,13 @@ class pagelet_filtro extends pagelet {
             
             $this->data['datos'] = $datos;
 	        
-            $link_form_comision = kernel::vinculador()->crear('definicion_cursos', 'grabar_comision');
+            $link_form_comision = kernel::vinculador()->crear('periodos_evaluacion', 'grabar_comision');
             $this->data['form_url_comision'] = $link_form_comision;     
             
-            $link_form_materia = kernel::vinculador()->crear('definicion_cursos', 'grabar_materia');
+            $link_form_materia = kernel::vinculador()->crear('periodos_evaluacion', 'grabar_materia');
             $this->data['form_url_materia'] = $link_form_materia;     
             
+             * 
+             */
         }
 }

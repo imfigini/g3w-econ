@@ -23,23 +23,40 @@ return array(
             )
         ),
         
-        /* Cursadas
+        /* Listado de Cursadas con sus %
          */
-        'definicion_cursos' => array(
-            'url' => 'definicion_cursos',
+        'detalle_cursos' => array(
+            'url' => 'detalle_cursos',
             'activa' => true,
             'menu' => array(
-                'submenu' => 'definicion_cursos',
+                'submenu' => 'detalle_cursos',
                 'visible' => true,
-                'texto' => 'definicion_cursos'
+                'texto' => 'detalle_cursos'
             )
         ),
         
-//        'definicion_cursos' => array ( // nueva operación
-//            'menu' => array(
-//                'visible' => true,
-//                'submenu' => 'listados'
-//            ),
-//        ),
+        /* Períodos de evaluación
+         */
+        'periodos_evaluacion' => array(
+            'url' => 'periodos_evaluacion',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'periodos_evaluacion'
+            )
+        ),
+        
+        /* MIXes
+         */
+        'mixes' => array(
+            'url' => 'mixes',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'mixes',
+                'visible' => true,
+                'texto' => 'definicion_mixes'
+            )
+        ),
     )
 );

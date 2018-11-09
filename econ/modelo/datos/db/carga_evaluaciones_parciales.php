@@ -14,6 +14,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
      */
     function listado_evaluaciones_parciales_econ($parametros)
     {
+        //Iris: En la consulta se agregó al coordinador para verificar si debe mostrar o no la opción de crear parciales en la web.
 		$sql = "SELECT
 			sga_comisiones.materia,
 			sga_materias.nombre as materia_nombre,
@@ -43,13 +44,18 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 			sga_tipo_eval_parc.descripcion as evaluacion_tipo,
 			sga_cron_eval_parc.fecha_hora as evaluacion_fecha,
 			sga_periodos_lect.anio_academico,
-			sga_periodos_lect.fecha_inicio
+			sga_periodos_lect.fecha_inicio,
+                        CASE
+				WHEN lower(sga_escala_notas.nombre) LIKE '%promo%' THEN 'PROMO'
+				ELSE 'REGULAR'
+			END AS escala_notas
 		FROM 
 			sga_docentes_com,
 			sga_comisiones,
 			sga_periodos_lect,
 			sga_materias,
 			sga_sedes,
+                        sga_escala_notas,
 			OUTER (sga_atr_eval_parc,
 							sga_eval_parc,
 							sga_tipo_eval_parc,
@@ -68,6 +74,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 			AND sga_tipo_eval_parc.tipo_evaluac_parc = sga_eval_parc.tipo_evaluac_parc
 			AND sga_cron_eval_parc.evaluacion = sga_eval_parc.evaluacion
 			AND sga_cron_eval_parc.comision   = sga_atr_eval_parc.comision
+                        AND sga_comisiones.escala_notas = sga_escala_notas.escala_notas
 
 			-- No mostrar comisiones con actas de cursadas cerradas
 			-- AND NOT EXISTS  (SELECT 1 FROM sga_actas_cursado	WHERE comision = sga_comisiones.comision AND estado = 'C')
@@ -107,6 +114,35 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 		return $datos;
     }
 
+    /**
+    * parametros: materia
+    * cache: memoria
+    * filas: n
+    */
+    function get_ciclo_materia($materia)
+    {
+        $sql = "SELECT COUNT(*) as cant
+                    FROM sga_ciclos
+                    JOIN sga_materias_ciclo ON (sga_materias_ciclo.ciclo = sga_ciclos.ciclo)
+                WHERE sga_materias_ciclo.materia = $materia
+                    AND lower(sga_ciclos.nombre) LIKE '%fundam%'" ;
+        $ciclo = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (isset($ciclo) && $ciclo[0]['CANT'] > 0)
+        {
+            return 'FUNDAMENTO';
+        }
+        $sql = "SELECT COUNT(*) as cant
+                    FROM sga_ciclos
+                    JOIN sga_materias_ciclo ON (sga_materias_ciclo.ciclo = sga_ciclos.ciclo)
+                WHERE sga_materias_ciclo.materia = $materia
+                    AND lower(sga_ciclos.nombre) LIKE '%profes%'" ;
+        $ciclo = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (isset($ciclo) && $ciclo[0]['CANT'] > 0)
+        {
+            return 'PROFESIONAL';
+        }
+        return '';
+    }
     
     /**
     * parametros: 
@@ -118,9 +154,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
         //var_dump($parametros); 
         $sql = "SELECT evaluacion, descripcion_abrev 
                     FROM sga_eval_parc 
-                    WHERE tipo_evaluac_parc = 1
                 ORDER BY 1";
-		$datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-		return $datos;  
+        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $datos;  
     }
 }

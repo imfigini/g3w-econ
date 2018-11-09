@@ -1,54 +1,52 @@
 <?php
-namespace econ\operaciones\definicion_cursos;
+namespace econ\operaciones\mixes;
 
 use kernel\interfaz\pagelet;
-use siu\modelo\datos\catalogo;
 use kernel\kernel;
+use siu\modelo\datos\catalogo;
 
-class pagelet_filtro extends pagelet {
+class pagelet_mixes extends pagelet {
+//class pagelet_mixes extends \siu\operaciones\_comun\operaciones\reporte\pagelet_reporte {
 	
         public function get_nombre()
         {
-            return 'filtro';
+            return 'mixes';
 	}
 
-	/**
-	 * @return guarani_form
-	 */
-	function get_form()
-	{
-            return $this->get_form_builder()->get_formulario();
-	}
-
-	function get_vista_form()
+        function prepare()
         {
-            return $this->get_form_builder()->get_vista();
-	}
-	
-	/**
-	* @return builder_form_filtro
-	*/
-	function get_form_builder()
-	{
-            return $this->controlador->get_form_builder();
-	}
-    
-	function get_periodo()
-	{
-            return $this->controlador->get_periodo();
-	}
-    
-	function get_anio_academico()
-	{
-            return $this->controlador->get_anio_academico();
-	}
-        
-        function get_mensaje()
-	{
-            return $this->controlador->get_mensaje();
-	}
-
-	public function prepare()
+            $this->data['mensaje'] = 'HOLA!!!!!!!!!!!!!!';
+            $carreras = catalogo::consultar('mixes', 'get_carreras_grado', null);
+            $datos = $carreras;
+            
+            foreach ($carreras AS $c=>$carrera)
+            {
+                $anios = catalogo::consultar('mixes', 'get_anios_de_cursada_con_mix', array('carrera' => $carrera['CARRERA']));
+                $datos[$c]['ANIOS'] = $anios;
+                foreach($anios AS $a=>$anio)
+                {
+                    $mixs = catalogo::consultar('mixes', 'get_mixes_del_anio', array('carrera' => $carrera['CARRERA'], 'anio_de_cursada' => $anio['ANIO_DE_CURSADA']));
+                    $datos[$c]['ANIOS'][$a]['MIXES'] = $mixs;
+                    
+                    foreach ($mixs AS $m=>$mix)
+                    {
+                        $parametros = array('carrera' => $carrera['CARRERA'], 
+                                            'anio_de_cursada' => $anio['ANIO_DE_CURSADA'], 
+                                            'mix' => $mix['MIX']);
+                        $materias_del_mix = catalogo::consultar('mixes', 'get_materias_mix', $parametros);
+                        $datos[$c]['ANIOS'][$a]['MIXES'][$m]['MATERIAS'] = $materias_del_mix;
+                    }
+                    
+                }
+           }
+            //print_r($datos); die;
+            $this->data['datos'] = $datos;
+            
+            $link_form = kernel::vinculador()->crear('mixes', 'modificar');
+            $this->data['form_url'] = $link_form;        
+        }
+        /*
+	public function c
 	{   
             $operacion = kernel::ruteador()->get_id_operacion();
             $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
@@ -75,7 +73,6 @@ class pagelet_filtro extends pagelet {
             $cant = count($materias);
             for ($i=0; $i<$cant; $i++)
             {
-                $materias[$i]['ciclo'] = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materias[$i]['MATERIA'])); 
                 $comisiones = $this->controlador->get_comisiones_promo($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
                 if (count($comisiones) > 0)
                 {
@@ -93,4 +90,6 @@ class pagelet_filtro extends pagelet {
             $this->data['form_url_materia'] = $link_form_materia;     
             
         }
+         * 
+         */
 }

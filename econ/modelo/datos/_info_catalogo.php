@@ -69,6 +69,18 @@ class _info_catalogo
 );
 	}
 
+	static function carga_evaluaciones_parciales__get_ciclo_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
 	static function carga_evaluaciones_parciales__guardar_renglon()
 	{
 		return array (
@@ -248,6 +260,36 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_ciclo_de_materias()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_comisiones_de_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_comisiones_promo_de_materia()
 	{
 		return array (
@@ -269,6 +311,14 @@ class _info_catalogo
 	static function cursos__get_materias_cincuentenario()
 	{
 		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+  ),
+  'param_null' => 
+  array (
+    0 => 'legajo',
+  ),
   'cache' => 'no',
   'filas' => 'n',
 );
@@ -348,6 +398,183 @@ class _info_catalogo
     3 => 'porc_trabajos',
   ),
   'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__existe_periodo_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'orden',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_dias_no_laborales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_periodo_lectivo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_periodos_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__insert_periodos_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'orden',
+    3 => 'fecha_inicio',
+    4 => 'fecha_fin',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__set_periodos_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'orden',
+    3 => 'fecha_inicio',
+    4 => 'fecha_fin',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__strToMDY()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'strFecha',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+  'El formato de strFecha debe ser' => 'Y-m-d',
+);
+	}
+
+	static function evaluaciones_parciales__update_periodos_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'orden',
+    3 => 'fecha_inicio',
+    4 => 'fecha_fin',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function mixes__get_anios_de_cursada_con_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function mixes__get_carreras_grado()
+	{
+		return array (
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function mixes__get_materias_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'anio_de_cursada',
+    2 => 'mix',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function mixes__get_mixes_del_anio()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'anio_de_cursada',
+  ),
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}

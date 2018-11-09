@@ -19,15 +19,12 @@ class coord_materia
         {
             $sql = "SELECT DISTINCT C.materia, 
                                     M.nombre_materia, 
-                                    M.carrera, 
-                                    R.nombre_reducido AS carrera_nombre,
                                     C.anio_academico, 
                                     C.periodo_lectivo, 
                                     U.coordinador,
                                     P.apellido || ', ' || P.nombres AS coordinador_nombre
                         FROM sga_comisiones C
                         JOIN sga_atrib_mat_plan M ON (M.materia = C.materia)
-                        JOIN sga_carreras R ON (M.carrera = R.carrera)
                         LEFT JOIN ufce_coordinadores_materias U ON (U.materia = M.materia AND U.anio_academico = C.anio_academico AND U.periodo_lectivo = C.periodo_lectivo)
                         LEFT JOIN sga_docentes D ON (D.legajo = U.coordinador)
                         LEFT JOIN sga_personas P ON (P.nro_inscripcion = D.nro_inscripcion)
@@ -49,8 +46,6 @@ class coord_materia
                     $nuevo[$id][catalogo::id] = $id;
                     $nuevo[$id]['MATERIA'] = $dato['MATERIA'];
                     $nuevo[$id]['NOMBRE_MATERIA'] = $dato['NOMBRE_MATERIA']." (".$dato['MATERIA'].")";
-                    $nuevo[$id]['CARRERA'] = $dato['CARRERA'];
-                    $nuevo[$id]['CARRERA_NOMBRE'] = $dato['CARRERA_NOMBRE']." (".$dato['CARRERA'].")";
                     $nuevo[$id]['PERIODO'] = $dato['PERIODO_LECTIVO'];
                     $nuevo[$id]['ANIO_ACADEMICO'] = $dato['ANIO_ACADEMICO'];
                     $nuevo[$id]['COORDINADOR'] = $dato['COORDINADOR'];

@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\definicion_cursos;
+namespace econ\operaciones\detalle_cursos;
 
 use kernel\interfaz\pagelet;
 use siu\modelo\datos\catalogo;
@@ -43,26 +43,16 @@ class pagelet_filtro extends pagelet {
             return $this->controlador->get_anio_academico();
 	}
         
-        function get_mensaje()
-	{
-            return $this->controlador->get_mensaje();
-	}
-
-	public function prepare()
+        public function prepare()
 	{   
             $operacion = kernel::ruteador()->get_id_operacion();
             $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
 
-//            $this->add_var_js('msg_guardado_exitoso', trans('datos_censales.guardado_exitoso'));
-//            $this->add_var_js('msg_error_al_guardar', trans('datos_censales.error_al_guardar'));
-           
             $periodo_hash = $this->get_periodo();
             $anio_academico_hash = $this->get_anio_academico();
             $form = $this->get_form_builder();
             $form->set_anio_academico($anio_academico_hash);
             $form->set_periodo($periodo_hash);
-            
-            $this->data['mensaje'] = $this->get_mensaje();
             
             $this->add_var_js('periodo_hash', $periodo_hash);
             $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
@@ -86,11 +76,5 @@ class pagelet_filtro extends pagelet {
             
             $this->data['datos'] = $datos;
 	        
-            $link_form_comision = kernel::vinculador()->crear('definicion_cursos', 'grabar_comision');
-            $this->data['form_url_comision'] = $link_form_comision;     
-            
-            $link_form_materia = kernel::vinculador()->crear('definicion_cursos', 'grabar_materia');
-            $this->data['form_url_materia'] = $link_form_materia;     
-            
         }
 }

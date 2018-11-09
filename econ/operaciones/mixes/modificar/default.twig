@@ -1,0 +1,57 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+    {% if (this.data.mensaje != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+    {% endif %}
+    
+    {% if this.data.datos %}
+        
+            {% for dato in this.data.datos %}
+                <div class="link-js" data-link="detalle_{{dato.CARRERA}}" aria-controls="detalle_{{dato.CARRERA}}">
+                    <h3 class="titulo-carrera">
+                        Carrera: {{dato.CARRERA_NOMBRE}}
+                        <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
+                    </h3>
+                </div>
+
+                <div id="detalle_{{dato.CARRERA}}" class="detalle" aria-live="assertive" >
+                    <form name="carrera_seleccionada" id="{{dato.CARRERA}}" method="post" action="{{this.data.form_url}}" >
+                        <input type="hidden" name="carrera" value="{{dato.CARRERA}}">
+                                                <input type="hidden" name="datos" value="{{dato}}">
+{#                          onsubmit="return validar_porcentaje(this)">#}
+                        <table class="table table-striped table-condensed" tabindex="0" summary="Tabla de mixes">
+                            <tbody> {#id="detalle_{{dato.CARRERA}}" class="detalle" aria-live="assertive" style="display:none">#}
+                               {% for anio in dato.ANIOS %}
+                                    <tr>
+                                        <td colspan="2"><h4 style="text-align:center" class="mix">Año de cursada: {{ anio.ANIO_DE_CURSADA }} </h4>
+                                    </tr>    
+                                    <tr>
+                                        {% for mixes in anio.MIXES %}
+                                            <td><strong>Mix {{mixes.MIX}}</strong></td>
+                                        {% endfor %}    
+                                    </tr>
+                                    <tr>
+                                        {% for mixes in anio.MIXES %}
+                                            <td>
+                                                {% for materia in mixes.MATERIAS %}
+                                                    <p>{{materia.MATERIA_NOMBRE}} ({{materia.MATERIA}})</p>
+                                                {% endfor %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div style="text-align: right">
+                            <button class="btn btn-info btn-lg" type="submit" name="boton_modificar" id="{{dato.CARRERA}}" style="align-self:center;font-size:12px;">Modificar</button>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        
+    {% else %}
+            <div class="alert">
+                    {{"mixes.sin_resultados"|trans|capitalize}}
+            </div>
+    {% endif %}
+{% endblock %}

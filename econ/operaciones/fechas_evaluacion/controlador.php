@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\definicion_cursos;
+namespace econ\operaciones\periodos_evaluacion;
 
 use kernel\kernel;
 use siu\extension_kernel\controlador_g3w2;
@@ -40,11 +40,8 @@ class controlador extends controlador_g3w2
         return $materias;
     }
     
-    function get_comisiones_promo($anio_academico_hash, $periodo_hash=null, $materia)
+    function get_comisiones($anio_academico_hash, $periodo_hash=null, $materia)
     {
-        $periodo = null;
-        $anio_academico = null;
-
         if (!empty($anio_academico_hash))
         {
             $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
@@ -59,19 +56,11 @@ class controlador extends controlador_g3w2
                                 'periodo' => $periodo,
                                 'materia' => $materia
                     );
-                return catalogo::consultar('cursos', 'get_comisiones_promo_de_materia', $parametros);
+                return catalogo::consultar('cursos', 'get_comisiones_de_materia', $parametros);
             }
         }
         return null;
     }
-    
-    
-//    function get_ciclo_de_materias($materia)
-//    {
-//        $parametros = array('materia' => $materia);
-//        return catalogo::consultar('cursos', 'get_ciclo_de_materias', $parametros);
-//    }
-    
     
     function get_periodo()
     {
@@ -245,7 +234,7 @@ class controlador extends controlador_g3w2
     function get_form_builder()
     {
         if (! isset($this->form_builder)) {
-                        $this->form_builder = kernel::localizador()->instanciar('operaciones\definicion_cursos\filtro\builder_form_filtro');
+                        $this->form_builder = kernel::localizador()->instanciar('operaciones\periodos_evaluacion\filtro\builder_form_filtro');
         }
 
         return $this->form_builder;

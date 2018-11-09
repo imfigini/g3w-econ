@@ -20,7 +20,6 @@
             <thead>
                 <tr>
                     <th>Materia</th>
-                    <th>Carrera</th>
                     <th>Período Lectivo</th>
                     <th>Coordinador</th>
                 </tr>
@@ -29,7 +28,6 @@
                 {% for materia in this.data.materias %}
                 <tr class="link-in-data" data-link="{{ materia.LINK }}">
                     <td> {{ materia.NOMBRE_MATERIA }} </td>
-                    <td> {{ materia.CARRERA_NOMBRE }} </td>
                     <td> {{ materia.PERIODO }} </td>
                     <td> {% if(materia.COORDINADOR) %}
                          {{ materia.COORDINADOR_NOMBRE }} ({{ materia.COORDINADOR }}) 

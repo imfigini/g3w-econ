@@ -1,0 +1,60 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+    {% if (this.data.mensaje != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+    {% endif %}    
+    
+    {% set vista_form = this.get_vista_form() %}
+	{{ vista_form.render_encabezado() | raw }}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+			<span class="pull-left">
+				{{"periodos_evaluacion"|trans|capitalize}}
+			</span>
+			<span class="pull-right">
+			{{ vista_form.render_acciones() | raw }}
+			</span>
+		</h2>
+	</div>
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+ 
+    {% if(this.data.datos and this.data.periodo_hash) %}
+        <form name="periodo_evaluacion" id="periodo_evaluacion" method="post" action="{{this.data.form_url}}">
+            <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+            <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+            
+            {% for periodo in this.data.datos %}
+                <table>
+
+                    <tr>
+                        <h4 class="periodo"> {{periodo.DESCRIPCION}} </h4>
+                    </tr>
+                    <tr>
+                        <td> Fecha de inicio: 
+                            <input id="fecha_inicio_{{periodo.EVALUACION}}" class="fecha" type='text' name="fecha_inicio_{{periodo.EVALUACION}}" 
+                                   {% if (periodo.FECHA_INICIO) %} value="{{periodo.FECHA_INICIO}}" {% endif %} >
+{#                            {% else %} value="{{this.data.fecha_inicio}}" {% endif %}>  #}
+                        </td>
+
+                        <td> Fecha de fin: 
+                            <input id="fecha_fin_{{periodo.EVALUACION}}" class="fecha" type='text' name="fecha_fin_{{periodo.EVALUACION}}" 
+                                   {% if (periodo.FECHA_FIN) %} value="{{periodo.FECHA_FIN}}" {% endif %} >
+{#                        {% else %} value="{{this.data.fecha_inicio}}" {% endif %}>  #}
+                        </td>
+    
+                    </tr>
+                    
+                </table>    
+            {% endfor %}
+            <div style="text-align: right">
+                <button class="btn btn-info btn-lg" type="submit" id="boton_guardar" style="align-self:center;font-size:12px;">Guardar</button>
+            </div>
+        </form>
+    {% else %}
+        <div role="alert" class="alert">
+            {{"periodos_evaluacion.sin_resultados"|trans|capitalize}}
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+    {% if (this.data.mensaje != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+    {% endif %}    
+    
+    {% set vista_form = this.get_vista_form() %}
+	{{ vista_form.render_encabezado() | raw }}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+			<span class="pull-left">
+				{{"periodos_evaluacion"|trans|capitalize}}
+			</span>
+			<span class="pull-right">
+			{{ vista_form.render_acciones() | raw }}
+			</span>
+		</h2>
+	</div>
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+ 
+    {% if(this.data.datos and this.data.periodo_hash) %}
+        <form name="periodo_evaluacion" id="periodo_evaluacion" method="post" action="{{this.data.form_url}}">
+            <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+            <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+
+            <input type="hidden" name="lectivo_inicio" id="lectivo_inicio" value="{{this.data.lectivo.0.FECHA_INICIO}}">
+            <input type="hidden" name="lectivo_fin" id="lectivo_fin" value="{{this.data.lectivo.0.FECHA_FIN}}">
+           
+            {% set i=0 %}
+            {% for feriado in this.data.feriados %}
+                <input type="hidden" name="feriado_{{i}}" id="feriado_{{i}}" value="{{feriado.FECHA}}" />
+                {% set i=i+1 %}
+            {% endfor %}
+            <input type="hidden" name="cant_feriados" id="cant_feriados" value="{{i}}" />
+            
+            {% for periodo in this.data.datos %}
+                <div>   
+                    <h4 class="periodo">{{periodo.ORDEN_NOMBRE}}: 
+                    {% if (periodo.FECHA_INICIO) and (periodo.FECHA_FIN) %}
+                        {{periodo.FECHA_INICIO|date("d/m/Y")}} - {{periodo.FECHA_FIN|date("d/m/Y")}} 
+                        <input type="hidden" name="fecha_inicio_{{periodo.ORDEN}}" id="fecha_inicio_{{periodo.ORDEN}}" value="{{periodo.FECHA_INICIO}}">
+                        <input type="hidden" name="fecha_fin_{{periodo.ORDEN}}" id="fecha_fin_{{periodo.ORDEN}}" value="{{periodo.FECHA_FIN}}">
+                    {% else %}
+                        <i>Sin definir</i>
+                    {% endif %}
+                    </h4>
+                    <input type="text" id="daterange_{{periodo.ORDEN}}" name="daterange_{{periodo.ORDEN}}" class="daterange" value="" />
+                </div>
+            {% endfor %}
+            <div style="text-align: right">
+                <button class="btn btn-info btn-lg" type="submit" id="boton_guardar" style="align-self:center;font-size:12px;">Guardar</button>
+            </div>
+        </form>
+    {% else %}
+        <div role="alert" class="alert">
+            {{"periodos_evaluacion.sin_resultados"|trans|capitalize}}
+        </div>
+    {% endif %}
+  
+{% endblock %}

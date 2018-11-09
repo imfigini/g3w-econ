@@ -12,12 +12,15 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
         $raw = $this->controlador->modelo()->info__lista_evaluaciones();
         $rs = array();
 
-		foreach($raw as $materia)
-		{
+        foreach($raw as $materia)
+        {
             $mat = $materia['MATERIA'];
             $rs[$mat]['MATERIA'] = $mat;
             $rs[$mat]['NOMBRE'] = $materia['MATERIA_NOMBRE'];
+        
+            //Iris: Se recupera el coordinador para determinar si puede crear o no parciales
             $rs[$mat]['COORDINADOR'] = $materia['COORDINADOR'];
+            $rs[$mat]['ESCALA_NOTAS'] = $materia['ESCALA_NOTAS'];
             
             $com = $materia['COMISION'];
             $rs[$mat]['COMISIONES'][$com]['COMISION'] = $com;
@@ -31,21 +34,23 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
             $rs[$mat]['COMISIONES'][$com]['SEDE_NOMBRE'] = $materia['SEDE_NOMBRE'];
             $rs[$mat]['COMISIONES'][$com]['URL'] = $materia['COMISION_URL'];
         
-			if (empty($materia['EVALUACION'])) {
+            if (empty($materia['EVALUACION'])) 
+            {
                 continue;
             }
 			
-			$evaluacion_id = $materia[catalogo::id];
+            $evaluacion_id = $materia[catalogo::id];
             $eva = $materia['EVALUACION'];
-			$rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['ID'] = $evaluacion_id;
+            $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['ID'] = $evaluacion_id;
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['EVALUACION'] = $eva;
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['NOMBRE'] = $materia['EVALUACION_NOMBRE'];
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['TIPO'] = $materia['EVALUACION_TIPO'];
 			
-			$rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['FECHA'] = "";
-			if (isset($materia['EVALUACION_FECHA'])){
-				$rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['FECHA'] = date("d/m/Y H:i", strtotime($materia['EVALUACION_FECHA']));
-			}
+            $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['FECHA'] = "";
+            if (isset($materia['EVALUACION_FECHA']))
+            {
+                    $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['FECHA'] = date("d/m/Y H:i", strtotime($materia['EVALUACION_FECHA']));
+            }
 			
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['PORCENTAJE_CARGA'] = $materia['PORCENTAJE_CARGA'];
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['CANT_INSCRIPTOS'] = $materia['CANT_INSCRIPTOS'];
@@ -55,30 +60,34 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
 				kernel::vinculador()->crear('notas_parciales', 'editar', $evaluacion_id);
         }
 
-		$cant_tipos_eval = count($this->controlador->modelo()->info__tipo_evaluacion());
-		foreach($raw as $materia)
-		{
-			foreach($rs[$materia['MATERIA']]['COMISIONES'] as $orden => $comision)
-			{
-				if (isset($rs[$materia['MATERIA']]['COMISIONES'][$orden]['EVALUACIONES']))
-					$rs[$materia['MATERIA']]['COMISIONES'][$orden]['COMPLETA'] = count($rs[$materia['MATERIA']]['COMISIONES'][$orden]['EVALUACIONES']) >= $cant_tipos_eval;
-			}
-		}
+        $cant_tipos_eval = count($this->controlador->modelo()->info__tipo_evaluacion());
+        foreach($raw as $materia)
+        {
+            foreach($rs[$materia['MATERIA']]['COMISIONES'] as $orden => $comision)
+            {
+                if (isset($rs[$materia['MATERIA']]['COMISIONES'][$orden]['EVALUACIONES']))
+                        $rs[$materia['MATERIA']]['COMISIONES'][$orden]['COMPLETA'] = count($rs[$materia['MATERIA']]['COMISIONES'][$orden]['EVALUACIONES']) >= $cant_tipos_eval;
+            }
+        }
+//print_r($rs);
         return $rs;
     }
     
     function prepare()
     {
 		$this->data = array();
-		
-		switch ($this->estado) {
+                
+                kernel::log()->add_debug('Entro al prepare'.__FILE__, $this->data);
+                switch ($this->estado) {
 			case 'crear_parcial':
 				$this->set_template('parcial');
 				break;
 			default:
                                 $this->data = $this->get_lista_materias();
+                                //Iris: Recueper el legajo del docente que está conectado para ver si es coordinador o no y de acuerdo a eso mostrar o no la creación de parciales
                                 $this->data['docente'] = kernel::persona()->get_legajo_docente();
-				$this->add_var_js('url_crear_evaluacion', kernel::vinculador()->crear('notas_parciales', 'crear_evaluacion'));
+				
+                                $this->add_var_js('url_crear_evaluacion', kernel::vinculador()->crear('notas_parciales', 'crear_evaluacion'));
 				$this->add_var_js('url_borrar_evaluacion', kernel::vinculador()->crear('notas_parciales', 'borrar_evaluacion'));
 				$this->add_var_js('titulo_crear_parcial', kernel::traductor()->trans('crear_evaluacion_parcial'));
                                 $this->add_var_js('boton_crear_parcial', kernel::traductor()->trans('crear_parcial'));
@@ -90,6 +99,7 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
 						'escalas' => $this->controlador->modelo()->info__lista_escala_notas()
 					))
 				);
+
 		}
     }
     

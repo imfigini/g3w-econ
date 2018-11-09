@@ -4,15 +4,19 @@ return array(
     'header.menu.inicio_oficina_docentes' => 'Inicio Oficina Docentes',
     'header.menu.coord_materias' => 'Coordinadores de materias',
     'header.menu.definicion_cursos' => 'Cursadas',
+    'header.menu.detalle_cursos' => 'Cursadas',
+    'header.menu.parciales' => 'Parciales',
+    'header.menu.mixes' => 'Mixs',
     
     /* Perfiles */
     'perfil.ofd' => 'oficina_docentes',
     
     'OFD' => 'oficina_docentes',
 
+    'filtro.filtro_periodos' => "períodos lectivos",
+    
      //Inicio Oficina de Docentes
     "inicio_oficina_docentes.titulo" => "Inicio Oficina de Docentes",
-    "header.menu.inicio_oficina_docentes" => "Inicio Oficina de Docentes",
     "inicio_oficina_docentes.bienvenido" => "Bienvenido",
     "inicio_oficina_docentes.intro" => "Para comenzar seleccione alguna de las opciones del menú",
 
@@ -29,7 +33,26 @@ return array(
     
     /* Definción de los cursos */
     'tit_definicion_cursos' => 'Definición de Cursos Promocionables',
-    'definicion_cursos' => 'Asignación de % de notas en los Cursos Promocionables',
+    'definicion_cursos' => 'Ponderación de instancias de evaluación en los Cursos Promocionables',
     'definicion_cursos.filtro.sin_resultados' => 'No hay información',
+    
+    /* Detalle de los cursos con sus %*/
+    'tit_detalle_cursos' => 'Listado de Cursos Promocionables',
+    'detalle_cursos' => 'Listado de ponderación de instancias de evaluación en los Cursos Promocionables',
+    'detalle_cursos.sin_resultados' => 'No hay información',
+    
+    'parciales' => 'Parciales',
+    
+    /* Períodos de veluación */
+    'tit_periodos_evaluacion' => 'Períodos de evaluación',
+    'periodos_evaluacion' => 'Definición de los períodos de evaluación',
+    'periodos_evaluacion.sin_resultados' => 'No hay información, seleccionar un año académico y un período para comenzar.',
+        
+     /* Definción de los Mixes */
+    'tit_mixes' => 'Mixs',
+    'mixes' => 'Mixs',
+    'definicion_mixes' => 'Definición de Mixs',
+    'mixes.sin_resultados' => 'No hay información cargada sobre mixes.',
+    'mixes.carrera' => 'Carrera',
     
 );
