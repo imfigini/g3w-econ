@@ -25,7 +25,7 @@
                                     <strong>Per&iacute;odo Lectivo:</strong> {{comision.PERIODO_LECTIVO}} - 
                                     <strong>Turno:</strong> {{comision.TURNO}} - 
                                     <strong>Inscriptos:</strong> {{ comision.CANT_INSCRIPTOS }} 
-                                    {{ _self.boton_crear(not comision.COMPLETA and materia.COORDINADOR==this.data.docente) }}
+{#                                    {{ _self.boton_crear(not comision.COMPLETA and materia.COORDINADOR==this.data.docente) }}#}
 				</div>			
 				<ul class='parciales-comision unstyled' orden='{{orden}}'>
 				{% if comision.EVALUACIONES %}

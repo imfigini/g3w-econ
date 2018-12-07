@@ -272,7 +272,7 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_comisiones_de_materia()
+	static function cursos__get_comisiones_de_materia_con_dias_de_clase()
 	{
 		return array (
   'parametros' => 
@@ -308,6 +308,66 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_dias_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_dias_de_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_fechas_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_fechas_eval_asignadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_fechas_no_validas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_materias_cincuentenario()
 	{
 		return array (
@@ -318,6 +378,18 @@ class _info_catalogo
   'param_null' => 
   array (
     0 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_materias_mismo_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -360,6 +432,19 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_periodos_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_porcentajes_instancias()
 	{
 		return array (
@@ -368,6 +453,36 @@ class _info_catalogo
     0 => 'comision',
   ),
   'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_posibles_fechas_eval()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'comision',
+    3 => 'pertenece_fundamento',
+    4 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_tipo_escala_de_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}

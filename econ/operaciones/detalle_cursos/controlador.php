@@ -59,14 +59,6 @@ class controlador extends controlador_g3w2
         return null;
     }
     
-    
-//    function get_ciclo_de_materias($materia)
-//    {
-//        $parametros = array('materia' => $materia);
-//        return catalogo::consultar('cursos', 'get_ciclo_de_materias', $parametros);
-//    }
-    
-    
     function get_periodo()
     {
         return $this->datos_filtro['periodo'];

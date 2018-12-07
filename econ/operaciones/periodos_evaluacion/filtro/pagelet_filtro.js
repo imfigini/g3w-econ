@@ -25,7 +25,9 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             
                     buscarPeriodos($('#formulario_filtro-anio_academico').val());
         
-                    setear_calendarios();     
+                    if (info.anio_academico_hash !== ""){
+                        setear_calendarios();
+                    }     
                 }
                 
     };
@@ -104,8 +106,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                             diaSemana = dia.getDay();
                             diaFormateado = dia.toISOString().substring(0, 10);
 
-                            bloquear =  (diaFormateado == '2018-06-29') ||
-                                        (diaSemana == 0) ||
+                            bloquear =  (diaSemana == 0) ||
                                         (diaSemana == 6) ||
                                         (feriados.includes(diaFormateado));
 

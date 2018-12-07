@@ -1,7 +1,7 @@
 <?php
 return array(
     
-    'header.menu.inicio_oficina_docentes' => 'Inicio Oficina Docentes',
+    'header.menu.inicio_oficina_docentes' => 'Inicio Dirección de Docentes',
     'header.menu.coord_materias' => 'Coordinadores de materias',
     'header.menu.definicion_cursos' => 'Cursadas',
     'header.menu.detalle_cursos' => 'Cursadas',
@@ -9,9 +9,9 @@ return array(
     'header.menu.mixes' => 'Mixs',
     
     /* Perfiles */
-    'perfil.ofd' => 'oficina_docentes',
+    'perfil.ofd' => 'dirección de docentes',
     
-    'OFD' => 'oficina_docentes',
+    'OFD' => 'dirección de docentes',
 
     'filtro.filtro_periodos' => "períodos lectivos",
     
@@ -41,7 +41,7 @@ return array(
     'detalle_cursos' => 'Listado de ponderación de instancias de evaluación en los Cursos Promocionables',
     'detalle_cursos.sin_resultados' => 'No hay información',
     
-    'parciales' => 'Parciales',
+    'parciales' => 'Carga de notas de evaluaciones parciales',
     
     /* Períodos de veluación */
     'tit_periodos_evaluacion' => 'Períodos de evaluación',
@@ -55,4 +55,8 @@ return array(
     'mixes.sin_resultados' => 'No hay información cargada sobre mixes.',
     'mixes.carrera' => 'Carrera',
     
+    /* Propuestas de fechas para parciales y recuperatorios */
+    'tit_fechas_parciales' => 'Solicitud  de fechas para parciales y recuperatorios',
+    'fechas_parciales' => 'Propuesta de fechas para parciales y recuperatorios',
+    'fechas_parciales.sin_resultados' => 'No hay información',
 );

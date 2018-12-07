@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\periodos_evaluacion\filtro;
+namespace econ\operaciones\fechas_parciales\filtro;
 
 use kernel\interfaz\componentes\forms\form_elemento_config;
 use kernel\kernel;
@@ -19,7 +19,7 @@ class builder_form_filtro extends builder_formulario
 
 	function get_action() 
 	{
-		return kernel::vinculador()->crear('periodos_evaluacion', 'index');
+		return kernel::vinculador()->crear('fechas_parciales', 'index');
 	}
 
 	protected function generar_definicion(guarani_form $form, fabrica_formularios $fabrica) 

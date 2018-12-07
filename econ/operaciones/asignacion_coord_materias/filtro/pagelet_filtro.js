@@ -23,6 +23,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             }
             
             buscarPeriodos($('#formulario_filtro-anio_academico').val());
+            
         }
     };
     

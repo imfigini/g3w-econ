@@ -163,8 +163,8 @@ class evaluaciones_parciales
         $fecha_fin = $parametros['fecha_fin'];
         $sql = "INSERT INTO ufce_eval_parc_periodos (anio_academico, periodo_lectivo, orden, fecha_inicio, fecha_fin)
                     VALUES ($anio_academico, $periodo, $orden, $fecha_inicio, $fecha_fin)";
-        print_R($sql);
         kernel::db()->ejecutar($sql);
     }
-    
+ 
+
 }

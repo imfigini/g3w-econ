@@ -15,13 +15,23 @@ return array(
                   )
               ),
 
-              'definicion_cursos' => array(
+                'definicion_cursos' => array(
                   'activa' => true,
                   'url' => 'definicion_cursos',
                   'menu' => array(
                       'submenu' => 'parciales',
                       'visible' => true,
                       'texto' => 'definicion_cursos'
+                  )
+              ),
+            
+                'fechas_parciales' => array(
+                  'activa' => true,
+                  'url' => 'fechas_parciales',
+                  'menu' => array(
+                      'submenu' => 'parciales',
+                      'visible' => true,
+                      'texto' => 'fechas_parciales'
                   )
               ),
             ),

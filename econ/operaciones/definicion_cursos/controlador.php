@@ -158,12 +158,11 @@ class controlador extends controlador_g3w2
         if (kernel::request()->isPost()) 
         {
             $comisiones = $this->get_comisiones_promo($parametros['anio_academico_hash'], $parametros['periodo_hash'], $parametros['materia']);
-            $result = 1;
+            $result = 0;
             foreach($comisiones AS $comision)
             {
                 $parametros['comision'] = $comision['COMISION'];
-                $r = catalogo::consultar('cursos', 'set_porcentajes_instancias', $parametros);
-                $result = $result * $r;
+                $result = catalogo::consultar('cursos', 'set_porcentajes_instancias', $parametros);
             }
             if ($result)
             {
