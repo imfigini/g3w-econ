@@ -25,18 +25,18 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             buscarPeriodos($('#formulario_filtro-anio_academico').val());
             
             //Para que despliegue u oculte la información de las comisiones de cada materia. 
-            $(id).delegate(".link-js", "click", function() {
-                        $(this).find('.toggle').toggleClass(function(){
-                            console.log($(this));
-                                if ($(this).is('.icon-chevron-up')) {
-                                        return 'icon-chevron-down';
-                                } else {
-                                        return 'icon-chevron-up';
-                                }
-                        });
-                        $("#"+$(this).attr('data-link')).toggle();
-                        return false;
-                });
+//            $(id).delegate(".link-js", "click", function() {
+//                        $(this).find('.toggle').toggleClass(function(){
+//                            console.log($(this));
+//                                if ($(this).is('.icon-chevron-up')) {
+//                                        return 'icon-chevron-down';
+//                                } else {
+//                                        return 'icon-chevron-up';
+//                                }
+//                        });
+//                        $("#"+$(this).attr('data-link')).toggle();
+//                        return false;
+//                });
             
             setear_calendarios();  
         }

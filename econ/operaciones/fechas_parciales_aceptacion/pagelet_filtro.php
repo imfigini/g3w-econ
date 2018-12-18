@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales;
+namespace econ\operaciones\fechas_parciales_aceptacion;
 
 use kernel\interfaz\pagelet;
 use siu\modelo\datos\catalogo;
@@ -82,10 +82,10 @@ class pagelet_filtro extends pagelet {
                 $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
                 
                 
-                $link_form_comision = kernel::vinculador()->crear('fechas_parciales', 'grabar_comision');
+                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_aceptacion', 'grabar_comision');
                 $this->data['form_url_comision'] = $link_form_comision;     
 
-                $link_form_materia = kernel::vinculador()->crear('fechas_parciales', 'grabar_materia');
+                $link_form_materia = kernel::vinculador()->crear('fechas_parciales_aceptacion', 'grabar_materia');
                 $this->data['form_url_materia'] = $link_form_materia;     
             }
         }

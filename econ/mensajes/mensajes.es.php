@@ -59,4 +59,9 @@ return array(
     'tit_fechas_parciales' => 'Solicitud  de fechas para parciales y recuperatorios',
     'fechas_parciales' => 'Propuesta de fechas para parciales y recuperatorios',
     'fechas_parciales.sin_resultados' => 'No hay información',
+    
+    /* Aceptación de fechas para parciales y recuperatorios */
+    'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales y recuperatorios',
+    'fechas_parciales_aceptacion' => 'Aceptación o modificación de fechas para parciales y recuperatorios',
+    'fechas_parciales_aceptacion.sin_resultados' => 'No hay información',    
 );

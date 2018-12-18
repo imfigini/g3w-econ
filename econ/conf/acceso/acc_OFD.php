@@ -47,6 +47,18 @@ return array(
             )
         ),
         
+        /* Aceptación fechas de evaluación
+         */
+        'fechas_parciales_aceptacion' => array(
+            'url' => 'fechas_parciales_aceptacion',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'fechas_parciales_aceptacion'
+            )
+        ),
+        
         /* MIXes
          */
         'mixes' => array(
@@ -57,6 +69,6 @@ return array(
                 'visible' => true,
                 'texto' => 'definicion_mixes'
             )
-        ),
+        ),        
     )
 );

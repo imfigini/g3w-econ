@@ -260,6 +260,21 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__alta_evaluacion_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+    2 => 'escala_notas',
+    3 => 'fecha_hora',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_ciclo_de_materias()
 	{
 		return array (
@@ -320,24 +335,13 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_dias_de_comision()
+	static function cursos__get_evaluaciones_existentes()
 	{
 		return array (
   'parametros' => 
   array (
     0 => 'comision',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
-	static function cursos__get_fechas_clase()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
+    1 => 'evaluacion',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -362,6 +366,19 @@ class _info_catalogo
   'parametros' => 
   array (
     0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_hora_inicio()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'dia_semana',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -457,22 +474,6 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_posibles_fechas_eval()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'anio_academico',
-    1 => 'periodo',
-    2 => 'comision',
-    3 => 'pertenece_fundamento',
-    4 => 'evaluacion',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
 	static function cursos__get_tipo_escala_de_materia()
 	{
 		return array (
@@ -481,6 +482,19 @@ class _info_catalogo
     0 => 'anio_academico',
     1 => 'periodo',
     2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__set_evaluaciones_observaciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'observaciones',
   ),
   'cache' => 'no',
   'filas' => 'n',

@@ -2,6 +2,8 @@
 namespace econ\modelo\datos\db;
 use kernel\kernel;
 use kernel\util\db\db;
+use siu\modelo\datos\util;
+
 
 class cursos 
 {
@@ -259,9 +261,11 @@ class cursos
                             WHEN C.escala_notas = 10 THEN 'PyR'
                         END AS escala,
                         C.turno,
-                        C.carrera 
+                        C.carrera,
+                        O.observaciones
                 FROM sga_comisiones C
                 JOIN sga_escala_notas EN ON (EN.escala_notas = C.escala_notas)
+                LEFT JOIN ufce_cron_eval_parc O ON (O.comision = C.comision)
                 WHERE C.estado = 'A'
                         AND C.anio_academico = $anio_academico
                         AND C.materia = $materia 
@@ -501,4 +505,107 @@ class cursos
                     WHERE comision = $comision AND valido = 'N'";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
+    
+    /**
+     * parametros: comision, dia_semana
+     * cache: no
+     * filas: n
+     */
+    function get_hora_inicio($parametros)
+    {
+//        print_r('<br>'.__FILE__.'-'.__LINE__.'<br>');
+//        print_r($parametros);
+        $comision = $parametros['comision'];
+        $dia_semana = $parametros['dia_semana'];
+        $sql = "SELECT hs_comienzo_clase
+                    FROM sga_asignaciones 
+                WHERE asignacion IN (SELECT asignacion 
+                                        FROM sga_calendcursada 
+                                            WHERE comision = $comision)
+                                            AND dia_semana = $dia_semana";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+    }
+    
+    /**
+    * parametros: comision, evaluacion, escala_notas, fecha_hora
+    * cache: no
+    * filas: n
+    */
+    function alta_evaluacion_parcial($parametros)
+    {
+        $comision = $parametros['comision'];
+        $evaluacion = $parametros['evaluacion'];
+        $escala = $parametros['escala_notas'];
+        $fecha_hora = $parametros['fecha_hora'];
+        $sql = "SELECT estado FROM sga_cron_eval_parc 
+                    WHERE comision = $comision 
+                        AND evaluacion = $evaluacion";
+        $estado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        
+        if (empty($estado) OR $estado[0]['ESTADO'] == 'P' || $estado[0]['ESTADO'] == 'R')
+        {
+
+            $sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
+            $result1 = util::ejecutar_procedure($sql);
+            
+            if (empty($result1))
+            {
+                return ("Error al almacenar la solicitud. ");
+            }
+
+            $sql = "UPDATE sga_cron_eval_parc SET estado = 'P' WHERE comision = $comision AND evaluacion = $evaluacion";
+            $result2 = kernel::db()->ejecutar($sql);
+            
+            return ("Se almacenó correctamente la solicitud para la ocmision $comision. ");
+        }
+        return null;
+    }
+    
+    /**
+    * parametros: comision, evaluacion
+    * cache: no
+    * filas: n
+    */
+    function get_evaluaciones_existentes($parametros)
+    {
+        $comision = $parametros['comision'];
+        $evaluacion = $parametros['evaluacion'];
+        $sql = "SELECT fecha_hora, estado
+                FROM sga_cron_eval_parc 
+                    WHERE comision = $comision
+                    AND evaluacion = $evaluacion";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+    }
+    
+    
+    /**
+    * parametros: comision, observaciones
+    * cache: no
+    * filas: n
+    */
+    function set_evaluaciones_observaciones($parametros)
+    {
+        $comision = $parametros['comision'];
+        $evaluacion = $parametros['evaluacion'];
+        $observaciones = $parametros['observaciones'];
+        $sql = "SELECT *
+                FROM ufce_cron_eval_parc 
+                    WHERE comision = $comision";
+        $obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (count($obs) > 0)
+        {
+            $sql = "UPDATE ufce_cron_eval_parc 
+                        SET observaciones = $observaciones
+                    WHERE comision = $comision";
+        }
+        else
+        {
+            $sql = "INSERT INTO ufce_cron_eval_parc (comision, observaciones)
+                        VALUES ($comision, $observaciones)";
+        }
+        return kernel::db()->ejecutar($sql);
+    }
+    
+    
+    
 }

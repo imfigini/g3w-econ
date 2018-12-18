@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales;
+namespace econ\operaciones\fechas_parciales_aceptacion;
 
 use kernel\kernel;
 use siu\extension_kernel\controlador_g3w2;
@@ -418,7 +418,7 @@ class controlador extends controlador_g3w2
     function get_form_builder()
     {
         if (! isset($this->form_builder)) {
-                        $this->form_builder = kernel::localizador()->instanciar('operaciones\fechas_parciales\filtro\builder_form_filtro');
+                        $this->form_builder = kernel::localizador()->instanciar('operaciones\fechas_parciales_aceptacion\filtro\builder_form_filtro');
         }
 
         return $this->form_builder;
