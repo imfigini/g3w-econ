@@ -25,13 +25,13 @@ return array(
                   )
               ),
             
-                'fechas_parciales' => array(
+                'fechas_parciales_propuesta' => array(
                   'activa' => true,
-                  'url' => 'fechas_parciales',
+                  'url' => 'fechas_parciales_propuesta',
                   'menu' => array(
                       'submenu' => 'parciales',
                       'visible' => true,
-                      'texto' => 'fechas_parciales'
+                      'texto' => 'fechas_parciales_propuesta'
                   )
               ),
             ),

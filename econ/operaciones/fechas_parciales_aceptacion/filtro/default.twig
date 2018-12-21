@@ -28,21 +28,21 @@
         {% endfor %}
     {% endif %}
     {% if(this.data.datos) %}
-        <div>
+        <div class="confirmacion_fechas_parciales">
             {#  Le paso los datos para armar los calendarios al js  #}
             <input type="hidden" id="materias" value="{{this.data.datos_json}}">
             <input type="hidden" id="feriados" value="{{this.data.dias_no_laborales}}">
             {% for materia in this.data.datos %}
                 
-{#                <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">#}
+                <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
                     <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
-{#                        <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
-                        <span style="float: right;font-size: 10px;">Detalle de comisiones</span>#}
+                        <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
+                        <span style="float: right;font-size: 10px;">Detalle de comisiones</span>
                     </h3>
-{#                </div>#}
+                </div>
                 
                 {% if (materia.COMISIONES) %}
-                    <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive">
+                    <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" >
                         {% for comision in materia.COMISIONES %}
                             
                             <form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
@@ -51,7 +51,7 @@
                                 <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
 
                                 <h4 class="comision">Comisión: {{comision.COMISION_NOMBRE}} ({{comision.COMISION}})</h4>
-                                    <div>
+                                    <div class="descripcion_comision">
                                         {% if (comision.CARRERA) %}
                                             Carrera: {{comision.CARRERA}} -
                                         {% endif %}
@@ -70,55 +70,50 @@
                                         {% if (comision.ESCALA == 'P  ' or comision.ESCALA == 'PyR') %}
                                             <tr>
                                                 <td>1er. Parcial Promoción: {{comision.EVAL_PROMO1.FECHA_HORA}}</td>  
-                                                <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                <td><select id="boton_aceptar_promo1_{{comision.COMISION}}" onchange='myFunct(this)'><option value="-1">--Seleccionar--</option><option value="A">Aceptar</option><option value="R">Rechazar</option> </select></td>
+                                                <td><div id='qq' style='display:none'>
+                                                    Asignar: <input type="text" id="datepicker_promo1_{{comision.COMISION}}" name="datepicker_promo1_{{comision.COMISION}}" class="datepicker" value="" />
+                                                </div></td>
                                             </tr>
                                             <tr>
                                                 <td>2do. Parcial Promoción: {{comision.EVAL_PROMO2.FECHA_HORA}}</td>                               
-                                                <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                <td><select id="boton_aceptar_promo2_{{comision.COMISION}}"><option value="0">--Seleccionar--</option><option value="1">Aceptar</option><option value="2">Rechazar</option> </select></td>
+                                                <td>Asignar: <input type="text" id="datepicker_promo2_{{comision.COMISION}}" name="datepicker_promo2_{{comision.COMISION}}" class="datepicker" value="" /></td>
                                             </tr>
                                             {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
                                                 <tr>
                                                     <td>Recuperatorio Unico: {{comision.EVAL_RECUP.FECHA_HORA}}</td>                               
-                                                    <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                    <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                    <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                    <td><select id="boton_aceptar_recup_{{comision.COMISION}}"><option value="0">--Seleccionar--</option><option value="1">Aceptar</option><option value="2">Rechazar</option> </select></td>
+                                                    <td>Asignar: <input type="text" id="datepicker_recup_{{comision.COMISION}}" name="datepicker_recup_{{comision.COMISION}}" class="datepicker" value="" /></td>
                                                 </tr>
                                             {% endif %}
                                             <tr>    
                                                 <td>Integrador: {{comision.EVAL_INTEG.FECHA_HORA}}</td>                               
-                                                <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                <td><select id="boton_aceptar_integ_{{comision.COMISION}}"><option value="0">--Seleccionar--</option><option value="1">Aceptar</option><option value="2">Rechazar</option> </select></td>
+                                                <td>Asignar: <input type="text" id="datepicker_integ_{{comision.COMISION}}" name="datepicker_integ_{{comision.COMISION}}" class="datepicker" value="" /></td>
                                             </tr>
                                         {% endif %}
 
                                         {% if (comision.ESCALA == 'R  ' or comision.ESCALA == 'PyR') %}
                                             <tr>
                                                 <td>1er. Parcial Regular: {{comision.EVAL_REGU1.FECHA_HORA}}</td>  
-                                                <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                <td><select id="boton_aceptar_regu1_{{comision.COMISION}}"><option value="0">--Seleccionar--</option><option value="1">Aceptar</option><option value="2">Rechazar</option> </select></td>
+                                                <td>Asignar: <input type="text" id="datepicker_regu1_{{comision.COMISION}}" name="datepicker_regu1_{{comision.COMISION}}" class="datepicker" value="" /></td>
                                             </tr>
                                             <tr>
                                                 <td>1er. Recuperatorio: {{comision.EVAL_RECUP1.FECHA_HORA}}</td>                               
-                                                <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                <td><select id="boton_aceptar_recup1_{{comision.COMISION}}"><option value="0">--Seleccionar--</option><option value="1">Aceptar</option><option value="2">Rechazar</option> </select></td>
+                                                <td>Asignar: <input type="text" id="datepicker_recup1_{{comision.COMISION}}" name="datepicker_recup1_{{comision.COMISION}}" class="datepicker" value="" /></td>
                                             </tr>
                                             <tr>
                                                 <td>2do. Recuperatorio: {{comision.EVAL_RECUP2.FECHA_HORA}}</td>                               
-                                                <td>Asignar: <input type="text" id="datepicker_materia_promo1_{{comision.COMISION}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" value="" /></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_aceptar_promo1_{{comision.COMISION}}">Aceptar</button></td>
-                                                <td><button class="btn btn-info btn-lg" type="submit" id="boton_rechazar_promo1_{{comision.COMISION}}">Rechazar</button></td>
+                                                <td><select id="boton_aceptar_recup2_{{comision.COMISION}}"><option value="0">--Seleccionar--</option><option value="1">Aceptar</option><option value="2">Rechazar</option> </select></td>
+                                                <td>Asignar: <input type="text" id="datepicker_recup2_{{comision.COMISION}}" name="datepicker_recup2_{{comision.COMISION}}" class="datepicker" value="" /></td>
                                             </tr>
                                         {% endif %}
 
                                         <tr>
-                                            <td>Observaciones: {{comision.OBSERVACIONES}}
+                                            <td colspan="4">Observaciones: {{comision.OBSERVACIONES}}
                                             </td>
                                         </tr>
 

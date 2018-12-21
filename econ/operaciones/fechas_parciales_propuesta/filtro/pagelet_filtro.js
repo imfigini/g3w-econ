@@ -38,10 +38,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         return false;
                 });
             
-    
-            inicio();
-            set_values('datepicker_promo1_6879', '2018-01-01', '2018-12-31');
-            //setear_calendarios();  
+            setear_calendarios();  
         }
     };
     
@@ -70,19 +67,13 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     }
         
         
-    function inicio()
-    {
-        $('#boton_aceptar_promo1_7028').val('A');
-    }
-    
-        
     function setear_calendarios()
     {
         var materias_json = $('#materias').val();
         if (materias_json)
         {
             var materias = JSON.parse(materias_json);
-
+            
             var inicio_periodo = new Array( new Date ($('#inicio_periodo_'+1).val().replace(/-/g, '\/')),
                                             new Date ($('#inicio_periodo_'+2).val().replace(/-/g, '\/')),
                                             new Date ($('#inicio_periodo_'+3).val().replace(/-/g, '\/')));
@@ -90,8 +81,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             var fin_periodo = new Array(    new Date ($('#fin_periodo_'+1).val().replace(/-/g, '\/')),
                                             new Date ($('#fin_periodo_'+2).val().replace(/-/g, '\/')),
                                             new Date ($('#fin_periodo_'+3).val().replace(/-/g, '\/')));
-//            console.log(inicio_periodo);
-//            console.log(fin_periodo);
+            console.log(inicio_periodo);
+            console.log(fin_periodo);
 
             var cant = Object.keys(materias).length;
             for(var i=0; i<cant; i++)
@@ -131,19 +122,12 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         if (materia.CICLO == 'F' ||  materia.CICLO == 'FyP')
         {
             var dp_recup = 'datepicker_materia_promo_recup_'+m;
-            var posibles_fechas_recup = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, null);
-            set_values(dp_recup, inicio_periodo[1], fin_periodo[1], posibles_fechas_recup);
-
-            var dp_integ = 'datepicker_materia_promo_integ_'+m;
-            var posibles_fechas_integ = get_posibles_fechas(dias_semana, inicio_periodo[2], fin_periodo[2], dias_no_disponibles, null);
-            set_values(dp_integ, inicio_periodo[2], fin_periodo[2], posibles_fechas_integ);
+            var posibles_fechas_recup = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, null);
+            set_values(dp_recup, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup);
         }
-        else
-        {
-            var dp_integ = 'datepicker_materia_promo_integ_'+m;
-            var posibles_fechas_integ = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, null);
-            set_values(dp_integ, inicio_periodo[1], fin_periodo[2], posibles_fechas_integ);
-        }
+        var dp_integ = 'datepicker_materia_promo_integ_'+m;
+        var posibles_fechas_integ = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, null);
+        set_values(dp_integ, inicio_periodo[1], fin_periodo[2], posibles_fechas_integ);
     }
     
     function set_values_materias_regu(materia, inicio_periodo, fin_periodo, dias_no_disponibles)    
@@ -152,32 +136,17 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         var dias_semana = materia.DIAS_REGU;
 
         var dp_regu1 = 'datepicker_materia_regu1_'+m;
-        if (materia.CICLO == 'F' || materia.CICLO == 'FyP' )
-        {
-            var posibles_fechas_regu1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, null);
-            set_values(dp_regu1, inicio_periodo[0], fin_periodo[0], posibles_fechas_regu1);
-        }
-        else
-        {
-            var posibles_fechas_regu1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[1], dias_no_disponibles, null);
-            set_values(dp_regu1, inicio_periodo[0], fin_periodo[1], posibles_fechas_regu1);
-        }
+        var posibles_fechas_regu1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, null);
+        set_values(dp_regu1, inicio_periodo[0], fin_periodo[0], posibles_fechas_regu1);
 
         var dp_recup1 = 'datepicker_materia_regu_recup1_'+m;
-        var posibles_fechas_recup1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[1], dias_no_disponibles, null);
-        set_values(dp_recup1, inicio_periodo[0], fin_periodo[1], posibles_fechas_recup1);
+        var posibles_fechas_recup1 = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, null);
+        set_values(dp_recup1, inicio_periodo[1], fin_periodo[1], posibles_fechas_recup1);
 
         var dp_recup2 = 'datepicker_materia_regu_recup2_'+m;
-        if (materia.CICLO == 'F' || materia.CICLO == 'FyP' )
-        {
-            var posibles_fechas_recup2 = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, null);
-            set_values(dp_recup2, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup2);
-        }
-        else
-        {
-            var posibles_fechas_recup2 = get_posibles_fechas(dias_semana, inicio_periodo[2], fin_periodo[2], dias_no_disponibles, null);
-            set_values(dp_recup2, inicio_periodo[2], fin_periodo[2], posibles_fechas_recup2);
-        }
+//        if (materia.CICLO == 'F' || materia.CICLO == 'FyP' )
+        var posibles_fechas_recup2 = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, null);
+        set_values(dp_recup2, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup2);
     }
 
     function set_values_comisiones(materia, inicio_periodo, fin_periodo, dias_no_disponibles)
@@ -213,38 +182,26 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             var posibles_fechas_promo1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, dias_no_validos);
             set_values(dp_com_promo1, inicio_periodo[0], fin_periodo[0], posibles_fechas_promo1_com);
         }
-
         if (!comision.EVAL_PROMO2.READONLY)
         {
             var dp_com_promo2 = 'datepicker_comision_promo2_'+c;
             var posibles_fechas_promo2_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, dias_no_validos);
             set_values(dp_com_promo2, inicio_periodo[1], fin_periodo[1], posibles_fechas_promo2_com);
         }
-        
-
         if (ciclo == 'F' ||  ciclo == 'FyP')
         {
             if (!comision.EVAL_RECUP.READONLY)
             {
                 var dp_com_recup = 'datepicker_comision_promo_recup_'+c;
-                var posibles_fechas_recup_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, dias_no_validos);
-                set_values(dp_com_recup, inicio_periodo[1], fin_periodo[1], posibles_fechas_recup_com);
-            }
-            if (!comision.EVAL_INTEG.READONLY)
-            {
-                var dp_com_integ = 'datepicker_comision_promo_integ_'+c;
-                var posibles_fechas_integ_com = get_posibles_fechas(dias_semana, inicio_periodo[2], fin_periodo[2], dias_no_disponibles, dias_no_validos);
-                set_values(dp_com_integ, inicio_periodo[2], fin_periodo[2], posibles_fechas_integ_com);
+                var posibles_fechas_recup_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_no_validos);
+                set_values(dp_com_recup, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup_com);
             }
         }
-        else
-        {
-            if (!comision.EVAL_INTEG.READONLY)
-            {    
-                var dp_com_integ = 'datepicker_comision_promo_integ_'+c;
-                var posibles_fechas_integ_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_no_validos);
-                set_values(dp_com_integ, inicio_periodo[1], fin_periodo[2], posibles_fechas_integ_com);
-            }
+        if (!comision.EVAL_INTEG.READONLY)
+        {    
+            var dp_com_integ = 'datepicker_comision_promo_integ_'+c;
+            var posibles_fechas_integ_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_no_validos);
+            set_values(dp_com_integ, inicio_periodo[1], fin_periodo[2], posibles_fechas_integ_com);
         }
     }
 
@@ -256,36 +213,21 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         if (!comision.EVAL_REGU1.READONLY)
         {    
             var dp_com_regu1 = 'datepicker_comision_regu1_'+c;
-            if (ciclo == 'F' || ciclo == 'FyP' )
-            {
-                var posibles_fechas_regu1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, dias_semana, dias_no_validos);
-                set_values(dp_com_regu1, inicio_periodo[0], fin_periodo[0], posibles_fechas_regu1_com);
-            }
-            else
-            {
-                var posibles_fechas_regu1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[1], dias_no_disponibles, dias_semana, dias_no_validos);
-                set_values(dp_com_regu1, inicio_periodo[0], fin_periodo[1], posibles_fechas_regu1_com);
-            }
+            //if (ciclo == 'F' || ciclo == 'FyP' )
+            var posibles_fechas_regu1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, dias_semana, dias_no_validos);
+            set_values(dp_com_regu1, inicio_periodo[0], fin_periodo[0], posibles_fechas_regu1_com);
         }
         if (!comision.EVAL_RECUP1.READONLY)
         {
             var dp_com_recup1 = 'datepicker_comision_regu_recup1_'+c;
-            var posibles_fechas_recup1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[1], dias_no_disponibles, dias_semana, dias_no_validos);
-            set_values(dp_com_recup1, inicio_periodo[0], fin_periodo[1], posibles_fechas_recup1_com);
+            var posibles_fechas_recup1_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, dias_semana, dias_no_validos);
+            set_values(dp_com_recup1, inicio_periodo[1], fin_periodo[1], posibles_fechas_recup1_com);
         }
         if (!comision.EVAL_RECUP2.READONLY)
         {    
             var dp_com_recup2 = 'datepicker_comision_regu_recup2_'+c;
-            if (ciclo == 'F' || ciclo == 'FyP' )
-            {
-                var posibles_fechas_recup2_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_semana, dias_no_validos);
-                set_values(dp_com_recup2, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup2_com);
-            }
-            else
-            {
-                var posibles_fechas_recup2_com = get_posibles_fechas(dias_semana, inicio_periodo[2], fin_periodo[2], dias_no_disponibles, dias_no_validos);
-                set_values(dp_com_recup2, inicio_periodo[2], fin_periodo[2], posibles_fechas_recup2_com);
-            }
+            var posibles_fechas_recup2_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_semana, dias_no_validos);
+            set_values(dp_com_recup2, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup2_com);
         }
     }
 
@@ -296,7 +238,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         var posibles_fechas = '[';
         while (dia <= fin_periodo)
         {
-            
             var diaSemana = dia.getDay();
             //if (dias_semana.includes(String(diaSemana+1)))
             if (contiene(dias_semana, diaSemana))
@@ -316,19 +257,29 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     function fecha_disponible(fechas_no_disponibles, fecha)
     {
         var dias_ocupados = JSON.stringify(fechas_no_disponibles);
-        if (dias_ocupados.includes(fecha))
+
+        var fecha_formateada = fecha.toISOString().substring(0, 10);
+        if (dias_ocupados.includes(fecha_formateada))
+        {
             return false;
+        }
 
         var dia_anterior = new Date(fecha);
-        dia_anterior.setDate(dia_anterior.getDate() + 1);
-        if (dias_ocupados.includes(dia_anterior))
+        dia_anterior.setDate(dia_anterior.getDate() - 1);
+        var dia_anterior_formateado = dia_anterior.toISOString().substring(0, 10);
+        if (dias_ocupados.includes(dia_anterior_formateado))
+        {
             return false;
+        }
         
         var dia_siguiente = new Date(fecha);
         dia_siguiente.setDate(dia_siguiente.getDate() + 1);
-        if (dias_ocupados.includes(dia_siguiente))
+        var dia_siguiente_formateado = dia_siguiente.toISOString().substring(0, 10);
+        if (dias_ocupados.includes(dia_siguiente_formateado))
+        {
             return false;
-        
+        }
+
         return true;
     }
     
@@ -354,7 +305,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     }
     
     
-    function set_values(objeto_id, inicio_periodo, fin_periodo) //, posibles_fechas)
+    function set_values(objeto_id, inicio_periodo, fin_periodo, posibles_fechas)
     {
 //        console.log(inicio_periodo);
 //        console.log(fin_periodo);
@@ -372,17 +323,15 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 maxDate: fin_periodo,
 
                 beforeShowDay: function (date) {
-                            diaSemana = date.getDay();
-//                            posiblesDias = posibles_fechas;
+//                            diaSemana = date.getDay();
+                            posiblesDias = posibles_fechas;
                             diaFormateado = date.toISOString().substring(0, 10);
-                            habilitar =   true; //(posiblesDias.includes(diaFormateado));
-                            console.log(habilitar);
+                            habilitar =   (posiblesDias.includes(diaFormateado));
+//                            console.log(habilitar);
                             return [habilitar];
-//                        return true;
                         }
             });
     }
-
 
 });
 
@@ -411,17 +360,3 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 //        }
 //    }
 //}
-
-    
-        function myFunct(pp)
-    {
-        console.log(pp.value);
-        if (pp.value == 'R')
-        {
-            $('#qq').show();
-        }
-        else
-        {
-            $('#qq').hide();
-        }
-    }

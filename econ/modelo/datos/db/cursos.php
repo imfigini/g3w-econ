@@ -265,7 +265,7 @@ class cursos
                         O.observaciones
                 FROM sga_comisiones C
                 JOIN sga_escala_notas EN ON (EN.escala_notas = C.escala_notas)
-                LEFT JOIN ufce_cron_eval_parc O ON (O.comision = C.comision)
+                LEFT JOIN ufce_cron_eval_parc_obs O ON (O.comision = C.comision)
                 WHERE C.estado = 'A'
                         AND C.anio_academico = $anio_academico
                         AND C.materia = $materia 
@@ -359,37 +359,7 @@ class cursos
         return '';        
     }
     
-    
-//    /**
-//     * parametros: comision
-//     * cache: no
-//     * filas: n
-//     */
-//    function get_dias_de_comision($parametros)
-//    {
-//        $comision = $parametros['comision'];
-//        $sql = "SELECT DISTINCT sga_asignaciones.dia_semana
-//			FROM sga_calendcursada ,  sga_asignaciones
-//		WHERE sga_calendcursada.comision = $comision
-//		AND sga_calendcursada.asignacion = sga_asignaciones.asignacion";
-//        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//    }
-
-//    /**
-//     * parametros: comision
-//     * cache: no
-//     * filas: n
-//     */
-//    function get_fechas_clase($parametros)
-//    {
-//        $comision = $parametros['comision'];
-//        $sql = "SELECT fecha 
-//                    FROM sga_calendcursada 
-//                WHERE comision = $comision
-//                AND valido = 'S'";
-//        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//    }
-    
+   
     /**
      * parametros: anio_academico, periodo
      * cache: no
@@ -489,6 +459,12 @@ class cursos
                     WHERE comision IN (
                                     SELECT comision FROM sga_comisiones WHERE materia = $materia
                             ) 
+                UNION
+                SELECT DISTINCT DATE(fecha_hora) AS fecha
+                    FROM ufce_cron_eval_parc 
+                    WHERE comision IN (
+                                    SELECT comision FROM sga_comisiones WHERE materia = $materia
+                            ) 
                         AND estado IN ('A', 'P')";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
@@ -531,34 +507,32 @@ class cursos
     * cache: no
     * filas: n
     */
-    function alta_evaluacion_parcial($parametros)
+    function alta_propuesta_evaluacion_parcial($parametros)
     {
         $comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
         $escala = $parametros['escala_notas'];
         $fecha_hora = $parametros['fecha_hora'];
-        $sql = "SELECT estado FROM sga_cron_eval_parc 
+        $sql = "SELECT estado FROM ufce_cron_eval_parc 
                     WHERE comision = $comision 
                         AND evaluacion = $evaluacion";
         $estado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         
-        if (empty($estado) OR $estado[0]['ESTADO'] == 'P' || $estado[0]['ESTADO'] == 'R')
+        if (!empty($estado) AND $estado[0]['ESTADO'] == 'P')
         {
 
-            $sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
-            $result1 = util::ejecutar_procedure($sql);
-            
-            if (empty($result1))
-            {
-                return ("Error al almacenar la solicitud. ");
-            }
-
-            $sql = "UPDATE sga_cron_eval_parc SET estado = 'P' WHERE comision = $comision AND evaluacion = $evaluacion";
-            $result2 = kernel::db()->ejecutar($sql);
-            
-            return ("Se almacenó correctamente la solicitud para la ocmision $comision. ");
+            //$sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
+            $sql = "UPDATE ufce_cron_eval_parc
+                        SET fecha_hora = $fecha_hora
+                    WHERE comision = $comision 
+                    AND evaluacion = $evaluacion";
         }
-        return null;
+        else
+        {
+            $sql = "INSERT INTO ufce_cron_eval_parc (comision, evaluacion, fecha_hora, estado)
+                        VALUES ($comision, $evaluacion, $fecha_hora, 'P')";
+        }
+        return util::ejecutar_procedure($sql);
     }
     
     /**
@@ -570,11 +544,20 @@ class cursos
     {
         $comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-        $sql = "SELECT fecha_hora, estado
-                FROM sga_cron_eval_parc 
-                    WHERE comision = $comision
-                    AND evaluacion = $evaluacion";
-        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        $sql = "SELECT fecha_hora, 'A' as estado
+                    FROM sga_cron_eval_parc 
+                        WHERE comision = $comision
+                        AND evaluacion = $evaluacion";
+        $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (empty($resultado))
+        {
+            $sql = "SELECT fecha_hora, estado
+                    FROM ufce_cron_eval_parc 
+                        WHERE comision = $comision
+                        AND evaluacion = $evaluacion";
+            $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        }
+        return $resultado;
     }
     
     
@@ -589,23 +572,22 @@ class cursos
         $evaluacion = $parametros['evaluacion'];
         $observaciones = $parametros['observaciones'];
         $sql = "SELECT *
-                FROM ufce_cron_eval_parc 
+                FROM ufce_cron_eval_parc_obs 
                     WHERE comision = $comision";
         $obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         if (count($obs) > 0)
         {
-            $sql = "UPDATE ufce_cron_eval_parc 
+            $sql = "UPDATE ufce_cron_eval_parc_obs 
                         SET observaciones = $observaciones
                     WHERE comision = $comision";
         }
         else
         {
-            $sql = "INSERT INTO ufce_cron_eval_parc (comision, observaciones)
+            $sql = "INSERT INTO ufce_cron_eval_parc_obs (comision, observaciones)
                         VALUES ($comision, $observaciones)";
         }
         return kernel::db()->ejecutar($sql);
     }
-    
     
     
 }

@@ -260,7 +260,7 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__alta_evaluacion_parcial()
+	static function cursos__alta_propuesta_evaluacion_parcial()
 	{
 		return array (
   'parametros' => 

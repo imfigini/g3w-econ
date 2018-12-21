@@ -56,9 +56,9 @@ return array(
     'mixes.carrera' => 'Carrera',
     
     /* Propuestas de fechas para parciales y recuperatorios */
-    'tit_fechas_parciales' => 'Solicitud  de fechas para parciales y recuperatorios',
-    'fechas_parciales' => 'Propuesta de fechas para parciales y recuperatorios',
-    'fechas_parciales.sin_resultados' => 'No hay información',
+    'tit_fechas_parciales_propuesta' => 'Solicitud  de fechas para parciales y recuperatorios',
+    'fechas_parciales_propuesta' => 'Propuesta de fechas para parciales y recuperatorios',
+    'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
     
     /* Aceptación de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales y recuperatorios',
