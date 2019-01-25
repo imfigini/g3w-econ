@@ -161,7 +161,8 @@ class coord_materia
             $existe = $this->get_coordinador($parametros);
             if ($existe)
             {
-                $this->update_coordinador($parametros);
+               $this->update_coordinador($parametros);
+               $this->del_coordinador_anterior(array('coord_anterior'=>$existe));
             }
             else
             {
@@ -175,8 +176,74 @@ class coord_materia
                 $datos = kernel::db()->ejecutar($sql);
                 return $datos;
             }
+            if (!$this->is_usuario_coord($parametros))
+            {
+                $this->set_usuario_coord($parametros);
+            }
         }
         return null;
     }
     
+    /**
+    * parametros: coordinador
+    * cache: memoria
+    * filas: n
+    */
+    function is_usuario_coord($parametros)
+    {
+        $coordinador = $parametros['coordinador'];
+        $sql = "SELECT * FROM aca_tipos_usuar_ag 
+                    WHERE nro_inscripcion IN (
+                                SELECT nro_inscripcion FROM sga_docentes WHERE legajo = $coordinador
+                            )
+                        AND  tipo_usuario = 'COORD'";
+        $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (!empty($resultado) && isset($resultado[0]))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+    * parametros: coordinador
+    * cache: memoria
+    * filas: n
+    */
+    function set_usuario_coord($parametros)
+    {
+        $coordinador = $parametros['coordinador'];
+        $sql = "SELECT nro_inscripcion FROM sga_docentes
+                    WHERE legajo = $coordinador";
+        $nro_inscripcion = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        $nro_inscripcion = $nro_inscripcion[0]['NRO_INSCRIPCION'];
+        
+        $sql = "INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', '$nro_inscripcion', 'COORD', 'A')";
+        kernel::db()->ejecutar($sql);
+    }
+    
+    /**
+    * parametros: coord_anterior
+    * cache: memoria
+    * filas: n
+    */
+    function del_coordinador_anterior($parametros)
+    {
+        $coord_anterior = $parametros['coord_anterior'];
+        $sql = "SELECT coordinador
+                    FROM ufce_coordinadores_materias
+                    WHERE coordinador = '$coord_anterior' ";
+        $existe = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (empty($existe) && !isset($existe[0]))
+        {
+            $sql = "SELECT nro_inscripcion FROM sga_docentes WHERE legajo = '$coord_anterior'";
+            $nro_inscripcion = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+            $nro_inscripcion = $nro_inscripcion[0]['NRO_INSCRIPCION'];
+            $sql = "DELETE FROM aca_tipos_usuar_ag
+                        WHERE nro_inscripcion = '$nro_inscripcion'
+                        AND tipo_usuario = 'COORD'";
+            kernel::db()->ejecutar($sql);
+        }
+    }
 }
+

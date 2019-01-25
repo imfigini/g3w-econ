@@ -26,7 +26,7 @@ class controlador extends controlador_g3w2
     {
         $parametros = array('legajo' => null);
         $perfil = kernel::persona()->perfil()->get_id();
-        if ($perfil == 'DOC')
+        if ($perfil == 'COORD')
         {
             $parametros = array('legajo'=> kernel::persona()->get_legajo_docente());
         }

@@ -115,7 +115,6 @@ class controlador extends controlador_g3w2
             
             $parametros = $this->get_parametros_grabar();
             catalogo::consultar('coord_materia', 'set_coordinador', $parametros);
-               
             $this->set_anio_academico($parametros['anio_academico_hash']);
             $this->set_periodo($parametros['periodo_hash']);
         }        

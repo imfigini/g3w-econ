@@ -48,6 +48,11 @@ class pagelet_filtro extends pagelet {
             return $this->controlador->get_mensaje();
 	}
 
+        function get_mensaje_error()
+	{
+            return $this->controlador->get_mensaje_error();
+	}
+        
 	public function prepare()
 	{   
             $operacion = kernel::ruteador()->get_id_operacion();
@@ -63,12 +68,13 @@ class pagelet_filtro extends pagelet {
             $form->set_periodo($periodo_hash);
             
             $this->data['mensaje'] = $this->get_mensaje();
+            $this->data['mensaje_error'] = $this->get_mensaje_error();
             
             $this->add_var_js('periodo_hash', $periodo_hash);
             $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
             $this->data['periodo_hash'] = $periodo_hash;
             $this->data['anio_academico_hash'] = $anio_academico_hash;
-
+         
             if (!empty($anio_academico_hash) && !empty($periodo_hash))
             {
                 $datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash);

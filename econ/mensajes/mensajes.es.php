@@ -2,6 +2,7 @@
 return array(
     
     'header.menu.inicio_oficina_docentes' => 'Inicio Dirección de Docentes',
+    'header.menu.inicio_coordinador' => 'Coordinador de materia',
     'header.menu.coord_materias' => 'Coordinadores de materias',
     'header.menu.definicion_cursos' => 'Cursadas',
     'header.menu.detalle_cursos' => 'Cursadas',
@@ -10,8 +11,10 @@ return array(
     
     /* Perfiles */
     'perfil.ofd' => 'dirección de docentes',
+    'perfil.coord' => 'coordinador de materia',
     
     'OFD' => 'dirección de docentes',
+    'COORD' => 'coordinador de materia',
 
     'filtro.filtro_periodos' => "períodos lectivos",
     
@@ -20,6 +23,11 @@ return array(
     "inicio_oficina_docentes.bienvenido" => "Bienvenido",
     "inicio_oficina_docentes.intro" => "Para comenzar seleccione alguna de las opciones del menú",
 
+    //Inicio Coordinador de Materia
+    "inicio_coordinador.titulo" => "Inicio Coordinador de Materia",
+    "inicio_coordinador.bienvenido" => "Bienvenido",
+    "inicio_coordinador.intro" => "Para comenzar seleccione alguna de las opciones del menú",
+    
     /* Asignación de coordinadores a materias */
     'tit_asignacion_coord_materias' => 'Asignación de coordinadores a materias',
     'asignacion_coord_materias' => 'Asignación de coordinadores a materias',

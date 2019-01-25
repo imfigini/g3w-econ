@@ -27,7 +27,7 @@ class controlador extends controlador_g3w2
     {
         $parametros = array('legajo' => null);
         $perfil = kernel::persona()->perfil()->get_id();
-        if ($perfil == 'DOC')
+        if ($perfil == 'COORD')
         {
             $parametros = array('legajo'=> kernel::persona()->get_legajo_docente());
         }
@@ -59,7 +59,8 @@ class controlador extends controlador_g3w2
                 //DIAS_CLASE [DIA_SEMANA, HS_COMIENZO_CLASE, HS_FINALIZ_CLASE, DIA_NOMBRE]
                 
                 $comisiones = $this->get_fechas_no_validas($comisiones);
-
+                //DIAS_NO_VALIDOS
+                
                 $comisiones = $this->get_evaluaciones_existentes($comisiones);
 
                 $promocionables = array();
@@ -77,14 +78,6 @@ class controlador extends controlador_g3w2
                                     break;
                     }
                 }
-                $materias[$i]['DIAS_PROMO'] = $this->get_mismos_dias($promocionables);
-                $materias[$i]['DIAS_REGU'] = $this->get_mismos_dias($regulares);
-                //[DIA, DIA_NOMBRE]] 
-                //[DIA, DIA_NOMBRE]] 
-                
-               // $materias[$i]['DIAS_NO_VALIDOS'] = $this->get_fechas_no_validas($materias[$i]['MATERIA']);
-                $materias[$i]['FECHAS_OCUPADAS'] = $this->get_fechas_ya_asignadas($materias[$i]['MATERIA']);
-               
                 $materias[$i]['COMISIONES'] = $comisiones;
                 $datos[] = $materias[$i];
             }
@@ -187,7 +180,7 @@ class controlador extends controlador_g3w2
             {
                 $arreglo[] = $d['FECHA'];
             }
-            $comision['DIAS_NO_VALIDOS'] = $arreglo;
+            $comision['DIAS_NO_VALIDOS_JOSN'] = json_encode($arreglo);
             $resultado[] = $comision;
         }
         return $resultado;
@@ -452,81 +445,40 @@ class controlador extends controlador_g3w2
         return false;
     }
     
-    
     /** Graba sólo la comisión */
     function accion__grabar_comision()
     {
+        $mensaje = 'En desarrollo.... Sólo acepta la fecha propuesta. Falta implementar la modificación de fecha.  ';
+        
         $datos = $this->get_parametros_grabar_comision();
-//        print_r("<br> datos: ");
-//        print_r($datos);
 
-        $mensaje = '';
-        if (kernel::request()->isPost()) 
+        if ($datos['opcion_promo1'] == 'A')
         {
-            $parametros['comision'] = $datos['comision'];
-            $parametros['escala_notas'] = $datos['escala'];
-
-            //PROMO
-            if (!empty($datos['fecha_promo1']))
-            {
-                $parametros['evaluacion'] = 1;
-                $parametros['fecha_hora'] = $datos['fecha_promo1'];
-                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-            if (!empty($datos['fecha_promo2']))
-            {
-                $parametros['evaluacion'] = 2;
-                $parametros['fecha_hora'] = $datos['fecha_promo2'];
-                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-            if (!empty($datos['fecha_recup']))
-            {
-                $parametros['evaluacion'] = 7;
-                $parametros['fecha_hora'] = $datos['fecha_recup'];
-                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-            if (!empty($datos['fecha_integ']))
-            {
-                $parametros['evaluacion'] = 14;
-                $parametros['fecha_hora'] = $datos['fecha_integ'];
-                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-
-            //REGULAR
-            if (!empty($datos['fecha_regu1']))
-            {
-                $parametros['evaluacion'] = 21;
-                $parametros['fecha_hora'] = $datos['fecha_regu1'];
-                $mesnaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-
-            if (!empty($datos['fecha_recup1']))
-            {
-                $parametros['evaluacion'] = 4;
-                $parametros['fecha_hora'] = $datos['fecha_recup1'];
-                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-            if (!empty($datos['fecha_recup2']))
-            {
-                $parametros['evaluacion'] = 5;
-                $parametros['fecha_hora'] = $datos['fecha_recup2'];
-                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-            }
-
-            //Observaciones
-            if (!empty($datos['observaciones']))
-            {
-                $parametros['observaciones'] = $datos['observaciones'];
-                catalogo::consultar('cursos', 'set_evaluaciones_observaciones', $parametros);
-            }
-
-            //.' de la materia '.$materia_nombre.'.';
-
-            //print_r($mensaje);
-            $this->set_anio_academico($datos['anio_academico_hash']);
-            $this->set_periodo($datos['periodo_hash']);
-            $this->set_mensaje($mensaje);
+            $datos['evaluacion'] = 1;
+            $datos['fecha_hora'] = $datos['fecha_hora_promo1']; 
+            $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
         }
+        if ($datos['opcion_promo2'] == 'A')
+        {
+            $datos['evaluacion'] = 2;
+            $datos['fecha_hora'] = $datos['fecha_hora_promo2'];
+            $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+        }
+        if ($datos['opcion_recup'] == 'A')
+        {
+            $datos['evaluacion'] = 7;
+            $datos['fecha_hora'] = $datos['fecha_hora_recup'];
+            $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+        }
+        if ($datos['opcion_integ'] == 'A')
+        {
+            $datos['evaluacion'] = 14;
+            $datos['fecha_hora'] = $datos['fecha_hora_integ'];
+            $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+        }
+        $this->set_anio_academico($datos['anio_academico_hash']);
+        $this->set_periodo($datos['periodo_hash']);
+        $this->set_mensaje($mensaje);
     }
     
     function get_parametros_grabar_comision()
@@ -534,286 +486,258 @@ class controlador extends controlador_g3w2
         $parametros = array();
        
         $parametros['comision'] = $this->validate_param('comision', 'post', validador::TIPO_TEXTO);
-        $tipo_escala = 'escala_'.$parametros['comision'];
-        $parametros['tipo_escala'] = $this->validate_param($tipo_escala, 'post', validador::TIPO_TEXTO);
-        $dias_clse_com = 'dias_clase_'.$parametros['comision'];
-        $dias_clase = $this->validate_param($dias_clse_com, 'post', validador::TIPO_TEXTO);
-        $parametros['dias_clase'] = (array) json_decode($dias_clase);
-        $observaciones = 'observaciones_'.$parametros['comision'];
-        $parametros['observaciones'] = $this->validate_param($observaciones, 'post', validador::TIPO_TEXTO);
-
-        //PROMO
-        if ($parametros['tipo_escala'] == 'P  ' || $parametros['tipo_escala'] == 'PyR' )
-        {
-            $parametros = $this->get_parametros_comision_promo($parametros);
-        }
-
-        //REGULAR
-        if ($parametros['tipo_escala'] == 'R  ' || $parametros['tipo_escala'] == 'PyR' )
-        {
-            $parametros = $this->get_parametros_comision_regu($parametros);
-        }
-
+        $escala = 'escala_'.$parametros['comision'];
+        $parametros['tipo_escala'] = $this->validate_param($escala, 'post', validador::TIPO_TEXTO); 
         switch ($parametros['tipo_escala'])
         {
-            case 'R  ': $parametros['escala'] = 3; break;    
-            case 'P  ': $parametros['escala'] = 6; break;   
-            case 'PyR': $parametros['escala'] = 4; break;   
+            case 'R  ': $parametros['escala_notas'] = 3; break;    
+            case 'P  ': $parametros['escala_notas'] = 6; break;   
+            case 'PyR': $parametros['escala_notas'] = 4; break;   
         }
+
+        $opcion = 'aceptar_promo1_'.$parametros['comision'];
+        $parametros['opcion_promo1'] = $this->validate_param($opcion, 'post', validador::TIPO_TEXTO);
+        $fecha_hora = 'fecha_hora_promo1_'.$parametros['comision'];
+        $parametros['fecha_hora_promo1'] = $this->validate_param($fecha_hora, 'post', validador::TIPO_TEXTO);
+        
+        $opcion = 'aceptar_promo2_'.$parametros['comision'];
+        $parametros['opcion_promo2'] = $this->validate_param($opcion, 'post', validador::TIPO_TEXTO);
+        $fecha_hora = 'fecha_hora_promo2_'.$parametros['comision'];
+        $parametros['fecha_hora_promo2'] = $this->validate_param($fecha_hora, 'post', validador::TIPO_TEXTO);
+        
+        $opcion = 'aceptar_recup_'.$parametros['comision'];
+        $parametros['opcion_recup'] = $this->validate_param($opcion, 'post', validador::TIPO_TEXTO);
+        $fecha_hora = 'fecha_hora_recup_'.$parametros['comision'];
+        $parametros['fecha_hora_recup'] = $this->validate_param($fecha_hora, 'post', validador::TIPO_TEXTO);
+        
+        $opcion = 'aceptar_integ_'.$parametros['comision'];
+        $parametros['opcion_integ'] = $this->validate_param($opcion, 'post', validador::TIPO_TEXTO);
+        $fecha_hora = 'fecha_hora_integ_'.$parametros['comision'];
+        $parametros['fecha_hora_integ'] = $this->validate_param($fecha_hora, 'post', validador::TIPO_TEXTO);
         
         $parametros['anio_academico_hash']  = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
         $parametros['periodo_hash']         = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
-        
-        return $parametros;        
-    }
-
-    private function get_parametros_comision_promo($parametros)
-    {
-        $promo1 = 'datepicker_comision_promo1_'.$parametros['comision'];
-        $promo2 = 'datepicker_comision_promo2_'.$parametros['comision'];
-        $recup = 'datepicker_comision_promo_recup_'.$parametros['comision'];
-        $integ = 'datepicker_comision_promo_integ_'.$parametros['comision'];
-
-        $fecha_promo1 = $this->validate_param($promo1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_promo1'] = $this->format_fecha_hora($fecha_promo1, $parametros['dias_clase']);
-        
-        $fecha_promo2 = $this->validate_param($promo2, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_promo2'] = $this->format_fecha_hora($fecha_promo2, $parametros['dias_clase']);
-
-        $fecha_recup = $this->validate_param($recup, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_recup'] = $this->format_fecha_hora($fecha_recup, $parametros['dias_clase']);
-        
-        $fecha_integ = $this->validate_param($integ, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_integ'] = $this->format_fecha_hora($fecha_integ, $parametros['dias_clase']);
-        
-        return $parametros;
-    }
-    
-    private function get_parametros_comision_regu($parametros)
-    {
-        $regu1 = 'datepicker_comision_regu1_'.$parametros['comision'];
-        $recup1 = 'datepicker_comision_regu_recup1_'.$parametros['comision'];
-        $recup2 = 'datepicker_comision_regu_recup2_'.$parametros['comision'];
-
-        $fecha_regu1 = $this->validate_param($regu1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_regu1'] = $this->format_fecha_hora($fecha_regu1, $parametros['dias_clase']);
-        
-        $fecha_recup1 = $this->validate_param($recup1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_recup1'] = $this->format_fecha_hora($fecha_recup1, $parametros['dias_clase']);
-                
-        $fecha_recup2 = $this->validate_param($recup2, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_recup2'] = $this->format_fecha_hora($fecha_recup2, $parametros['dias_clase']);
-        
-        return $parametros;
-    }
-    
-    private function format_fecha_hora($fecha, $dias_clase)
-    {
-        $exp = explode('/', $fecha);
-        if (count($exp) > 1)
-        {
-            $dia_semana = date("w",strtotime('mm/dd/yyyy',$fecha));
-            
-            foreach($dias_clase AS $d)
-            {
-                if ($d->{'DIA_SEMANA'} == $dia_semana)
-                {
-                    $hora = $d->{'HS_COMIENZO_CLASE'};
-                    $dia = substr($fecha, 0, 2);
-                    $mes = substr($fecha, 3, 2);
-                    $anio = substr($fecha, 6, 4);
-                    $fecha_fromateada = $anio.'-'.$mes.'-'.$dia;
-                    return $fecha_fromateada.' '.$hora;
-                }
-            }
-        }
-        return $fecha;
-    }
-    
-   
-    /** Graba todas las comisiones de la materia */
-    function accion__grabar_materia()
-    {
-        $datos = $this->get_parametros_grabar_materia();
-//        print_r("<br> datos: ");
-//        print_r($datos);
-        
-        $mensaje = '';
-        if (kernel::request()->isPost()) 
-        {
-            $comisiones = $this->get_comisiones_de_materia_con_dias_de_clase($datos['anio_academico_hash'], $datos['periodo_hash'], $datos['materia']);
-
-            foreach ($comisiones as $comision)
-            {
-                $parametros['comision'] = $comision['COMISION'];
-                
-                switch ($comision['ESCALA'])
-                {
-                    case 'R  ': $parametros['escala_notas'] = 3; break;    
-                    case 'P  ': $parametros['escala_notas'] = 6; break;   
-                    case 'PyR': $parametros['escala_notas'] = 4; break;   
-                }
-                
-                $dias_clase = catalogo::consultar('cursos', 'get_dias_clase', $parametros);
-                
-                //PROMO
-                if ($comision['ESCALA'] == 'P  ' || $comision['ESCALA'] == 'PyR')
-                {
-                    if (!empty($datos['fecha_promo1']))
-                    {
-                        $parametros['evaluacion'] = 1;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_promo1'], $dias_clase);
-                        $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                    if (!empty($datos['fecha_promo2']))
-                    {
-                        $parametros['evaluacion'] = 2;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_promo2'], $dias_clase);
-                        $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                    if (!empty($datos['fecha_recup']))
-                    {
-                        $parametros['evaluacion'] = 7;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_recup'], $dias_clase);
-                        $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                    if (!empty($datos['fecha_integ']))
-                    {
-                        $parametros['evaluacion'] = 14;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_integ'], $dias_clase);
-                        $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                }
-
-                //REGULAR
-                if ($comision['ESCALA'] == 'R  ' || $comision['ESCALA'] == 'PyR')
-                {
-                    if (!empty($datos['fecha_regu1']))
-                    {
-                        $parametros['evaluacion'] = 21;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_regu1'], $dias_clase);
-                        $mesnaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                    if (!empty($datos['fecha_recup1']))
-                    {
-                        $parametros['evaluacion'] = 4;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_recup1'], $dias_clase);
-                        $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                    if (!empty($datos['fecha_recup2']))
-                    {
-                        $parametros['evaluacion'] = 5;
-                        $parametros['fecha_hora'] = $this->get_fecha_hora($datos['fecha_recup2'], $dias_clase);
-                        $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
-                    }
-                }
-
-                //Observaciones
-                if (!empty($datos['observaciones']))
-                {
-                    $parametros['observaciones'] = $datos['observaciones'];
-                    catalogo::consultar('cursos', 'set_evaluaciones_observaciones', $parametros);
-                }
-            }
-
-            //print_r($mensaje);
-            $this->set_anio_academico($datos['anio_academico_hash']);
-            $this->set_periodo($datos['periodo_hash']);
-            $this->set_mensaje($mensaje);
-        }
-    }
-    
-    private function get_fecha_hora($fecha, $dias_clase)
-    {
-        $dia_semana = date("w",strtotime('mm/dd/yyyy',$fecha));
-        foreach($dias_clase AS $d)
-        {
-            if ($d['DIA_SEMANA'] == $dia_semana)
-            {
-                $hora = $d['HS_COMIENZO_CLASE'];
-                return $fecha.' '.$hora;
-            }
-        }
-        return $fecha;
-    }
-    
-    function get_parametros_grabar_materia()
-    {
-        $parametros = array();
-        $parametros['materia'] = $this->validate_param('materia', 'post', validador::TIPO_TEXTO);
-        $parametros['calidad'] = $this->validate_param('materia_calidad', 'post', validador::TIPO_TEXTO);
-        
-        //PROMO
-        if ($parametros['calidad'] == 'P  ' || $parametros['calidad'] == 'PyR' )
-        {
-            $parametros = $this->get_parametros_materia_promo($parametros);
-        }
-
-        //REGULAR
-        if ($parametros['calidad'] == 'R  ' || $parametros['calidad'] == 'PyR' )
-        {
-            $parametros = $this->get_parametros_materia_regu($parametros);
-        }
-        
-        $parametros['anio_academico_hash']  = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
-        $parametros['periodo_hash']         = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
-        
-        return $parametros;        
-    }
-
-    private function get_parametros_materia_promo($parametros)
-    {
-        $promo1 = 'datepicker_materia_promo1_'.$parametros['materia'];
-        $promo2 = 'datepicker_materia_promo2_'.$parametros['materia'];
-        $recup = 'datepicker_materia_promo_recup_'.$parametros['materia'];
-        $integ = 'datepicker_materia_promo_integ_'.$parametros['materia'];
-        
-        $fecha_promo1 = $this->validate_param($promo1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_promo1'] = $this->format_fecha($fecha_promo1);
-
-        $fecha_promo2 = $this->validate_param($promo2, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_promo2'] = $this->format_fecha($fecha_promo2);
-
-        $fecha_recup = $this->validate_param($recup, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_recup'] = $this->format_fecha($fecha_recup);
-        
-        $fecha_integ = $this->validate_param($integ, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_integ'] = $this->format_fecha($fecha_integ);
 
         return $parametros;
+//        $dias_clse_com = 'dias_clase_'.$parametros['comision'];
+//        $dias_clase = $this->validate_param($dias_clse_com, 'post', validador::TIPO_TEXTO);
+//        $parametros['dias_clase'] = (array) json_decode($dias_clase);
+//        $observaciones = 'observaciones_'.$parametros['comision'];
+//        $parametros['observaciones'] = $this->validate_param($observaciones, 'post', validador::TIPO_TEXTO);
+//
+//        //PROMO
+//        if ($parametros['tipo_escala'] == 'P  ' || $parametros['tipo_escala'] == 'PyR' )
+//        {
+//            $parametros = $this->get_parametros_comision_promo($parametros);
+//        }
+//
+//        //REGULAR
+//        if ($parametros['tipo_escala'] == 'R  ' || $parametros['tipo_escala'] == 'PyR' )
+//        {
+//            $parametros = $this->get_parametros_comision_regu($parametros);
+//        }
+//
+//        switch ($parametros['tipo_escala'])
+//        {
+//            case 'R  ': $parametros['escala'] = 3; break;    
+//            case 'P  ': $parametros['escala'] = 6; break;   
+//            case 'PyR': $parametros['escala'] = 4; break;   
+//        }
+        
     }
     
-    private function get_parametros_materia_regu($parametros)
-    {
-        $regu1 = 'datepicker_materia_regu1_'.$parametros['materia'];
-        $recup1 = 'datepicker_materia_regu_recup1_'.$parametros['materia'];
-        $recup2 = 'datepicker_materia_regu_recup2_'.$parametros['materia'];
-
-        $fecha_regu1 = $this->validate_param($regu1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_regu1'] = $this->format_fecha($fecha_regu1);
-        
-        $fecha_recup1 = $this->validate_param($recup1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_recup1'] = $this->format_fecha($fecha_recup1);
-                
-        $fecha_recup2 = $this->validate_param($recup2, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_recup2'] = $this->format_fecha($fecha_recup2);
-        
-        return $parametros;
-    }        
-  
-    private function format_fecha($fecha)
-    {
-        $exp = explode('/', $fecha);
-        if (count($exp) > 1)
-        {
-            $dia = substr($fecha, 0, 2);
-            $mes = substr($fecha, 3, 2);
-            $anio = substr($fecha, 6, 4);
-            $fecha_fromateada = $anio.'-'.$mes.'-'.$dia;
-            return $fecha_fromateada;
-        }
-        return $fecha;
-    }
+    
+    /** Graba sólo la comisión */
+//    function accion__grabar_comision()
+//    {
+//        $datos = $this->get_parametros_grabar_comision();
+////        print_r("<br> datos: ");
+////        print_r($datos);
+//
+//        $mensaje = '';
+//        if (kernel::request()->isPost()) 
+//        {
+//            $parametros['comision'] = $datos['comision'];
+//            $parametros['escala_notas'] = $datos['escala'];
+//
+//            //PROMO
+//            if (!empty($datos['fecha_promo1']))
+//            {
+//                $parametros['evaluacion'] = 1;
+//                $parametros['fecha_hora'] = $datos['fecha_promo1'];
+//                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//            if (!empty($datos['fecha_promo2']))
+//            {
+//                $parametros['evaluacion'] = 2;
+//                $parametros['fecha_hora'] = $datos['fecha_promo2'];
+//                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//            if (!empty($datos['fecha_recup']))
+//            {
+//                $parametros['evaluacion'] = 7;
+//                $parametros['fecha_hora'] = $datos['fecha_recup'];
+//                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//            if (!empty($datos['fecha_integ']))
+//            {
+//                $parametros['evaluacion'] = 14;
+//                $parametros['fecha_hora'] = $datos['fecha_integ'];
+//                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//
+//            //REGULAR
+//            if (!empty($datos['fecha_regu1']))
+//            {
+//                $parametros['evaluacion'] = 21;
+//                $parametros['fecha_hora'] = $datos['fecha_regu1'];
+//                $mesnaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//
+//            if (!empty($datos['fecha_recup1']))
+//            {
+//                $parametros['evaluacion'] = 4;
+//                $parametros['fecha_hora'] = $datos['fecha_recup1'];
+//                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//            if (!empty($datos['fecha_recup2']))
+//            {
+//                $parametros['evaluacion'] = 5;
+//                $parametros['fecha_hora'] = $datos['fecha_recup2'];
+//                $mensaje .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $parametros);
+//            }
+//
+//            //Observaciones
+//            if (!empty($datos['observaciones']))
+//            {
+//                $parametros['observaciones'] = $datos['observaciones'];
+//                catalogo::consultar('cursos', 'set_evaluaciones_observaciones', $parametros);
+//            }
+//
+//            //.' de la materia '.$materia_nombre.'.';
+//
+//            //print_r($mensaje);
+//            $this->set_anio_academico($datos['anio_academico_hash']);
+//            $this->set_periodo($datos['periodo_hash']);
+//            $this->set_mensaje($mensaje);
+//        }
+//    }
+//    
+//    function get_parametros_grabar_comision()
+//    {
+//        $parametros = array();
+//       
+//        $parametros['comision'] = $this->validate_param('comision', 'post', validador::TIPO_TEXTO);
+//        $tipo_escala = 'escala_'.$parametros['comision'];
+//        $parametros['tipo_escala'] = $this->validate_param($tipo_escala, 'post', validador::TIPO_TEXTO);
+//        $dias_clse_com = 'dias_clase_'.$parametros['comision'];
+//        $dias_clase = $this->validate_param($dias_clse_com, 'post', validador::TIPO_TEXTO);
+//        $parametros['dias_clase'] = (array) json_decode($dias_clase);
+//        $observaciones = 'observaciones_'.$parametros['comision'];
+//        $parametros['observaciones'] = $this->validate_param($observaciones, 'post', validador::TIPO_TEXTO);
+//
+//        //PROMO
+//        if ($parametros['tipo_escala'] == 'P  ' || $parametros['tipo_escala'] == 'PyR' )
+//        {
+//            $parametros = $this->get_parametros_comision_promo($parametros);
+//        }
+//
+//        //REGULAR
+//        if ($parametros['tipo_escala'] == 'R  ' || $parametros['tipo_escala'] == 'PyR' )
+//        {
+//            $parametros = $this->get_parametros_comision_regu($parametros);
+//        }
+//
+//        switch ($parametros['tipo_escala'])
+//        {
+//            case 'R  ': $parametros['escala'] = 3; break;    
+//            case 'P  ': $parametros['escala'] = 6; break;   
+//            case 'PyR': $parametros['escala'] = 4; break;   
+//        }
+//        
+//        $parametros['anio_academico_hash']  = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
+//        $parametros['periodo_hash']         = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
+//        
+//        return $parametros;        
+//    }
+//
+//    private function get_parametros_comision_promo($parametros)
+//    {
+//        $promo1 = 'datepicker_comision_promo1_'.$parametros['comision'];
+//        $promo2 = 'datepicker_comision_promo2_'.$parametros['comision'];
+//        $recup = 'datepicker_comision_promo_recup_'.$parametros['comision'];
+//        $integ = 'datepicker_comision_promo_integ_'.$parametros['comision'];
+//
+//        $fecha_promo1 = $this->validate_param($promo1, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_promo1'] = $this->format_fecha_hora($fecha_promo1, $parametros['dias_clase']);
+//        
+//        $fecha_promo2 = $this->validate_param($promo2, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_promo2'] = $this->format_fecha_hora($fecha_promo2, $parametros['dias_clase']);
+//
+//        $fecha_recup = $this->validate_param($recup, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_recup'] = $this->format_fecha_hora($fecha_recup, $parametros['dias_clase']);
+//        
+//        $fecha_integ = $this->validate_param($integ, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_integ'] = $this->format_fecha_hora($fecha_integ, $parametros['dias_clase']);
+//        
+//        return $parametros;
+//    }
+//    
+//    private function get_parametros_comision_regu($parametros)
+//    {
+//        $regu1 = 'datepicker_comision_regu1_'.$parametros['comision'];
+//        $recup1 = 'datepicker_comision_regu_recup1_'.$parametros['comision'];
+//        $recup2 = 'datepicker_comision_regu_recup2_'.$parametros['comision'];
+//
+//        $fecha_regu1 = $this->validate_param($regu1, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_regu1'] = $this->format_fecha_hora($fecha_regu1, $parametros['dias_clase']);
+//        
+//        $fecha_recup1 = $this->validate_param($recup1, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_recup1'] = $this->format_fecha_hora($fecha_recup1, $parametros['dias_clase']);
+//                
+//        $fecha_recup2 = $this->validate_param($recup2, 'post', validador::TIPO_TEXTO);
+//        $parametros['fecha_recup2'] = $this->format_fecha_hora($fecha_recup2, $parametros['dias_clase']);
+//        
+//        return $parametros;
+//    }
+//    
+//    private function format_fecha_hora($fecha, $dias_clase)
+//    {
+//        $exp = explode('/', $fecha);
+//        if (count($exp) > 1)
+//        {
+//            $dia_semana = date("w",strtotime('mm/dd/yyyy',$fecha));
+//            
+//            foreach($dias_clase AS $d)
+//            {
+//                if ($d->{'DIA_SEMANA'} == $dia_semana)
+//                {
+//                    $hora = $d->{'HS_COMIENZO_CLASE'};
+//                    $dia = substr($fecha, 0, 2);
+//                    $mes = substr($fecha, 3, 2);
+//                    $anio = substr($fecha, 6, 4);
+//                    $fecha_fromateada = $anio.'-'.$mes.'-'.$dia;
+//                    return $fecha_fromateada.' '.$hora;
+//                }
+//            }
+//        }
+//        return $fecha;
+//    }
+    
+//   
+//    private function format_fecha($fecha)
+//    {
+//        $exp = explode('/', $fecha);
+//        if (count($exp) > 1)
+//        {
+//            $dia = substr($fecha, 0, 2);
+//            $mes = substr($fecha, 3, 2);
+//            $anio = substr($fecha, 6, 4);
+//            $fecha_fromateada = $anio.'-'.$mes.'-'.$dia;
+//            return $fecha_fromateada;
+//        }
+//        return $fecha;
+//    }
 
 }
 ?>

@@ -27,7 +27,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             //Para que despliegue u oculte la información de las comisiones de cada materia. 
             $(id).delegate(".link-js", "click", function() {
                         $(this).find('.toggle').toggleClass(function(){
-                            console.log($(this));
+                                //console.log($(this));
                                 if ($(this).is('.icon-chevron-up')) {
                                         return 'icon-chevron-down';
                                 } else {
@@ -81,8 +81,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             var fin_periodo = new Array(    new Date ($('#fin_periodo_'+1).val().replace(/-/g, '\/')),
                                             new Date ($('#fin_periodo_'+2).val().replace(/-/g, '\/')),
                                             new Date ($('#fin_periodo_'+3).val().replace(/-/g, '\/')));
-            console.log(inicio_periodo);
-            console.log(fin_periodo);
+//            console.log(inicio_periodo);
+//            console.log(fin_periodo);
 
             var cant = Object.keys(materias).length;
             for(var i=0; i<cant; i++)
@@ -166,7 +166,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             
             if (comision.ESCALA == 'R  ' || comision.ESCALA == 'PyR')
             {
-                set_values_comisiones_regu(comision, materia.CICLO, inicio_periodo, fin_periodo, dias_no_disponibles, dias_no_validos);
+                set_values_comisiones_regu(comision, inicio_periodo, fin_periodo, dias_no_disponibles, dias_no_validos);
             }
         }
     }
@@ -205,7 +205,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         }
     }
 
-    function set_values_comisiones_regu(comision, ciclo, inicio_periodo, fin_periodo, dias_no_disponibles, dias_no_validos)
+    function set_values_comisiones_regu(comision, inicio_periodo, fin_periodo, dias_no_disponibles, dias_no_validos)
     {
         var c = comision.COMISION;
         var dias_semana = comision['DIAS_CLASE'];
@@ -214,19 +214,19 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         {    
             var dp_com_regu1 = 'datepicker_comision_regu1_'+c;
             //if (ciclo == 'F' || ciclo == 'FyP' )
-            var posibles_fechas_regu1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, dias_semana, dias_no_validos);
+            var posibles_fechas_regu1_com = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_no_disponibles, dias_no_validos);
             set_values(dp_com_regu1, inicio_periodo[0], fin_periodo[0], posibles_fechas_regu1_com);
         }
         if (!comision.EVAL_RECUP1.READONLY)
         {
             var dp_com_recup1 = 'datepicker_comision_regu_recup1_'+c;
-            var posibles_fechas_recup1_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, dias_semana, dias_no_validos);
+            var posibles_fechas_recup1_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_no_disponibles, dias_no_validos);
             set_values(dp_com_recup1, inicio_periodo[1], fin_periodo[1], posibles_fechas_recup1_com);
         }
         if (!comision.EVAL_RECUP2.READONLY)
         {    
             var dp_com_recup2 = 'datepicker_comision_regu_recup2_'+c;
-            var posibles_fechas_recup2_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_semana, dias_no_validos);
+            var posibles_fechas_recup2_com = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_no_disponibles, dias_no_validos);
             set_values(dp_com_recup2, inicio_periodo[1], fin_periodo[2], posibles_fechas_recup2_com);
         }
     }

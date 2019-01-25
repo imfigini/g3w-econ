@@ -23,18 +23,7 @@ return array(
             )
         ),
         
-        /* Listado de Cursadas con sus %
-         */
-        'detalle_cursos' => array(
-            'url' => 'detalle_cursos',
-            'activa' => true,
-            'menu' => array(
-                'submenu' => 'detalle_cursos',
-                'visible' => true,
-                'texto' => 'detalle_cursos'
-            )
-        ),
-        
+                
         /* Períodos de evaluación
          */
         'periodos_evaluacion' => array(
@@ -58,6 +47,19 @@ return array(
                 'texto' => 'fechas_parciales_aceptacion'
             )
         ),
+        
+        /* Listado de Cursadas con sus %
+         */
+        'detalle_cursos' => array(
+            'url' => 'detalle_cursos',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'detalle_cursos'
+            )
+        ),
+        
         
         /* MIXes
          */

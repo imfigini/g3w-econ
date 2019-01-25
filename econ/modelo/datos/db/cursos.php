@@ -70,6 +70,10 @@ class cursos
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         $materia = $parametros['materia'];
+        
+        $promociones = '4,6,9,10';
+        //$regulares = '3,4,5,7,8,10';
+        //
         //Sólo retorna las comisiones que son promocionables
         $sql = "SELECT  C.comision, 
                         C.nombre AS comision_nombre, 
@@ -86,7 +90,7 @@ class cursos
                 JOIN sga_escala_notas EN ON (EN.escala_notas = C.escala_notas)
                 LEFT JOIN ufce_comisiones_porc_notas UC ON (UC.comision = C.comision)
                 WHERE C.estado = 'A'
-                        AND lower(EN.nombre) LIKE '%promo%'
+                        AND EN.escala_notas IN ($promociones)
                         AND C.anio_academico = $anio_academico
                         AND C.materia = $materia ";
 
@@ -589,5 +593,49 @@ class cursos
         return kernel::db()->ejecutar($sql);
     }
     
+    /**
+    * parametros: comision, evaluacion, escala_notas, fecha_hora
+    * cache: no
+    * filas: n
+    */
+    function alta_evaluacion_parcial($parametros)
+    {
+        $comision = $parametros['comision'];
+        $evaluacion = $parametros['evaluacion'];
+        $escala = $parametros['escala_notas'];
+        $fecha_hora = $parametros['fecha_hora'];
+
+        $sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
+        $result1 = util::ejecutar_procedure($sql);
+
+        if ($result1 == 'OK')
+        {
+            $sql = "UPDATE ufce_cron_eval_parc
+                        SET estado = 'A'
+                    WHERE comision = $comision 
+                    AND evaluacion = $evaluacion";
+            $result2 = kernel::db()->ejecutar($sql);
+            return ("Se dio de alta correctamente la evaluación $evaluacion para la comisión $comision. ");
+        }
+        else
+        {
+            return $result1;
+        }
+        
+    }
     
+    /**
+    * parametros: comision
+    * cache: no
+    * filas: n
+    */
+    function get_materia($parametros)
+    {
+        $comision = $parametros['comision'];
+        $sql = "SELECT materia FROM sga_comisiones WHERE comision = $comision";
+        $materia = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $materia[0]['MATERIA'];
+    }
+        
 }
+

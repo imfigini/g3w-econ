@@ -173,6 +173,18 @@ class _info_catalogo
 );
 	}
 
+	static function coord_materia__del_coordinador_anterior()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'coord_anterior',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
 	static function coord_materia__get_coordinador()
 	{
 		return array (
@@ -226,6 +238,18 @@ class _info_catalogo
 );
 	}
 
+	static function coord_materia__is_usuario_coord()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'coordinador',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
 	static function coord_materia__set_coordinador()
 	{
 		return array (
@@ -245,6 +269,18 @@ class _info_catalogo
 );
 	}
 
+	static function coord_materia__set_usuario_coord()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'coordinador',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
 	static function coord_materia__update_coordinador()
 	{
 		return array (
@@ -256,6 +292,21 @@ class _info_catalogo
     3 => 'coordinador',
   ),
   'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__alta_evaluacion_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+    2 => 'escala_notas',
+    3 => 'fecha_hora',
+  ),
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -379,6 +430,18 @@ class _info_catalogo
   array (
     0 => 'comision',
     1 => 'dia_semana',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
   ),
   'cache' => 'no',
   'filas' => 'n',

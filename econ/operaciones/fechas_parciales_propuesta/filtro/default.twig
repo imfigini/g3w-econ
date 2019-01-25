@@ -1,9 +1,13 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
-    
+    <p style="color: red">{{this.data.mensaje_error}}</p>
     {% if (this.data.mensaje != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
-    {% endif %}    
+    {% endif %} 
+    
+    {% if (this.data.mensaje_error != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+    {% endif %}
     
     {% set vista_form = this.get_vista_form() %}
 	{{ vista_form.render_encabezado() | raw }}
@@ -34,9 +38,9 @@
             <input type="hidden" id="feriados" value="{{this.data.dias_no_laborales}}">
             {% for materia in this.data.datos %}
                 
-                <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
+                <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}" >
                     <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
-                        <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
+                        <span class="toggle icon-white icon-chevron-up" style="float: right; color: white"></span> 
                         <span style="float: right;font-size: 10px;">Detalle de comisiones</span>
                     </h3>
                 </div>
@@ -133,7 +137,7 @@
 
                 {#     Sección específica para detallar cada comisión individualmente               #}            
                 {% if (materia.COMISIONES) %}
-                    <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" style="display:none">
+                    <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" style="display: block;">
                         {% for comision in materia.COMISIONES %}
                             
                                 <form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
@@ -164,23 +168,27 @@
                                                         <input type="text" id="datepicker_comision_promo1_{{comision.COMISION}}" name="datepicker_comision_promo1_{{comision.COMISION}}" 
 {#                                                               onchange="verifica_fechas_promo(this)"#}
                                                                value="{{comision.EVAL_PROMO1.FECHA_HORA}}" {% if comision.EVAL_PROMO1.READONLY %} readonly {% endif %} /> 
+                                                        <input type="hidden" id="promo1_readonly_{{comision.COMISION}}" name="promo1_readonly_{{comision.COMISION}}" value="{{comision.EVAL_PROMO1.READONLY}}">
                                                     </td>  
                                                     <td>2do. Parcial Promoción: 
                                                         <input type="text" id="datepicker_comision_promo2_{{comision.COMISION}}" name="datepicker_comision_promo2_{{comision.COMISION}}" class="datepicker" 
 {#                                                               onchange="verifica_fechas_promo(this)"#}
                                                                value="{{comision.EVAL_PROMO2.FECHA_HORA}}" {% if comision.EVAL_PROMO2.READONLY %} readonly {% endif %} /> 
+                                                        <input type="hidden" id="promo2_readonly_{{comision.COMISION}}" name="promo2_readonly_{{comision.COMISION}}" value="{{comision.EVAL_PROMO2.READONLY}}">
                                                     </td>                               
                                                     {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
                                                         <td>Recuperatorio Unico: 
                                                             <input type="text" id="datepicker_comision_promo_recup_{{comision.COMISION}}" name="datepicker_comision_promo_recup_{{comision.COMISION}}" class="datepicker" 
 {#                                                                   onchange="verifica_fechas_promo(this)"#}
                                                                    value="{{comision.EVAL_RECUP.FECHA_HORA}}" {% if comision.EVAL_RECUP.READONLY %} readonly {% endif %} />
+                                                            <input type="hidden" id="recup_readonly_{{comision.COMISION}}" name="recup_readonly_{{comision.COMISION}}" value="{{comision.EVAL_RECUP.READONLY}}">
                                                         </td>                               
                                                     {% endif %}
                                                     <td>Integrador: 
                                                         <input type="text" id="datepicker_comision_promo_integ_{{comision.COMISION}}" name="datepicker_comision_promo_integ_{{comision.COMISION}}" class="datepicker" 
 {#                                                               onchange="verifica_fechas_promo(this)"#}
                                                                value="{{comision.EVAL_INTEG.FECHA_HORA}}" {% if comision.EVAL_INTEG.READONLY %} readonly {% endif %} /> 
+                                                        <input type="hidden" id="integ_readonly_{{comision.COMISION}}" name="integ_readonly_{{comision.COMISION}}" value="{{comision.EVAL_INTEG.READONLY}}">
                                                     </td>                               
                                                 </tr>
                                             {% endif %}
@@ -190,14 +198,17 @@
                                                     <td>1er. Parcial Regular: 
                                                         <input type="text" id="datepicker_comision_regu1_{{comision.COMISION}}" name="datepicker_comision_regu1_{{comision.COMISION}}" class="datepicker" 
                                                                value="{{comision.EVAL_REGU1.FECHA_HORA}}" {% if comision.EVAL_REGU1.READONLY %} readonly {% endif %} />
+                                                        <input type="hidden" id="regu1_readonly_{{comision.COMISION}}" name="regu1_readonly_{{comision.COMISION}}" value="{{comision.EVAL_REGU1.READONLY}}">
                                                     </td>  
                                                     <td>1er. Recuperatorio: 
                                                         <input type="text" id="datepicker_comision_regu_recup1_{{comision.COMISION}}" name="datepicker_comision_regu_recup1_{{comision.COMISION}}" class="datepicker" 
                                                                value="{{comision.EVAL_RECUP1.FECHA_HORA}}" {% if comision.EVAL_RECUP1.READONLY %} readonly {% endif %} />
+                                                        <input type="hidden" id="recup1_readonly_{{comision.COMISION}}" name="recup1_readonly_{{comision.COMISION}}" value="{{comision.EVAL_RECUP1.READONLY}}">
                                                     </td>                               
                                                     <td>2do. Recuperatorio: 
                                                         <input type="text" id="datepicker_comision_regu_recup2_{{comision.COMISION}}" name="datepicker_comision_regu_recup2_{{comision.COMISION}}" class="datepicker" 
                                                                value="{{comision.EVAL_RECUP2.FECHA_HORA}}" {% if comision.EVAL_RECUP2.READONLY %} readonly {% endif %} />
+                                                        <input type="hidden" id="recup2_readonly_{{comision.COMISION}}" name="recup2_readonly_{{comision.COMISION}}" value="{{comision.EVAL_RECUP2.READONLY}}">
                                                     </td>                               
                                                 </tr>
                                             {% endif %}
