@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales_aceptacion;
+namespace econ\operaciones\fechas_parciales_calendario;
 
 use kernel\kernel;
 use siu\extension_kernel\controlador_g3w2;
@@ -10,7 +10,7 @@ use kernel\util\validador;
 
 class controlador extends controlador_g3w2
 {
-    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'carrera'=>"", 'mix'=>"", 'mensaje'=>'', 'mensaje_error'=>'');
+    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'carrera'=>"", 'mix'=>"");
     
     function modelo()
     {
@@ -45,7 +45,7 @@ class controlador extends controlador_g3w2
     {
         $materias = $this->get_materias_cincuentenario($carrera, $mix); 
         //MATERIA, MATERIA_NOMBRE
-
+       
         $datos = array();
         $cant = count($materias);
         for ($i=0; $i<$cant; $i++)
@@ -377,16 +377,6 @@ class controlador extends controlador_g3w2
         return $this->datos_filtro['mix'];
     }
     
-    function get_mensaje()
-    {
-        return $this->datos_filtro['mensaje'];
-    }
-    
-    function get_mensaje_error()
-    {
-        return $this->datos_filtro['mensaje_error'];
-    }
-    
     function set_periodo($periodo)
     {
         $this->datos_filtro['periodo'] = $periodo;
@@ -407,25 +397,16 @@ class controlador extends controlador_g3w2
         $this->datos_filtro['mix'] = $mix;
     }
     
-    function set_mensaje($mensaje)
-    {
-        $this->datos_filtro['mensaje'] = $mensaje;
-    }
-    
-    function set_mensaje_error($mensaje)
-    {
-        $this->datos_filtro['mensaje_error'] = $mensaje;
-    }
 
     function accion__buscar_periodos() 
     {
-            $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
-            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
-            $datos = array();
-            if (!is_null($anio_academico)){
-                    $datos = catalogo::consultar('unidad_academica', 'buscar_periodos_lectivos', array('anio' => $anio_academico));
-            }
-            $this->render_raw_json($datos);
+        $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
+        $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+        $datos = array();
+        if (!is_null($anio_academico)){
+                $datos = catalogo::consultar('unidad_academica', 'buscar_periodos_lectivos', array('anio' => $anio_academico));
+        }
+        $this->render_raw_json($datos);
     }
     
     /**
@@ -447,7 +428,7 @@ class controlador extends controlador_g3w2
     function get_form_builder()
     {
         if (! isset($this->form_builder)) {
-                        $this->form_builder = kernel::localizador()->instanciar('operaciones\fechas_parciales_aceptacion\filtro\builder_form_filtro');
+                        $this->form_builder = kernel::localizador()->instanciar('operaciones\fechas_parciales_calendario\filtro\builder_form_filtro');
         }
 
         return $this->form_builder;
@@ -480,168 +461,6 @@ class controlador extends controlador_g3w2
         }
         return false;
     }
-    
-    /** Graba sólo la comisión */
-    function accion__grabar_comision()
-    {
-        $mensaje = array();
-        $datos = $this->get_parametros_grabar_comision();
-
-//        print_r($datos);
-//        die;
-
-        //Instancias PROMO
-        if (isset($datos['fecha_hora_promo1']))
-        {
-            $datos['evaluacion'] = 1;
-            $datos['fecha_hora'] = $datos['fecha_hora_promo1']; 
-            $datos['estado'] = $datos['opcion_promo1'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        if (isset($datos['fecha_hora_promo2']))
-        {
-            $datos['evaluacion'] = 2;
-            $datos['fecha_hora'] = $datos['fecha_hora_promo2'];
-            $datos['estado'] = $datos['opcion_promo2'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        if (isset($datos['fecha_hora_recup']))
-        {
-            $datos['evaluacion'] = 7;
-            $datos['fecha_hora'] = $datos['fecha_hora_recup'];
-            $datos['estado'] = $datos['opcion_recup'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        if (isset($datos['fecha_hora_integ']))
-        {
-            $datos['evaluacion'] = 14;
-            $datos['fecha_hora'] = $datos['fecha_hora_integ'];
-            $datos['estado'] = $datos['opcion_integ'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        
-        //Instancias REGULAR
-        if (isset($datos['fecha_hora_regu1']) && $datos['opcion_regu1'] != 'P')
-        {
-//            print_r('fecha_hora_regu1: '.$datos['fecha_hora_regu1']);
-//            print_r('opcion_regu1: '.$datos['opcion_regu1']);
-            $datos['evaluacion'] = 21;
-            $datos['fecha_hora'] = $datos['fecha_hora_regu1']; 
-            $datos['estado'] = $datos['opcion_regu1'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        if (isset($datos['fecha_hora_recup1']))
-        {
-            $datos['evaluacion'] = 4;
-            $datos['fecha_hora'] = $datos['fecha_hora_recup1'];
-            $datos['estado'] = $datos['opcion_recup1'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        if (isset($datos['fecha_hora_recup2']))
-        {
-            $datos['evaluacion'] = 5;
-            $datos['fecha_hora'] = $datos['fecha_hora_recup2'];
-            $datos['estado'] = $datos['opcion_recup2'];
-            $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-        }
-        $this->set_anio_academico($datos['anio_academico_hash']);
-        $this->set_periodo($datos['periodo_hash']);
-        
-        $msg = $this->formatear_mensaje($mensaje);
-        $this->set_mensaje($msg[0]);
-        $this->set_mensaje_error($msg[1]);
-    }
-
-    private function formatear_mensaje($mensaje)
-    {
-        $msg = '';
-        $msg_error = '';
-        foreach($mensaje as $m)
-        {
-            ($m['success'] == 1) ? $msg .= $m['mensaje'] : $msg_error .= $m['mensaje'];
-        }
-        return array($msg, $msg_error);
-    }
-    
-    function get_parametros_grabar_comision()
-    {
-        $parametros = array();
-       
-        $parametros['comision'] = $this->validate_param('comision', 'post', validador::TIPO_TEXTO);
-        $escala = 'escala_'.$parametros['comision'];
-        $parametros['tipo_escala'] = $this->validate_param($escala, 'post', validador::TIPO_TEXTO); 
-        switch ($parametros['tipo_escala'])
-        {
-            case 'R  ': $parametros['escala_notas'] = 3; break;    
-            case 'P  ': $parametros['escala_notas'] = 6; break;   
-            case 'PyR': $parametros['escala_notas'] = 4; break;   
-        }
-
-        //Instancia PROMO
-        $parametros = $this->get_parametros_fecha($parametros, 'promo1');
-        $parametros = $this->get_parametros_fecha($parametros, 'promo2');
-        $parametros = $this->get_parametros_fecha($parametros, 'recup');
-        $parametros = $this->get_parametros_fecha($parametros, 'integ');
-        
-        //Instancia REGULAR
-        $parametros = $this->get_parametros_fecha($parametros, 'regu1');
-        $parametros = $this->get_parametros_fecha($parametros, 'recup1');
-        $parametros = $this->get_parametros_fecha($parametros, 'recup2');
-
-        $parametros['anio_academico_hash']  = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
-        $parametros['periodo_hash']         = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
-        return $parametros;
-        
-    }
-
-    function get_parametros_fecha($parametros, $instancia)
-    {
-        $comision = $parametros['comision'];
-
-        $param_validar = 'aceptar_'.$instancia.'_'.$comision;
-        $opcion_instancia = 'opcion_'.$instancia;
-        $parametros[$opcion_instancia] = $this->validate_param($param_validar, 'post', validador::TIPO_TEXTO);
-        $fecha_hora_instancia = 'fecha_hora_'.$instancia;
-        
-        switch ($parametros[$opcion_instancia])
-        {
-            case 'A':
-                $param_validar = 'fecha_hora_'.$instancia.'_'.$comision;
-                $parametros[$fecha_hora_instancia] = $this->validate_param($param_validar, 'post', validador::TIPO_TEXTO);
-                break;
-            case 'R':
-                $param_validar = 'datepicker_'.$instancia.'_'.$comision;
-                $fecha = $this->validate_param($param_validar, 'post', validador::TIPO_TEXTO);
-                $hs_comienzo = catalogo::consultar('cursos', 'get_hora_comienzo_clase', array('comision'=>$comision, 'fecha'=>$fecha));
-                $fecha = $this->format_fecha($fecha);
-                $parametros[$fecha_hora_instancia] = $fecha.' '.$hs_comienzo;
-                break;
-
-            case 'N': 
-                $param_validar = 'datepicker_'.$instancia.'_'.$comision;
-                $fecha = $this->validate_param($param_validar, 'post', validador::TIPO_TEXTO);
-                $hs_comienzo = catalogo::consultar('cursos', 'get_hora_comienzo_clase', array('comision'=>$comision, 'fecha'=>$fecha));
-                $fecha = $this->format_fecha($fecha);
-                $parametros[$fecha_hora_instancia] = $fecha.' '.$hs_comienzo;
-                break;
-            default: 
-                $parametros[$fecha_hora_instancia] = null;
-        }
-        return $parametros;
-    }
-    
-    private function format_fecha($fecha)
-    {
-        $exp = explode('/', $fecha);
-        if (count($exp) > 1)
-        {
-            $dia = substr($fecha, 0, 2);
-            $mes = substr($fecha, 3, 2);
-            $anio = substr($fecha, 6, 4);
-            $fecha_fromateada = $anio.'-'.$mes.'-'.$dia;
-            return $fecha_fromateada;
-        }
-        return $fecha;
-    }
+   
 }
 ?>

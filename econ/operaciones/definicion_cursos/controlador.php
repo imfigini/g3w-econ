@@ -9,7 +9,7 @@ use kernel\util\validador;
 
 class controlador extends controlador_g3w2
 {
-    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'mensaje'=>'');
+    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'mensaje'=>"");
     
     function modelo()
     {
@@ -24,13 +24,15 @@ class controlador extends controlador_g3w2
     
     function get_materias_cincuentenario()
     {
-        $parametros = array('legajo' => null);
+        $parametros['legajo'] = null;
+        $parametros['carrera'] = null;
+        $parametros['mix'] = null;
+        
         $perfil = kernel::persona()->perfil()->get_id();
         if ($perfil == 'COORD')
         {
-            $parametros = array('legajo'=> kernel::persona()->get_legajo_docente());
+            $parametros['legajo'] = kernel::persona()->get_legajo_docente();
         }
-        //die;
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         $operacion = kernel::ruteador()->get_id_operacion();
         foreach($materias as $key => $materia)

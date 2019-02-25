@@ -31,15 +31,15 @@ return array(
                   )
             ),
             
-            'notas_parciales' => array(
-                  'activa' => true,
-                  'url' => 'parciales',
-                  'menu' => array(
-                      'submenu' => 'parciales',
-                      'visible' => true,
-                      'texto' => 'parciales'
-                  )
-            ),
+//            'notas_parciales' => array(
+//                  'activa' => true,
+//                  'url' => 'parciales',
+//                  'menu' => array(
+//                      'submenu' => 'parciales',
+//                      'visible' => true,
+//                      'texto' => 'parciales'
+//                  )
+//            ),
 
         ),
 );

@@ -166,5 +166,33 @@ class evaluaciones_parciales
         kernel::db()->ejecutar($sql);
     }
  
+    /**
+     * parametros: 
+     * cache: no
+     * filas: n
+     */
+    function get_carreras()
+    {
+        $sql = "SELECT carrera, nombre AS carrera_nombre 
+                    FROM sga_carreras
+                    WHERE carrera IN (SELECT carrera from ufce_mixes)";
+        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $result;
+    }
 
+    /**
+     * parametros: 
+     * cache: no
+     * filas: n
+     */
+    function get_mixs($parametros)
+    {
+        $sql = "SELECT DISTINCT anio_de_cursada || mix AS mix, anio_de_cursada || ' - ' || mix AS mix_nombre
+                    FROM ufce_mixes
+                ORDER BY 1";
+        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $result;
+    }
+
+    
 }

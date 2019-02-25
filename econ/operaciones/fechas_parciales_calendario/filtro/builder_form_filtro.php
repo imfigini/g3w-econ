@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales_aceptacion\filtro;
+namespace econ\operaciones\fechas_parciales_calendario\filtro;
 
 use kernel\interfaz\componentes\forms\form_elemento_config;
 use kernel\kernel;
@@ -14,27 +14,27 @@ class builder_form_filtro extends builder_formulario
 {
 	function get_id_html() 
 	{
-		return 'formulario_filtro';
+            return 'formulario_filtro';
 	}
 
 	function get_action() 
 	{
-		return kernel::vinculador()->crear('fechas_parciales_aceptacion', 'index');
+            return kernel::vinculador()->crear('fechas_parciales_calendario', 'index');
 	}
 
 	protected function generar_definicion(guarani_form $form, fabrica_formularios $fabrica) 
 	{
             $form->add_elemento($fabrica->elemento('anio_academico', array(
-                            form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_anio_academico')),
-                            form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
-                            form_elemento_config::obligatorio	=> true,
-                            form_elemento_config::elemento		=> array('tipo' => 'select'),
-                            form_elemento_config::multi_options => self::get_anios_academicos(),
-                            form_elemento_config::validar_select => false,
-                            form_elemento_config::valor_default  =>   $this->anio_academico_hash,
-                            form_elemento_config::clase_css => 'filtros_comunes',
-            )));
-
+				form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_anio_academico')),
+				form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
+				form_elemento_config::obligatorio	=> true,
+				form_elemento_config::elemento		=> array('tipo' => 'select'),
+				form_elemento_config::multi_options => self::get_anios_academicos(),
+				form_elemento_config::validar_select => false,
+                                form_elemento_config::valor_default  =>   $this->anio_academico_hash,
+				form_elemento_config::clase_css => 'filtros_comunes',
+		)));
+		
             $form->add_elemento($fabrica->elemento('periodo', array(
                             form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_periodos')),
                             form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
@@ -44,7 +44,7 @@ class builder_form_filtro extends builder_formulario
                             form_elemento_config::validar_select => false,
                             form_elemento_config::clase_css => 'filtros_cursadas',
             )));
-                
+
             $form->add_elemento($fabrica->elemento('carrera', array(
                             form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('filtro.carreras')),
                             form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
@@ -64,7 +64,7 @@ class builder_form_filtro extends builder_formulario
                             form_elemento_config::validar_select => false,
                             form_elemento_config::clase_css => 'filtros_cursadas',
             )));
-                
+
             $form->add_accion($fabrica->accion_boton_submit('boton_buscar', ucfirst(kernel::traductor()->trans('actas.filtro_buscar'))));
 	}
 
@@ -110,8 +110,8 @@ class builder_form_filtro extends builder_formulario
         {
             $this->mix = $mix;
         }
-        
-	function get_anios_academicos()
+
+        function get_anios_academicos()
 	{
             $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
             return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
@@ -121,7 +121,7 @@ class builder_form_filtro extends builder_formulario
 	{
             return array(""=>  kernel::traductor()->trans('filtro.todos'));
 	}
-        
+
         function get_carreras()
 	{
             $datos = catalogo::consultar('evaluaciones_parciales', 'get_carreras');
@@ -133,5 +133,6 @@ class builder_form_filtro extends builder_formulario
             $datos = catalogo::consultar('evaluaciones_parciales', 'get_mixs');
             return guarani_form_elemento::armar_combo_opciones($datos, 'MIX', 'MIX_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Todos --')));
 	}
-        
+
 }
+

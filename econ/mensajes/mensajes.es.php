@@ -17,6 +17,9 @@ return array(
     'COORD' => 'coordinador de materia',
 
     'filtro.filtro_periodos' => "períodos lectivos",
+    'filtro.carreras' => "carreras",
+    'filtro.mix' => "mix",
+    'filtro.todos' => "-- Todos --",
     
      //Inicio Oficina de Docentes
     "inicio_oficina_docentes.titulo" => "Inicio Oficina de Docentes",
@@ -40,13 +43,13 @@ return array(
     'asignacion_coord_materias.filtro_seleccione' => '-- Todos --',
     
     /* Definción de los cursos */
-    'tit_definicion_cursos' => 'Definición de Cursos Promocionables',
-    'definicion_cursos' => 'Ponderación de instancias de evaluación en los Cursos Promocionables',
+    'tit_definicion_cursos' => 'Definición de Cursos por Promoción',
+    'definicion_cursos' => 'Ponderación de instancias de evaluación en los Cursos por Promoción',
     'definicion_cursos.filtro.sin_resultados' => 'No hay información',
     
     /* Detalle de los cursos con sus %*/
-    'tit_detalle_cursos' => 'Listado de Cursos Promocionables',
-    'detalle_cursos' => 'Listado de ponderación de instancias de evaluación en los Cursos Promocionables',
+    'tit_detalle_cursos' => 'Listado de Cursos por Promoción',
+    'detalle_cursos' => 'Listado de ponderación de instancias de evaluación en los Cursos por Promoción',
     'detalle_cursos.sin_resultados' => 'No hay información',
     
     'parciales' => 'Carga de notas de evaluaciones parciales',
@@ -64,12 +67,17 @@ return array(
     'mixes.carrera' => 'Carrera',
     
     /* Propuestas de fechas para parciales y recuperatorios */
-    'tit_fechas_parciales_propuesta' => 'Solicitud  de fechas para parciales y recuperatorios',
-    'fechas_parciales_propuesta' => 'Propuesta de fechas para parciales y recuperatorios',
+    'tit_fechas_parciales_propuesta' => 'Solicitud de fechas de evaluación para parciales, integrador y recuperatorios',
+    'fechas_parciales_propuesta' => 'Solicitud de fechas de evaluación para parciales, integrador y recuperatorios',
     'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
     
     /* Aceptación de fechas para parciales y recuperatorios */
-    'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales y recuperatorios',
-    'fechas_parciales_aceptacion' => 'Aceptación o modificación de fechas para parciales y recuperatorios',
+    'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales, integrador y recuperatorios',
+    'fechas_parciales_aceptacion' => 'Aceptación o modificación de fechas para parciales, integrador y recuperatorios',
     'fechas_parciales_aceptacion.sin_resultados' => 'No hay información',    
+
+    /* Visualización de fechas para parciales y recuperatorios (en calenadario)*/
+    'tit_fechas_parciales_calendario' => 'Revisión de fechas para parciales, integrador y recuperatorios',
+    'fechas_parciales_calendario' => 'Visualización de fechas para parciales, integrador y recuperatorios',
+    'fechas_parciales_calendario.sin_resultados' => 'No hay información',    
 );

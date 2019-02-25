@@ -24,7 +24,9 @@ class controlador extends controlador_g3w2
     
     function get_materias_cincuentenario()
     {
-        $parametros = array('legajo' => null);
+        $parametros['legajo'] = null;
+        $parametros['carrera'] = null;
+        $parametros['mix'] = null;
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         $operacion = kernel::ruteador()->get_id_operacion();
         foreach($materias as $key => $materia)

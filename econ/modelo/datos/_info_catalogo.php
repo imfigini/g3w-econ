@@ -305,6 +305,7 @@ class _info_catalogo
     1 => 'evaluacion',
     2 => 'escala_notas',
     3 => 'fecha_hora',
+    4 => 'estado',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -399,6 +400,20 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_evaluaciones_observaciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo_lectivo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_fechas_eval_asignadas()
 	{
 		return array (
@@ -417,6 +432,19 @@ class _info_catalogo
   'parametros' => 
   array (
     0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__get_hora_comienzo_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'fecha',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -454,10 +482,14 @@ class _info_catalogo
   'parametros' => 
   array (
     0 => 'legajo',
+    1 => 'carrera',
+    2 => 'mix',
   ),
   'param_null' => 
   array (
     0 => 'legajo',
+    1 => 'carrera',
+    2 => 'mix',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -556,8 +588,10 @@ class _info_catalogo
 		return array (
   'parametros' => 
   array (
-    0 => 'comision',
-    1 => 'observaciones',
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo_lectivo',
+    3 => 'observaciones',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -612,6 +646,14 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales__get_carreras()
+	{
+		return array (
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function evaluaciones_parciales__get_dias_no_laborales()
 	{
 		return array (
@@ -620,6 +662,14 @@ class _info_catalogo
     0 => 'anio_academico',
     1 => 'periodo',
   ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_mixs()
+	{
+		return array (
   'cache' => 'no',
   'filas' => 'n',
 );

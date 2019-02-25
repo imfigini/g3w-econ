@@ -25,7 +25,7 @@
                 <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
                     <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
                         <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
-                        <span style="float: right;font-size: 10px;">Detalle de comisiones</span>
+                        <span style="float: right;font-size: 10px;">VER / EDITAR POR COMISION</span>
                     </h3>
                 </div>
                     <div>
@@ -51,7 +51,10 @@
                                         <td>% en Trabajos: 
                                             <input type="number" min="0" max="100" name="porc_trabajos_{{materia.MATERIA}}" id="porc_trabajos_{{materia.MATERIA}}" readonly onchange="actualiza_porcentaje(this)" value="{{materia.PORC_TRABAJOS}}">
                                         </td>                               
-                                        <td><button class="btn btn-info btn-lg" type="submit" id="boton_guardar_gral" style="align-self:center;font-size:11px;">Aplicar a todas las comisiones promocionales</button>
+                                        <td>
+                                            <button class="btn btn-info btn-lg" type="submit" id="boton_guardar_gral" style="align-self:center;font-size:12px;"
+                                                    title="Guardar y Aplicar a todas las comisiones por promoción.">
+                                                Grabar</button>
                                         </td>
                                 </tr>
                             </table>

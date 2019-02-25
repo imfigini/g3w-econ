@@ -43,7 +43,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         var $elem_periodos = $('#formulario_filtro-periodo');
                         $elem_periodos.children().remove();
                         $elem_periodos.append(
-                                $('<option></option>').val('').html(info.mensaje_seleccione)
+                                $('<option></option>').val('').html('-- Seleccione --')
                         );
                         $.each(data, function(key, value) {
                                 if (value['ID'] === info.periodo_hash){
@@ -59,9 +59,12 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     function set_values(objeto_id, fechaInicio, fechaFin, fechaMin, fechaMax, feriados)
     {
         $('#'+objeto_id).daterangepicker({
-                opens: 'left',
+                opens: 'right',
+                drops: 'up',
                 format: 'YYYY-MM-DD',  
-                showDropdowns: false,
+                showDropdowns: true,
+                autoUpdateInput: true,
+                autoApply: true,
                 locale: {
                     "format": "DD/MM/YYYY",
                     "separator": " - ",

@@ -21,6 +21,16 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 $("#formulario_filtro-anio_academico option[value="+ info.anio_academico_hash +"]").attr("selected",true);
                 $('#formulario_filtro-anio_academico').val(info.anio_academico_hash);
             }
+
+            if (info.carrera !== ""){
+                $("#formulario_filtro-carrera option[value="+ info.carrera +"]").attr("selected",true);
+                $('#formulario_filtro-carrera').val(info.carrera);
+            }
+            
+            if (info.mix !== ""){
+                $("#formulario_filtro-mix option[value="+ info.mix +"]").attr("selected",true);
+                $('#formulario_filtro-mix').val(info.mix);
+            }
             
             buscarPeriodos($('#formulario_filtro-anio_academico').val());
             
@@ -59,7 +69,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                             $elem_periodos.children().remove();
                             //console.log($elem_periodos);
                             $elem_periodos.append(
-                                    $('<option></option>').val('').html(info.mensaje_seleccione)
+                                    $('<option></option>').val('').html('-- Seleccione --')
                             );
                             $.each(data, function(key, value) {
                                     if (value['ID'] === info.periodo_hash){
@@ -119,41 +129,63 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         {
              estado = eval.ESTADO;
         }                            
-        $('#'+boton).val(estado);
+        $('#'+boton).val(estado).change();
     }
         
 });
     
 
-function calendarioVisible(estado, comision, instancia)
+function calendarioVisible(estado, comision, instancia, estado_orig)
 {
 //    console.log(estado.value);
     var div = 'div_'+instancia+'_'+comision;
+    var div_aceptado = 'div_aceptado_'+instancia+'_'+comision;
     switch(estado.value)
     {
         case 'R': 
-            $('#'+div).show();
             setear_calendario_restringido(comision, instancia);
+            $('#'+div).show();
             break;
         case 'N': 
+            setear_calendario_abierto(comision, instancia);
             $('#'+div).show();
-            //setear_calendario_abierto(comision, instancia);
             break;
         default: 
             $('#'+div).hide();
     }
+    
+    if (estado_orig)
+    {
+        $('#'+div_aceptado).show();
+    }
+    else
+    {
+        $('#'+div_aceptado).hide();
+    }
+
 }
+
 
 function setear_calendario_restringido(comision, instancia)
 {
     var datepick = 'datepicker_'+instancia+'_'+comision;
     var dias_no_validos = $('#dias_no_validos_'+comision).val();
     var dias_clase = $('#dias_clase_'+comision).val();
-//    console.log(datepick);
-//    console.log(dias_no_validos);
-//    console.log(escala);
-//    console.log(dias_clase);
 
+    setear_calendario(instancia, datepick, dias_clase, dias_no_validos);
+}
+
+function setear_calendario_abierto(comision, instancia)
+{
+    var datepick = 'datepicker_'+instancia+'_'+comision;
+    var dias_no_validos = $('#dias_no_validos_'+comision).val();
+    var dias_clase = null;
+
+    setear_calendario(instancia, datepick, dias_clase, dias_no_validos);
+}
+
+function setear_calendario(instancia, datepick, dias_clase, dias_no_validos)
+{
     var inicio_periodo = new Array( new Date ($('#inicio_periodo_'+1).val().replace(/-/g, '\/')),
                                     new Date ($('#inicio_periodo_'+2).val().replace(/-/g, '\/')),
                                     new Date ($('#inicio_periodo_'+3).val().replace(/-/g, '\/')));
@@ -161,32 +193,50 @@ function setear_calendario_restringido(comision, instancia)
     var fin_periodo = new Array(    new Date ($('#fin_periodo_'+1).val().replace(/-/g, '\/')),
                                     new Date ($('#fin_periodo_'+2).val().replace(/-/g, '\/')),
                                     new Date ($('#fin_periodo_'+3).val().replace(/-/g, '\/')));
-//    console.log(inicio_periodo);
-//    console.log(fin_periodo);
 
     switch (instancia)
     {
         case 'promo1':
-            set_values(datepick, inicio_periodo[0], fin_periodo[0], dias_clase, dias_no_validos);
+            get_fechas_and_set_values(datepick, inicio_periodo[0], fin_periodo[0], dias_clase, dias_no_validos);
             break;
         case 'promo2':
-            set_values(datepick, inicio_periodo[1], fin_periodo[1], dias_clase, dias_no_validos);
+            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[1], dias_clase, dias_no_validos);
             break;
         case 'recup':
-            set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
+            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
             break;
         case 'integ':
-            set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
+            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
+            break;
+        case 'regu1':
+            get_fechas_and_set_values(datepick, inicio_periodo[0], fin_periodo[0], dias_clase, dias_no_validos);
+            break;
+        case 'recup1':
+            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[1], dias_clase, dias_no_validos);
+            break;
+        case 'recup2':
+            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
             break;
     }
 }
 
-function set_values(objeto_id, inicio_periodo, fin_periodo, dias_clase, dias_no_validos)
+function get_fechas_and_set_values(objeto_id, inicio_periodo, fin_periodo, dias_clase, dias_no_validos)
 {
-//    console.log(inicio_periodo);
-//    console.log(fin_periodo);
-    var posibles_fechas = get_posibles_fechas(dias_clase, inicio_periodo, fin_periodo, dias_no_validos);
+    var posibles_fechas;
+    if (dias_clase)
+    {
+        posibles_fechas = get_posibles_fechas(dias_clase, inicio_periodo, fin_periodo, dias_no_validos);
+    }
+    else
+    {
+        posibles_fechas = get_posibles_fechas_todas(inicio_periodo, fin_periodo, dias_no_validos);
+    }
+    set_values(objeto_id, posibles_fechas, inicio_periodo, fin_periodo);
+}
 
+function set_values(objeto_id, posibles_fechas, inicio_periodo, fin_periodo)
+{
+    $('#'+objeto_id).datepicker( "destroy" );
     $('#'+objeto_id).datepicker({
 
             format: 'YYYY-MM-DD',  
@@ -203,7 +253,7 @@ function set_values(objeto_id, inicio_periodo, fin_periodo, dias_clase, dias_no_
                     }
         });
 }
-    
+
 function get_posibles_fechas(dias_semana, inicio_periodo, fin_periodo, dias_no_validos)
 {
     var feriados = $('#feriados').val();
@@ -213,6 +263,28 @@ function get_posibles_fechas(dias_semana, inicio_periodo, fin_periodo, dias_no_v
     {
         var diaSemana = dia.getDay();
         if (contiene(dias_semana, diaSemana))
+        {
+            var diaFormateado = dia.toISOString().substring(0, 10);
+            var es_fecha_valida = fecha_valida(dias_no_validos, dia);
+            if (feriados.includes(diaFormateado) == false && es_fecha_valida)
+                posibles_fechas += diaFormateado + ',';
+        }
+        dia.setDate(dia.getDate() + 1);
+    }
+    return posibles_fechas.substring(0, posibles_fechas.length-1) + ']';
+}
+
+
+function get_posibles_fechas_todas(inicio_periodo, fin_periodo, dias_no_validos)
+{
+    var feriados = $('#feriados').val();
+    var dia = new Date(inicio_periodo);
+    var posibles_fechas = '[';
+    while (dia <= fin_periodo)
+    {
+        var diaSemana = dia.getDay();
+        //console.log(diaSemana);
+        if (diaSemana != 0)
         {
             var diaFormateado = dia.toISOString().substring(0, 10);
             var es_fecha_valida = fecha_valida(dias_no_validos, dia);
@@ -243,4 +315,22 @@ function fecha_valida(dias_no_validos, fecha)
     if (fechas_no_validas.includes(fecha))
         return false;
     return true;
+}
+
+function grabar_comision_x_ajax(comision, form_url_comision)
+{
+    var formulario_id = 'comision_seleccionada_'+comision;
+    var formulario = $('#'+formulario_id);
+    var contenedor = $('#contenedor_'+comision); 
+    console.log(contenedor);
+    $.ajax({
+        type: "POST",
+        url: form_url_comision,
+        data: formulario.serialize(), // serializes the form's elements. 
+        success: function(data) { 
+            //alert(data); // show response from the php script. 
+            contenedor.empty();
+            console.log(data);
+            } 
+        });
 }

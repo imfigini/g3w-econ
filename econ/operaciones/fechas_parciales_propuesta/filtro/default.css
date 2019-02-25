@@ -26,5 +26,8 @@
         line-height: 30px;
 }
 
-
-
+input[readonly].no_editable 
+{
+    background-color: white;
+    cursor: default;
+}

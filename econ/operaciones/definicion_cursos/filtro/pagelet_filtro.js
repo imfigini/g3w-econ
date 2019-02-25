@@ -50,7 +50,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 				var $elem_periodos = $('#formulario_filtro-periodo');
 				$elem_periodos.children().remove();
 				$elem_periodos.append(
-					$('<option></option>').val('').html(info.mensaje_seleccione)
+					$('<option></option>').val('').html('-- Seleccione --')
 				);
 				$.each(data, function(key, value) {
 					if (value['ID'] === info.periodo_hash){

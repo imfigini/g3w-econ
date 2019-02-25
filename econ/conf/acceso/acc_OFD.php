@@ -36,6 +36,18 @@ return array(
             )
         ),
         
+        /* Visualizacion fechas de evaluación (con calendario)
+         */
+        'fechas_parciales_calendario' => array(
+            'url' => 'fechas_parciales_calendario',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'fechas_parciales_calendario'
+            )
+        ),
+        
         /* Aceptación fechas de evaluación
          */
         'fechas_parciales_aceptacion' => array(
