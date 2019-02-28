@@ -81,18 +81,14 @@ class pagelet_filtro extends pagelet {
             
             if (!empty($anio_academico_hash) && !empty($periodo_hash))
             {
-//                $datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash, $carrera, $mix);
-//                $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
-//                
-////                //print_R($datos);
-//                $this->data['datos'] = $datos;
-//                $this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
-//                
+                $datos = $this->controlador->get_evaluaciones($anio_academico_hash, $periodo_hash, $carrera, $mix);
+                $this->data['datos_json'] = json_encode($datos); //, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR 
+                $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
+                $this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
+
+                //print_r($this->data);
 //                $this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
 //                $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
-//                
-//                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_calendario', 'grabar_comision');
-//                $this->data['form_url_comision'] = $link_form_comision;     
 
             }
         }

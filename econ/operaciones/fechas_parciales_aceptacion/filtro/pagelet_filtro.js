@@ -51,6 +51,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     
             //setear_calendarios();  
             inicio();
+            set_focus(info.comision);
             //set_values('datepicker_promo1_6879', '2018-01-01', '2018-12-31');
             
         }
@@ -317,20 +318,44 @@ function fecha_valida(dias_no_validos, fecha)
     return true;
 }
 
-function grabar_comision_x_ajax(comision, form_url_comision)
+function grabar_comision(comision)
 {
     var formulario_id = 'comision_seleccionada_'+comision;
     var formulario = $('#'+formulario_id);
-    var contenedor = $('#contenedor_'+comision); 
-    console.log(contenedor);
-    $.ajax({
-        type: "POST",
-        url: form_url_comision,
-        data: formulario.serialize(), // serializes the form's elements. 
-        success: function(data) { 
-            //alert(data); // show response from the php script. 
-            contenedor.empty();
-            console.log(data);
-            } 
-        });
+    //var contenedor = $('#h4_'+comision); 
+    formulario.submit();
+//    var titulo = 'h4_'+comision;
+//    console.log(titulo)
+//    document.getElementById(titulo).focus();
+//    console.log(contenedor);
+//    $.ajax({
+//        type: "POST",
+//        url: form_url_comision,
+//        data: formulario.serialize(), // serializes the form's elements. 
+//        success: function(data) { 
+//            //alert(data); // show response from the php script. 
+//            contenedor.
+//            } 
+//        });
+}
+
+function set_focus(comision)
+{
+    if (!comision)
+    {
+        return;
+    }
+        
+    var titulo = 'aceptar_promo1_'+comision;
+    var elemento = document.getElementById(titulo);
+    if (elemento)
+    {
+        elemento.focus();
+    }
+    else
+    {
+        var titulo = 'aceptar_regu1_'+comision;
+        var elemento = document.getElementById(titulo);
+        elemento.focus();
+    }
 }

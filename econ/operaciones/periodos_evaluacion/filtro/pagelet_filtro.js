@@ -58,6 +58,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 
     function set_values(objeto_id, fechaInicio, fechaFin, fechaMin, fechaMax, feriados)
     {
+        console.log(feriados);
         $('#'+objeto_id).daterangepicker({
                 opens: 'right',
                 drops: 'up',
@@ -105,13 +106,18 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 startDate: new Date(fechaInicio),
                 endDate: new Date(fechaFin),
                 isInvalidDate: function (momento) {
-                            dia = momento.toDate();
-                            diaSemana = dia.getDay();
-                            diaFormateado = dia.toISOString().substring(0, 10);
+                            var dia = momento.toDate();
+                            var diaSemana = dia.getDay();
+//                            var diaFormateado = dia.toISOString().substring(0, 10);
+                            var formattedDate = moment(dia).format('YYYY-MM-DD');                            
+//                    console.log(dia);
+//                    console.log(formattedDate);
+//                    console.log(diaSemana);
+//                    console.log(diaFormateado);
 
-                            bloquear =  (diaSemana == 0) ||
+                            var bloquear =  (diaSemana == 0) ||
                                         (diaSemana == 6) ||
-                                        (feriados.includes(diaFormateado));
+                                        (feriados.includes(formattedDate));
 
                             return bloquear;
                         }

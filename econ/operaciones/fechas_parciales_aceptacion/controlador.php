@@ -10,7 +10,7 @@ use kernel\util\validador;
 
 class controlador extends controlador_g3w2
 {
-    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'carrera'=>"", 'mix'=>"", 'mensaje'=>'', 'mensaje_error'=>'');
+    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'carrera'=>"", 'mix'=>"", 'mensaje'=>'', 'mensaje_error'=>'', 'comision'=>"");
     
     function modelo()
     {
@@ -53,6 +53,8 @@ class controlador extends controlador_g3w2
             $materias[$i]['CICLO'] = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materias[$i]['MATERIA'])); 
             //F - P - FyP
 
+            $materias[$i]['OBSERVACIONES'] = $this->get_observaciones_materia($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
+            
             $comisiones = $this->get_comisiones_de_materia_con_dias_de_clase($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
             //COMISION, COMISION_NOMBRE, ANIO_ACADEMICO, PERIODO_LECTIVO, ESCALA, TURNO, CARRERA, OBSERVACIONES
 
@@ -131,6 +133,30 @@ class controlador extends controlador_g3w2
         return null;
     }
     
+    function get_observaciones_materia($anio_academico_hash, $periodo_hash, $materia)
+    {
+        $periodo = null;
+        $anio_academico = null;
+
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico) and !empty($periodo_hash))
+            {
+                $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+
+                $parametros = array(
+                            'anio_academico' => $anio_academico,
+                            'periodo' => $periodo,
+                            'materia' => $materia
+                );
+                return catalogo::consultar('cursos', 'get_observaciones_materia', $parametros);
+            }
+            return null;
+        }
+        return null;
+    }
+
     function get_periodos_evaluacion($anio_academico_hash, $periodo_hash)
     {
         $periodo = null;
@@ -377,6 +403,11 @@ class controlador extends controlador_g3w2
         return $this->datos_filtro['mix'];
     }
     
+    function get_comision()
+    {
+        return $this->datos_filtro['comision'];
+    }
+    
     function get_mensaje()
     {
         return $this->datos_filtro['mensaje'];
@@ -407,6 +438,11 @@ class controlador extends controlador_g3w2
         $this->datos_filtro['mix'] = $mix;
     }
     
+    function set_comision($comision)
+    {
+        $this->datos_filtro['comision'] = $comision;
+    }
+
     function set_mensaje($mensaje)
     {
         $this->datos_filtro['mensaje'] = $mensaje;
@@ -455,7 +491,7 @@ class controlador extends controlador_g3w2
 
     function decodificar_anio_academico($anio_hash) 
     {
-        $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
+        $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
         if (!empty($datos)) {
                 foreach($datos as $value){
                         if ($value['_ID_'] == $anio_hash){
@@ -544,12 +580,18 @@ class controlador extends controlador_g3w2
             $datos['estado'] = $datos['opcion_recup2'];
             $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
         }
+        
         $this->set_anio_academico($datos['anio_academico_hash']);
         $this->set_periodo($datos['periodo_hash']);
+        $this->set_carrera($datos['carrera']);
+        $this->set_mix($datos['mix']);
+        
+        $this->set_comision($datos['comision']);
         
         $msg = $this->formatear_mensaje($mensaje);
         $this->set_mensaje($msg[0]);
         $this->set_mensaje_error($msg[1]);
+        
     }
 
     private function formatear_mensaje($mensaje)
@@ -590,6 +632,9 @@ class controlador extends controlador_g3w2
 
         $parametros['anio_academico_hash']  = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
         $parametros['periodo_hash']         = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
+        $parametros['carrera']              = $this->validate_param('carrera', 'post', validador::TIPO_TEXTO);
+        $parametros['mix']                  = $this->validate_param('mix', 'post', validador::TIPO_TEXTO); 
+
         return $parametros;
         
     }

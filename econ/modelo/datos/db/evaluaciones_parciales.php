@@ -194,5 +194,43 @@ class evaluaciones_parciales
         return $result;
     }
 
-    
+    /**
+     * parametros: anio_academico, periodo, carrera, anio_cursada, mix
+     * cache: no
+     * filas: n
+     */
+    function get_evaluaciones_de_materias($parametros)
+    {
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $carrera = $parametros['carrera'];
+        $anio_cursada = $parametros['anio_cursada'];
+        $mix = $parametros['mix'];
+        
+        $sql = "SELECT DISTINCT sga_materias.materia, 
+                                sga_materias.nombre as materia_nombre, 
+                                sga_eval_parc.descripcion as evaluacion, 
+                                sga_cron_eval_parc.fecha_hora::DATE as fecha
+                    FROM sga_cron_eval_parc
+                    JOIN sga_comisiones ON (sga_comisiones.comision = sga_cron_eval_parc.comision)
+                    JOIN sga_materias ON (sga_materias.materia = sga_comisiones.materia)
+                    JOIN sga_eval_parc ON (sga_eval_parc.evaluacion = sga_cron_eval_parc.evaluacion)
+                    JOIN ufce_mixes ON (ufce_mixes.materia = sga_materias.materia)
+                    WHERE sga_comisiones.anio_academico = $anio_academico
+                            AND sga_comisiones.periodo_lectivo = $periodo ";
+        if ($parametros['carrera'] != "''")
+        {
+            $sql .= " AND ufce_mixes.carrera = $carrera ";
+        }
+        if ($parametros['anio_cursada'] != "''")
+        {
+            $sql .= " AND ufce_mixes.anio_de_cursada = $anio_cursada ";
+        }                    
+        if ($parametros['mix'] != "''")
+        {
+            $sql .= " AND ufce_mixes.mix = $mix ";
+        }
+        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $result;
+    }
 }

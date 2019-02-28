@@ -73,6 +73,29 @@ class cursos
                 
     /**
      * parametros: anio_academico, periodo, materia
+     * cache: no
+     * filas: n
+     */
+    function get_observaciones_materia($parametros)
+    {
+        $materia = $parametros['materia'];
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $sql = "SELECT observaciones
+                    FROM ufce_cron_eval_parc_obs 
+                    WHERE materia = $materia 
+                        AND anio_academico = $anio_academico 
+                        AND periodo_lectivo = $periodo ";
+        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if (count($result) > 0)
+        {
+            return $result[0]['OBSERVACIONES'];
+        }
+        return null;
+    }
+
+    /**
+     * parametros: anio_academico, periodo, materia
      * param_null: periodo
      * cache: no
      * filas: n
@@ -409,23 +432,31 @@ class cursos
     }
     
     /**
-     * parametros: materia
+     * parametros: materia, anio_academico, periodo
      * cache: no
      * filas: n
      */
     function get_fechas_eval_asignadas($parametros)
     {
         $materia = $parametros['materia'];
-        $sql = "SELECT DISTINCT DATE(fecha_hora) AS fecha
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $sql = "SELECT DISTINCT DATE(fecha_hora) AS fecha, evaluacion
                     FROM sga_cron_eval_parc 
                     WHERE comision IN (
-                                    SELECT comision FROM sga_comisiones WHERE materia = $materia
+                                    SELECT comision FROM sga_comisiones 
+                                    WHERE materia = $materia
+                                        AND anio_academico = $anio_academico 
+                                        AND periodo_lectivo = $periodo
                             ) 
                 UNION
-                SELECT DISTINCT DATE(fecha_hora) AS fecha
+                SELECT DISTINCT DATE(fecha_hora) AS fecha, evaluacion
                     FROM ufce_cron_eval_parc 
                     WHERE comision IN (
-                                    SELECT comision FROM sga_comisiones WHERE materia = $materia
+                                    SELECT comision FROM sga_comisiones 
+                                    WHERE materia = $materia
+                                        AND anio_academico = $anio_academico 
+                                        AND periodo_lectivo = $periodo
                             ) 
                         AND estado IN ('A', 'P')";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
@@ -549,7 +580,7 @@ class cursos
     
     
      /**
-    * parametros: materia, anio_academico, periodo_lectivo
+    * parametros: materia, anio_academico, periodo
     * cache: no
     * filas: n
     */
@@ -557,12 +588,12 @@ class cursos
     {
         $materia = $parametros['materia'];
         $anio_academico = $parametros['anio_academico'];
-        $periodo_lectivo = $parametros['periodo_lectivo'];
+        $periodo = $parametros['periodo'];
         $sql = "SELECT observaciones
                 FROM ufce_cron_eval_parc_obs 
                     WHERE materia = $materia
                     AND anio_academico = $anio_academico
-                    AND periodo_lectivo = $periodo_lectivo";
+                    AND periodo_lectivo = $periodo";
         $obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         if (count($obs) > 0) 
         {

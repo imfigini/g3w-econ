@@ -38,7 +38,7 @@ class builder_form_filtro extends builder_formulario
             $form->add_elemento($fabrica->elemento('periodo', array(
                             form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_periodos')),
                             form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
-                            form_elemento_config::obligatorio	=> false,
+                            form_elemento_config::obligatorio	=> true,
                             form_elemento_config::elemento		=> array('tipo' => 'select'),
                             form_elemento_config::multi_options => self::get_periodos_lectivos(),
                             form_elemento_config::validar_select => false,
@@ -58,7 +58,7 @@ class builder_form_filtro extends builder_formulario
             $form->add_elemento($fabrica->elemento('mix', array(
                             form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('filtro.mix')),
                             form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
-                            form_elemento_config::obligatorio	=> false,
+                            form_elemento_config::obligatorio	=> true,
                             form_elemento_config::elemento		=> array('tipo' => 'select'),
                             form_elemento_config::multi_options => self::get_mixs(), 
                             form_elemento_config::validar_select => false,
@@ -113,7 +113,7 @@ class builder_form_filtro extends builder_formulario
 
         function get_anios_academicos()
 	{
-            $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
+            $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
             return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	

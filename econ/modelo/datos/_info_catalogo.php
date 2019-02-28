@@ -407,7 +407,7 @@ class _info_catalogo
   array (
     0 => 'materia',
     1 => 'anio_academico',
-    2 => 'periodo_lectivo',
+    2 => 'periodo',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -420,6 +420,8 @@ class _info_catalogo
   'parametros' => 
   array (
     0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -544,6 +546,20 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_observaciones_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_periodos_evaluacion()
 	{
 		return array (
@@ -661,6 +677,22 @@ class _info_catalogo
   array (
     0 => 'anio_academico',
     1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_evaluaciones_de_materias()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'carrera',
+    3 => 'anio_cursada',
+    4 => 'mix',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -817,6 +849,14 @@ class _info_catalogo
     1 => 'anio_de_cursada',
   ),
   'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function unidad_academica_econ__anios_academicos()
+	{
+		return array (
+  'cache' => 'memoria',
   'filas' => 'n',
 );
 	}

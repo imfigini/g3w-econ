@@ -22,341 +22,7 @@ class controlador extends controlador_g3w2
             $this->datos_filtro = $_GET['formulario_filtro'];
         }
     }
-    
-    function get_materias_cincuentenario($carrera, $mix)
-    {
-        $parametros['legajo'] = null;
-        $parametros['carrera'] = null;
-        $parametros['mix'] = null;
-        
-        if (isset($carrera))
-        {
-            $parametros['carrera'] = $carrera;
-        }
-        if (isset($mix))
-        {
-            $parametros['mix'] = $mix;
-        }
-        $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
-        return $materias;
-    }
-    
-    function get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash, $carrera, $mix)
-    {
-        $materias = $this->get_materias_cincuentenario($carrera, $mix); 
-        //MATERIA, MATERIA_NOMBRE
-       
-        $datos = array();
-        $cant = count($materias);
-        for ($i=0; $i<$cant; $i++)
-        {
-            $materias[$i]['CICLO'] = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materias[$i]['MATERIA'])); 
-            //F - P - FyP
 
-            $comisiones = $this->get_comisiones_de_materia_con_dias_de_clase($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
-            //COMISION, COMISION_NOMBRE, ANIO_ACADEMICO, PERIODO_LECTIVO, ESCALA, TURNO, CARRERA, OBSERVACIONES
-
-            if (count($comisiones) > 0)
-            {
-                $materias[$i]['CALIDAD'] = $this->get_tipo_escala_de_materia($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
-                // 'P', 'R' o 'PyR'
-
-                $comisiones = $this->get_dias_de_clase_comision($comisiones);
-                //DIAS_CLASE [DIA_SEMANA, HS_COMIENZO_CLASE, HS_FINALIZ_CLASE, DIA_NOMBRE]
-                
-                $comisiones = $this->get_fechas_no_validas($comisiones);
-                //DIAS_NO_VALIDOS
-                
-                $comisiones = $this->get_evaluaciones_existentes($comisiones);
-
-                $promocionables = array();
-                $regulares = array();
-                foreach ($comisiones AS $comision)
-                {
-                    switch(trim($comision['ESCALA']))
-                    {
-                        case 'P':   $promocionables[] = $comision; 
-                                    break;
-                        case 'R':   $regulares[] = $comision; 
-                                    break;
-                        case 'PyR': $promocionables[] = $comision;
-                                    $regulares[] = $comision;
-                                    break;
-                    }
-                }
-                $materias[$i]['COMISIONES'] = $comisiones;
-                $datos[] = $materias[$i];
-            }
-        }
-        return $datos;
-    }
-    
-    function get_fechas_ya_asignadas($materia)
-    {
-        $materias_mismo_mix = catalogo::consultar('cursos', 'get_materias_mismo_mix', array('materia'=>$materia)); 
-        $fechas_ya_asignadas = array();
-        foreach($materias_mismo_mix AS $mat)
-        {
-            $fechas = catalogo::consultar('cursos', 'get_fechas_eval_asignadas', array('materia'=>$mat['MATERIA'])); 
-            foreach ($fechas as $f)
-            {
-                $fechas_ya_asignadas[] = $f['FECHA'];
-            }
-        }
-        return $fechas_ya_asignadas;
-    }
-    
-    function get_comisiones_de_materia_con_dias_de_clase($anio_academico_hash, $periodo_hash, $materia)
-    {
-        $periodo = null;
-        $anio_academico = null;
-
-        if (!empty($anio_academico_hash))
-        {
-            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
-            if (!empty($anio_academico))
-            {
-                if (!empty($periodo_hash))
-                {
-                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-                }
-                $parametros = array(
-                                'anio_academico' => $anio_academico,
-                                'periodo' => $periodo,
-                                'materia' => $materia
-                    );
-                return catalogo::consultar('cursos', 'get_comisiones_de_materia_con_dias_de_clase', $parametros);
-            }
-        }
-        return null;
-    }
-    
-    function get_periodos_evaluacion($anio_academico_hash, $periodo_hash)
-    {
-        $periodo = null;
-        $anio_academico = null;
-
-        if (!empty($anio_academico_hash))
-        {
-            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
-            if (!empty($anio_academico))
-            {
-                if (!empty($periodo_hash))
-                {
-                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-                }
-                $parametros = array(
-                                'anio_academico' => $anio_academico,
-                                'periodo' => $periodo
-                    );
-                return catalogo::consultar('cursos', 'get_periodos_evaluacion', $parametros);
-            }
-        }
-    }
-    
-    /*
-     * Retorna los días de la semana asignados a cada comisión, y la banda horaria
-     //* y las fechas de clase específicas asignadas a cada comisión (válidas)
-     */
-    function get_dias_de_clase_comision($comisiones)
-    {
-        $resultado = array();
-        foreach ($comisiones AS $comision)
-        {
-            $parametros['comision'] = $comision['COMISION'];
-            $comision['DIAS_CLASE'] = catalogo::consultar('cursos', 'get_dias_clase', $parametros);
-            $comision['DIAS_CLASE_JSON'] = json_encode($comision['DIAS_CLASE'], JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
-            $resultado[] = $comision;
-        }
-        return $resultado;
-    }
-    
-    /*
-     * Retorna las fechas indicadas como no válidas para cada comisión
-     */
-    function get_fechas_no_validas($comisiones)
-    {
-        $resultado = array();
-        foreach ($comisiones AS $comision)
-        {
-            $parametros['comision'] = $comision['COMISION'];
-            $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas', $parametros);
-            $arreglo = Array();
-            foreach ($dias_no_validos AS $d)
-            {
-                $arreglo[] = $d['FECHA'];
-            }
-            $comision['DIAS_NO_VALIDOS_JOSN'] = json_encode($arreglo);
-            $resultado[] = $comision;
-        }
-        return $resultado;
-    }
-    
-    function get_tipo_escala_de_materia($anio_academico_hash, $periodo_hash=null, $materia)
-    {
-        $periodo = null;
-        $anio_academico = null;
-
-        if (!empty($anio_academico_hash))
-        {
-            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
-            if (!empty($anio_academico))
-            {
-                if (!empty($periodo_hash))
-                {
-                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-                }
-                $parametros = array(
-                                'anio_academico' => $anio_academico,
-                                'periodo' => $periodo,
-                                'materia' => $materia
-                    );
-                return catalogo::consultar('cursos', 'get_tipo_escala_de_materia', $parametros);
-            }
-        }
-        return null;
-    }
-    
-
-    function get_mismos_dias($comisiones)
-    {
-        $cant = count($comisiones);
-        if ($cant == 0)
-        {
-            return null;
-        }
-        $mismos_dias = true;
-        for ($i=1; $i<$cant; $i++)
-        {
-            $dias_clase_1 = $comisiones[$i-1]['DIAS_CLASE'];
-            $dias_clase_2 = $comisiones[$i]['DIAS_CLASE'];
-            if (count($dias_clase_1) != count($dias_clase_2))
-            {
-                $mismos_dias = false;
-            }
-            else
-            {
-                $cant_dias = count($dias_clase_1);
-                for ($j=0; $j<$cant_dias; $j++)
-                {
-                    if ($dias_clase_1[$j]['DIA_SEMANA'] != $dias_clase_2[$j]['DIA_SEMANA'])
-                    {
-                        $mismos_dias = false;
-                    }
-                }
-            }
-        }
-        if ($mismos_dias)
-        {
-            $resultado = array();
-            foreach ($comisiones[0]['DIAS_CLASE'] AS $dia)
-            {
-                $r['DIA_SEMANA'] = $dia['DIA_SEMANA'];
-                $r['DIA_NOMBRE'] = $dia['DIA_NOMBRE'];
-                $resultado[] = $r;
-            }
-            return $resultado;  
-        }
-        else
-        {
-            return null;
-        }              
-    }
-
-    function get_dias_no_laborales($anio_academico_hash, $periodo_hash)
-    {
-        if (!empty($anio_academico_hash))
-        {
-            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
-            if (!empty($periodo_hash))
-            {
-                $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-            }
-            $parametros = array(
-                        'anio_academico' => $anio_academico,
-                        'periodo' => $periodo
-                    );
-            return catalogo::consultar('evaluaciones_parciales', 'get_dias_no_laborales', $parametros);
-        }
-        return null;
-    }
-
-    function get_evaluaciones_existentes($comisiones)
-    {
-        $result = array();
-        foreach($comisiones as $comision)
-        {
-            $parametros['comision'] = $comision['COMISION'];
-            $escala = $comision['ESCALA'];
-
-            //PROMO
-            if ($escala == 'P  ' || $escala == 'PyR')
-            {
-                $parametros['evaluacion'] = 1;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_PROMO1'] = $eval[0];
-                $comision['EVAL_PROMO1']['READONLY'] = $this->is_eval_readonly($eval[0]);
-
-                $parametros['evaluacion'] = 2;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_PROMO2'] = $eval[0];
-                $comision['EVAL_PROMO2']['READONLY'] = $this->is_eval_readonly($eval[0]);
-
-                $parametros['evaluacion'] = 7;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_RECUP'] = $eval[0];
-                $comision['EVAL_RECUP']['READONLY'] = $this->is_eval_readonly($eval[0]);
-
-                $parametros['evaluacion'] = 14;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_INTEG'] = $eval[0];
-                $comision['EVAL_INTEG']['READONLY'] = $this->is_eval_readonly($eval[0]);
-            }
-            
-            //REGULAR
-            if ($escala == 'R  ' || $escala == 'PyR')
-            {
-                $parametros['evaluacion'] = 21;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_REGU1'] = $eval[0];
-                $comision['EVAL_REGU1']['READONLY'] = $this->is_eval_readonly($eval[0]);
-
-                $parametros['evaluacion'] = 4;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_RECUP1'] = $eval[0];
-                $comision['EVAL_RECUP1']['READONLY'] = $this->is_eval_readonly($eval[0]);
-
-                $parametros['evaluacion'] = 5;
-                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
-                $comision['EVAL_RECUP2'] = $eval[0];
-                $comision['EVAL_RECUP2']['READONLY'] = $this->is_eval_readonly($eval[0]);            
-            }
-            $result[] = $comision;
-        }
-        return $result;
-    }
-    
-    /*
-     * Si hay fecha cargada y el estado es NULL o 'A' no puede modificar el docente
-     */
-    private function is_eval_readonly($evaluacion)
-    {
-        if (!empty($evaluacion['FECHA_HORA']))
-        {
-            if (empty($evaluacion['ESTADO']) || $evaluacion['ESTADO'] == 'A')
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    function get_ciclo_de_materias($materia)
-    {
-        $parametros = array('materia' => $materia);
-        return catalogo::consultar('cursos', 'get_ciclo_de_materias', $parametros);
-    }
-    
     function get_periodo()
     {
         return $this->datos_filtro['periodo'];
@@ -436,7 +102,7 @@ class controlador extends controlador_g3w2
 
     function decodificar_anio_academico($anio_hash) 
     {
-        $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
+        $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
         if (!empty($datos)) {
                 foreach($datos as $value){
                         if ($value['_ID_'] == $anio_hash){
@@ -461,6 +127,96 @@ class controlador extends controlador_g3w2
         }
         return false;
     }
-   
+
+    
+    function get_evaluaciones($anio_academico_hash, $periodo_hash, $carrera, $mix)
+    {
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico) and !empty($periodo_hash))
+            {
+                $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+
+                $parametros = array(
+                            'anio_academico' => $anio_academico,
+                            'periodo' => $periodo,
+                            'carrera' => $carrera,
+                            'anio_cursada' => substr($mix, 0, 1),
+                            'mix' => substr($mix, 1, 1)
+                        );
+                $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_de_materias', $parametros);
+                $resultado = $this->eliminar_acentos($resultado);
+                return $resultado;
+            }
+        }
+        return null;
+    }
+
+    function get_dias_no_laborales($anio_academico_hash, $periodo_hash)
+    {
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($periodo_hash))
+            {
+                $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+                $parametros = array(
+                        'anio_academico' => $anio_academico,
+                        'periodo' => $periodo
+                    );
+                return catalogo::consultar('evaluaciones_parciales', 'get_dias_no_laborales', $parametros);
+            }
+        }
+        return null;
+    }
+    
+    private function eliminar_acentos($arreglo)
+    {
+        $resultado = array();
+        foreach ($arreglo as $a)
+        {
+            $a['MATERIA_NOMBRE'] = $this->eliminar_tildes($a['MATERIA_NOMBRE']);
+            $resultado[] = $a;
+        }
+        return $resultado;
+    }
+    
+    private function eliminar_tildes($cadena)
+    {
+        $cadena = str_replace(
+            array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
+            array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
+            $cadena
+        );
+
+        $cadena = str_replace(
+            array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
+            array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
+            array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
+            array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
+            array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('ñ', 'Ñ', 'ç', 'Ç'),
+            array('n', 'N', 'c', 'C'),
+            $cadena
+        );
+
+        return $cadena;
+    }
 }
 ?>

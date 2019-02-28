@@ -80,18 +80,18 @@
                                                 </td>  
                                                 <td>2do. Parcial Promoción: 
                                                     <input type="text" id="datepicker_materia_promo2_{{materia.MATERIA}}" name="datepicker_materia_promo2_{{materia.MATERIA}}" 
-                                                           class="no_editable" />
+                                                           class="no_editable" onchange="verifica_fechas_materia(this)" />
 
                                                 </td>                               
                                                 {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
                                                     <td>Recuperatorio Unico: 
                                                         <input type="text" id="datepicker_materia_recup_{{materia.MATERIA}}" name="datepicker_materia_recup_{{materia.MATERIA}}" 
-                                                               class="no_editable" onchange="verifica_fechas_materia_promo(this)"/>
+                                                               class="no_editable" onchange="verifica_fechas_materia(this)"/>
                                                     </td>                               
                                                 {% endif %}
                                                 <td>Integrador: 
                                                     <input type="text" id="datepicker_materia_integ_{{materia.MATERIA}}" name="datepicker_materia_integ_{{materia.MATERIA}}" 
-                                                           class="no_editable" onchange="verifica_fechas_materia_promo(this)"/>
+                                                           class="no_editable" onchange="verifica_fechas_materia(this)"/>
                                                 </td>                               
                                             </tr>
                                         {% else %}
@@ -114,10 +114,12 @@
                                                     <input type="text" id="datepicker_materia_regu1_{{materia.MATERIA}}" name="datepicker_materia_regu1_{{materia.MATERIA}}" class="no_editable" />
                                                 </td>  
                                                 <td>1er. Recuperatorio: 
-                                                    <input type="text" id="datepicker_materia_recup1_{{materia.MATERIA}}" name="datepicker_materia_recup1_{{materia.MATERIA}}" class="no_editable" />
+                                                    <input type="text" id="datepicker_materia_recup1_{{materia.MATERIA}}" name="datepicker_materia_recup1_{{materia.MATERIA}}" 
+                                                           class="no_editable" onchange="verifica_fechas_materia(this)" />
                                                 </td>                               
                                                 <td>2do. Recuperatorio: 
-                                                    <input type="text" id="datepicker_materia_recup2_{{materia.MATERIA}}" name="datepicker_materia_recup2_{{materia.MATERIA}}" class="no_editable" />
+                                                    <input type="text" id="datepicker_materia_recup2_{{materia.MATERIA}}" name="datepicker_materia_recup2_{{materia.MATERIA}}" 
+                                                           class="no_editable" onchange="verifica_fechas_materia(this)" />
                                                 </td>                               
                                             </tr>
                                         {% else %}   
@@ -324,8 +326,8 @@
 
 {% macro set_input(comision, instancia, fecha_hora, solo_lectura) %}    
     <input type="text" id="datepicker_comision_{{instancia}}_{{comision}}" name="datepicker_comision_{{instancia}}_{{comision}}" 
-           {% if (instancia == 'recup') or (instancia == 'integ') %}
-               onchange="verifica_fechas_comision_promo(this)"
+           {% if (instancia =='promo2') or (instancia == 'recup') or (instancia == 'integ') or (instancia == 'recup1') or (instancia == 'recup2')%}
+               onchange="verifica_fechas_comision(this)"
            {% endif %}
             value="{{fecha_hora}}" {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> 
     <input type="hidden" id="{{instancia}}_readonly_{{comision}}" name="{{instancia}}_readonly_{{comision}}" 

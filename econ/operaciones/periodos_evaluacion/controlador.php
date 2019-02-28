@@ -73,12 +73,14 @@ class controlador extends controlador_g3w2
             if (!empty($periodo_hash))
             {
                 $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-            }
-            $parametros = array(
+            
+                $parametros = array(
                         'anio_academico' => $anio_academico,
                         'periodo' => $periodo
                     );
-            return catalogo::consultar('evaluaciones_parciales', 'get_dias_no_laborales', $parametros);
+                return catalogo::consultar('evaluaciones_parciales', 'get_dias_no_laborales', $parametros);
+            }
+            return null;
         }
         return null;
     }
@@ -197,7 +199,7 @@ class controlador extends controlador_g3w2
 
     function decodificar_anio_academico($anio_hash) 
     {
-        $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
+        $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
         if (!empty($datos)) {
                 foreach($datos as $value){
                         if ($value['_ID_'] == $anio_hash){

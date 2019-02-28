@@ -16,6 +16,14 @@
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
     
+    {% if this.data.datos_json %}
+        <input type="hidden" id="evaluaciones" value="{{this.data.datos_json}}">
+    {% endif %}
+        
+    {% if this.data.dias_no_laborales_json %}
+        <input type="hidden" id="dias_no_laborales" value="{{this.data.dias_no_laborales_json }}">
+    {% endif %}
+
     <div id='calendar'>        
     </div>    
      

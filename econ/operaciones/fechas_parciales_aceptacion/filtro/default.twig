@@ -48,6 +48,10 @@
                         </h3>
                     </div>
 
+                    <div>
+                        <label {% if (materia.OBSERVACIONES) %} style="color: red" {% endif %}>Observaciones: {{materia.OBSERVACIONES}}</label>
+                    </div>
+
                     {% if (materia.COMISIONES) %}
                         <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" >
                             {% for comision in materia.COMISIONES %}
@@ -55,11 +59,12 @@
                                 <form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
                                     <input type="hidden" id="{{comision.COMISION}}" name="comision" value="{{comision.COMISION}}">                                
                                     <input type="hidden" id="dias_no_validos_{{comision.COMISION}}" value="{{comision.DIAS_NO_VALIDOS_JOSN}}">
-    {#                                <input type="hidden" id="ciclo_{{comision.COMISION}}" value="{{materia.CICLO}}">#}
                                     <input type="hidden" id="escala_{{comision.COMISION}}" name="escala_{{comision.COMISION}}" value="{{comision.ESCALA}}">
                                     <input type="hidden" id="dias_clase_{{comision.COMISION}}" value="{{comision.DIAS_CLASE_JSON}}">
                                     <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
                                     <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+                                    <input type="hidden" name="carrera" value="{{this.data.carrera}}">
+                                    <input type="hidden" name="mix" value="{{this.data.mix}}">
 
                                     <h4 class="comision">Comisión: {{comision.COMISION_NOMBRE}} ({{comision.COMISION}})</h4>
                                     <div class="descripcion_comision">
@@ -115,21 +120,12 @@
                                             </tr>
                                         {% endif %}
 
-                                        <tr>
-                                            {% if (comision.OBSERVACIONES) %}
-                                                <td colspan="4" style="color: red">
-                                            {% else %}
-                                                <td colspan="4">
-                                            {% endif %}
-                                                Observaciones: {{comision.OBSERVACIONES}}
-                                            </td>
-                                        </tr>
                                     </table>
                                     </div>
                                             
                                     <div style="text-align: right">
 {#                                        <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>#}
-                                        <div class="btn btn-info btn-lg" onclick="grabar_comision_x_ajax({{comision.COMISION}}, '{{this.data.form_url_comision}}')" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
+                                        <div class="btn btn-info btn-lg" onclick="grabar_comision({{comision.COMISION}})" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
                                     </div>
                                 </form>
                         {% endfor %}
@@ -144,7 +140,7 @@
         </div>
     {% endif %}
     
- 
+    
     
 {% endblock %}
 

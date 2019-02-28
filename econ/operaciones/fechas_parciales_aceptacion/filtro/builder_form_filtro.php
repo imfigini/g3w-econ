@@ -113,7 +113,7 @@ class builder_form_filtro extends builder_formulario
         
 	function get_anios_academicos()
 	{
-            $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
+            $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
             return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	

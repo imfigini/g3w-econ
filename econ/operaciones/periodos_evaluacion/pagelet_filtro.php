@@ -77,28 +77,5 @@ class pagelet_filtro extends pagelet {
             
             $link_form_evaluacion = kernel::vinculador()->crear('periodos_evaluacion', 'grabar_periodo_evaluacion');
             $this->data['form_url'] = $link_form_evaluacion;
-            
-            /*$cant = count($materias);
-            for ($i=0; $i<$cant; $i++)
-            {
-                $materias[$i]['ciclo'] = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materias[$i]['MATERIA'])); 
-                $comisiones = $this->controlador->get_comisiones($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
-                if (count($comisiones) > 0)
-                {
-                    $materias[$i]['comisiones'] = $comisiones;
-                    $datos[] = $materias[$i];
-                }
-            }
-            
-            $this->data['datos'] = $datos;
-	        
-            $link_form_comision = kernel::vinculador()->crear('periodos_evaluacion', 'grabar_comision');
-            $this->data['form_url_comision'] = $link_form_comision;     
-            
-            $link_form_materia = kernel::vinculador()->crear('periodos_evaluacion', 'grabar_materia');
-            $this->data['form_url_materia'] = $link_form_materia;     
-            
-             * 
-             */
         }
 }

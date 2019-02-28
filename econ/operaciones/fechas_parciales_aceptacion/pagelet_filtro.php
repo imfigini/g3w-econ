@@ -52,6 +52,11 @@ class pagelet_filtro extends pagelet {
 	{
             return $this->controlador->get_mix();
 	}
+     
+        function get_comision()
+	{
+            return $this->controlador->get_comision();
+	}
         
         function get_mensaje()
 	{
@@ -73,16 +78,19 @@ class pagelet_filtro extends pagelet {
             $anio_academico_hash = $this->get_anio_academico();
             $carrera = $this->get_carrera();
             $mix = $this->get_mix();
+            $comision = $this->get_comision();
+            
             $form = $this->get_form_builder();
             $form->set_anio_academico($anio_academico_hash);
             $form->set_periodo($periodo_hash);
             $form->set_carrera($carrera);
             $form->set_mix($mix);
-
+            
             $this->add_var_js('periodo_hash', $periodo_hash);
             $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
             $this->add_var_js('carrera', $carrera);        
             $this->add_var_js('mix', $mix);        
+            $this->add_var_js('comision', $comision); 
 
             $this->data['mensaje'] = $this->get_mensaje();
             $this->data['mensaje_error'] = $this->get_mensaje_error();
@@ -90,6 +98,7 @@ class pagelet_filtro extends pagelet {
             $this->data['anio_academico_hash'] = $anio_academico_hash;
             $this->data['carrera'] = $carrera;
             $this->data['mix'] = $mix;
+            $this->data['comision'] = $comision;
 
             if (!empty($anio_academico_hash) && !empty($periodo_hash))
             {

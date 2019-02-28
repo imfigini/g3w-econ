@@ -51,17 +51,60 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 });
             
     
-            //setear_calendarios();  
+//            var eventos = get_eventos();
+//            console.log(eventos);
             inicio_calendario();
             //set_values('datepicker_promo1_6879', '2018-01-01', '2018-12-31');
             
         }
     };
     
+    function get_eventos()
+    {
+        console.log('entro por get_eventos');
+        var evaluaciones_json = $('#evaluaciones').val();
+        //var resultado = '[ ';
+        if (evaluaciones_json)
+        {
+            var evaluaciones = JSON.parse(evaluaciones_json);
+//            console.log(evaluaciones);
+            var cant = Object.keys(evaluaciones).length;
+            var cadena = '';
+            for(var i=0; i<cant; i++)
+            {
+                var eval = evaluaciones[i];
+  //              console.log(eval);
+                var r = '{ ';
+                r += ' "title": "'+eval['MATERIA_NOMBRE']+' '+eval['EVALUACION']+'"';
+                r += ', "start": "'+eval['FECHA']+'"';
+                r += ', "end": "'+eval['FECHA']+'"';
+                cadena += r+'}, ';
+            }
+            var resultado = cadena.substring(0, cadena.length-2);
+            console.log(resultado);
+            resultado = JSON.parse(resultado);
+            console.log(resultado);
+            //return resultado;
+            
+            return resultado;
+        }
+        return null;
+    }
+    
+    function get_eventos2()
+    {
+        var resultado =  [ { "title": "Prueba", "start": "2019-02-10", "end": "2019-02-10" } ];
+        console.log(resultado);
+        //resultado = JSON.parse(resultado);
+        //console.log(resultado);        
+        return resultado;
+    }
     
     function inicio_calendario()
     {
-        console.log('entro a onready');
+//        var eventos = get_eventos();
+//        console.log(eventos);
+//var variable = [ { "title": "Prueba", "start": "2019-02-10", "end": "2019-02-10" } ];
         $('#calendar').fullCalendar({
                 lang: 'es',
                 header: {
@@ -72,23 +115,30 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 editable: false,
                 eventLimit: true, // allow "more" link when too many events
                 selectable: false,
-                events: [
-//                                './getdatos.php'	
-                    {
-                        title : 'Event Title1',
-                        start : '2019-02-20',
-                        end : '2019-02-20'
-                    },
-                    {
-                        'title' : 'Titulo del calendario',
-                        'start' : '2019-02-25T13:13:55.008',
-                        'textColor' : 'black',
-                        'tip' : 'este es un tip',
-                        'backgroundColor' : 'yellow',
-                        'borderColor' : 'red',
-                        'end' : '2019-02-25T13:13:55.008'
-                    }
-                        ],
+                events: function (start, end, timezone, callback) 
+                        {
+                            console.log(start);
+                    var eventos = get_eventos2();
+                            callback(eventos);
+                        } ,
+////                                './getdatos.php'	
+//                    {
+//                        title : 'Event Title1',
+//                        start : '2019-02-20',
+//                        end : '2019-02-20'
+//                    }
+                    
+               //     {  title: "Analisis Macroeconomico Primer Parcial Promo", start: "2018-10-09", end: "2018-10-09"}, {  title: "Analisis Macroeconomico Segundo Parcial Promo", start: "2018-11-13", end: "2018-11-13"}, {  title: "Derecho Empresario II Parcial Regular", start: "2018-10-15", end: "2018-10-15"}, {  title: "Derecho Empresario II Primer Recuperatorio Regular", start: "2018-11-19", end: "2018-11-19"}, {  title: "Logistica y Organizacion Productiva Primer Parcial Promo", start: "2018-10-18", end: "2018-10-18"}, {  title: "Logistica y Organizacion Productiva Segundo Parcial Promo", start: "2018-11-22", end: "2018-11-22"}, {  title: "Marketing Primer Parcial Promo", start: "2018-10-18", end: "2018-10-18"}, {  title: "Marketing Segundo Parcial Promo", start: "2018-11-27", end: "2018-11-27"}, {  title: "Econometria y Modelizacion Primer Parcial Promo", start: "2018-10-19", end: "2018-10-19"}, {  title: "Econometria y Modelizacion Segundo Parcial Promo", start: "2018-11-23", end: "2018-11-23"}
+//                    {
+//                        'title' : 'Titulo del calendario',
+//                        'start' : '2019-02-25T13:13:55.008',
+//                        'textColor' : 'black',
+//                        'tip' : 'este es un tip',
+//                        'backgroundColor' : 'yellow',
+//                        'borderColor' : 'red',
+//                        'end' : '2019-02-25T13:13:55.008'
+//                    }
+                 //       ],
                 eventRender: function(event, element) {
                     element.attr('title', event.tip);
                 }
@@ -96,7 +146,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     }
     
     function buscarPeriodos(anio_academico){
-            console.log(anio_academico.valueOf());    
+            //console.log(anio_academico.valueOf());    
             $.ajax({
                     url: info.url_buscar_periodos,
                     dataType: 'json',

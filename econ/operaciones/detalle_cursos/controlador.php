@@ -119,7 +119,7 @@ class controlador extends controlador_g3w2
 
     function decodificar_anio_academico($anio_hash) 
     {
-        $datos = catalogo::consultar('unidad_academica', 'anios_academicos');
+        $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
         if (!empty($datos)) {
                 foreach($datos as $value){
                         if ($value['_ID_'] == $anio_hash){
