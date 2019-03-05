@@ -9,7 +9,7 @@ use kernel\util\validador;
 
 class controlador extends controlador_g3w2
 {
-    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"");
+    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'mensaje'=>"", 'mensaje_error'=>"");
     
     function modelo()
     {
@@ -75,6 +75,16 @@ class controlador extends controlador_g3w2
         return $this->datos_filtro['anio_academico'];
     }
 
+    function get_mensaje()
+    {
+        return $this->datos_filtro['mensaje'];
+    }
+    
+    function get_mensaje_error()
+    {
+        return $this->datos_filtro['mensaje_error'];
+    }
+    
     function set_periodo($periodo)
     {
         $this->datos_filtro['periodo'] = $periodo;
@@ -83,6 +93,16 @@ class controlador extends controlador_g3w2
     function set_anio_academico($anio_academico)
     {
         $this->datos_filtro['anio_academico'] = $anio_academico;
+    }
+
+    function set_mensaje($mensaje)
+    {
+        $this->datos_filtro['mensaje'] = $mensaje;
+    }
+
+    function set_mensaje_error($mensaje)
+    {
+        $this->datos_filtro['mensaje_error'] = $mensaje;
     }
     
     function accion__materia()
@@ -212,6 +232,52 @@ class controlador extends controlador_g3w2
                 }
         }
         return false;
+    }
+    
+    /** Replica los coordinadores asignados el cuatrimestre anterior */
+    function accion__replicar_coordinadores()
+    {
+        if (kernel::request()->isPost()) 
+        {
+            $parametros = array();
+            $anio_academico_hash = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
+            $periodo_hash = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
+            $parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
+            $parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
+            
+            try
+            {
+                if (isset($parametros['periodo']))
+                {
+                    kernel::db()->abrir_transaccion();
+                    if (strpos($parametros['periodo'], '1') !== false)
+                    {
+                        $parametros['anio_academico_anterior'] = $parametros['anio_academico']-1;
+                        $parametros['periodo_anterior'] = str_replace('1','2',$parametros['periodo']);
+                    }
+                    else 
+                    {
+                        $parametros['anio_academico_anterior'] = $parametros['anio_academico'];
+                        $parametros['periodo_anterior'] = str_replace('2','1',$parametros['periodo']);
+                    }
+                    catalogo::consultar('coord_materia', 'replicar_coordinador', $parametros);
+                    
+                    kernel::db()->cerrar_transaccion();
+                    
+                }
+                $this->set_anio_academico($anio_academico_hash);
+                $this->set_periodo($periodo_hash);
+                $this->set_mensaje('Se replicaron los corrdinadores del cuatrimestre anterior');
+            } 
+            catch (error_guarani $e)
+            {
+                $msj = $e->getMessage();
+                kernel::db()->abortar_transaccion($msj);
+                $this->set_anio_academico($parametros['anio_academico_hash']);
+                $this->set_periodo($parametros['periodo_hash']);
+                $this->set_mensaje_error($msj);
+            }
+        }
     }
 }
 ?>

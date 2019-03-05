@@ -15,6 +15,18 @@
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
     
+    {#  Mensaje si se guardó con éxito      #}
+    {% if (this.data.mensaje != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+    {% endif %}
+
+    {#  Mensaje si hubo error al guardar      #}
+    {% if (this.data.mensaje_error != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+        <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
+    {% endif %}
+
+
     {% if(this.data.materias) %}
         <table class="table table-striped table-bordered table-condensed" summary="Tabla de materias">
             <thead>
@@ -36,6 +48,17 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+        <div style="text-align: right">
+            <form name="replicar_coordinadores" id="replicar_coordinadores" method="post" action="{{this.data.form_url_replicar_coord}}">
+                <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+                <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+                <button class="btn btn-info btn-lg" type="submit" style="align-self:center;font-size:12px;"
+                        title="Replica los coordinadores asignados el cuatrimestre anterior.">
+                        Replicar</button>
+            </form>
+        </div>
+        
     {% else %}
         <div role="alert" class="alert">
             {{"asignacion_coord_materias.filtro.sin_resultados"|trans|capitalize}}

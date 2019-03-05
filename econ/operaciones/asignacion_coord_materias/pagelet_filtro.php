@@ -42,6 +42,16 @@ class pagelet_filtro extends pagelet {
             return $this->controlador->get_anio_academico();
 	}
 
+        function get_mensaje()
+	{
+            return $this->controlador->get_mensaje();
+	}
+
+        function get_mensaje_error()
+	{
+            return $this->controlador->get_mensaje_error();
+	}
+        
 	public function prepare()
 	{   
             $operacion = kernel::ruteador()->get_id_operacion();
@@ -58,5 +68,11 @@ class pagelet_filtro extends pagelet {
             $this->data['periodo_hash'] = $periodo_hash;
             $this->data['anio_academico_hash'] = $anio_academico_hash;
             $this->data['materias'] = $this->controlador->get_materias_en_comision($anio_academico_hash, $periodo_hash);
+            $this->data['mensaje'] = $this->get_mensaje();
+            $this->data['mensaje_error'] = $this->get_mensaje_error();
+            
+            $link_replicar_coordinadores = kernel::vinculador()->crear('asignacion_coord_materias', 'replicar_coordinadores');
+            $this->data['form_url_replicar_coord'] = $link_replicar_coordinadores;     
+
 	}
 }

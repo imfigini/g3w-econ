@@ -16,8 +16,8 @@
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
     
-    {% if this.data.datos_json %}
-        <input type="hidden" id="evaluaciones" value="{{this.data.datos_json}}">
+    {% if this.data.eventos %}
+        <input type="hidden" id="evaluaciones" value="{{this.data.eventos}}">
     {% endif %}
         
     {% if this.data.dias_no_laborales_json %}

@@ -51,45 +51,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 });
             
     
-//            var eventos = get_eventos();
-//            console.log(eventos);
             inicio_calendario();
-            //set_values('datepicker_promo1_6879', '2018-01-01', '2018-12-31');
-            
+           
         }
     };
-    
-    function get_eventos()
-    {
-        console.log('entro por get_eventos');
-        var evaluaciones_json = $('#evaluaciones').val();
-        //var resultado = '[ ';
-        if (evaluaciones_json)
-        {
-            var evaluaciones = JSON.parse(evaluaciones_json);
-//            console.log(evaluaciones);
-            var cant = Object.keys(evaluaciones).length;
-            var cadena = '';
-            for(var i=0; i<cant; i++)
-            {
-                var eval = evaluaciones[i];
-  //              console.log(eval);
-                var r = '{ ';
-                r += ' "title": "'+eval['MATERIA_NOMBRE']+' '+eval['EVALUACION']+'"';
-                r += ', "start": "'+eval['FECHA']+'"';
-                r += ', "end": "'+eval['FECHA']+'"';
-                cadena += r+'}, ';
-            }
-            var resultado = cadena.substring(0, cadena.length-2);
-            console.log(resultado);
-            resultado = JSON.parse(resultado);
-            console.log(resultado);
-            //return resultado;
-            
-            return resultado;
-        }
-        return null;
-    }
     
     function get_eventos2()
     {
@@ -102,9 +67,13 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     
     function inicio_calendario()
     {
-//        var eventos = get_eventos();
+        var eventos = $('#evaluaciones').val();
 //        console.log(eventos);
-//var variable = [ { "title": "Prueba", "start": "2019-02-10", "end": "2019-02-10" } ];
+//        var timezone = false;
+//        var start = '2018-10-01';
+//        var end = '2018-12-30';
+        
+        var timezone = false;
         $('#calendar').fullCalendar({
                 lang: 'es',
                 header: {
@@ -115,12 +84,17 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 editable: false,
                 eventLimit: true, // allow "more" link when too many events
                 selectable: false,
-                events: function (start, end, timezone, callback) 
-                        {
-                            console.log(start);
-                    var eventos = get_eventos2();
-                            callback(eventos);
-                        } ,
+                
+                events: {
+                    url: './getdatos.php',
+                    cache: true
+                },
+//events: './getdatos.php',
+//                events: function (start, end, timezone, callback) 
+//                        {
+//                            console.log(start);
+//                            callback(eventos);
+//                        } ,
 ////                                './getdatos.php'	
 //                    {
 //                        title : 'Event Title1',
@@ -139,9 +113,13 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 //                        'end' : '2019-02-25T13:13:55.008'
 //                    }
                  //       ],
-                eventRender: function(event, element) {
-                    element.attr('title', event.tip);
-                }
+//                eventRender: function(event, element) {
+//                    element.attr('title', event.tip);
+//                }
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
         });
     }
     

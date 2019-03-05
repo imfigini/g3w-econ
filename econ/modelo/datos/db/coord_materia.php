@@ -198,7 +198,7 @@ class coord_materia
                             )
                         AND  tipo_usuario = 'COORD'";
         $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        if (!empty($resultado) && isset($resultado[0]))
+        if (count($resultado)>0 && isset($resultado[0]))
         {
             return true;
         }
@@ -215,8 +215,9 @@ class coord_materia
         $coordinador = $parametros['coordinador'];
         $sql = "SELECT nro_inscripcion FROM sga_docentes
                     WHERE legajo = $coordinador";
+
         $nro_inscripcion = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        $nro_inscripcion = $nro_inscripcion[0]['NRO_INSCRIPCION'];
+                $nro_inscripcion = $nro_inscripcion[0]['NRO_INSCRIPCION'];
         
         $sql = "INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', '$nro_inscripcion', 'COORD', 'A')";
         kernel::db()->ejecutar($sql);
@@ -242,6 +243,42 @@ class coord_materia
             $sql = "DELETE FROM aca_tipos_usuar_ag
                         WHERE nro_inscripcion = '$nro_inscripcion'
                         AND tipo_usuario = 'COORD'";
+            kernel::db()->ejecutar($sql);
+        }
+    }
+    
+    /**
+    * parametros: anio_academico, periodo, anio_academico_anterior, periodo_anterior
+    * cache: memoria
+    * filas: n
+    */
+    function replicar_coordinador($parametros)
+    {
+        //Borra los del cuatrimestre actual
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $sql = "DELETE FROM ufce_coordinadores_materias
+                    WHERE anio_academico = $anio_academico
+                        AND periodo_lectivo = $periodo";
+        kernel::db()->ejecutar($sql);
+        
+        //Recupera los del cuatrimestre anterior
+        $anio_academico_anterior = $parametros['anio_academico_anterior'];
+        $periodo_anterior = $parametros['periodo_anterior'];
+        $sql = "SELECT unidad_academica, materia, anio_academico, periodo_lectivo, coordinador
+                    FROM ufce_coordinadores_materias
+                    WHERE anio_academico = $anio_academico_anterior
+                        AND periodo_lectivo = $periodo_anterior";
+        $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        
+        //Inserta los del cuatrimestre anterior en el actual
+        foreach($resultado as $res)
+        {
+            $ua = $res['UNIDAD_ACADEMICA'];
+            $materia = $res['MATERIA'];
+            $coord = $res['COORDINADOR'];
+            $sql = "INSERT INTO ufce_coordinadores_materias 
+                        VALUES ('$ua', '$materia', $anio_academico, $periodo, '$coord')";
             kernel::db()->ejecutar($sql);
         }
     }

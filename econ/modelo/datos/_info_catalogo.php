@@ -250,6 +250,21 @@ class _info_catalogo
 );
 	}
 
+	static function coord_materia__replicar_coordinador()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'anio_academico_anterior',
+    3 => 'periodo_anterior',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
 	static function coord_materia__set_coordinador()
 	{
 		return array (
