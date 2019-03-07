@@ -245,7 +245,7 @@ class _info_catalogo
   array (
     0 => 'coordinador',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -275,11 +275,7 @@ class _info_catalogo
     2 => 'periodo',
     3 => 'coordinador',
   ),
-  'param_null' => 
-  array (
-    0 => 'coordinador',
-  ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -291,7 +287,7 @@ class _info_catalogo
   array (
     0 => 'coordinador',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -677,6 +673,23 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales__existe_periodo_solicitud_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function evaluaciones_parciales__get_carreras()
 	{
 		return array (
@@ -698,7 +711,23 @@ class _info_catalogo
 );
 	}
 
-	static function evaluaciones_parciales__get_evaluaciones_de_materias()
+	static function evaluaciones_parciales__get_evaluaciones_aceptadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'carrera',
+    3 => 'anio_cursada',
+    4 => 'mix',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_evaluaciones_pendientes()
 	{
 		return array (
   'parametros' => 
@@ -735,6 +764,19 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales__get_periodo_solicitud_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function evaluaciones_parciales__get_periodos_evaluacion()
 	{
 		return array (
@@ -742,6 +784,25 @@ class _info_catalogo
   array (
     0 => 'anio_academico',
     1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__insert_periodo_solicitud_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'fecha_inicio',
+    3 => 'fecha_fin',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -762,6 +823,21 @@ class _info_catalogo
   'param_null' => 
   array (
     0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__set_periodo_solicitud_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'fecha_inicio',
+    3 => 'fecha_fin',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -798,6 +874,25 @@ class _info_catalogo
   'cache' => 'no',
   'filas' => 'n',
   'El formato de strFecha debe ser' => 'Y-m-d',
+);
+	}
+
+	static function evaluaciones_parciales__update_periodo_solicitud_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'fecha_inicio',
+    3 => 'fecha_fin',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
 );
 	}
 

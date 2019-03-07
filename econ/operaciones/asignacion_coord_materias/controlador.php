@@ -131,8 +131,8 @@ class controlador extends controlador_g3w2
 
     function accion__grabar()
     {
-        if (kernel::request()->isPost()) {
-            
+        if (kernel::request()->isPost()) 
+        {
             $parametros = $this->get_parametros_grabar();
             catalogo::consultar('coord_materia', 'set_coordinador', $parametros);
             $this->set_anio_academico($parametros['anio_academico_hash']);

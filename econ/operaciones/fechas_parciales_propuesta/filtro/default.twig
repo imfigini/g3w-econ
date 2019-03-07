@@ -24,7 +24,7 @@
 
         {% if(this.data.datos) %}
 
-            <div role='alert' class="alert">{{'Considere aplicar la misma fecha de evaluación para todas las comisiones de una misma materia'}}</div>
+{#            <div role='alert' class="alert">{{'Considere aplicar la misma fecha de evaluación para todas las comisiones de una misma materia'}}</div>#}
 
             {#  Mensaje si se guardó con éxito      #}
             {% if (this.data.mensaje != '') %}
@@ -47,7 +47,7 @@
                     <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
                         <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
                             <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
-                            <span style="float: right;font-size: 10px;">VER / EDITAR FECHAS POR COMISIÓN</span>
+                            <span style="float: right;font-size: 10px;">Ver / Ocultar fechas por comisión</span>
                         </h3>
                     </div>
 
@@ -156,7 +156,7 @@
 
                     {#     Sección específica para detallar cada comisión individualmente               #}            
                     {% if (materia.COMISIONES) %}
-                        <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" style="display: none;">
+                        <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" style="display: block;">
                             {% for comision in materia.COMISIONES %}
 
                                     <form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
@@ -214,7 +214,7 @@
                                                     </tr>
                                                 {% endif %}
 
-                                                <tr>
+                                                {#<tr>
                                                     <td scope="row" colspan="4">
                                                         <div style="text-align: right">
                                                             {{ _self.crear_boton(comision.COMISION, materia.CICLO, comision.ESCALA, 
@@ -223,7 +223,7 @@
 
                                                         </div>
                                                     </td>
-                                                </tr>
+                                                </tr>#}
                                             </table>
                                     </form>
                             {% endfor %}
@@ -325,11 +325,12 @@
 
 
 {% macro set_input(comision, instancia, fecha_hora, solo_lectura) %}    
-    <input type="text" id="datepicker_comision_{{instancia}}_{{comision}}" name="datepicker_comision_{{instancia}}_{{comision}}" 
+    <input type="text" {#id="datepicker_comision_{{instancia}}_{{comision}}" name="datepicker_comision_{{instancia}}_{{comision}}" #}
            {% if (instancia =='promo2') or (instancia == 'recup') or (instancia == 'integ') or (instancia == 'recup1') or (instancia == 'recup2')%}
                onchange="verifica_fechas_comision(this)"
            {% endif %}
-            value="{{fecha_hora}}" {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> 
+           value="{{fecha_hora}}" readonly {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> 
+{#            value="{{fecha_hora}}" {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> #}
     <input type="hidden" id="{{instancia}}_readonly_{{comision}}" name="{{instancia}}_readonly_{{comision}}" 
             value="{{solo_lectura}}">
 {% endmacro %}                                                        

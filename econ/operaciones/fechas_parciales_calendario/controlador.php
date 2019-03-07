@@ -145,14 +145,50 @@ class controlador extends controlador_g3w2
                             'anio_cursada' => substr($mix, 0, 1),
                             'mix' => substr($mix, 1, 1)
                         );
-                $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_de_materias', $parametros);
-                $resultado = $this->eliminar_acentos($resultado);
-                return $resultado;
+                $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_aceptadas', $parametros);
+                $evaluaciones_aceptadas = $this->eliminar_acentos($resultado);
+                $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_pendientes', $parametros);
+                $evaluaciones_pendientes = $this->eliminar_acentos($resultado);
+                $evaluaciones = self::asignar_colores($evaluaciones_aceptadas, $evaluaciones_pendientes);
+                return $evaluaciones;
             }
         }
         return null;
     }
 
+    function asignar_colores($evaluaciones_aceptadas, $evaluaciones_pendientes)
+    {
+        $colores = array(0=>'DodgerBlue', 1=>'LimeGreen', 2=>'Gold', 3=>'LightCoral', 4=>'DarkTurquoise');
+        $colores_claros = array(0=>'LightSkyBlue', 1=>'Lime', 2=>'LightGoldenRodYellow', 3=>'LightPink', 4=>'PaleTurquoise'); 
+        $evaluaciones = array_merge($evaluaciones_aceptadas, $evaluaciones_pendientes);
+        $materias = array();
+        foreach($evaluaciones as $e)
+        {
+            $mat = $e['MATERIA'];
+            if (!in_array($mat, $materias))
+            {
+                $materias[] = $mat;
+            }
+        }
+        $cant = count($evaluaciones);
+        foreach($materias as $k=>$mat)
+        {
+            for ($i=0; $i<$cant; $i++)
+            {
+                if ($evaluaciones[$i]['MATERIA'] == $mat)
+                {
+                    switch ($evaluaciones[$i]['ESTADO'])
+                    {
+                        case 'A': $evaluaciones[$i]['COLOR'] = $colores[$k]; break;
+                        case 'P': $evaluaciones[$i]['COLOR'] = $colores_claros[$k]; break;
+                    }
+                }
+            }
+        }
+        //print_r($evaluaciones);
+        return $evaluaciones;
+    }
+    
     function get_dias_no_laborales($anio_academico_hash, $periodo_hash)
     {
         if (!empty($anio_academico_hash))

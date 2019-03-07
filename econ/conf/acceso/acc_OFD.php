@@ -11,6 +11,18 @@ return array(
         'mensajes' => array('activa' => true),
         'configuracion' => array('activa' => true),
 
+        /* MIXes
+         */
+        'mixes' => array(
+            'url' => 'mixes',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'mixes',
+                'visible' => true,
+                'texto' => 'definicion_mixes'
+            )
+        ),        
+
         /* ASIGNACION DE COORDINADORES A MATERIAS
          */
         'asignacion_coord_materias' => array(
@@ -72,17 +84,5 @@ return array(
             )
         ),
         
-        
-        /* MIXes
-         */
-        'mixes' => array(
-            'url' => 'mixes',
-            'activa' => true,
-            'menu' => array(
-                'submenu' => 'mixes',
-                'visible' => true,
-                'texto' => 'definicion_mixes'
-            )
-        ),        
     )
 );

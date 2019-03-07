@@ -3,6 +3,8 @@ namespace econ\modelo\datos\db;
 use kernel\kernel;
 use kernel\util\db\db;
 use siu\modelo\datos\catalogo;
+use siu\modelo\datos\db\toba;
+
 
 class coord_materia 
 {
@@ -150,8 +152,7 @@ class coord_materia
     
     /**
     * parametros: materia, anio_academico, periodo, coordinador
-    * param_null: coordinador
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function set_coordinador($parametros)
@@ -186,7 +187,7 @@ class coord_materia
     
     /**
     * parametros: coordinador
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function is_usuario_coord($parametros)
@@ -197,7 +198,14 @@ class coord_materia
                                 SELECT nro_inscripcion FROM sga_docentes WHERE legajo = $coordinador
                             )
                         AND  tipo_usuario = 'COORD'";
+        
+        kernel::log()->add_info("EJECUTANDO ACCION IRIS is_usuario_coord", '');
+        kernel::log()->add_info($sql, '');
+        
         $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        
+        kernel::log()->add_info($resultado, '');
+        
         if (count($resultado)>0 && isset($resultado[0]))
         {
             return true;
@@ -207,7 +215,7 @@ class coord_materia
 
     /**
     * parametros: coordinador
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function set_usuario_coord($parametros)
@@ -280,6 +288,11 @@ class coord_materia
             $sql = "INSERT INTO ufce_coordinadores_materias 
                         VALUES ('$ua', '$materia', $anio_academico, $periodo, '$coord')";
             kernel::db()->ejecutar($sql);
+
+            if (!$this->is_usuario_coord(array('coordinador'=>"'$coord'")))
+            {
+                $this->set_usuario_coord(array('coordinador'=>"'$coord'"));
+            }
         }
     }
 }

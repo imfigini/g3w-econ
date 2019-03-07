@@ -131,7 +131,7 @@ class builder_form_filtro extends builder_formulario
         function get_mixs()
 	{
             $datos = catalogo::consultar('evaluaciones_parciales', 'get_mixs');
-            return guarani_form_elemento::armar_combo_opciones($datos, 'MIX', 'MIX_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Todos --')));
+            return guarani_form_elemento::armar_combo_opciones($datos, 'MIX', 'MIX_NOMBRE', false, false, ucfirst(kernel::traductor()->trans('-- Todos --')));
 	}
 
 }

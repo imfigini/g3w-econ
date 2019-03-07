@@ -340,7 +340,7 @@ class controlador extends controlador_g3w2
             $escala = $comision['ESCALA'];
 
             //PROMO
-            if ($escala == 'P  ' || $escala == 'PyR')
+            if (strpos($escala, 'P') !== false)
             {
                 $parametros['evaluacion'] = 1;
                 $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
@@ -368,7 +368,7 @@ class controlador extends controlador_g3w2
             }
             
             //REGULAR
-            if ($escala == 'R  ' || $escala == 'PyR')
+            if (strpos($escala, 'R') !== false)
             {
                 $parametros['evaluacion'] = 21;
                 $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
@@ -634,13 +634,13 @@ class controlador extends controlador_g3w2
 //            $parametros['observaciones'] = $this->validate_param($observaciones, 'post', validador::TIPO_TEXTO);
 
             //PROMO
-            if ($parametros['tipo_escala'] == 'P  ' || $parametros['tipo_escala'] == 'PyR' )
+            if (strpos($parametros['tipo_escala'], 'P') !== false)
             {
                 $parametros = $this->get_parametros_comision_promo($parametros);
             }
 
             //REGULAR
-            if ($parametros['tipo_escala'] == 'R  ' || $parametros['tipo_escala'] == 'PyR' )
+            if (strpos($parametros['tipo_escala'], 'R') !== false)
             {
                 $parametros = $this->get_parametros_comision_regu($parametros);
             }
@@ -947,6 +947,7 @@ class controlador extends controlador_g3w2
             try 
             {
                 kernel::db()->abrir_transaccion();
+
                 foreach ($comisiones as $comision)
                 {
                     $parametros['comision'] = $comision['COMISION'];
@@ -957,11 +958,11 @@ class controlador extends controlador_g3w2
                         case 'P  ': $parametros['escala_notas'] = 6; break;   
                         case 'PyR': $parametros['escala_notas'] = 4; break;   
                     }
-
+                    
                     $dias_clase = catalogo::consultar('cursos', 'get_dias_clase', $parametros);
-
+                
                     //PROMO
-                    if ($comision['ESCALA'] == 'P  ' || $comision['ESCALA'] == 'PyR')
+                    if (strpos($comision['ESCALA'], 'P') !== false)
                     {
                         if (!empty($datos['fecha_promo1']))
                         {
@@ -994,7 +995,7 @@ class controlador extends controlador_g3w2
                     }
 
                     //REGULAR
-                    if ($comision['ESCALA'] == 'R  ' || $comision['ESCALA'] == 'PyR')
+                    if (strpos($comision['ESCALA'], 'R') !== false)
                     {
                         if (!empty($datos['fecha_regu1']))
                         {
@@ -1083,15 +1084,15 @@ class controlador extends controlador_g3w2
         $parametros = array();
         $parametros['materia'] = $this->validate_param('materia', 'post', validador::TIPO_TEXTO);
         $parametros['calidad'] = $this->validate_param('materia_calidad', 'post', validador::TIPO_TEXTO);
-        
+
         //PROMO
-        if ($parametros['calidad'] == 'P  ' || $parametros['calidad'] == 'PyR' )
+        if (strpos($parametros['calidad'], 'P') !== false)
         {
             $parametros = $this->get_parametros_materia_promo($parametros);
         }
 
         //REGULAR
-        if ($parametros['calidad'] == 'R  ' || $parametros['calidad'] == 'PyR' )
+        if (strpos($parametros['calidad'], 'R') !== false)
         {
             $parametros = $this->get_parametros_materia_regu($parametros);
         }

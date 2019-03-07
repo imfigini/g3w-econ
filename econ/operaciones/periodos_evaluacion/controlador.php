@@ -47,6 +47,27 @@ class controlador extends controlador_g3w2
         return null;
     }
     
+    function get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash)
+    {
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+                    $parametros = array(
+                                    'anio_academico' => $anio_academico,
+                                    'periodo' => $periodo
+                        );
+                    return catalogo::consultar('evaluaciones_parciales', 'get_periodo_solicitud_fecha', $parametros);
+                }
+            }
+        }
+        return null;
+    }
+    
     function get_periodo_lectivo($anio_academico_hash, $periodo_hash)
     {
         if (!empty($anio_academico_hash))
@@ -146,6 +167,8 @@ class controlador extends controlador_g3w2
                         catalogo::consultar('evaluaciones_parciales', 'set_periodos_evaluacion', $parametros);
                     }
                 }
+                
+                $this->grabar_periodo_solicitud_fechas($parametros['anio_academico'], $parametros['periodo']);
                 $mensaje = 'Se actualizaron correctamente los períodos de evaluación correspondientes al '.$parametros['periodo'].' del año '.$parametros['anio_academico'].'.';
                 $this->set_anio_academico($anio_academico_hash);
                 $this->set_periodo($periodo_hash);
@@ -158,6 +181,22 @@ class controlador extends controlador_g3w2
                 $this->set_periodo($periodo_hash);
                 $this->set_mensaje($e->getMessage().' - '.$mensaje);
             }
+        }
+    }
+    
+    function grabar_periodo_solicitud_fechas($anio_academico, $periodo)
+    {
+        $intervalo = $this->validate_param("daterange_solicitud_fechas", 'post', validador::TIPO_TEXTO);
+        $intervalo = explode('-', $intervalo);
+        $parametros['fecha_inicio'] = $intervalo[0];
+        $parametros['fecha_fin'] = $intervalo[1];
+        $parametros['anio_academico'] = $anio_academico;
+        $parametros['periodo'] = $periodo;
+//        print_R('<br> Parametros: ');
+//        print_r($parametros);
+        if ($parametros['fecha_inicio'] != '' && $parametros['fecha_fin'] != '')
+        {
+            catalogo::consultar('evaluaciones_parciales', 'set_periodo_solicitud_fecha', $parametros);
         }
     }
     

@@ -83,7 +83,7 @@ class pagelet_filtro extends pagelet {
             {
                 $datos = $this->controlador->get_evaluaciones($anio_academico_hash, $periodo_hash, $carrera, $mix);
                 $this->data['eventos'] = $this->get_eventos($datos);
-                print_r($this->data['eventos']);
+                //print_r($this->data['eventos']);
 
                 $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
                 $this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
@@ -97,24 +97,22 @@ class pagelet_filtro extends pagelet {
         
     public function get_eventos($datos)
     {
-        $colores = array(0=>'red', 1=>'blue', 2=>'green', 3=>'yellow');
         $resultado = array();
         $i = 0;
         foreach ($datos as $evento)
         {
-            $materia            = $evento['MATERIA'];
             $materia_nombre     = $evento['MATERIA_NOMBRE'];
             $title              = $evento['EVALUACION'].' - '.$materia_nombre;
             $start              = $evento['FECHA'];
             $end                = $evento['FECHA'];
             $tip                = $evento['MATERIA_NOMBRE'];
-            //$url                = '';
-            $backgroundColor	= $colores[$i];
+            $url                = '';
+            $backgroundColor	= $evento['COLOR'];
 
             $calendarEvent = self::buildEvent($title, $start, $end, $url, $tip, $backgroundColor);
             $resultado[] = $calendarEvent;
             
-            if ($i<3)
+            if ($i<4)
                 $i++;
             else
                 $i=0;
@@ -122,6 +120,7 @@ class pagelet_filtro extends pagelet {
 
         $resultado = implode(',', $resultado);
         $resultado = '['.$resultado.']';
+        //print_r($resultado);
         return $resultado;
     }
 
@@ -130,12 +129,12 @@ class pagelet_filtro extends pagelet {
         $resultado = array();
         $evento = array (
                         'title'			=> $title,
-                        'start'			=> $start,
-//                        'url'			=> $url,
-                        'textColor'             => 'black',
                         'tip'                   => $tip,
-                        'backgroundColor'       => $backgroundColor,
-                        'end'			=> $end
+                        'start'			=> $start,
+                        'end'			=> $end,
+                        'url'			=> $url,
+                        'textColor'             => 'black',
+                        'backgroundColor'       => $backgroundColor
                         );
 
         foreach($evento as $colName => $dataValue)

@@ -35,6 +35,25 @@ class evaluaciones_parciales
      * cache: no
      * filas: n
      */
+    function get_periodo_solicitud_fecha($parametros)
+    {
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        
+        $sql = "SELECT  fecha_inicio, fecha_fin 
+                    FROM ufce_priodo_solic_fecha_parc
+                        WHERE anio_academico = $anio_academico 
+                        AND periodo_lectivo = $periodo ";
+        
+        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $datos;
+    }
+    
+    /**
+     * parametros: anio_academico, periodo
+     * cache: no
+     * filas: n
+     */
     function get_periodo_lectivo($parametros)
     {
         $anio_academico = $parametros['anio_academico'];
@@ -136,19 +155,6 @@ class evaluaciones_parciales
     }
 
     /**
-     * parametros: strFecha
-     * cache: no
-     * filas: n
-     * El formato de strFecha debe ser: Y-m-d
-     */
-    private function strToMDY($strFecha)
-    {
-        $fecha = explode("'", $strFecha);
-        $fecha = explode('/', $fecha[1]);
-        return 'MDY('.$fecha[1].','. $fecha[0].','.$fecha[2].')';
-    }
-    
-    /**
      * parametros: anio_academico, periodo, orden, fecha_inicio, fecha_fin
      * param_null: periodo
      * cache: no
@@ -166,6 +172,95 @@ class evaluaciones_parciales
         kernel::db()->ejecutar($sql);
     }
  
+    /**
+     * parametros: anio_academico, periodo, fecha_inicio, fecha_fin
+     * cache: no
+     * filas: n
+     */
+    function set_periodo_solicitud_fecha($parametros)
+    {
+        if ($this->existe_periodo_solicitud_fecha($parametros))
+        {
+            $this->update_periodo_solicitud_fecha($parametros);
+        }
+        else
+        {
+            $this->insert_periodo_solicitud_fecha($parametros);
+        }
+    }
+    
+    /**
+     * parametros: anio_academico, periodo
+     * param_null: periodo
+     * cache: no
+     * filas: n
+     */
+    function existe_periodo_solicitud_fecha($parametros)
+    {
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $sql = "SELECT COUNT(*) AS existe
+                    FROM ufce_priodo_solic_fecha_parc
+                    WHERE anio_academico = $anio_academico 
+                        AND periodo_lectivo = $periodo ";
+        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        if ($result[0]['EXISTE'] > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * parametros: anio_academico, periodo, fecha_inicio, fecha_fin
+     * param_null: periodo
+     * cache: no
+     * filas: n
+     */
+    function update_periodo_solicitud_fecha($parametros)
+    {
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
+        $fecha_fin = self::strToMDY($parametros['fecha_fin']);
+        $sql = "UPDATE ufce_priodo_solic_fecha_parc
+                    SET fecha_inicio = $fecha_inicio,
+                        fecha_fin = $fecha_fin
+                WHERE anio_academico = $anio_academico
+                    AND periodo_lectivo = $periodo ";
+        kernel::db()->ejecutar($sql);
+    }
+
+    /**
+     * parametros: anio_academico, periodo, fecha_inicio, fecha_fin
+     * param_null: periodo
+     * cache: no
+     * filas: n
+     */
+    function insert_periodo_solicitud_fecha($parametros)
+    {
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $fecha_inicio = $parametros['fecha_inicio'];
+        $fecha_fin = $parametros['fecha_fin'];
+        $sql = "INSERT INTO ufce_priodo_solic_fecha_parc (anio_academico, periodo_lectivo, fecha_inicio, fecha_fin)
+                    VALUES ($anio_academico, $periodo, $fecha_inicio, $fecha_fin)";
+        kernel::db()->ejecutar($sql);
+    }
+    
+    /**
+     * parametros: strFecha
+     * cache: no
+     * filas: n
+     * El formato de strFecha debe ser: Y-m-d
+     */
+    private function strToMDY($strFecha)
+    {
+        $fecha = explode("'", $strFecha);
+        $fecha = explode('/', $fecha[1]);
+        return 'MDY('.$fecha[1].','. $fecha[0].','.$fecha[2].')';
+    }
+    
     /**
      * parametros: 
      * cache: no
@@ -199,7 +294,7 @@ class evaluaciones_parciales
      * cache: no
      * filas: n
      */
-    function get_evaluaciones_de_materias($parametros)
+    function get_evaluaciones_aceptadas($parametros)
     {
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
@@ -209,8 +304,17 @@ class evaluaciones_parciales
         
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
-                                sga_eval_parc.descripcion as evaluacion, 
-                                sga_cron_eval_parc.fecha_hora::DATE as fecha
+                                CASE 
+                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1튡romo'
+                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2튡romo'
+                                    WHEN sga_eval_parc.evaluacion = 7 THEN 'R.Unico'
+                                    WHEN sga_eval_parc.evaluacion = 14 THEN 'Integ'
+                                    WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
+                                    WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
+                                    WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
+                                END as evaluacion, 
+                                sga_cron_eval_parc.fecha_hora::DATE as fecha,
+                                'A' as estado
                     FROM sga_cron_eval_parc
                     JOIN sga_comisiones ON (sga_comisiones.comision = sga_cron_eval_parc.comision)
                     JOIN sga_materias ON (sga_materias.materia = sga_comisiones.materia)
@@ -230,7 +334,60 @@ class evaluaciones_parciales
         {
             $sql .= " AND ufce_mixes.mix = $mix ";
         }
+        $sql .= " ORDER BY 1 ";
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $result;
     }
+    
+    /**
+     * parametros: anio_academico, periodo, carrera, anio_cursada, mix
+     * cache: no
+     * filas: n
+     */
+    function get_evaluaciones_pendientes($parametros)
+    {
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $carrera = $parametros['carrera'];
+        $anio_cursada = $parametros['anio_cursada'];
+        $mix = $parametros['mix'];
+        
+        $sql = "SELECT DISTINCT sga_materias.materia, 
+                                sga_materias.nombre as materia_nombre, 
+                                CASE 
+                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1튡romo'
+                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2튡romo'
+                                    WHEN sga_eval_parc.evaluacion = 7 THEN 'R.Unico'
+                                    WHEN sga_eval_parc.evaluacion = 14 THEN 'Integ'
+                                    WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
+                                    WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
+                                    WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
+                                END as evaluacion, 
+                                ufce_cron_eval_parc.fecha_hora::DATE as fecha,
+                                'P' as estado
+                    FROM ufce_cron_eval_parc
+                    JOIN sga_comisiones ON (sga_comisiones.comision = ufce_cron_eval_parc.comision)
+                    JOIN sga_materias ON (sga_materias.materia = sga_comisiones.materia)
+                    JOIN sga_eval_parc ON (sga_eval_parc.evaluacion = ufce_cron_eval_parc.evaluacion)
+                    JOIN ufce_mixes ON (ufce_mixes.materia = sga_materias.materia)
+                    WHERE sga_comisiones.anio_academico = $anio_academico
+                            AND sga_comisiones.periodo_lectivo = $periodo 
+                            AND ufce_cron_eval_parc.estado = 'P'";
+        if ($parametros['carrera'] != "''")
+        {
+            $sql .= " AND ufce_mixes.carrera = $carrera ";
+        }
+        if ($parametros['anio_cursada'] != "''")
+        {
+            $sql .= " AND ufce_mixes.anio_de_cursada = $anio_cursada ";
+        }                    
+        if ($parametros['mix'] != "''")
+        {
+            $sql .= " AND ufce_mixes.mix = $mix ";
+        }
+        $sql .= " ORDER BY 1 ";
+        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return $result;
+    }
+    
 }

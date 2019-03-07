@@ -26,6 +26,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                     buscarPeriodos($('#formulario_filtro-anio_academico').val());
         
                     if (info.anio_academico_hash !== ""){
+                        setear_solicitud_fechas();
                         setear_calendarios();
                     }     
                 }
@@ -170,6 +171,27 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         feriados += ']';
         return feriados;
     }
+
+    function setear_solicitud_fechas()
+    {
+        var fecha_inicio;
+        var fecha_fin;
+        var feriados = armar_cadena_de_feriados();
+
+        fecha_inicio = new Date();
+        fecha_fin = new Date();
+        if ($('#fecha_inicio_solicitud_fechas').length && $('#fecha_fin_solicitud_fechas').length)
+        {
+            fecha_inicio = new Date ($('#fecha_inicio_solicitud_fechas').val().replace(/-/g, '\/'));
+            fecha_fin = new Date ($('#fecha_fin_solicitud_fechas').val().replace(/-/g, '\/'));
+        }
+
+        if ($('#daterange_solicitud_fechas'))
+        {
+            set_values('daterange_solicitud_fechas', fecha_inicio, fecha_fin, $('#lectivo_inicio').val(), $('#lectivo_fin').val(), feriados);
+        }
+    }
+
 
 });
 

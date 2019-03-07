@@ -34,6 +34,19 @@
             {% endfor %}
             <input type="hidden" name="cant_feriados" id="cant_feriados" value="{{i}}" />
             
+            <div>
+                <h4 class="periodo">Período de solicitud de fechas por parte de los coordinadores: 
+                {% if (this.data.periodo_solicitud_fechas) %}
+                    {{this.data.periodo_solicitud_fechas.0.FECHA_INICIO|date("d/m/Y")}} - {{this.data.periodo_solicitud_fechas.0.FECHA_FIN|date("d/m/Y")}} 
+                    <input type="hidden" name="fecha_inicio_solicitud_fechas" id="fecha_inicio_solicitud_fechas" value="{{this.data.periodo_solicitud_fechas.0.FECHA_INICIO}}">
+                    <input type="hidden" name="fecha_fin_solicitud_fechas" id="fecha_fin_solicitud_fechas" value="{{this.data.periodo_solicitud_fechas.0.FECHA_FIN}}">
+                {% else %}
+                    <i style="color: red">Sin definir</i>
+                {% endif %}
+                </h4>
+                <input type="text" id="daterange_solicitud_fechas" name="daterange_solicitud_fechas" class="daterange" value="" />
+            </div>
+                
             {% for periodo in this.data.datos %}
                 <div>   
                     <h4 class="periodo">{{periodo.ORDEN_NOMBRE}}: 
@@ -42,7 +55,7 @@
                         <input type="hidden" name="fecha_inicio_{{periodo.ORDEN}}" id="fecha_inicio_{{periodo.ORDEN}}" value="{{periodo.FECHA_INICIO}}">
                         <input type="hidden" name="fecha_fin_{{periodo.ORDEN}}" id="fecha_fin_{{periodo.ORDEN}}" value="{{periodo.FECHA_FIN}}">
                     {% else %}
-                        <i>Sin definir</i>
+                        <i style="color: red">Sin definir</i>
                     {% endif %}
                     </h4>
                     <input type="text" id="daterange_{{periodo.ORDEN}}" name="daterange_{{periodo.ORDEN}}" class="daterange" value="" />

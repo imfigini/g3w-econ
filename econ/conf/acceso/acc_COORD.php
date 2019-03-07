@@ -21,15 +21,15 @@ return array(
                   )
             ),
         
-            'definicion_cursos' => array(
-                  'activa' => true,
-                  'url' => 'definicion_cursos',
-                  'menu' => array(
-                      'submenu' => 'parciales',
-                      'visible' => true,
-                      'texto' => 'definicion_cursos'
-                  )
-            ),
+//            'definicion_cursos' => array(
+//                  'activa' => true,
+//                  'url' => 'definicion_cursos',
+//                  'menu' => array(
+//                      'submenu' => 'parciales',
+//                      'visible' => true,
+//                      'texto' => 'definicion_cursos'
+//                  )
+//            ),
             
 //            'notas_parciales' => array(
 //                  'activa' => true,
