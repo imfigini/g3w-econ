@@ -145,6 +145,7 @@ class controlador extends controlador_g3w2
                             'anio_cursada' => substr($mix, 0, 1),
                             'mix' => substr($mix, 1, 1)
                         );
+                
                 $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_aceptadas', $parametros);
                 $evaluaciones_aceptadas = $this->eliminar_acentos($resultado);
                 $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_pendientes', $parametros);

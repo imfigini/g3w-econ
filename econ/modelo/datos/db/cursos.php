@@ -727,6 +727,33 @@ class cursos
         }
         return $hs_comienzo_clase[0]['HS_COMIENZO_CLASE'];
     }
+    
+    /**
+    * parametros: materia, anio_academico, periodo
+    * cache: no
+    * filas: n
+    */
+    function get_evaluaciones_de_materia($parametros)
+    {
+        $materia = $parametros['materia'];
+        $anio_academico = $parametros['anio_academico'];
+        $periodo = $parametros['periodo'];
+        $sql = "SELECT fecha_hora::DATE as fecha, evaluacion, 'A' as estado
+                    FROM sga_cron_eval_parc 
+                    WHERE comision IN (SELECT comision FROM sga_comisiones 
+				WHERE materia = $materia
+				AND anio_academico = $anio_academico
+				AND periodo_lectivo = $periodo)
+                UNION
+                SELECT fecha_hora::DATE as fecha, evaluacion, estado
+                    FROM ufce_cron_eval_parc 
+                    WHERE comision IN (SELECT comision FROM sga_comisiones 
+				WHERE materia = $materia
+				AND anio_academico = $anio_academico
+				AND periodo_lectivo = $periodo)
+        		AND estado = 'P'";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+    }
 
 //    private function get_datetime_from_string($datetime_str, $format = 'Y-m-d H:i:s')
 //    {

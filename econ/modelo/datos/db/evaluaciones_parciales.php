@@ -386,6 +386,7 @@ class evaluaciones_parciales
             $sql .= " AND ufce_mixes.mix = $mix ";
         }
         $sql .= " ORDER BY 1 ";
+        
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $result;
     }

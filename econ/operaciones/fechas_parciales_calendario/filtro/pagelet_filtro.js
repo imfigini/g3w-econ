@@ -67,6 +67,11 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     
     function inicio_calendario()
     {
+        if (!$('#evaluaciones').val())
+        {
+            return;
+        }
+        
         var eventos = JSON.parse($('#evaluaciones').val());
         
         $('#calendar').fullCalendar({

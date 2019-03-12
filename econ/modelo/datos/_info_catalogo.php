@@ -398,6 +398,20 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_evaluaciones_de_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__get_evaluaciones_existentes()
 	{
 		return array (
