@@ -23,11 +23,22 @@
 
 #contenido li
 {
-        line-height: 30px;
+        line-height: 20px;
+}
+
+#contenido .alert p
+{
+        margin: 0 0 3px;
 }
 
 input[readonly].no_editable 
 {
     background-color: white;
+    cursor: default;
+}
+
+input[readonly] 
+{
+    background-color: #afd8af;
     cursor: default;
 }

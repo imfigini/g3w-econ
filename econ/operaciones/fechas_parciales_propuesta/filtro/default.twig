@@ -25,9 +25,10 @@
         {% if(this.data.datos) %}
 
             <div role='alert' class="alert">
-                <p>En caso que la materia disponga de comisiones por promoción y comisiones regular, considere solicitar la misma fecha de evaluación para: 
+                <p>En caso que la materia disponga de comisiones por promoción y regular, recuerde solicitar la misma fecha de evaluación para: 
                     <li>1º Parcial por promoción y Parcial Regular.</li>
                     <li>2º Parcial por promoción y 1º Recuperatorio Regular.</li>
+                    <li>En el caso de las materias pertenecientes al ciclo de fundamento, Recuperatorio Unico o Integrador igual a la fecha del 2º Recuperatorio Regular.</li>
             </div>
 
             {#  Mensaje si se guardó con éxito      #}
@@ -107,7 +108,7 @@
                                                 </tr>
                                             {% endif %}
                                         {% endif %}
-                                        {% if (materia.CALIDAD == 'R  ' or materia.CALIDAD == 'PyR') %}
+                                        {% if (materia.CALIDAD == 'R' or materia.CALIDAD == 'R  ' or materia.CALIDAD == 'PyR') %}
                                             {% if (materia.DIAS_REGU) %}
                                                 <tr>
                                                     <td scope="row" colspan="4">Cursos Regulares:
@@ -135,8 +136,6 @@
                                                 </tr>
                                             {% endif %}
                                         {% endif %}
-        {#                                {% if (materia.DIAS_PROMO or materia.DIAS_REGU) %}#}
-          {#                                {% endif %}#}
                                     {% else %}
                                         <tr>
                                             <td> No todos los cursos se dictan para el mismo ciclo. Debe definir las fechas de evaluación por cada comisión. </td>
