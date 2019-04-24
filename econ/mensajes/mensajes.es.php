@@ -67,8 +67,8 @@ return array(
     'mixes.carrera' => 'Carrera',
     
     /* Propuestas de fechas para parciales y recuperatorios */
-    'tit_fechas_parciales_propuesta' => 'Solicitud de fechas de evaluación para parciales, integrador y recuperatorios',
-    'fechas_parciales_propuesta' => 'Solicitud de fechas de evaluación para parciales, integrador y recuperatorios',
+    'tit_fechas_parciales_propuesta' => 'Carga de fechas de evaluación para parciales, integrador y recuperatorios',
+    'fechas_parciales_propuesta' => 'Carga de fechas de evaluación para parciales, integrador y recuperatorios',
     'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
     
     /* Aceptación de fechas para parciales y recuperatorios */

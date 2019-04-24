@@ -747,9 +747,7 @@ class controlador extends controlador_g3w2
             if (instancia_evaluacion == 'promo2')
             {
                 if ($f_ocup['EVALUACION'] == $promo2 
-                        || $f_ocup['EVALUACION'] == $integ
-                        || $f_ocup['EVALUACION'] == $recup1
-                        || $f_ocup['EVALUACION'] == $recup2 )
+                        || $f_ocup['EVALUACION'] == $integ )
                 {
                     if ($f_ocup['FECHA'] == $fecha
                             || $f_ocup['FECHA'] == $fecha_ant
@@ -758,7 +756,9 @@ class controlador extends controlador_g3w2
                         $ocupada = true;
                     }
                 }
-                else if ($f_ocup['EVALUACION'] == $recup)
+                else if ($f_ocup['EVALUACION'] == $recup
+                        || $f_ocup['EVALUACION'] == $regu1
+                        || $f_ocup['EVALUACION'] == $regu2 )
                 {
                     if ($f_ocup['FECHA'] == $fecha)
                     {
@@ -782,10 +782,7 @@ class controlador extends controlador_g3w2
             }
             if (instancia_evaluacion == 'integ')
             {
-                if ($f_ocup['EVALUACION'] == $promo2 
-                        || $f_ocup['EVALUACION'] == $integ
-                        || $f_ocup['EVALUACION'] == $recup1
-                        || $f_ocup['EVALUACION'] == $recup2 )
+                if ($f_ocup['EVALUACION'] == $promo2 )
                 {
                     if ($f_ocup['FECHA'] == $fecha
                             || $f_ocup['FECHA'] == $fecha_ant
@@ -794,7 +791,10 @@ class controlador extends controlador_g3w2
                         $ocupada = true;
                     }
                 }
-                else if ($f_ocup['EVALUACION'] == $recup)
+                else if ($f_ocup['EVALUACION'] == $recup
+                        || $f_ocup['EVALUACION'] == $integ
+                        || $f_ocup['EVALUACION'] == $recup1
+                        || $f_ocup['EVALUACION'] == $recup2 )
                 {
                     if ($f_ocup['FECHA'] == $fecha)
                     {
@@ -804,21 +804,9 @@ class controlador extends controlador_g3w2
             }
             if (instancia_evaluacion == 'regu1')
             {
+                
                 if ( $f_ocup['EVALUACION'] == $promo1 
                         || $f_ocup['EVALUACION'] == $regu1 )
-                {
-                    if ($f_ocup['FECHA'] == $fecha)
-                    {
-                        $ocupada = true;
-                    }
-                }
-            }
-            if (instancia_evaluacion == 'recup1')
-            {
-                if ($f_ocup['EVALUACION'] == $promo2 
-                        || $f_ocup['EVALUACION'] == $integ
-                        || $f_ocup['EVALUACION'] == $recup1
-                        || $f_ocup['EVALUACION'] == $recup2 )
                 {
                     if ($f_ocup['FECHA'] == $fecha
                             || $f_ocup['FECHA'] == $fecha_ant
@@ -827,7 +815,14 @@ class controlador extends controlador_g3w2
                         $ocupada = true;
                     }
                 }
-                else if ($f_ocup['EVALUACION'] == $recup)
+            }
+            if (instancia_evaluacion == 'recup1')
+            {
+                if ($f_ocup['EVALUACION'] == $promo2 
+                        || $f_ocup['EVALUACION'] == $recup
+                        || $f_ocup['EVALUACION'] == $integ
+                        || $f_ocup['EVALUACION'] == $recup1
+                        || $f_ocup['EVALUACION'] == $recup2 )
                 {
                     if ($f_ocup['FECHA'] == $fecha)
                     {
@@ -838,18 +833,10 @@ class controlador extends controlador_g3w2
             if (instancia_evaluacion == 'recup2')
             {
                 if ($f_ocup['EVALUACION'] == $promo2 
+                        || $f_ocup['EVALUACION'] == $recup
                         || $f_ocup['EVALUACION'] == $integ
                         || $f_ocup['EVALUACION'] == $recup1
                         || $f_ocup['EVALUACION'] == $recup2 )
-                {
-                    if ($f_ocup['FECHA'] == $fecha
-                            || $f_ocup['FECHA'] == $fecha_ant
-                            || $f_ocup['FECHA'] == $fecha_sig)
-                    {
-                        $ocupada = true;
-                    }
-                }
-                else if ($f_ocup['EVALUACION'] == $recup)
                 {
                     if ($f_ocup['FECHA'] == $fecha)
                     {
