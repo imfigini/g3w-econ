@@ -289,16 +289,14 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                             || fechas_no_disponibles[i]['FECHA'] == dia_siguiente_formateado )
                     {
             //        console.log('entro 2º if');
-                    return false;
+                        return false;
                     }
                 }
             }
             if (instancia_evaluacion == 'promo2')
             {
                 if (fechas_no_disponibles[i]['EVALUACION'] == promo2 
-                        || fechas_no_disponibles[i]['EVALUACION'] == integ
-                        || fechas_no_disponibles[i]['EVALUACION'] == recup1
-                        || fechas_no_disponibles[i]['EVALUACION'] == recup2 )
+                        || fechas_no_disponibles[i]['EVALUACION'] == integ )
                 {
                     if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada
                             || fechas_no_disponibles[i]['FECHA'] == dia_anterior_formateado
@@ -307,7 +305,9 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         return false;
                     }
                 }
-                else if (fechas_no_disponibles[i]['EVALUACION'] == recup)
+                else if (fechas_no_disponibles[i]['EVALUACION'] == recup
+                        || fechas_no_disponibles[i]['EVALUACION'] == recup1
+                        || fechas_no_disponibles[i]['EVALUACION'] == recup2 )
                 {
                     if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada)
                     {
@@ -331,10 +331,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             }
             if (instancia_evaluacion == 'integ')
             {
-                if (fechas_no_disponibles[i]['EVALUACION'] == promo2 
-                        || fechas_no_disponibles[i]['EVALUACION'] == integ
-                        || fechas_no_disponibles[i]['EVALUACION'] == recup1
-                        || fechas_no_disponibles[i]['EVALUACION'] == recup2 )
+                if (fechas_no_disponibles[i]['EVALUACION'] == promo2 )
                 {
                     if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada
                             || fechas_no_disponibles[i]['FECHA'] == dia_anterior_formateado
@@ -343,7 +340,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         return false;
                     }
                 }
-                else if (fechas_no_disponibles[i]['EVALUACION'] == recup)
+                else if (  fechas_no_disponibles[i]['EVALUACION'] == recup
+                        || fechas_no_disponibles[i]['EVALUACION'] == integ
+                        || fechas_no_disponibles[i]['EVALUACION'] == recup1
+                        || fechas_no_disponibles[i]['EVALUACION'] == recup2  )
                 {
                     if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada)
                     {
@@ -356,7 +356,9 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 if ( fechas_no_disponibles[i]['EVALUACION'] == promo1 
                         || fechas_no_disponibles[i]['EVALUACION'] == regu1 )
                 {
-                    if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada)
+                    if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada
+                            || fechas_no_disponibles[i]['FECHA'] == dia_anterior_formateado
+                            || fechas_no_disponibles[i]['FECHA'] == dia_siguiente_formateado )
                     {
                         return false;
                     }
@@ -365,18 +367,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             if (instancia_evaluacion == 'recup1')
             {
                 if (fechas_no_disponibles[i]['EVALUACION'] == promo2 
+                        || fechas_no_disponibles[i]['EVALUACION'] == recup
                         || fechas_no_disponibles[i]['EVALUACION'] == integ
                         || fechas_no_disponibles[i]['EVALUACION'] == recup1
                         || fechas_no_disponibles[i]['EVALUACION'] == recup2 )
-                {
-                    if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada
-                            || fechas_no_disponibles[i]['FECHA'] == dia_anterior_formateado
-                            || fechas_no_disponibles[i]['FECHA'] == dia_siguiente_formateado)
-                    {
-                        return false;
-                    }
-                }
-                else if (fechas_no_disponibles[i]['EVALUACION'] == recup)
                 {
                     if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada)
                     {
@@ -387,18 +381,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             if (instancia_evaluacion == 'recup2')
             {
                 if (fechas_no_disponibles[i]['EVALUACION'] == promo2 
+                        ||fechas_no_disponibles[i]['EVALUACION'] == recup
                         || fechas_no_disponibles[i]['EVALUACION'] == integ
                         || fechas_no_disponibles[i]['EVALUACION'] == recup1
                         || fechas_no_disponibles[i]['EVALUACION'] == recup2 )
-                {
-                    if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada
-                            || fechas_no_disponibles[i]['FECHA'] == dia_anterior_formateado
-                            || fechas_no_disponibles[i]['FECHA'] == dia_siguiente_formateado)
-                    {
-                        return false;
-                    }
-                }
-                else if (fechas_no_disponibles[i]['EVALUACION'] == recup)
                 {
                     if (fechas_no_disponibles[i]['FECHA'] == fecha_formateada)
                     {
