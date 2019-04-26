@@ -1,0 +1,814 @@
+.
+├── backups
+├── bin
+├── instalacion
+│   ├── cache
+│   ├── log
+│   │   └── FCE
+│   ├── operaciones_inactivas
+│   ├── saml
+│   ├── servicio_noticias
+│   ├── servicios_web
+│   │   ├── consumidos
+│   │   └── ofrecidos
+│   └── temp
+│       └── FCE
+├── lost+found
+└── src
+    ├── pers
+    │   └── econ
+    │       ├── conf
+    │       │   └── acceso
+    │       ├── mensajes
+    │       ├── modelo
+    │       │   ├── datos
+    │       │   │   └── db
+    │       │   └── transacciones
+    │       ├── operaciones
+    │       │   ├── asignacion_coord_materias
+    │       │   │   ├── filtro
+    │       │   │   └── materia
+    │       │   ├── definicion_cursos
+    │       │   │   └── filtro
+    │       │   ├── detalle_cursos
+    │       │   │   └── filtro
+    │       │   ├── fechas_parciales_aceptacion
+    │       │   │   └── filtro
+    │       │   ├── fechas_parciales_calendario
+    │       │   │   └── filtro
+    │       │   ├── fechas_parciales_propuesta
+    │       │   │   └── filtro
+    │       │   ├── fechas_parciales_propuesta_completa
+    │       │   │   └── filtro
+    │       │   ├── inicio_coordinador
+    │       │   │   └── intro
+    │       │   ├── inicio_oficina_docentes
+    │       │   │   └── intro
+    │       │   ├── mixes
+    │       │   │   ├── mixes
+    │       │   │   └── modificar
+    │       │   ├── notas_parciales
+    │       │   │   └── lista_materias
+    │       │   └── periodos_evaluacion
+    │       │       └── filtro
+    │       └── scripts
+    ├── pers.org
+    │   ├── comun
+    │   │   ├── modelo
+    │   │   │   └── autenticacion
+    │   │   └── operaciones
+    │   │       └── censo
+    │   │           ├── _forms
+    │   │           └── formulario
+    │   └── econ
+    │       ├── conf
+    │       │   └── acceso
+    │       ├── mensajes
+    │       ├── modelo
+    │       │   ├── datos
+    │       │   │   └── db
+    │       │   └── transacciones
+    │       └── operaciones
+    │           ├── asignacion_coord_materias
+    │           │   ├── filtro
+    │           │   └── materia
+    │           ├── definicion_cursos
+    │           │   └── filtro
+    │           ├── inicio_oficina_docentes
+    │           │   └── intro
+    │           └── notas_parciales
+    │               └── lista_materias
+    ├── siu
+    │   ├── conf
+    │   │   ├── acceso
+    │   │   └── derechos
+    │   ├── errores
+    │   ├── extension_kernel
+    │   │   └── formularios
+    │   │       └── elementos
+    │   ├── lib
+    │   │   ├── DJJob
+    │   │   ├── ezpdf
+    │   │   │   └── fonts
+    │   │   ├── guzzle
+    │   │   │   ├── composer
+    │   │   │   └── guzzlehttp
+    │   │   │       ├── guzzle
+    │   │   │       │   ├── build
+    │   │   │       │   ├── docs
+    │   │   │       │   │   ├── _static
+    │   │   │       │   │   └── _templates
+    │   │   │       │   ├── src
+    │   │   │       │   │   ├── Adapter
+    │   │   │       │   │   │   └── Curl
+    │   │   │       │   │   ├── Cookie
+    │   │   │       │   │   ├── Event
+    │   │   │       │   │   ├── Exception
+    │   │   │       │   │   ├── Message
+    │   │   │       │   │   ├── Post
+    │   │   │       │   │   └── Subscriber
+    │   │   │       │   └── tests
+    │   │   │       │       ├── Adapter
+    │   │   │       │       │   └── Curl
+    │   │   │       │       ├── Cookie
+    │   │   │       │       ├── Event
+    │   │   │       │       ├── Exception
+    │   │   │       │       ├── Message
+    │   │   │       │       ├── Post
+    │   │   │       │       └── Subscriber
+    │   │   │       └── streams
+    │   │   │           ├── src
+    │   │   │           │   └── Exception
+    │   │   │           └── tests
+    │   │   │               └── Exception
+    │   │   ├── janrain
+    │   │   │   └── Auth
+    │   │   │       ├── OpenID
+    │   │   │       └── Yadis
+    │   │   ├── kernel
+    │   │   │   ├── acceso
+    │   │   │   ├── consola
+    │   │   │   │   └── comandos
+    │   │   │   ├── interfaz
+    │   │   │   │   ├── componentes
+    │   │   │   │   │   └── forms
+    │   │   │   │   │       └── elementos
+    │   │   │   │   ├── pagelets
+    │   │   │   │   ├── templates
+    │   │   │   │   │   └── kernel
+    │   │   │   │   └── vistas
+    │   │   │   ├── nucleo
+    │   │   │   └── util
+    │   │   │       ├── cache
+    │   │   │       ├── consola
+    │   │   │       │   └── comandos
+    │   │   │       ├── db
+    │   │   │       ├── memoria
+    │   │   │       ├── modelo
+    │   │   │       └── phpmailer
+    │   │   │           └── language
+    │   │   ├── phpExcel
+    │   │   │   └── PHPExcel
+    │   │   │       ├── CachedObjectStorage
+    │   │   │       ├── Calculation
+    │   │   │       ├── Cell
+    │   │   │       ├── locale
+    │   │   │       │   ├── cs
+    │   │   │       │   ├── da
+    │   │   │       │   ├── de
+    │   │   │       │   ├── en
+    │   │   │       │   │   └── uk
+    │   │   │       │   ├── es
+    │   │   │       │   ├── fi
+    │   │   │       │   ├── fr
+    │   │   │       │   ├── hu
+    │   │   │       │   ├── it
+    │   │   │       │   ├── nl
+    │   │   │       │   ├── no
+    │   │   │       │   ├── pl
+    │   │   │       │   ├── pt
+    │   │   │       │   │   └── br
+    │   │   │       │   ├── ru
+    │   │   │       │   └── sv
+    │   │   │       ├── Reader
+    │   │   │       │   └── Excel5
+    │   │   │       ├── RichText
+    │   │   │       ├── Shared
+    │   │   │       │   ├── Escher
+    │   │   │       │   │   ├── DgContainer
+    │   │   │       │   │   │   └── SpgrContainer
+    │   │   │       │   │   └── DggContainer
+    │   │   │       │   │       └── BstoreContainer
+    │   │   │       │   │           └── BSE
+    │   │   │       │   ├── JAMA
+    │   │   │       │   │   ├── docs
+    │   │   │       │   │   │   └── includes
+    │   │   │       │   │   ├── examples
+    │   │   │       │   │   ├── tests
+    │   │   │       │   │   └── utils
+    │   │   │       │   ├── OLE
+    │   │   │       │   │   └── PPS
+    │   │   │       │   └── trend
+    │   │   │       ├── Style
+    │   │   │       ├── Worksheet
+    │   │   │       │   └── Drawing
+    │   │   │       └── Writer
+    │   │   │           ├── Excel2007
+    │   │   │           └── Excel5
+    │   │   ├── phpqrcode
+    │   │   │   ├── bindings
+    │   │   │   │   └── tcpdf
+    │   │   │   ├── cache
+    │   │   │   │   ├── mask_0
+    │   │   │   │   ├── mask_1
+    │   │   │   │   ├── mask_2
+    │   │   │   │   ├── mask_3
+    │   │   │   │   ├── mask_4
+    │   │   │   │   ├── mask_5
+    │   │   │   │   ├── mask_6
+    │   │   │   │   └── mask_7
+    │   │   │   ├── temp
+    │   │   │   └── tools
+    │   │   ├── php-saml
+    │   │   │   ├── certs
+    │   │   │   ├── demo1
+    │   │   │   ├── demo2
+    │   │   │   ├── demo-old
+    │   │   │   ├── endpoints
+    │   │   │   ├── extlib
+    │   │   │   │   └── xmlseclibs
+    │   │   │   ├── lib
+    │   │   │   │   ├── Saml
+    │   │   │   │   └── Saml2
+    │   │   │   │       └── schemas
+    │   │   │   └── locale
+    │   │   │       ├── en_US
+    │   │   │       │   └── LC_MESSAGES
+    │   │   │       └── es_ES
+    │   │   │           └── LC_MESSAGES
+    │   │   ├── phpunit
+    │   │   │   ├── PHPUnit
+    │   │   │   │   ├── Extensions
+    │   │   │   │   │   ├── PhptTestCase
+    │   │   │   │   │   ├── Story
+    │   │   │   │   │   │   └── ResultPrinter
+    │   │   │   │   │   │       └── Template
+    │   │   │   │   │   └── TicketListener
+    │   │   │   │   ├── Framework
+    │   │   │   │   │   ├── Assert
+    │   │   │   │   │   ├── ComparisonFailure
+    │   │   │   │   │   ├── Constraint
+    │   │   │   │   │   ├── Error
+    │   │   │   │   │   ├── Process
+    │   │   │   │   │   └── TestSuite
+    │   │   │   │   ├── Runner
+    │   │   │   │   ├── TextUI
+    │   │   │   │   └── Util
+    │   │   │   │       ├── DeprecatedFeature
+    │   │   │   │       ├── Log
+    │   │   │   │       ├── PHP
+    │   │   │   │       ├── Skeleton
+    │   │   │   │       │   └── Template
+    │   │   │   │       └── TestDox
+    │   │   │   │           └── ResultPrinter
+    │   │   │   └── Tests
+    │   │   │       ├── Extensions
+    │   │   │       ├── _files
+    │   │   │       ├── Framework
+    │   │   │       ├── Regression
+    │   │   │       │   ├── 1021
+    │   │   │       │   ├── 578
+    │   │   │       │   ├── 684
+    │   │   │       │   └── 783
+    │   │   │       ├── Runner
+    │   │   │       ├── TextUI
+    │   │   │       └── Util
+    │   │   │           └── TestDox
+    │   │   ├── recaptcha
+    │   │   ├── rest
+    │   │   │   ├── chulupi
+    │   │   │   ├── docs
+    │   │   │   ├── http
+    │   │   │   ├── lib
+    │   │   │   ├── seguridad
+    │   │   │   │   ├── autenticacion
+    │   │   │   │   │   └── oauth2
+    │   │   │   │   └── autorizacion
+    │   │   │   ├── tests
+    │   │   │   │   ├── docs
+    │   │   │   │   ├── http
+    │   │   │   │   ├── lib
+    │   │   │   │   └── seguridad
+    │   │   │   │       └── autenticacion
+    │   │   │   │           └── oauth2
+    │   │   │   ├── toba
+    │   │   │   └── vendor
+    │   │   │       ├── composer
+    │   │   │       └── doctrine
+    │   │   │           └── cache
+    │   │   │               ├── lib
+    │   │   │               │   └── Doctrine
+    │   │   │               │       └── Common
+    │   │   │               │           └── Cache
+    │   │   │               └── tests
+    │   │   │                   ├── Doctrine
+    │   │   │                   │   └── Tests
+    │   │   │                   │       └── Common
+    │   │   │                   │           └── Cache
+    │   │   │                   └── travis
+    │   │   ├── sfyaml
+    │   │   ├── Symfony
+    │   │   │   ├── Bridge
+    │   │   │   │   └── Twig
+    │   │   │   │       ├── Extension
+    │   │   │   │       ├── Node
+    │   │   │   │       └── TokenParser
+    │   │   │   └── Component
+    │   │   │       ├── Config
+    │   │   │       │   └── Resource
+    │   │   │       ├── Console
+    │   │   │       │   ├── Command
+    │   │   │       │   ├── Formatter
+    │   │   │       │   ├── Helper
+    │   │   │       │   ├── Input
+    │   │   │       │   ├── Output
+    │   │   │       │   └── Tester
+    │   │   │       ├── Translation
+    │   │   │       │   └── Loader
+    │   │   │       │       └── schema
+    │   │   │       │           └── dic
+    │   │   │       │               └── xliff-core
+    │   │   │       └── Yaml
+    │   │   │           └── Exception
+    │   │   ├── Twig
+    │   │   │   ├── Error
+    │   │   │   ├── Extension
+    │   │   │   ├── Filter
+    │   │   │   ├── Function
+    │   │   │   ├── Loader
+    │   │   │   ├── Node
+    │   │   │   │   └── Expression
+    │   │   │   │       ├── Binary
+    │   │   │   │       ├── Filter
+    │   │   │   │       ├── Test
+    │   │   │   │       └── Unary
+    │   │   │   ├── NodeVisitor
+    │   │   │   ├── Sandbox
+    │   │   │   ├── Test
+    │   │   │   └── TokenParser
+    │   │   └── Zend
+    │   │       ├── Barcode
+    │   │       │   ├── Object
+    │   │       │   └── Renderer
+    │   │       ├── Config
+    │   │       │   └── Writer
+    │   │       ├── Controller
+    │   │       │   ├── Action
+    │   │       │   │   ├── Helper
+    │   │       │   │   │   └── AutoComplete
+    │   │       │   │   └── HelperBroker
+    │   │       │   ├── Dispatcher
+    │   │       │   ├── Plugin
+    │   │       │   ├── Request
+    │   │       │   ├── Response
+    │   │       │   └── Router
+    │   │       │       └── Route
+    │   │       ├── Filter
+    │   │       │   ├── Compress
+    │   │       │   ├── Encrypt
+    │   │       │   ├── File
+    │   │       │   └── Word
+    │   │       │       └── Separator
+    │   │       ├── Form
+    │   │       │   ├── Decorator
+    │   │       │   │   ├── Captcha
+    │   │       │   │   └── Marker
+    │   │       │   │       └── File
+    │   │       │   └── Element
+    │   │       ├── Loader
+    │   │       │   ├── Autoloader
+    │   │       │   └── PluginLoader
+    │   │       ├── Locale
+    │   │       │   ├── Data
+    │   │       │   └── Math
+    │   │       ├── Validate
+    │   │       │   ├── Barcode
+    │   │       │   ├── Db
+    │   │       │   ├── File
+    │   │       │   ├── Hostname
+    │   │       │   └── Sitemap
+    │   │       └── View
+    │   │           └── Helper
+    │   │               ├── Navigation
+    │   │               ├── Partial
+    │   │               └── Placeholder
+    │   │                   ├── Container
+    │   │                   └── Registry
+    │   ├── mensajes
+    │   ├── modelo
+    │   │   ├── autenticacion
+    │   │   ├── controles
+    │   │   │   └── puntos_control
+    │   │   ├── datos
+    │   │   │   ├── cache
+    │   │   │   ├── db
+    │   │   │   └── estrategias
+    │   │   ├── entidades
+    │   │   ├── interfaces
+    │   │   └── transacciones
+    │   ├── operaciones
+    │   │   ├── acceso
+    │   │   │   ├── contenido_login
+    │   │   │   ├── login
+    │   │   │   └── recuperar_pass
+    │   │   ├── acta_cursadas
+    │   │   │   ├── acta
+    │   │   │   └── reporte
+    │   │   ├── acta_examenes
+    │   │   │   ├── acta
+    │   │   │   └── reporte
+    │   │   ├── acta_promociones
+    │   │   │   ├── acta
+    │   │   │   └── reporte
+    │   │   ├── actas
+    │   │   │   ├── acta_cursada
+    │   │   │   ├── acta_examen
+    │   │   │   ├── acta_promocion
+    │   │   │   ├── cuadro
+    │   │   │   └── filtro
+    │   │   ├── actuacion_provisoria_cursada
+    │   │   │   └── reporte
+    │   │   ├── actuacion_provisoria_examen
+    │   │   │   └── reporte
+    │   │   ├── admin_operaciones
+    │   │   │   └── operaciones
+    │   │   ├── agenda_cursadas
+    │   │   │   └── reporte
+    │   │   ├── agenda_examenes
+    │   │   │   └── reporte
+    │   │   ├── asistencias
+    │   │   │   ├── cabecera
+    │   │   │   ├── edicion_asistencias
+    │   │   │   ├── libres
+    │   │   │   ├── lista_materias
+    │   │   │   └── planilla
+    │   │   ├── aulas
+    │   │   │   └── reporte
+    │   │   ├── censo
+    │   │   │   ├── datos_discapacidad
+    │   │   │   ├── _forms
+    │   │   │   ├── formulario
+    │   │   │   └── lista_forms
+    │   │   ├── censo_docente
+    │   │   │   ├── _forms
+    │   │   │   └── formulario
+    │   │   ├── _comun
+    │   │   │   ├── comprobantes
+    │   │   │   ├── operaciones
+    │   │   │   │   └── reporte
+    │   │   │   │       ├── reporte
+    │   │   │   │       └── template_reporte
+    │   │   │   │           └── reporte
+    │   │   │   ├── pagelets
+    │   │   │   │   ├── ficha_alumno
+    │   │   │   │   ├── lista_materias
+    │   │   │   │   └── notificaciones
+    │   │   │   ├── templates
+    │   │   │   └── util
+    │   │   ├── configuracion
+    │   │   │   ├── configuraciones
+    │   │   │   └── cuentas_externas
+    │   │   ├── creditos
+    │   │   │   ├── detalle
+    │   │   │   └── reporte
+    │   │   ├── cursada
+    │   │   │   └── info_materia
+    │   │   ├── encuestas
+    │   │   │   ├── encuesta
+    │   │   │   ├── encuestas_pendientes
+    │   │   │   ├── encuestas_respondidas
+    │   │   │   └── filtros
+    │   │   ├── encuestas_kolla
+    │   │   │   ├── encuesta
+    │   │   │   └── listado_encuestas
+    │   │   ├── estado_titulo
+    │   │   │   ├── reporte
+    │   │   │   └── titulos
+    │   │   ├── examen
+    │   │   │   └── info_materia_examen
+    │   │   ├── fecha_examen
+    │   │   │   └── filtro
+    │   │   ├── ficha_alumno
+    │   │   │   ├── actividades_extracurriculares
+    │   │   │   ├── antecedentes_academicos
+    │   │   │   ├── antecedentes_docentes
+    │   │   │   ├── antecedentes_laborales
+    │   │   │   ├── cambios_calidad
+    │   │   │   ├── carreras
+    │   │   │   ├── certificados_solicitados
+    │   │   │   ├── datos_personales
+    │   │   │   ├── excepciones
+    │   │   │   ├── filtro
+    │   │   │   ├── historia_academica
+    │   │   │   ├── historia_academica_no_valida
+    │   │   │   ├── homologaciones
+    │   │   │   ├── inscripciones_cursadas
+    │   │   │   ├── inscripciones_examenes
+    │   │   │   ├── perdidas_regularidad
+    │   │   │   ├── porcentaje_aprobacion
+    │   │   │   ├── promedios
+    │   │   │   ├── prorrogas_regularidad
+    │   │   │   ├── regularidades
+    │   │   │   ├── requisitos
+    │   │   │   ├── sanciones
+    │   │   │   ├── titulos
+    │   │   │   └── tramite_titulos
+    │   │   ├── gestion_encuestas
+    │   │   │   └── formulario
+    │   │   ├── historia_academica
+    │   │   │   ├── info_historia
+    │   │   │   ├── menu_filtros
+    │   │   │   └── notificaciones
+    │   │   ├── inicio_administrativo
+    │   │   │   └── intro
+    │   │   ├── inicio_alumno
+    │   │   │   ├── lista_carreras
+    │   │   │   ├── lista_encuestas_pendientes
+    │   │   │   └── lista_noticias
+    │   │   ├── inicio_bedelia
+    │   │   │   └── intro
+    │   │   ├── inicio_docente
+    │   │   │   ├── actas
+    │   │   │   ├── actas_examen
+    │   │   │   ├── comisiones
+    │   │   │   ├── lista_encuestas_pendientes
+    │   │   │   └── reporte
+    │   │   ├── inicio_gerencial
+    │   │   │   └── intro
+    │   │   ├── inscripciones
+    │   │   │   ├── cursadas
+    │   │   │   └── examenes
+    │   │   ├── inscripciones_rechazadas
+    │   │   │   └── reporte
+    │   │   ├── inscriptos_cursadas
+    │   │   │   ├── comision
+    │   │   │   └── reporte
+    │   │   ├── inscriptos_examenes
+    │   │   │   ├── comision
+    │   │   │   ├── ficha_alumno
+    │   │   │   └── reporte
+    │   │   ├── logger
+    │   │   │   ├── info_log
+    │   │   │   └── lista_logs
+    │   │   ├── mensajes
+    │   │   │   ├── envio_mensajes
+    │   │   │   └── lista_mensajes
+    │   │   ├── modificar_periodo_alcance
+    │   │   │   └── encuestas
+    │   │   ├── notas_cursada
+    │   │   │   ├── actas
+    │   │   │   ├── cabecera
+    │   │   │   ├── herramientas
+    │   │   │   └── renglones
+    │   │   ├── notas_examen
+    │   │   │   ├── actas
+    │   │   │   ├── cabecera
+    │   │   │   ├── ficha_alumno
+    │   │   │   ├── herramientas
+    │   │   │   └── renglones
+    │   │   ├── notas_parciales
+    │   │   │   ├── cabecera
+    │   │   │   ├── edicion_notas
+    │   │   │   ├── herramientas
+    │   │   │   ├── lista_materias
+    │   │   │   └── lista_notas
+    │   │   ├── orientacion
+    │   │   │   └── formulario
+    │   │   ├── plan
+    │   │   │   └── info_plan
+    │   │   ├── planes_estudio
+    │   │   │   ├── filtro
+    │   │   │   └── info_plan
+    │   │   ├── regularidades
+    │   │   │   └── reporte
+    │   │   ├── reinscripcion
+    │   │   │   └── form_reinscripcion
+    │   │   ├── reinscripciones
+    │   │   │   └── listado
+    │   │   ├── resumen_cursada
+    │   │   │   ├── comision
+    │   │   │   └── filtro
+    │   │   ├── solicitud_certificado
+    │   │   │   ├── certificado_evaluacion
+    │   │   │   ├── certificados
+    │   │   │   └── formulario
+    │   │   ├── temas_dictados
+    │   │   │   ├── reporte
+    │   │   │   └── temas
+    │   │   ├── tesis
+    │   │   │   └── reporte
+    │   │   ├── validador_certificados
+    │   │   │   ├── confirmacion
+    │   │   │   └── validador
+    │   │   └── vincular_encuestas
+    │   │       └── encuestas
+    │   ├── rest
+    │   │   └── legacy
+    │   ├── util
+    │   │   └── consola
+    │   │       └── comandos
+    │   ├── var
+    │   │   └── less
+    │   └── www
+    │       ├── _comp
+    │       │   ├── econ
+    │       │   │   └── operaciones
+    │       │   │       ├── asignacion_coord_materias
+    │       │   │       │   └── filtro
+    │       │   │       ├── definicion_cursos
+    │       │   │       │   └── filtro
+    │       │   │       ├── detalle_cursos
+    │       │   │       │   └── filtro
+    │       │   │       ├── fechas_evaluacion
+    │       │   │       │   └── filtro
+    │       │   │       ├── fechas_parciales_aceptacion
+    │       │   │       │   └── filtro
+    │       │   │       ├── fechas_parciales_calendario
+    │       │   │       │   └── filtro
+    │       │   │       ├── fechas_parciales_propuesta
+    │       │   │       │   └── filtro
+    │       │   │       ├── fechas_parciales_propuesta_completa
+    │       │   │       │   └── filtro
+    │       │   │       ├── mixes
+    │       │   │       │   ├── mixes
+    │       │   │       │   └── modificar
+    │       │   │       ├── notas_parciales
+    │       │   │       │   └── lista_materias
+    │       │   │       ├── periodos_evaluacion
+    │       │   │       │   └── filtro
+    │       │   │       └── periodos_evaluacion_1
+    │       │   │           └── filtro
+    │       │   ├── _img_alumnos
+    │       │   │   └── FCE
+    │       │   │       ├── chica
+    │       │   │       │   └── cfcd208495d565ef66e7dff9f98764da
+    │       │   │       ├── grande
+    │       │   │       │   └── cfcd208495d565ef66e7dff9f98764da
+    │       │   │       └── mediana
+    │       │   │           └── cfcd208495d565ef66e7dff9f98764da
+    │       │   └── siu
+    │       │       ├── css
+    │       │       ├── img
+    │       │       │   ├── iconos
+    │       │       │   ├── login
+    │       │       │   └── ui
+    │       │       ├── js
+    │       │       │   ├── escalas
+    │       │       │   │   └── FCE
+    │       │       │   └── lib
+    │       │       │       └── history
+    │       │       │           └── uncompressed
+    │       │       └── operaciones
+    │       │           ├── acceso
+    │       │           │   ├── contenido_login
+    │       │           │   ├── login
+    │       │           │   └── recuperar_pass
+    │       │           ├── acta_cursadas
+    │       │           │   └── reporte
+    │       │           ├── acta_examenes
+    │       │           │   ├── acta
+    │       │           │   └── reporte
+    │       │           ├── acta_promociones
+    │       │           │   ├── acta
+    │       │           │   └── reporte
+    │       │           ├── actas
+    │       │           │   ├── acta_cursada
+    │       │           │   ├── acta_examen
+    │       │           │   ├── acta_promocion
+    │       │           │   └── filtro
+    │       │           ├── actuacion_provisoria_cursada
+    │       │           │   └── reporte
+    │       │           ├── actuacion_provisoria_examen
+    │       │           │   └── reporte
+    │       │           ├── admin_operaciones
+    │       │           │   └── operaciones
+    │       │           ├── asistencias
+    │       │           │   ├── cabecera
+    │       │           │   ├── edicion_asistencias
+    │       │           │   ├── libres
+    │       │           │   ├── lista_materias
+    │       │           │   └── planilla
+    │       │           ├── aulas
+    │       │           │   └── reporte
+    │       │           ├── censo
+    │       │           │   ├── datos_discapacidad
+    │       │           │   ├── formulario
+    │       │           │   └── lista_forms
+    │       │           ├── censo_docente
+    │       │           │   └── formulario
+    │       │           ├── _comun
+    │       │           │   └── pagelets
+    │       │           │       ├── lista_materias
+    │       │           │       └── notificaciones
+    │       │           ├── configuracion
+    │       │           │   ├── configuraciones
+    │       │           │   └── cuentas_externas
+    │       │           ├── creditos
+    │       │           │   ├── detalle
+    │       │           │   └── reporte
+    │       │           ├── cursada
+    │       │           │   └── info_materia
+    │       │           ├── encuestas
+    │       │           │   ├── encuesta
+    │       │           │   ├── encuestas_pendientes
+    │       │           │   ├── encuestas_respondidas
+    │       │           │   └── filtros
+    │       │           ├── encuestas_kolla
+    │       │           │   ├── encuesta
+    │       │           │   └── listado_encuestas
+    │       │           ├── estado_titulo
+    │       │           │   └── reporte
+    │       │           ├── examen
+    │       │           │   └── info_materia_examen
+    │       │           ├── fecha_examen
+    │       │           │   └── filtro
+    │       │           ├── ficha_alumno
+    │       │           │   ├── carreras
+    │       │           │   ├── filtro
+    │       │           │   ├── historia_academica_no_valida
+    │       │           │   ├── inscripciones_cursadas
+    │       │           │   └── prorrogas_regularidad
+    │       │           ├── gestion_encuestas
+    │       │           │   └── formulario
+    │       │           ├── historia_academica
+    │       │           │   ├── info_historia
+    │       │           │   └── menu_filtros
+    │       │           ├── inicio_alumno
+    │       │           │   ├── lista_carreras
+    │       │           │   ├── lista_encuestas_pendientes
+    │       │           │   └── lista_noticias
+    │       │           ├── inicio_docente
+    │       │           │   ├── actas
+    │       │           │   ├── comisiones
+    │       │           │   ├── lista_encuestas_pendientes
+    │       │           │   └── reporte
+    │       │           ├── inscripciones
+    │       │           │   ├── cursadas
+    │       │           │   └── examenes
+    │       │           ├── inscripciones_rechazadas
+    │       │           │   └── reporte
+    │       │           ├── inscriptos_cursadas
+    │       │           │   └── reporte
+    │       │           ├── inscriptos_examenes
+    │       │           │   ├── comision
+    │       │           │   └── reporte
+    │       │           ├── logger
+    │       │           │   ├── info_log
+    │       │           │   └── lista_logs
+    │       │           ├── mensajes
+    │       │           │   ├── envio_mensajes
+    │       │           │   └── lista_mensajes
+    │       │           ├── modificar_periodo_alcance
+    │       │           │   └── encuestas
+    │       │           ├── notas_cursada
+    │       │           │   ├── cabecera
+    │       │           │   ├── herramientas
+    │       │           │   └── renglones
+    │       │           ├── notas_examen
+    │       │           │   ├── cabecera
+    │       │           │   ├── herramientas
+    │       │           │   └── renglones
+    │       │           ├── notas_parciales
+    │       │           │   ├── cabecera
+    │       │           │   ├── edicion_notas
+    │       │           │   ├── herramientas
+    │       │           │   ├── lista_materias
+    │       │           │   └── lista_notas
+    │       │           ├── orientacion
+    │       │           │   └── formulario
+    │       │           ├── plan
+    │       │           │   └── info_plan
+    │       │           ├── planes_estudio
+    │       │           │   ├── filtro
+    │       │           │   └── info_plan
+    │       │           ├── regularidades
+    │       │           │   └── reporte
+    │       │           ├── reinscripcion
+    │       │           │   └── form_reinscripcion
+    │       │           ├── reinscripciones
+    │       │           │   └── listado
+    │       │           ├── resumen_cursada
+    │       │           │   └── filtro
+    │       │           ├── solicitud_certificado
+    │       │           │   ├── certificado_evaluacion
+    │       │           │   ├── certificados
+    │       │           │   └── formulario
+    │       │           ├── tesis
+    │       │           │   └── reporte
+    │       │           ├── validador_certificados
+    │       │           │   ├── confirmacion
+    │       │           │   └── validador
+    │       │           └── vincular_encuestas
+    │       │               └── encuestas
+    │       ├── css
+    │       ├── img
+    │       │   ├── iconos
+    │       │   ├── login
+    │       │   └── ui
+    │       └── js
+    │           ├── escalas
+    │           │   └── FCE
+    │           └── lib
+    │               └── history
+    │                   └── uncompressed
+    └── test
+        ├── lib
+        │   └── kernel
+        │       └── acceso
+        └── modelo
+            ├── datos
+            │   └── cache
+            ├── entidades
+            └── transacciones
+
+811 directories

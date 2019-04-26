@@ -977,6 +977,168 @@ class _info_catalogo
 );
 	}
 
+	static function sistema__cache_lista_alumnos_carrera()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'CARRERA',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__cache_lista_alumnos_solicitud_actualizacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__cache_lista_alumnos_ua()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__cache_lista_carreras()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__controles_activos_punto()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'operacion',
+    2 => 'evento',
+    3 => '_interfaz',
+    4 => 'punto_control',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '120',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__escala_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'escala_notas',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__escala_notas_econ()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'escala_notas',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__fecha_actual()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '60',
+  'filas' => '1',
+);
+	}
+
+	static function sistema__fecha_actual_formato()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'formato',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '60',
+  'filas' => '1',
+);
+	}
+
+	static function sistema__mensaje()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'mensaje',
+  ),
+  'cache' => 'memoria',
+  'filas' => '1',
+);
+	}
+
+	static function sistema__parametro()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'parametro',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__sedes()
+	{
+		return array (
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__version_base_valida()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'conversion',
+    1 => 'creacion',
+    2 => 'script_corrido',
+  ),
+  'cache' => 'memoria',
+);
+	}
+
 	static function unidad_academica_econ__anios_academicos()
 	{
 		return array (
