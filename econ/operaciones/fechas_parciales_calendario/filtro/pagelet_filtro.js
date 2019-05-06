@@ -81,12 +81,22 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         center: 'title',
                         right: 'month,basicWeek,basicDay'
                 },
-                editable: false,
+                //editable: false,
+                editable: true,
                // eventLimit: true, // allow "more" link when too many events
-                selectable: false,
+                //selectable: false,
+                selectable: true,
                 events: eventos,
                 eventRender: function(event, element) {
                     element.attr('title', event.tip);
+                },
+                eventDrop: function(info) { 
+                    console.log(info);
+                        //alert(info.event.title + " was dropped on " + info.event.start.toISOString()); 
+                        //alert(info.title + " was dropped on " + info.start.toISOString()); 
+                        if (!confirm("Are you sure about this change?")) { info.revert(); }
+                        //else : LLamar a ajax, y si falla (error/fail) que revierta
+                        
                 },
                 monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
                 monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
@@ -123,5 +133,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     {
             console.log('entro por cargarCalendario');    
     }
+    
     
 });
