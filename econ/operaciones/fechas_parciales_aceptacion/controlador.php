@@ -57,7 +57,7 @@ class controlador extends controlador_g3w2
             
             $comisiones = $this->get_comisiones_de_materia_con_dias_de_clase($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
             //COMISION, COMISION_NOMBRE, ANIO_ACADEMICO, PERIODO_LECTIVO, ESCALA, TURNO, CARRERA, OBSERVACIONES
-
+                
             if (count($comisiones) > 0)
             {
                 $materias[$i]['CALIDAD'] = $this->get_tipo_escala_de_materia($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
@@ -70,7 +70,7 @@ class controlador extends controlador_g3w2
                 //DIAS_NO_VALIDOS
                 
                 $comisiones = $this->get_evaluaciones_existentes($comisiones);
-
+                
                 $promocionables = array();
                 $regulares = array();
                 foreach ($comisiones AS $comision)
@@ -121,13 +121,14 @@ class controlador extends controlador_g3w2
                 if (!empty($periodo_hash))
                 {
                     $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-                }
-                $parametros = array(
+
+                    $parametros = array(
                                 'anio_academico' => $anio_academico,
                                 'periodo' => $periodo,
                                 'materia' => $materia
                     );
-                return catalogo::consultar('cursos', 'get_comisiones_de_materia_con_dias_de_clase', $parametros);
+                    return catalogo::consultar('cursos', 'get_comisiones_de_materia_con_dias_de_clase', $parametros);
+                }
             }
         }
         return null;
@@ -523,9 +524,6 @@ class controlador extends controlador_g3w2
         $mensaje = array();
         $datos = $this->get_parametros_grabar_comision();
 
-//        print_r($datos);
-//        die;
-
         //Instancias PROMO
         if (isset($datos['fecha_hora_promo1']))
         {
@@ -559,8 +557,6 @@ class controlador extends controlador_g3w2
         //Instancias REGULAR
         if (isset($datos['fecha_hora_regu1']) && $datos['opcion_regu1'] != 'P')
         {
-//            print_r('fecha_hora_regu1: '.$datos['fecha_hora_regu1']);
-//            print_r('opcion_regu1: '.$datos['opcion_regu1']);
             $datos['evaluacion'] = 21;
             $datos['fecha_hora'] = $datos['fecha_hora_regu1']; 
             $datos['estado'] = $datos['opcion_regu1'];

@@ -311,6 +311,8 @@ class cursos
         {
             $sql .= " AND C.periodo_lectivo = $periodo";
         }
+//        print_r('<br>Sql: ');
+//        print_r($sql);
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
  

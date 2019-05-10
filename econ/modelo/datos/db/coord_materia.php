@@ -175,14 +175,12 @@ class coord_materia
                 $sql = "INSERT INTO ufce_coordinadores_materias (unidad_academica, materia, anio_academico, periodo_lectivo, coordinador) VALUES
                             ('FCE', $materia, $anio_academico, $periodo, $coordinador)";
                 $datos = kernel::db()->ejecutar($sql);
-                return $datos;
             }
             if (!$this->is_usuario_coord($parametros))
             {
                 $this->set_usuario_coord($parametros);
             }
         }
-        return null;
     }
     
     /**

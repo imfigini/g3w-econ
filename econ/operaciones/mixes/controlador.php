@@ -27,16 +27,6 @@ class controlador extends controlador_g3w2
             var_dump('Entró en: accion__modificar()'); //die;
             
             $this->carrera = $this->validate_param('carrera', 'post', validador::TIPO_TEXTO);     
-//            var_dump($pp);
-            
-            /*
-             * $parametros = $this->get_parametros_grabar();
-            catalogo::consultar('coord_materia', 'set_coordinador', $parametros);
-               
-            $this->set_anio_academico($parametros['anio_academico_hash']);
-            $this->set_periodo($parametros['periodo_hash']);
-             * 
-             */
         }        
     }
     
