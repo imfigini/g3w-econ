@@ -75,7 +75,7 @@ class mixes
         {            
             $carrera = $parametros['carrera'];
             $anio_de_cursada = $parametros['anio_de_cursada'];
-            $sql = "SELECT  DISTINCT mix
+            $sql = "SELECT DISTINCT mix
                     FROM ufce_mixes
                         WHERE carrera = $carrera 
                             AND anio_de_cursada = $anio_de_cursada ";
@@ -84,4 +84,94 @@ class mixes
         return null;
     }
 
+    
+    /**
+     * parametros: carrera
+     * cache: no
+     * filas: n
+     */
+    function get_carrera_nombre($parametros)
+    {
+        if (isset($parametros['carrera']))
+        {            
+            $carrera = $parametros['carrera'];
+            $sql = "SELECT nombre AS carrera_nombre
+                    FROM sga_carreras
+                        WHERE carrera = $carrera ";
+            return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        }
+        return null;
+    }
+    
+    /**
+     * parametros: carrera, anio, mix, materia
+     * cache: no
+     * filas: 1
+     */
+    function del_materia_de_mix($parametros)
+    {
+        $carrera = $parametros['carrera'];
+        $anio = $parametros['anio'];
+        $mix = $parametros['mix'];
+        $materia = $parametros['materia'];
+        $sql = "DELETE FROM ufce_mixes 
+                    WHERE carrera = $carrera
+                    AND anio_de_cursada = $anio
+                    AND mix = $mix
+                    AND materia = $materia";
+        return kernel::db()->ejecutar($sql);
+    }
+    
+    /**
+     * parametros: carrera
+     * cache: no
+     * filas: 1
+     */
+    function get_materias_sin_mix($parametros)
+    {
+        $carrera = $parametros['carrera'];
+        $sql = "SELECT DISTINCT materia, nombre_materia 
+                    FROM sga_atrib_mat_plan MP
+                    WHERE carrera = $carrera
+                    AND plan IN (SELECT plan FROM sga_planes WHERE carrera = MP.carrera AND plan = MP.plan AND version_actual = MP.version AND estado = 'V') 
+                    AND materia NOT IN (SELECT materia FROM ufce_mixes WHERE carrera = MP.carrera)
+                    AND tipo_materia = 'N' AND obligatoria = 'S'
+                ORDER BY nombre_materia ";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+    }
+    
+    /**
+     * parametros: carrera, materia
+     * cache: no
+     * filas: 1
+     */
+    function get_plan_y_version_actual_de_materia($parametros)
+    {
+        $carrera = $parametros['carrera'];
+        $materia = $parametros['materia'];
+        $sql = "SELECT plan, version
+                    FROM sga_atrib_mat_plan MP
+                    WHERE carrera = $carrera
+                        AND plan IN (SELECT plan FROM sga_planes WHERE carrera = MP.carrera AND plan = MP.plan AND version_actual = MP.version AND estado = 'V') 
+                        AND materia = $materia ";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+    }
+
+    /**
+     * parametros: carrera, plan, version, materia, anio, mix
+     * cache: no
+     * filas: 1
+     */
+    function add_materia_a_mix($parametros)
+    {
+        $carrera = $parametros['carrera'];
+        $plan = $parametros['plan'];
+        $version = $parametros['version'];
+        $materia = $parametros['materia'];
+        $anio = $parametros['anio'];
+        $mix = $parametros['mix'];
+        
+        $sql = "INSERT INTO ufce_mixes VALUES ('FCE', $carrera, $plan, $version, $materia, $anio, $mix) ";
+        return kernel::db()->ejecutar($sql);
+    }    
 }

@@ -10,10 +10,11 @@ use siu\modelo\guarani_notificacion;
 class controlador extends controlador_g3w2
 {       
     protected $carrera; 
+    protected $mensaje_error;
     
     function modelo()
     {
-        return null;
+       // return null;
     }
 
     function accion__index()
@@ -24,8 +25,8 @@ class controlador extends controlador_g3w2
     {
         if (kernel::request()->isPost()) {
             
-            var_dump('Entró en: accion__modificar()'); //die;
-            
+            var_dump('Entró en: accion__modificar()'); 
+
             $this->carrera = $this->validate_param('carrera', 'post', validador::TIPO_TEXTO);     
 //            var_dump($pp);
             
@@ -40,16 +41,110 @@ class controlador extends controlador_g3w2
         }        
     }
     
+    function accion__eliminar()
+    {
+        if (kernel::request()->isPost()) 
+        {
+            $parametros = $this->get_parametros_eliminar(); 
+            try
+            {
+                kernel::db()->abrir_transaccion();
+                catalogo::consultar('mixes', 'del_materia_de_mix', $parametros);
+                kernel::db()->cerrar_transaccion();
+                $this->set_carrera($parametros['carrera']);         
+            }
+            catch (error_guarani $e)
+            {
+                $msj = $e->getMessage();
+                kernel::db()->abortar_transaccion($msj);
+                $this->set_carrera($parametros['carrera']);
+                $this->set_mensaje_error($msj);
+            }
+        }        
+    }
+    
+    private function get_parametros_eliminar()
+    {
+        $datos = array();
+        $datos['carrera'] = $this->validate_param('carrera', 'post', validador::TIPO_TEXTO);  
+        $datos['anio'] = $this->validate_param('anio', 'post', validador::TIPO_TEXTO);     
+        $datos['mix'] = $this->validate_param('mix', 'post', validador::TIPO_TEXTO);     
+        $datos['materia'] = $this->validate_param('materia_del', 'post', validador::TIPO_TEXTO);     
+//        print_r('<br>Datos: ');
+//        print_r($datos);
+        return $datos;
+    }
+    
+    function accion__agregar()
+    {
+         if (kernel::request()->isPost()) 
+        {
+            $parametros = $this->get_parametros_agregar(); 
+            try
+            {
+                if (isset($parametros['materia']))
+                {
+                    kernel::db()->abrir_transaccion();
+                    catalogo::consultar('mixes', 'add_materia_a_mix', $parametros);
+                    kernel::db()->cerrar_transaccion();
+                    $this->set_carrera($parametros['carrera']);
+                }
+            }
+            catch (error_guarani $e)
+            {
+                $msj = $e->getMessage();
+                kernel::db()->abortar_transaccion($msj);
+                $this->set_carrera($parametros['carrera']);
+                $this->set_mensaje_error($msj);
+            }
+        }     
+    }
+    
+    private function get_parametros_agregar()
+    {
+        $datos = array();
+        $datos['carrera'] = $this->validate_param('carrera', 'post', validador::TIPO_TEXTO);  
+        $datos['anio'] = $this->validate_param('anio', 'post', validador::TIPO_TEXTO);     
+        $datos['mix'] = $this->validate_param('mix', 'post', validador::TIPO_TEXTO);     
+        $datos['materia'] = $this->validate_param('materia_add', 'post', validador::TIPO_TEXTO); 
+
+        $plan_ver = catalogo::consultar('mixes', 'get_plan_y_version_actual_de_materia', $datos);
+        $datos['plan'] = $plan_ver[0]['PLAN'];
+        $datos['version'] = $plan_ver[0]['VERSION'];
+//        print_r('<br>Datos: ');
+//        print_r($datos);
+
+        return $datos;
+    }
+
+    function set_carrera($carrera)
+    {
+        $this->carrera = $carrera;
+    }
+    
     function get_carrera()
     {
         return $this->carrera;
     }
     
+    function set_mensaje_error($mensaje)
+    {
+        $this->mensaje_error = $mensaje;
+    }
+    
+    function get_mensaje_error()
+    {
+        return $this->mensaje_error;
+    }
+    
     function get_clase_vista()
     {
-        //console.log($this);
         switch ($this->accion) {
             case 'modificar': 
+                    return 'vista_modificar';
+            case 'eliminar': 
+                    return 'vista_modificar';
+            case 'agregar': 
                     return 'vista_modificar';
             default: 
                     return 'vista';

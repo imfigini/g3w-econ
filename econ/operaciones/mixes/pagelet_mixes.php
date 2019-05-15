@@ -6,7 +6,6 @@ use kernel\kernel;
 use siu\modelo\datos\catalogo;
 
 class pagelet_mixes extends pagelet {
-//class pagelet_mixes extends \siu\operaciones\_comun\operaciones\reporte\pagelet_reporte {
 	
         public function get_nombre()
         {
@@ -15,7 +14,6 @@ class pagelet_mixes extends pagelet {
 
         function prepare()
         {
-            $this->data['mensaje'] = 'HOLA!!!!!!!!!!!!!!';
             $carreras = catalogo::consultar('mixes', 'get_carreras_grado', null);
             $datos = $carreras;
             
@@ -45,51 +43,4 @@ class pagelet_mixes extends pagelet {
             $link_form = kernel::vinculador()->crear('mixes', 'modificar');
             $this->data['form_url'] = $link_form;        
         }
-        /*
-	public function c
-	{   
-            $operacion = kernel::ruteador()->get_id_operacion();
-            $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
-
-//            $this->add_var_js('msg_guardado_exitoso', trans('datos_censales.guardado_exitoso'));
-//            $this->add_var_js('msg_error_al_guardar', trans('datos_censales.error_al_guardar'));
-           
-            $periodo_hash = $this->get_periodo();
-            $anio_academico_hash = $this->get_anio_academico();
-            $form = $this->get_form_builder();
-            $form->set_anio_academico($anio_academico_hash);
-            $form->set_periodo($periodo_hash);
-            
-            $this->data['mensaje'] = $this->get_mensaje();
-            
-            $this->add_var_js('periodo_hash', $periodo_hash);
-            $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
-            $this->data['periodo_hash'] = $periodo_hash;
-            $this->data['anio_academico_hash'] = $anio_academico_hash;
-
-            $materias = $this->controlador->get_materias_cincuentenario();
-            
-            $datos = array();
-            $cant = count($materias);
-            for ($i=0; $i<$cant; $i++)
-            {
-                $comisiones = $this->controlador->get_comisiones_promo($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
-                if (count($comisiones) > 0)
-                {
-                    $materias[$i]['comisiones'] = $comisiones;
-                    $datos[] = $materias[$i];
-                }
-            }
-            
-            $this->data['datos'] = $datos;
-	        
-            $link_form_comision = kernel::vinculador()->crear('definicion_cursos', 'grabar_comision');
-            $this->data['form_url_comision'] = $link_form_comision;     
-            
-            $link_form_materia = kernel::vinculador()->crear('definicion_cursos', 'grabar_materia');
-            $this->data['form_url_materia'] = $link_form_materia;     
-            
-        }
-         * 
-         */
 }

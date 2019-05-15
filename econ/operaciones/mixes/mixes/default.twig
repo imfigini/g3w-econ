@@ -1,8 +1,8 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
-    {#{% if (this.data.mensaje != '') %}
-        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
-    {% endif %}   #}
+    <div class="titulo_operacion">
+        <h2>{{"definicion_mixes"|trans|capitalize}}</h2>
+    </div>
     
     {% if this.data.datos %}
         
@@ -41,9 +41,9 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        {#<div style="text-align: right">
+                        <div style="text-align: right">
                             <button class="btn btn-info btn-lg" type="submit" name="boton_modificar" id="{{dato.CARRERA}}" style="align-self:center;font-size:12px;">Modificar</button>
-                        </div>#}
+                        </div>
                     </form>
                 </div>
             {% endfor %}

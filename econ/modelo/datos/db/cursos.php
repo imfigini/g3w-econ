@@ -61,7 +61,7 @@ class cursos
                     JOIN sga_materias_ciclo MC ON (MC.materia = M.materia)
                     JOIN sga_ciclos CIC ON (CIC.ciclo = MC.ciclo)
                     JOIN sga_ciclos_plan CP ON (CIC.ciclo = CP.ciclo)
-                    WHERE CP.plan LIKE '50%'
+                    WHERE CP.plan IN (SELECT plan FROM sga_planes WHERE carrera = CP.carrera AND plan = CP.plan AND estado = 'V')
                     AND M.materia = $materia ";
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         switch (count($result))

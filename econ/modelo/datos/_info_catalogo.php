@@ -930,7 +930,51 @@ class _info_catalogo
 );
 	}
 
+	static function mixes__add_materia_a_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'plan',
+    2 => 'version',
+    3 => 'materia',
+    4 => 'anio',
+    5 => 'mix',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function mixes__del_materia_de_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'anio',
+    2 => 'mix',
+    3 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function mixes__get_anios_de_cursada_con_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function mixes__get_carrera_nombre()
 	{
 		return array (
   'parametros' => 
@@ -964,6 +1008,18 @@ class _info_catalogo
 );
 	}
 
+	static function mixes__get_materias_sin_mix()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function mixes__get_mixes_del_anio()
 	{
 		return array (
@@ -974,6 +1030,19 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function mixes__get_plan_y_version_actual_de_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

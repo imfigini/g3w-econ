@@ -31,4 +31,14 @@
 }
 
 
+.mix_agregar_materia {
+        text-align: right; 
+        margin-start: 10px;
+}
+
+.mix_agregar_materia select {
+        width: 50%;
+        margin-right: 10px;
+        margin-bottom: 0px;
+}
 

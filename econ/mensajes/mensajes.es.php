@@ -54,7 +54,7 @@ return array(
     
     'parciales' => 'Carga de notas de evaluaciones parciales',
     
-    /* Períodos de veluación */
+    /* Períodos de evaluación */
     'tit_periodos_evaluacion' => 'Períodos de evaluación',
     'periodos_evaluacion' => 'Definición de los períodos de evaluación',
     'periodos_evaluacion.sin_resultados' => 'No hay información, seleccionar un año académico y un período para comenzar.',
@@ -65,6 +65,7 @@ return array(
     'definicion_mixes' => 'Definición de Mixs',
     'mixes.sin_resultados' => 'No hay información cargada sobre mixes.',
     'mixes.carrera' => 'Carrera',
+    'mixes_modificacion' => 'Modificación de Mix',
     
     /* Propuestas de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_propuesta' => 'Carga de fechas de evaluación para parciales, integrador y recuperatorios',

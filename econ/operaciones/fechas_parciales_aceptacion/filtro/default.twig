@@ -1,12 +1,12 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
     
-    <p style="color: red">{{this.data.mensaje_error}}</p>
+{#    <p style="color: red">{{this.data.mensaje_error}}</p>
     <p>{{this.data.mensaje}}</p>
-    
+#}    
     {% if (this.data.mensaje != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
-    {% endif %}    
+    {% endif %}
     
     {% if (this.data.mensaje_error != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
@@ -152,7 +152,7 @@
 	{{'Regular'}}
     {% endif %}
     {% if escala == 'PyR' %}
-	{{'Promoción y Regular'}}
+	{{'Promocion y Regular'}}
     {% endif %}
 {% endmacro %}
 
@@ -176,7 +176,7 @@
 	{{'Noche'}}
     {% endif %}
     {% if turno == 'M' %}
-	{{'Mañana'}}
+	{{'Maï¿½ana'}}
     {% endif %}
 {% endmacro %}
 
@@ -195,4 +195,3 @@
         <p style="color:green">La fecha ya está aceptada y asignada</p>
     </div></td>
 {% endmacro %}
-

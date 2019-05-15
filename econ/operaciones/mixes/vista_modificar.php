@@ -13,4 +13,5 @@ class vista_modificar extends vista_g3w2
 		$pl = kernel::localizador()->instanciar($clase, 'contenido');
 		$this->add_pagelet($pl);
 	}
+        
 }

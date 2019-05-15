@@ -27,10 +27,11 @@ class coord_materia
                                     P.apellido || ', ' || P.nombres AS coordinador_nombre
                         FROM sga_comisiones C
                         JOIN sga_atrib_mat_plan M ON (M.materia = C.materia)
+                        JOIN sga_planes PL ON (PL.unidad_academica = M.unidad_academica AND PL.carrera = M.carrera AND PL.plan = M.plan)
                         LEFT JOIN ufce_coordinadores_materias U ON (U.materia = M.materia AND U.anio_academico = C.anio_academico AND U.periodo_lectivo = C.periodo_lectivo)
                         LEFT JOIN sga_docentes D ON (D.legajo = U.coordinador)
                         LEFT JOIN sga_personas P ON (P.nro_inscripcion = D.nro_inscripcion)
-                    WHERE   M.plan LIKE '50%'
+                    WHERE   PL.estado = 'V'
 			AND C.anio_academico = $anio_academico ";
             $periodo = $parametros['periodo'];
             if (!empty($periodo) && isset($periodo) && $periodo != "''")
