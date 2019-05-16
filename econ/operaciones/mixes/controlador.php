@@ -14,30 +14,19 @@ class controlador extends controlador_g3w2
     
     function modelo()
     {
-       // return null;
+       return null;
     }
 
     function accion__index()
     {
+
     }
     
     function accion__modificar()
     {
-        if (kernel::request()->isPost()) {
-            
-            var_dump('Entró en: accion__modificar()'); 
-
+        if (kernel::request()->isPost()) 
+        {
             $this->carrera = $this->validate_param('carrera', 'post', validador::TIPO_TEXTO);     
-//            var_dump($pp);
-            
-            /*
-             * $parametros = $this->get_parametros_grabar();
-            catalogo::consultar('coord_materia', 'set_coordinador', $parametros);
-               
-            $this->set_anio_academico($parametros['anio_academico_hash']);
-            $this->set_periodo($parametros['periodo_hash']);
-             * 
-             */
         }        
     }
     
@@ -77,27 +66,33 @@ class controlador extends controlador_g3w2
     
     function accion__agregar()
     {
-         if (kernel::request()->isPost()) 
+        $carrera = $this->get_carrera();
+//        print_r($carrera);
+        if (kernel::request()->isPost()) 
         {
             $parametros = $this->get_parametros_agregar(); 
             try
             {
-                if (isset($parametros['materia']))
+                if (isset($parametros['materia']) && $parametros['materia'] <> '0')
                 {
                     kernel::db()->abrir_transaccion();
                     catalogo::consultar('mixes', 'add_materia_a_mix', $parametros);
                     kernel::db()->cerrar_transaccion();
-                    $this->set_carrera($parametros['carrera']);
+                    
                 }
             }
             catch (error_guarani $e)
             {
                 $msj = $e->getMessage();
                 kernel::db()->abortar_transaccion($msj);
-                $this->set_carrera($parametros['carrera']);
                 $this->set_mensaje_error($msj);
             }
-        }     
+            $this->set_carrera($parametros['carrera']);
+        }  
+        else
+        {
+            $this->set_carrera($carrera);
+        }
     }
     
     private function get_parametros_agregar()
@@ -117,6 +112,12 @@ class controlador extends controlador_g3w2
         return $datos;
     }
 
+    function accion__volver()
+    {
+        //print_r('entro x accion__volver()');
+        $this->accion = 'vista';
+    }
+    
     function set_carrera($carrera)
     {
         $this->carrera = $carrera;

@@ -43,5 +43,8 @@ class pagelet_modificar extends pagelet {
             
             $link_form_add = kernel::vinculador()->crear('mixes', 'agregar');
             $this->data['form_url_add'] = $link_form_add;
+            
+            $link_form_volver = kernel::vinculador()->crear('mixes', 'volver');
+            $this->data['form_url_volver'] = $link_form_volver;
         }
 }

@@ -2,9 +2,10 @@
 {% block contenido %}
     <div class="titulo_operacion">
         <h2 class="clearfix">
-            <button class='btn btn-primary btn-small pull-left js-history-back' alt="Volver"><span class="icon-chevron-left icon-white"></span></button>
-{#            <button class='btn btn-primary btn-small pull-left' alt="Volver"><span class="icon-chevron-left icon-white"></span></button>#}
-                <span class="pull-left">{{"mixes_modificacion"|trans|capitalize}}</span>
+            <form action="{{this.data.form_url_volver}}">
+                <button class='btn btn-primary btn-small pull-left' alt="Volver" type="submit"><span class="icon-chevron-left icon-white"></span></button>
+            </form>
+            <span class="pull-left">{{"mixes_modificacion"|trans|capitalize}}</span>
         </h2>
     </div>
     
@@ -44,7 +45,7 @@
                     <input type="hidden" name="anio" value="{{dato.anio}}">
                     <input type="hidden" name="mix" value="{{dato.mix}}">
                     <select name="materia_add">
-                        <option value="">-- Seleccione una materia --</option>
+                        <option value="0">-- Seleccione una materia --</option>
                         {% for materia in this.data.materias_sin_mix %}
                             <option value="{{materia.MATERIA}}">{{materia.NOMBRE_MATERIA}} ({{materia.MATERIA}})</option>
                         {% endfor %}

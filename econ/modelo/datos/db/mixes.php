@@ -171,7 +171,7 @@ class mixes
         $anio = $parametros['anio'];
         $mix = $parametros['mix'];
         
-        $sql = "INSERT INTO ufce_mixes VALUES ('FCE', $carrera, $plan, $version, $materia, $anio, $mix) ";
+        $sql = "INSERT INTO ufce_mixes (unidad_academica, carrera, plan, version, materia, anio_de_cursada, mix) VALUES ('FCE', $carrera, $plan, $version, $materia, $anio, $mix) ";
         return kernel::db()->ejecutar($sql);
     }    
 }
