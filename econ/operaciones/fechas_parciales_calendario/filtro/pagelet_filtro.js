@@ -39,7 +39,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             //Para que despliegue u oculte la información de las comisiones de cada materia. 
             $(id).delegate(".link-js", "click", function() {
                         $(this).find('.toggle').toggleClass(function(){
-                            console.log($(this));
+//                            console.log($(this));
                                 if ($(this).is('.icon-chevron-up')) {
                                         return 'icon-chevron-down';
                                 } else {
@@ -55,15 +55,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
            
         }
     };
-    
-//    function get_eventos2()
-//    {
-//        var resultado =  [ { "title": "Prueba", "start": "2019-02-10", "end": "2019-02-10" } ];
-//        console.log(resultado);
-//        //resultado = JSON.parse(resultado);
-//        //console.log(resultado);        
-//        return resultado;
-//    }
     
     function inicio_calendario()
     {
@@ -81,23 +72,22 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         center: 'title',
                         right: 'month,basicWeek,basicDay'
                 },
-                //editable: false,
-                editable: true,
-               // eventLimit: true, // allow "more" link when too many events
-                //selectable: false,
-                selectable: true,
+                editable: false,
+                selectable: false,
+                //editable: true,
+                //selectable: true,
                 events: eventos,
                 eventRender: function(event, element) {
                     element.attr('title', event.tip);
                 },
-                eventDrop: function(info) { 
-                    console.log(info);
-                        //alert(info.event.title + " was dropped on " + info.event.start.toISOString()); 
-                        //alert(info.title + " was dropped on " + info.start.toISOString()); 
-                        if (!confirm("Are you sure about this change?")) { info.revert(); }
-                        //else : LLamar a ajax, y si falla (error/fail) que revierta
-                        
-                },
+//                eventDrop: function(info) { 
+//                    console.log(info);
+//                        //alert(info.event.title + " was dropped on " + info.event.start.toISOString()); 
+//                        //alert(info.title + " was dropped on " + info.start.toISOString()); 
+//                        if (!confirm("Are you sure about this change?")) { info.revert(); }
+//                        //else : LLamar a ajax, y si falla (error/fail) que revierta
+//                        
+//                },
                 monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
                 monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
                 dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
@@ -129,10 +119,5 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             });
     }
         
-//    function cargarCalendario()
-//    {
-//            console.log('entro por cargarCalendario');    
-//    }
-    
-    
+
 });
