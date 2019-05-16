@@ -56,14 +56,14 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         }
     };
     
-    function get_eventos2()
-    {
-        var resultado =  [ { "title": "Prueba", "start": "2019-02-10", "end": "2019-02-10" } ];
-        console.log(resultado);
-        //resultado = JSON.parse(resultado);
-        //console.log(resultado);        
-        return resultado;
-    }
+//    function get_eventos2()
+//    {
+//        var resultado =  [ { "title": "Prueba", "start": "2019-02-10", "end": "2019-02-10" } ];
+//        console.log(resultado);
+//        //resultado = JSON.parse(resultado);
+//        //console.log(resultado);        
+//        return resultado;
+//    }
     
     function inicio_calendario()
     {
@@ -100,8 +100,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 },
                 monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
                 monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-                dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+                dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'],
         });
     }
     
@@ -129,10 +129,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             });
     }
         
-    function cargarCalendario()
-    {
-            console.log('entro por cargarCalendario');    
-    }
+//    function cargarCalendario()
+//    {
+//            console.log('entro por cargarCalendario');    
+//    }
     
     
 });
