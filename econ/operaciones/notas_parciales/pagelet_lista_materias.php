@@ -18,8 +18,10 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
             $rs[$mat]['MATERIA'] = $mat;
             $rs[$mat]['NOMBRE'] = $materia['MATERIA_NOMBRE'];
         
-            //Iris: Se recupera el coordinador para determinar si puede crear o no parciales
+            //Iris: Se recupera el coordinador y si la materia pertenece a algún plan del 50º para determinar si puede crear o no parciales
             $rs[$mat]['COORDINADOR'] = $materia['COORDINADOR'];
+            $rs[$mat]['IN_PLAN_VIEJO'] = $materia['IN_PLAN_VIEJO'];
+            
             $rs[$mat]['ESCALA_NOTAS'] = $materia['ESCALA_NOTAS'];
             
             $com = $materia['COMISION'];
@@ -84,9 +86,11 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
 				break;
 			default:
                                 $this->data = $this->get_lista_materias();
+                                //print_r($this->data);
+                            
                                 //Iris: Recueper el legajo del docente que está conectado para ver si es coordinador o no y de acuerdo a eso mostrar o no la creación de parciales
                                 $this->data['docente'] = kernel::persona()->get_legajo_docente();
-				
+                                        
                                 $this->add_var_js('url_crear_evaluacion', kernel::vinculador()->crear('notas_parciales', 'crear_evaluacion'));
 				$this->add_var_js('url_borrar_evaluacion', kernel::vinculador()->crear('notas_parciales', 'borrar_evaluacion'));
 				$this->add_var_js('titulo_crear_parcial', kernel::traductor()->trans('crear_evaluacion_parcial'));

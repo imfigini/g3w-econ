@@ -14,7 +14,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
      */
     function listado_evaluaciones_parciales_econ($parametros)
     {
-        //Iris: En la consulta se agregó al coordinador para verificar si debe mostrar o no la opción de crear parciales en la web.
+        //Iris: En la consulta se agregó al coordinador
+        //Iris: En la consulta se agregó si pertenece o no la materia a algún plan del 50º
 		$sql = "SELECT
 			sga_comisiones.materia,
 			sga_materias.nombre as materia_nombre,
@@ -22,6 +23,9 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 				ufce_coordinadores_materias.materia = sga_comisiones.materia
 				AND ufce_coordinadores_materias.anio_academico = sga_comisiones.anio_academico
 				AND ufce_coordinadores_materias.periodo_lectivo = sga_comisiones.periodo_lectivo) AS coordinador,
+                        (SELECT COUNT(*)=0 FROM sga_atrib_mat_plan MP WHERE materia = sga_comisiones.materia AND plan IN 
+                                (SELECT plan FROM sga_planes WHERE carrera = MP.carrera AND plan = MP.plan AND version_actual = MP.version AND estado = 'V') ) 
+                                AS in_plan_viejo,
 			sga_comisiones.comision,
 			sga_comisiones.nombre as comision_nombre,
 			sga_comisiones.anio_academico,

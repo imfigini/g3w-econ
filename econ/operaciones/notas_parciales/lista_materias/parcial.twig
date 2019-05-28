@@ -23,11 +23,11 @@
 		<a href='{{ url_editar }}' class="btn btn-mini"><span class="icon-pencil"></span> {{ "cargar"|trans |capitalize}}</a>
 	    {% endif %}
 		
-		{#{% if porcentaje == 0 %}
-	    <button class='btn btn-mini btn-warning boton-borrar' data-evaluacion-id='{{evaluacion_id}}'>
+            {% if in_plan_viejo and porcentaje == 0 %}
+                <button class='btn btn-mini btn-warning boton-borrar' data-evaluacion-id='{{evaluacion_id}}'>
 			<span class="icon-remove"></span> {{ "borrar"|trans |capitalize}}
 		</button>
-		{% endif %}#}
+            {% endif %}
 	</div>
     </div>
 </li>

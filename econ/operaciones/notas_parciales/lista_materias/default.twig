@@ -19,13 +19,14 @@
                                         tabindex='0'
 				>
                                 <div class='comision-nombre clearfix'>
-                                    <input type="hidden" name="resultado" value="{{materia.COORDINADOR==this.data.docente}}">
+{#                                    <input type="hidden" name="resultado" value="{{materia.COORDINADOR==this.data.docente}}">#}
                                     {% if comision.EVALUACIONES %}<span class="js-toggle_icon abierto"></span>{% endif %}
                                     <strong>Comisi&oacute;n:</strong> {{ comision.NOMBRE }} - 
                                     <strong>Per&iacute;odo Lectivo:</strong> {{comision.PERIODO_LECTIVO}} - 
                                     <strong>Turno:</strong> {{comision.TURNO}} - 
                                     <strong>Inscriptos:</strong> {{ comision.CANT_INSCRIPTOS }} 
-{#                                    {{ _self.boton_crear(not comision.COMPLETA and materia.COORDINADOR==this.data.docente) }}#}
+                                    {# Iris: Sólo puede crear parcial si la materia pertenece a un plan anterior al vigente (50º) #}
+                                        {{ _self.boton_crear(not comision.COMPLETA and materia.IN_PLAN_VIEJO) }}
 				</div>			
 				<ul class='parciales-comision unstyled' orden='{{orden}}'>
 				{% if comision.EVALUACIONES %}
@@ -34,6 +35,7 @@
 							'nombre': evaluacion.NOMBRE, 
 							'tipo': evaluacion.EVALUACION,
 							'porcentaje': evaluacion.PORCENTAJE_CARGA,
+                                                        'in_plan_viejo': materia.IN_PLAN_VIEJO,
 							'cant_inscriptos': evaluacion.CANT_INSCRIPTOS,
 							'url_listar': evaluacion.URL_LISTAR,
 							'url_editar': evaluacion.URL_EDITAR,
