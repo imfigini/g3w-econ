@@ -534,7 +534,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                             CASE when sga_asignaciones.dia_semana = 1 then 'Dom'
                                 WHEN sga_asignaciones.dia_semana = 2 THEN 'Lun'
                                 WHEN sga_asignaciones.dia_semana = 3 THEN 'Mar'
-                                WHEN sga_asignaciones.dia_semana = 4 THEN 'Mié'
+                                WHEN sga_asignaciones.dia_semana = 4 THEN 'Mie'
                                 WHEN sga_asignaciones.dia_semana = 5 THEN 'Jue'
                                 WHEN sga_asignaciones.dia_semana = 6 THEN 'Vie'
                                 WHEN sga_asignaciones.dia_semana = 7 THEN 'Sáb'

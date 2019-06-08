@@ -291,7 +291,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
         $pdf->set_pdf_fuente_titulo($this->pdf_fuente_titulo);
         $pdf->set_pdf_fuente_subtitulo($this->pdf_fuente_subtitulo);
 
-        $this->pdf_encabezado = array($universidad, "Reporte de Asistencias", 110);
+        $this->pdf_encabezado = array($universidad, "Planilla de Asistencias", 110);
+        
         $pdf->set_encabezado($this->pdf_encabezado[0], $this->pdf_encabezado[1], $this->pdf_encabezado[2]);
 
         $logo = kernel::localizador()->encontrar_img('www/img','logo.png');
@@ -300,8 +301,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
         // ENCABEZADO
         $data = $this->get_data();
         $datos_encabezado = $this->get_encabezado();
-        $titulos = $this->get_columnas($this->filtros_consulta['cantidad'], $datos_encabezado);
-
+        
         $pdf->agregar_texto("");                       
         $pdf->agregar_texto("Año Académico: ".$datos_encabezado['ANIO_ACADEMICO']);
         $pdf->agregar_texto("Período Lectivo: ".$datos_encabezado['PERIODO_LECTIVO']);
@@ -327,6 +327,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
 
 
         //ALUMNOS
+        $titulos = $this->get_columnas($this->filtros_consulta['cantidad'], $datos_encabezado);
+        
         $pdf->agregar_tabla($data,$titulos,'');
         $pdf->agregar_texto("");
         $pdf->agregar_texto("");
@@ -363,7 +365,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
     } 
 
     public function get_nombre_archivo(){
-            return "planilla";
+            return "planilla_asistencia.pdf";
     }	
   
     
@@ -419,27 +421,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
        
         
         $excel->generar();
-        //print_r($docentes);
-        
-//
-//        //TABLA PARA FIRMA DOCENTE
-//        $cantidad = $this->filtros_consulta['cantidad'];
-//
-//        $titulos_firma = array();
-//        $titulos_firma['DATOS'] = "Datos";
-//        for($i= 1; $i <= $cantidad; $i++){
-//            $titulos_firma['FECHA'.$i] = $datos_encabezado['FECHA'.$i];
-//        };
-//
-//        $datos_firma = array();
-//        $datos_firma[0]['DATOS'] = "Tema";
-//        $datos_firma[1]['DATOS'] = "Firma Docente";
-//
-//        $pdf->agregar_tabla($datos_firma,$titulos_firma,'');
-//        $pdf->agregar_texto("");
-//
-//        $pdf->set_nombre_archivo($this->get_nombre_archivo());
-//        $pdf->generar();
     }   
 
     protected function get_generador_excel()

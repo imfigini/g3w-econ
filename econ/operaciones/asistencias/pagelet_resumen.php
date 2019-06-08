@@ -66,7 +66,6 @@ class pagelet_resumen extends pagelet
 //            kernel::log()->add_debug('prepare resumen POST: ', $_POST);
             $this->data['resumen'] = $this->controlador->get_resumen();
             $this->data['comisiones'] = $this->get_comisiones();
-            
             $link = kernel::vinculador()->crear($operacion, 'generar_excel');
             $this->data['url']['generar_excel'] = $link;
 
