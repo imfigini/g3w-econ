@@ -3,6 +3,199 @@ namespace econ\modelo\datos;
 
 class _info_catalogo
 {
+	static function carga_asistencias__clase_detalle()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_calidad_inscripcion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_clases_comisiones_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+    2 => 'filas',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '3600',
+  'filas' => 'n*',
+);
+	}
+
+	static function carga_asistencias__get_clases_especificas_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'materia',
+    3 => 'dia_semana',
+    4 => 'hs_comienzo',
+    5 => 'filas',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_clases_materia_dia_hs()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'fecha_clase',
+    2 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_clases_subcomisiones_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'comision',
+    3 => 'filas',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '3600',
+  'filas' => 'n*',
+);
+	}
+
+	static function carga_asistencias__get_planilla()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'subcomision',
+    2 => 'fecha',
+    3 => 'cantidad',
+    4 => 'tipo',
+    5 => 'tipo_clase',
+  ),
+  'param_null' => 
+  array (
+    0 => 'subcomision',
+    1 => 'fecha',
+    2 => 'cantidad',
+    3 => 'tipo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_subcomisiones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__guardar()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'comision',
+    4 => 'clase',
+    5 => 'cantidad',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__listado_alumnos_libres()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__listado_comisiones_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__listado_comisiones_filtro()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'docente',
+    2 => 'per_lect',
+    3 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__listado_dias_clases_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function carga_evaluaciones_parciales__alta_evaluacion_parcial()
 	{
 		return array (

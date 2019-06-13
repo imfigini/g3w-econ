@@ -1,11 +1,11 @@
 <?php
 namespace econ\operaciones\asistencias;
 
-use kernel\interfaz\pagelet;
+//use kernel\interfaz\pagelet;
 use kernel\kernel;
-use siu\guarani;
+//use siu\guarani;
 
-class pagelet_edicion_asistencias extends pagelet
+class pagelet_edicion_asistencias extends \siu\operaciones\asistencias\pagelet_edicion_asistencias
 {
 	protected $encabezado;
 	protected $renglon = false;
@@ -23,9 +23,9 @@ class pagelet_edicion_asistencias extends pagelet
 		return $this->controlador->modelo();
 	}
 	
-	protected function get_clase_encabezado()
+	protected function get_clase_encabezado_econ()
 	{
-		return $this->controlador->get_clase_encabezado();
+		return $this->controlador->get_clase_encabezado_econ();
 	}
 	
 	protected function get_clase_detalle()
@@ -56,7 +56,10 @@ class pagelet_edicion_asistencias extends pagelet
 		$this->data = array();
 		$this->data['clase_detalle'] = $this->get_clase_detalle();
 		$this->data['clase_id'] = $this->controlador->clase_id;
-		$this->data['comision'] = $this->controlador->comision_id;
+                $this->data['materia'] = $this->controlador->materia;
+                $this->data['dia_semana'] = $this->controlador->dia_semana;
+                $this->data['fecha'] = $this->controlador->fecha;
+                $this->data['hs_comienzo_clase'] = $this->controlador->hs_comienzo_clase;
 		$this->data['filas'] = $this->controlador->filas;
 		$this->data['url_guardar'] = $this->get_url_guardar();
 		$this->add_var_js('highlight_renglon', $this->renglon);

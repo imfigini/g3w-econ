@@ -88,7 +88,7 @@ class pagelet_filtro extends pagelet {
                 $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
                 $priodo_solicitud_fechas = $this->controlador->get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash);
                 $this->data['priodo_solicitud_fechas'] = $priodo_solicitud_fechas[0];
-                print_r($this->data['priodo_solicitud_fechas']);
+                //print_r($this->data['priodo_solicitud_fechas']);
                 
                 $link_form_comision = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_comision');
                 $this->data['form_url_comision'] = $link_form_comision;     

@@ -3,25 +3,24 @@
 namespace econ\operaciones\asistencias;
 
 use siu\guarani;
-use siu\extension_kernel\controlador_g3w2;
 use kernel\util\validador;
 use kernel\kernel;
 use siu\modelo\datos\catalogo;
 use siu\operaciones\_comun\operaciones\reporte\generador_pdf;
 use econ\operaciones\asistencias\pagelet_planilla;
-use econ\operaciones\asistencias\pagelet_lista_materias;
 
 class controlador extends \siu\operaciones\asistencias\controlador
 {
 
     /*Variables para filtros*/
     public $clase_id;
-    public $comision_id;
-    public $subcomision_id = null;
-    public $tipo_clase = null;
-    public $comision_hash;
+    public $materia;
+    public $fecha;
+    //public $tipo_clase = null;
+    public $dia_semana;
+//    public $dia_nombre;
+    public $hs_comienzo_clase;
     public $filas;
-    public $filtros = array('materia' => "", 'per_lect'=> "", 'docente'=> "");
 
     /* Variables para generaci?n de PDF */
     protected $pdf_hoja = "A4";
@@ -31,15 +30,14 @@ class controlador extends \siu\operaciones\asistencias\controlador
     protected $pdf_fuente_texto = 10;
     protected $pdf_fuente_titulo = 10;
     protected $pdf_fuente_subtitulo = 12;
-    public $datos_consulta;        
-    public $filtros_consulta;        
+//    public $datos_consulta;        
+//    public $filtros_consulta;        
 
     function get_clase_vista()
     {
         switch ($this->accion) {
                 case 'index': 
                 case 'mostrar_clases': 
-                case 'mostrar_subcomisiones': 
                 case 'filtrar': 
                         return 'vista_materias';
                 case 'libres':
@@ -62,42 +60,51 @@ class controlador extends \siu\operaciones\asistencias\controlador
     {
     }
 	
-	function accion__mostrar_clases()
-	{
-		$comision_id = $this->validate_param('comision_id', 'post', validador::TIPO_ALPHANUM);
-		$filas= $this->validate_param('cant', 'post', validador::TIPO_INT);
-		$resultado = $this->modelo()->get_clases_comision($comision_id, $filas);
-		$this->render_template('lista_materias/clases.twig', $resultado);
-	}
+    function accion__mostrar_clases()
+    {
+            //$clase_id = $this->validate_param('clase_id', 'post', validador::TIPO_ALPHANUM);
+            $filas= $this->validate_param('cant', 'post', validador::TIPO_INT);
+            $materia= $this->validate_param('materia', 'post', validador::TIPO_ALPHANUM);
+            $dia_semana= $this->validate_param('dia_semana', 'post', validador::TIPO_INT);
+            $hs_comienzo= $this->validate_param('hs_comienzo', 'post', validador::TIPO_ARRAY_TIME);
+
+            $this->materia = $materia;
+            $this->dia_semana = $dia_semana;
+            $this->hs_comienzo_clase = $hs_comienzo;
+
+            $resultado = $this->modelo()->get_clases_especificas($materia, $dia_semana, $hs_comienzo, $filas);
+            $this->render_template('lista_materias/clases.twig', $resultado);
+    }
 	
-	function accion__mostrar_subcomisiones()
-	{
-		$comision_id = $this->validate_param('comision_id', 'post', validador::TIPO_ALPHANUM);
-		$resultado = $this->modelo()->get_subcomisiones($comision_id);
-		$this->render_template('lista_materias/subcomisiones.twig', $resultado);
-	}
-	
-	
+
 	function accion__editar()
 	{
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// @todo sacar los 3 parámetros estos y agregarlo al esquema de seguridad
-		
-		if (! kernel::request()->isPost()) {
-			
-			$this->comision_id = $this->validate_param('comision_id', 'get', validador::TIPO_ALPHANUM);
-			$this->filas = $this->validate_param('filas', 'get', validador::TIPO_INT);
-			$this->clase_id = $this->validate_param('clase_id', 'get', validador::TIPO_ALPHANUM);
-		} else {
+            if (! kernel::request()->isPost()) 
+            {
+                $this->clase_id = $this->validate_param('clase_id', 'get', validador::TIPO_ALPHANUM);
+                $this->materia = $this->validate_param('materia', 'get', validador::TIPO_ALPHANUM);
+                $this->fecha = $this->validate_param('fecha', 'get', validador::TIPO_ALPHANUM);
+                $this->dia_semana = $this->validate_param('dia_semana', 'get', validador::TIPO_INT);
+                $this->hs_comienzo_clase = $this->validate_param('hs_comienzo', 'get', validador::TIPO_ARRAY_TIME);
+                $this->filas = $this->validate_param('filas', 'get', validador::TIPO_INT);
+//                kernel::log()->add_debug('$accion__editar', $this);
+            } 
+            else 
+            {
 			$alumnos = $_POST['alumnos'];
+                        //print_r($alumnos);
+                        
 			foreach ($alumnos as $key => $alumno) {
 				$alumnos[$key]['PRESENTE'] = ($alumno['PRESENTE'] == 'on') ? 0 : 1;
 			}
 			
-			kernel::log()->add_debug('CLASE', $_POST['clase']);
-			kernel::log()->add_debug('ALUMNOS', $alumnos);
+//			kernel::log()->add_debug('accion__editar_CLASE', $_POST);
+//			kernel::log()->add_debug('accion__editar_ALUMNOS', $alumnos);
 			
-			$this->modelo()->grabar($_POST['clase']['ID'], $_POST['clase']['COMISION'], $_POST['clase']['FILAS'], $alumnos);
+//			$this->modelo()->grabar($_POST['clase']['ID'], $_POST['clase']['COMISION'], $_POST['clase']['FILAS'], $alumnos);
+			//$seleccion_clase, $materia, $dia_semana, $fecha, $hs_comienzo_clase, $alumnos
+                        $this->modelo()->grabar($_POST['clase']['ID'], $_POST['clase']['MATERIA'], $_POST['clase']['DIA_SEMANA'], $_POST['clase']['FECHA'], $_POST['clase']['HS_COMIENZO_CLASE'], $alumnos);                        
+                        
 			
 			$this->render_ajax(kernel::traductor()->trans('asistencia_guardado_exitoso'));
 		}
@@ -110,8 +117,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	
 	function accion__planilla()
 	{
-			$this->subcomision_id = $this->validate_param('SUBCO', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true));
-			$this->tipo_clase = $this->validate_param('TIPO', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true));
+            $this->subcomision_id = $this->validate_param('SUBCO', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true));
+            $this->tipo_clase = $this->validate_param('TIPO', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true));
             $this->decodificar_comision();
             $this->filtros_consulta = $this->get_filtros();
             
@@ -130,16 +137,12 @@ class controlador extends \siu\operaciones\asistencias\controlador
 				if(!isset($this->comision_id)){
 					$this->comision_hash = $this->validate_param('ID', 'get', validador::TIPO_ALPHANUM);
 				}
-				if(!isset($this->subcomision_id)){
-					$this->subcomision_id = $this->validate_param('SUBCO', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true));				
-				}
 				
 				if(!isset($this->tipo_clase)){
 					$this->tipo_clase = $this->validate_param('TIPO', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true));					
 				}
 									
                 $parametros = array('comision' => $this->comision_id,
-                                                        'subcomision'=> $this->subcomision_id,
                                                         'fecha' => str_replace("/", "-", $filtros['fecha']),
                                                         'cantidad' => $filtros['cantidad'],
                                                         'tipo' => $filtros['tipo'],
@@ -152,14 +155,14 @@ class controlador extends \siu\operaciones\asistencias\controlador
             return $datos_planilla;
         }        
 
-	function get_clase_encabezado()
+	function get_clase_encabezado_econ()
 	{
-		return $this->modelo()->info__clase_cabecera($this->clase_id, $this->comision_id, $this->filas);
+            return $this->modelo()->info__clase_cabecera($this->clase_id, $this->materia, $this->dia_semana, $this->hs_comienzo_clase, $this->filas);
 	}
 	
 	function get_clase_detalle()
 	{
-		return $this->modelo()->info__clase_detalle($this->clase_id, $this->comision_id, $this->filas);
+            return $this->modelo()->info__clase_detalle($this->clase_id, $this->materia, $this->dia_semana, $this->hs_comienzo_clase, $this->filas);
 	}
 	
 
@@ -189,16 +192,16 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	}
         
         
-	function get_filtros()
-	{
-           $filtros = null;
-           $form = $this->get_form();
-            if (kernel::request()->isPost()) {
-                $form->procesar();
-                $filtros = $form->get_datos();                    
-            }
-            return $filtros;
-	}
+//	function get_filtros()
+//	{
+//           $filtros = null;
+//           $form = $this->get_form();
+//            if (kernel::request()->isPost()) {
+//                $form->procesar();
+//                $filtros = $form->get_datos();                    
+//            }
+//            return $filtros;
+//	}
         
 /* GENERADOR PDF */
        
@@ -243,6 +246,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	}
 
 	public function get_encabezado(){
+            kernel::log()->add_debug('get_encabezado', $this);
 		if (!empty($this->datos_consulta)){
                         $materia = current($this->datos_consulta);
 			$encabezado = array();
@@ -309,11 +313,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
 		$pdf->agregar_texto("Período Lectivo: ".$datos_encabezado['PERIODO_LECTIVO']);
 		$pdf->agregar_texto("Materia: (".$datos_encabezado['MATERIA'].") - ".$datos_encabezado['MATERIA_NOMBRE'] );
 		$pdf->agregar_texto("Comisión: (".$datos_encabezado['COMISION'].") - ".$datos_encabezado['COMISION_NOMBRE'] );
-                if(!empty($datos_encabezado['SUBCOMISION'])){
-                    $pdf->agregar_texto("Subcomisión: (".$datos_encabezado['SUBCOMISION'].") - ".$datos_encabezado['SUB_NOMBRE'] );                   
-                }  else {
-                    $pdf->agregar_texto("Subcomisión: -");                   
-                };
                 if(!empty($datos_encabezado['TURNO'])){
                     $pdf->agregar_texto("Turno: ".kernel::traductor()->trans('asistencias.turno_'.$datos_encabezado['TURNO']));  
                 }  else {
@@ -397,7 +396,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	}
 	
 	/* FILTROS PERFIL BEDELIA*/
-
+/*
 	function accion__filtrar(){
 		$filtros = array();
 		$filtros['materia'] = $this->validate_param('filtro_materia', 'get', validador::TIPO_ALPHANUM, array('allowempty' => true, 'default' => ''));
@@ -421,7 +420,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
 		$pagelet->set_filtros($filtros);
 		kernel::renderer()->add($pagelet);
 	}
-
+*/
+        /*
 	private function get_per_lec_by_id($id){
 		$pl = catalogo::consultar('unidad_academica', 'periodos_lectivos');
 		foreach($pl as $periodo){
@@ -431,6 +431,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
 		}
 		return "";
 	}
+         * 
+         */
 
     function decodificar_materia($materia_hash) {
         $datos = catalogo::consultar('unidad_academica', 'materias', array('term' => ""));

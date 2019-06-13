@@ -4,7 +4,10 @@
 {% if this.data.clase_detalle %}
     <form class='form-renglones' action='{{ this.data.url_guardar }}' method='post'>
 	<input type="hidden" name="clase[ID]" value="{{ this.data.clase_id }}">
-	<input type="hidden" name="clase[COMISION]" value="{{ this.data.comision }}">
+        <input type="hidden" name="clase[MATERIA]" value="{{this.data.materia}}">
+	<input type="hidden" name="clase[FECHA]" value="{{ this.data.fecha }}">
+        <input type="hidden" name="clase[DIA_SEMANA]" value="{{this.data.dia_semana}}">
+        <input type="hidden" name="clase[HS_COMIENZO_CLASE]" value="{{this.data.hs_comienzo_clase}}">    
 	<input type="hidden" name="clase[FILAS]" value="{{ this.data.filas }}">
 	{% for alumno in this.data.clase_detalle %}
 	{% set ausente = (alumno.INASISTENCIA > 0) %}
@@ -22,6 +25,8 @@
 		<div class='info pull-right'>
 			<div>{{ alumno.NOMBRE }}</div>
 			<div>{{ alumno.LEGAJO }}</div>
+                        <div>{{ alumno.COMISION_NOMBRE }}</div>
+                        <div>{{_self.get_calidad_insc_descripcion(alumno.CALIDAD_INSC)}}</div>
 		</div>
 	</div>
 	{% endfor %}
@@ -32,3 +37,9 @@
 {% endif %}
 
 {% endblock %}
+    
+{% macro get_calidad_insc_descripcion(calidad_insc) %}
+{% if calidad_insc == 'P' %}{{'Promoción'}}{% endif %}
+{% if calidad_insc == 'R' %}{{'Regular'}}{% endif %}
+{% if calidad_insc == 'L' %}{{'Libre'}}{% endif %}
+{% endmacro %}

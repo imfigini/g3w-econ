@@ -1,57 +1,6 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
 
-	{% if this.perfil_activo == "BED"%}
-	<div id="filtros" class="well">
-		<form action="{{this.data.url_form_filtro}}" method="get" id="filtro_form">
-		{% set datos_filtros = this.get_datos_filtros() %}
-		<table summary="Filtros">
-            <tr><th colspan="4" class="pull-left" id="filtros_h"><h3>Filtros</h3></th></tr>
-			<tr>
-				<td scope="col" headers="filtros_h">
-					{% set filtros = this.get_filtros %}
-					<label for="filtro_per_lectivo">Per&iacute;odo lectivo: </label>
-					<select id="filtro_per_lectivo" name="filtro_per_lectivo">
-						<option value="">Todos</option>				
-						{% for clave, valor in datos_filtros.per_lec %}
-						<option value="{{ clave }}" {% if filtros['per_lect'] and filtros['per_lect'] == valor %}selected="selected"{% endif %}>{{ valor }}</option>
-						{% endfor %}
-					</select>
-				</td>
-				<td scope="col" headers="filtros_h">
-                    {% if filtros['materia'] %}
-                        {% set materia = this.get_materia(filtros['materia']) %}
-                        {% set materia_nombre = attribute(materia, 'LABEL') %}
-                        {% set materia_hash = attribute(materia, '_ID_') %}
-                    {% else %}
-                        {% set materia_nombre = 'Todas' %}
-                        {% set materia_hash = '' %}
-                    {% endif %}
-					<label for="filtro_nombre_materia">Nombre de la materia: </label>				
-					<input style="width: 250px;" type="text" id="filtro_nombre_materia" name="filtro_nombre_materia" value="{{ materia_nombre }}" />
-					<input type="hidden" id="filtro_materia" name="filtro_materia" value="{{ materia_hash }}" />
-				</td>
-				<td scope="col" headers="filtros_h">
-                    {% if filtros['docente'] %}
-                        {% set docente = this.get_docente(filtros['docente']) %}
-                        {% set docente_nombre = attribute(docente, 'LABEL') %}
-                        {% set docente_hash = attribute(docente, '_ID_') %}
-                    {% else %}
-                        {% set docente_nombre = 'Todos' %}
-                        {% set docente_hash = '' %}
-                    {% endif %}
-					<label for="filtro_docente">Docente: </label>				
-					<input style="width: 250px;" type="text" id="filtro_docente" name="filtro_docente" value="{{ docente_nombre }}" />
-					<input type="hidden" id="filtro_docente_legajo" name="filtro_docente_legajo" value="{{ docente_hash }}" />
-				</td>
-				<td scope="col" style="padding-top: 14px;" headers="filtros_h">
-					<input type="submit" id="filtro_boton" name="filtro_boton" value="Filtrar" class="btn" />
-				</td>
-			</tr>
-		</table>
-		</form>
-	</div>
-	{% endif %}
 {% if this.data.datos%}
 <button aria-live="polite" class="btn btn-small" id="js-toggle-all" data-toggle-texto="{{'mostrar_informacion_clase_todo'|trans|capitalize}}">{{'esconder_informacion_clase_todo'|trans|capitalize}}</button>
 
@@ -60,31 +9,34 @@
 	<li class='materia'>
 	    <div class='materia-nombre js-materia-cabecera' tabindex='0'>{{ materia.NOMBRE }} ({{ materia.MATERIA }})</div>
 		<div class="js-materia-contenido">
-			{% for comision in materia.COMISIONES %}
-			<ul class='lista-comisiones' tabindex='0'>
-				<li id='c_{{ comision.ID }}'
-					data-comision-id='{{ comision.ID }}' 
-					class='comision'
+                    {% for dia_clase in materia.DIAS_CLASE %}	
+                        {% for clase in dia_clase.CLASE %}
+                                <ul class='lista-comisiones' tabindex='0'>
+{#                                    {{ clase.ID }}#}
+                                    <li id='{{ clase.ID }}'
+                                        data-clase-id='{{ clase.ID }}' 
+                                        class='clase'
+                                    >
                                         
-				>
-				<div class='comision-nombre clearfix'>
-					<strong>Comisi&oacute;n:</strong> {{ comision.COMISION }} {{ comision.NOMBRE }} - <strong>Per&iacute;odo Lectivo:</strong> {{comision.PERIODO_LECTIVO}} - <strong>Turno:</strong> {{comision.TURNO}} - <strong>Inscriptos:</strong> {{ comision.CANT_INSCRIPTOS }} {{ _self.boton_crear(true,comision.ID) }} {{ _self.boton_libres(comision.URL_LIBRES, comision.CANT_LIBRES) }} {{ _self.boton_planilla(comision.URL_PLANILLA, comision.CANT_INSCRIPTOS) }} {{ _self.boton_subco(comision.CNT_SUBCOMISIONES, comision.ID) }}
-				</div>		
-					<div class= 'js-subcomisiones-comision' style='display: none;' aria-live="assertive" id="{{comision.ID}}" >
-						{#resultado del ajax#}
-						<div class='js-subcomisiones'>
-						</div>
-					</div>
-					<div class= 'js-clases-comision' style='display: none;' aria-live="assertive" id="{{comision.ID}}" >
-						{#resultado del ajax#}
-						<div class='js-clases-resumen' >
-						</div>
-						<div class='js-clases-completo' >
-						</div>
-					</div>
-				</li>
-			</ul>
-			{% endfor %}
+                                        <input type="hidden" id="materia_{{clase.ID}}" value="{{materia.MATERIA}}">
+                                        <input type="hidden" id="dia_{{clase.ID}}" value="{{dia_clase.DIA}}">
+                                        <input type="hidden" id="hs_{{clase.ID}}" value="{{clase.HS_COMIENZO}}">     
+                                        <div class='comision-nombre clearfix'>
+                                                <strong>Día:</strong> {{ dia_clase.DIA_NOMBRE }} - <strong>Horario:</strong> {{ clase.HS_COMIENZO }} a {{ clase.HS_FINALIZ }} - <strong>Per&iacute;odo Lectivo:</strong> {{ clase.PERIODO_LECTIVO}} - <strong>Cant. alumnos:</strong> {{ clase.CANT_INSCRIPTOS }} 
+                                                {{ _self.boton_crear(true,clase.ID) }} {{ _self.boton_libres(comision.URL_LIBRES, comision.CANT_LIBRES) }} {{ _self.boton_planilla(comision.URL_PLANILLA, clase.CANT_INSCRIPTOS) }}
+                                        </div>		
+                                        <div class= 'js-clases-comision' style='display: none;' aria-live="assertive" id="{{clase.ID}}" >
+                                                {#resultado del ajax#}
+                                                <div class='js-clases-resumen' >
+                                                </div>
+                                                <div class='js-clases-completo' >
+                                                </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            {% endfor %}
+                        {% endfor %}
 		</div>
 	</li>
     {% endfor %}
@@ -102,14 +54,10 @@
     {% endif %}
 {% endmacro %}
 	
-{% macro boton_subco(cant_subco,controls_id) %}
-	<button aria-controls="{{controls_id}}" class='subco btn btn-mini pull-right' {% if cant_subco <= 0 %} disabled="disabled"{% endif %}>{{ "asistencias.mostrar_subco"|trans|capitalize }}</button>
-{% endmacro %}
-	
 {% macro boton_libres(url_libres, cantidad) %}
     <button data-link="{{url_libres}}" class="btn btn-mini alumnos_libres pull-right"{% if cantidad <= 0 %} disabled="disabled"{% endif %}>{{ "asistencias.alumnos_libres"|trans|capitalize }}{% if cantidad > 0 %} <strong>({{cantidad}})</strong>{% endif %}</button>
 {% endmacro %}
 	
 {% macro boton_planilla(url_planilla, inscriptos) %}
-    <button data-link="{{url_planilla}}" class="btn btn-mini alumnos_libres pull-right"{% if inscriptos <= 0 %} disabled="disabled"{% endif %}>{{ "asistencias.imprimir_planilla"|trans|capitalize }}</button>
+    <button data-link="{{url_planilla}}" class="btn btn-mini alumnos_libres pull-right"{% if inscriptos <= 0 %} disabled="disabled"{% endif %}>{#PLANILLA#} {{ "asistencias.imprimir_planilla"|trans|capitalize }}</button>
 {% endmacro %}
