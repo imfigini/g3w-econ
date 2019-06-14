@@ -32,8 +32,12 @@ class pagelet_edicion_asistencias extends \siu\operaciones\asistencias\pagelet_e
 	{
 		// se pide al controlador para hacer validación con los datos enviados al guardar
 		$detalle = $this->controlador->get_clase_detalle();
-		
 		return $detalle;
+	}
+        
+        protected function get_motivos_inasistencia()
+	{
+		return $this->modelo()->get_motivos_inasistencia();
 	}
 
 	protected function get_id_clase()
@@ -55,6 +59,9 @@ class pagelet_edicion_asistencias extends \siu\operaciones\asistencias\pagelet_e
     {
 		$this->data = array();
 		$this->data['clase_detalle'] = $this->get_clase_detalle();
+                $this->data['motivos_inasist'] = $this->get_motivos_inasistencia();
+                kernel::log()->add_debug('motivos_inasist', $this->data);
+                
 		$this->data['clase_id'] = $this->controlador->clase_id;
                 $this->data['materia'] = $this->controlador->materia;
                 $this->data['dia_semana'] = $this->controlador->dia_semana;

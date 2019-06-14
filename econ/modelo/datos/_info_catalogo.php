@@ -24,7 +24,7 @@ class _info_catalogo
     1 => 'comision',
   ),
   'cache' => 'no',
-  'filas' => 'n',
+  'filas' => '1',
 );
 	}
 
@@ -90,6 +90,27 @@ class _info_catalogo
 );
 	}
 
+	static function carga_asistencias__get_justificacion_inasist()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_motivos_inasistencia()
+	{
+		return array (
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function carga_asistencias__get_planilla()
 	{
 		return array (
@@ -126,6 +147,18 @@ class _info_catalogo
 );
 	}
 
+	static function carga_asistencias__get_tipo_inasistencia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'motivo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_asistencias__guardar()
 	{
 		return array (
@@ -136,7 +169,12 @@ class _info_catalogo
     2 => 'legajo',
     3 => 'comision',
     4 => 'clase',
-    5 => 'cantidad',
+    5 => 'cant_inasist',
+    6 => 'motivo',
+  ),
+  'param_null' => 
+  array (
+    0 => 'motivo',
   ),
   'cache' => 'no',
   'filas' => '1',

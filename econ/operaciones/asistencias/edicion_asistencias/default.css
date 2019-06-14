@@ -14,7 +14,7 @@
 #edicion_asistencias .box-asistencia {
 	float: left;
 	width: 260px;
-	height: 90px;
+	height: 111px;
 	padding: 5px;
 	margin: 5px;
 	cursor: pointer;
@@ -31,10 +31,31 @@
 
 #edicion_asistencias .check-asistencia {
 	position: absolute;
-	top: 78px;
+	top: 77px;
 	left: 202px;
 }
 #edicion_asistencias .ausente {
 	background-color: #da4f49;
 	color: white;
+}
+
+#edicion_asistencias .asistio {
+	background-color: #1c7c5c;
+	color: white;
+}
+
+#edicion_asistencias .select-inasist {
+	position: absolute;
+	top: 95px;
+	right: 5px;
+        font-size: small;
+}
+
+#edicion_asistencias .select-inasist select {
+    width: 161px;
+    padding: 0px 6px;
+    margin-bottom: 0px;
+    font-size: 12px;
+    line-height: 12px;
+    height: 20px;
 }

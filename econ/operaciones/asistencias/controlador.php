@@ -40,8 +40,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
                 case 'mostrar_clases': 
                 case 'filtrar': 
                         return 'vista_materias';
-                case 'libres':
-                        return 'vista_libres';
                 case 'planilla':
                 case 'generar_pdf':
                         return 'vista_planilla';
@@ -92,28 +90,31 @@ class controlador extends \siu\operaciones\asistencias\controlador
             else 
             {
 			$alumnos = $_POST['alumnos'];
-                        //print_r($alumnos);
+                        //kernel::log()->add_debug('GRABAR_alumnos', $alumnos);
                         
 			foreach ($alumnos as $key => $alumno) {
-				$alumnos[$key]['PRESENTE'] = ($alumno['PRESENTE'] == 'on') ? 0 : 1;
+                            
+                            $alumnos[$key]['MOTIVO'] = ($alumno['PRESENTE'] > 0) ? $alumno['PRESENTE'] : null;
+                            $alumnos[$key]['CANT_INASIST'] = ($alumno['PRESENTE'] == 0) ? 0 : 1;
 			}
+                        kernel::log()->add_debug('GRABAR_alumnos2', $alumnos);
 			
 //			kernel::log()->add_debug('accion__editar_CLASE', $_POST);
 //			kernel::log()->add_debug('accion__editar_ALUMNOS', $alumnos);
 			
 //			$this->modelo()->grabar($_POST['clase']['ID'], $_POST['clase']['COMISION'], $_POST['clase']['FILAS'], $alumnos);
 			//$seleccion_clase, $materia, $dia_semana, $fecha, $hs_comienzo_clase, $alumnos
-                        $this->modelo()->grabar($_POST['clase']['ID'], $_POST['clase']['MATERIA'], $_POST['clase']['DIA_SEMANA'], $_POST['clase']['FECHA'], $_POST['clase']['HS_COMIENZO_CLASE'], $alumnos);                        
+                        $this->modelo()->grabar($_POST['clase']['ID'], $_POST['clase']['MATERIA'], $_POST['clase']['DIA_SEMANA'], $_POST['clase']['HS_COMIENZO_CLASE'], $alumnos);                        
                         
 			
 			$this->render_ajax(kernel::traductor()->trans('asistencia_guardado_exitoso'));
 		}
 	}
 	
-	function accion__libres()
-	{
-		$this->comision_id = $this->validate_param('ID', 'get', validador::TIPO_ALPHANUM);
-	}
+//	function accion__libres()
+//	{
+//		$this->comision_id = $this->validate_param('ID', 'get', validador::TIPO_ALPHANUM);
+//	}
 	
 	function accion__planilla()
 	{
@@ -162,10 +163,16 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	
 	function get_clase_detalle()
 	{
-            return $this->modelo()->info__clase_detalle($this->clase_id, $this->materia, $this->dia_semana, $this->hs_comienzo_clase, $this->filas);
+            $datos = $this->modelo()->info__clase_detalle($this->clase_id, $this->materia, $this->dia_semana, $this->hs_comienzo_clase, $this->filas);
+            kernel::log()->add_debug('get_clase_detalle_datos', $datos);
+            return $datos;
 	}
 	
-
+//	function get_motivos_inasistencia()
+//	{
+//            return $this->modelo()->get_motivos_inasistencia();
+//	}
+        
 	/**
 	 * @return guarani_form
 	 */
@@ -263,8 +270,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
 			$encabezado['CATEDRA'] = $materia['CATEDRA'];
 			$encabezado['DOCENTES'] = $materia['DOCENTES'];
 			$encabezado['AULA'] = $materia['AULA'];
-			$encabezado['SUBCOMISION'] = $materia['SUBCOMISION'];
-			$encabezado['SUB_NOMBRE'] = $materia['SUB_NOMBRE'];
+//			$encabezado['SUBCOMISION'] = $materia['SUBCOMISION'];
+//			$encabezado['SUB_NOMBRE'] = $materia['SUB_NOMBRE'];
 			$encabezado['FECHA1'] = $materia['FECHAS'][1];
 			$encabezado['FECHA2'] = $materia['FECHAS'][2];
 			$encabezado['FECHA3'] = $materia['FECHAS'][3];
@@ -376,24 +383,24 @@ class controlador extends \siu\operaciones\asistencias\controlador
 		return "planilla";
 	}	
         
-        public function decodificar_comision(){
-		$this->comision_hash = $this->validate_param('ID', 'get', validador::TIPO_ALPHANUM);
-		$perfil_activo = kernel::persona()->get_id_perfil_activo();
-		if ($perfil_activo == "BED")
-		{
-			$comisiones = $this->modelo()->get_lista_comisiones_filtro($this->filtros);
-		} else 
-		{
-			$comisiones = $this->modelo()->get_lista_comisiones();
-		}
-
-		$rs	= null;
-		foreach ($comisiones as $comision) {
-			if ($comision[catalogo::id] == $this->comision_hash){
-				$this->comision_id = $comision['COMISION'];
-			}
-		}
-	}
+//        public function decodificar_comision(){
+//		$this->comision_hash = $this->validate_param('ID', 'get', validador::TIPO_ALPHANUM);
+//		$perfil_activo = kernel::persona()->get_id_perfil_activo();
+//		if ($perfil_activo == "BED")
+//		{
+//			$comisiones = $this->modelo()->get_lista_comisiones_filtro($this->filtros);
+//		} else 
+//		{
+//			$comisiones = $this->modelo()->get_lista_comisiones();
+//		}
+//
+//		$rs	= null;
+//		foreach ($comisiones as $comision) {
+//			if ($comision[catalogo::id] == $this->comision_hash){
+//				$this->comision_id = $comision['COMISION'];
+//			}
+//		}
+//	}
 	
 	/* FILTROS PERFIL BEDELIA*/
 /*
@@ -434,52 +441,52 @@ class controlador extends \siu\operaciones\asistencias\controlador
          * 
          */
 
-    function decodificar_materia($materia_hash) {
-        $datos = catalogo::consultar('unidad_academica', 'materias', array('term' => ""));
-        if (!empty($datos)) {
-            foreach($datos as $value){
-                if ($value['id'] == $materia_hash){
-                    return $value['materia'];
-                }
-            }
-        }
-        return "";
-    }
-
-    function decodificar_docente($docente_hash) {
-        $datos = catalogo::consultar('unidad_academica', 'docentes', array('term' => ""));
-        if (!empty($datos)) {
-            foreach($datos as $value){
-                if ($value['id'] == $docente_hash){
-                    return $value['legajo'];
-                }
-            }
-        }
-        return "";
-    }
+//    function decodificar_materia($materia_hash) {
+//        $datos = catalogo::consultar('unidad_academica', 'materias', array('term' => ""));
+//        if (!empty($datos)) {
+//            foreach($datos as $value){
+//                if ($value['id'] == $materia_hash){
+//                    return $value['materia'];
+//                }
+//            }
+//        }
+//        return "";
+//    }
+//
+//    function decodificar_docente($docente_hash) {
+//        $datos = catalogo::consultar('unidad_academica', 'docentes', array('term' => ""));
+//        if (!empty($datos)) {
+//            foreach($datos as $value){
+//                if ($value['id'] == $docente_hash){
+//                    return $value['legajo'];
+//                }
+//            }
+//        }
+//        return "";
+//    }
 	
-	function accion__buscar_materia() {
-		$term = $this->validate_param('term', 'get', validador::TIPO_TEXTO);
-		
-		$term = utf8_decode($term);
-		$datos = array();
-		if (!is_null($term)){
-			$datos = catalogo::consultar('unidad_academica', 'materias', array('term' => $term));
-		}
-		
-		$this->render_raw_json($datos);
-	}	
-	
-	function accion__buscar_docente() {
-		$term = $this->validate_param('term', 'get', validador::TIPO_TEXTO);
-		
-		$term = utf8_decode($term);
-		$datos = array();
-		if (!is_null($term)){
-			$datos = catalogo::consultar('unidad_academica', 'docentes', array('term' => $term));
-		}
-		
-		$this->render_raw_json($datos);
-	}	
+//	function accion__buscar_materia() {
+//		$term = $this->validate_param('term', 'get', validador::TIPO_TEXTO);
+//		
+//		$term = utf8_decode($term);
+//		$datos = array();
+//		if (!is_null($term)){
+//			$datos = catalogo::consultar('unidad_academica', 'materias', array('term' => $term));
+//		}
+//		
+//		$this->render_raw_json($datos);
+//	}	
+//	
+//	function accion__buscar_docente() {
+//		$term = $this->validate_param('term', 'get', validador::TIPO_TEXTO);
+//		
+//		$term = utf8_decode($term);
+//		$datos = array();
+//		if (!is_null($term)){
+//			$datos = catalogo::consultar('unidad_academica', 'docentes', array('term' => $term));
+//		}
+//		
+//		$this->render_raw_json($datos);
+//	}	
 }
 ?>

@@ -129,40 +129,6 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
     }
 
     
-
-//    /**
-//    * parametros: _ua, legajo, materia
-//    * cache: no
-//    * filas: n
-//    */
-//    function listado_dias_clase_docente($parametros)
-//    {
-//        $sql = "SELECT	DISTINCT sga_asignaciones.dia_semana, 
-//                        CASE    WHEN sga_asignaciones.dia_semana = 1 then 'Domingo'
-//                                WHEN sga_asignaciones.dia_semana = 2 then 'Lunes'
-//                                WHEN sga_asignaciones.dia_semana = 3 then 'Martes'
-//                                WHEN sga_asignaciones.dia_semana = 4 then 'Miércoles'
-//                                WHEN sga_asignaciones.dia_semana = 5 then 'Jueves'
-//                                WHEN sga_asignaciones.dia_semana = 6 then 'Viernes'
-//                                WHEN sga_asignaciones.dia_semana = 7 then 'Sábado'  
-//                        END AS dia_nombre,
-//                        sga_asignaciones.hs_comienzo_clase, 
-//                        sga_asignaciones.hs_finaliz_clase
-//					
-//                FROM	sga_docentes_com
-//                JOIN	sga_comisiones		ON (sga_comisiones.comision = sga_docentes_com.comision)
-//                JOIN 	sga_asign_clases 	ON (sga_asign_clases.comision = sga_comisiones.comision)			
-//                JOIN 	sga_asignaciones	ON (sga_asignaciones.asignacion = sga_asign_clases.asignacion)
-//                JOIN	sga_periodos_lect	ON (sga_periodos_lect.anio_academico = sga_comisiones.anio_academico
-//                                                                        AND sga_periodos_lect.periodo_lectivo = sga_comisiones.periodo_lectivo)
-//                WHERE	sga_docentes_com.legajo =  {$parametros['legajo']}
-//                        AND sga_comisiones.materia = {$parametros['materia']}
-//                        AND sga_periodos_lect.fecha_inactivacion >= TODAY
-//                ORDER BY sga_asignaciones.dia_semana, sga_asignaciones.hs_comienzo_clase ";
-//				
-//        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//    }
-
     /**
     * parametros: materia, fecha_clase, hs_comienzo_clase
     * cache: no
@@ -203,10 +169,13 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
             $nuevo[$id]['COMISION'] = $dato[4];
             $nuevo[$id]['COMISION_NOMBRE'] = $dato[5];
             $calidad_insc = $this->get_calidad_inscripcion(array('legajo'=>$nuevo[$id]['LEGAJO'], 'comision'=>$nuevo[$id]['COMISION']));
-            $nuevo[$id]['CALIDAD_INSC'] = $calidad_insc[0]['CALIDAD_INSC'];
+            $nuevo[$id]['CALIDAD_INSC'] = $calidad_insc['CALIDAD_INSC'];
             $nuevo[$id]['CLASE'] = $dato[10];
             $nuevo[$id]['NOMBRE'] = "{$dato[17]}, {$dato[18]}"; 
             $nuevo[$id]['INASISTENCIA'] = $dato[19]; 
+            $nuevo[$id]['MOTIVO_INASIST'] = $dato[20]; 
+            $motivo_justific = $this->get_justificacion_inasist(array('legajo'=>$nuevo[$id]['LEGAJO'], 'clase'=>$nuevo[$id]['CLASE']));
+            $nuevo[$id]['MOTIVO_JUSTIFIC'] = $motivo_justific['MOTIVO_JUSTIFIC'];
             $nuevo[$id]['ID_IMAGEN'] = $dato[21]; 
             if (!empty($nuevo[$id]['ID_IMAGEN'])) {
                     $nuevo[$id]['URL_IMAGEN'] = alumno_foto::url_imagen($nuevo[$id]['ID_IMAGEN']);
@@ -224,35 +193,100 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
     /**
     * parametros: legajo, comision
     * cache: no
-    * filas: n
+    * filas: 1
     */
-    function get_calidad_inscripcion($parametros)
+    private function get_calidad_inscripcion($parametros)
     {
         $sql = "SELECT calidad_insc 
                     FROM sga_insc_cursadas 
                     WHERE comision = '{$parametros['comision']}'
                     AND legajo = '{$parametros['legajo']}' ";
-        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
     }
     
     
     /**
-    * parametros: _ua, carrera, legajo, comision, clase, cantidad
+    * parametros: _ua, carrera, legajo, comision, clase, cant_inasist, motivo
+    * param_null: motivo
     * cache: no
     * filas: 1
     */
    function guardar($parametros) 
    {
-   $sql = "EXECUTE PROCEDURE sp_u_asisaluclas(" .
-                             $parametros["_ua"] . ",".
-                             $parametros["carrera"] . "," .
-                             $parametros["legajo"] . "," .
-                             $parametros["comision"] . "," .
-                             $parametros["clase"] . "," .
-                             $parametros["cantidad"] . ",".
-                             "NULL);";
-           $datos = kernel::db()->consultar_fila($sql, db::FETCH_NUM);
-           return $datos;                                                         
+        if (!isset($parametros["motivo"]))
+        {
+            $sql = "EXECUTE PROCEDURE sp_u_asisaluclas(" .
+                                 $parametros["_ua"] . ",".
+                                 $parametros["carrera"] . "," .
+                                 $parametros["legajo"] . "," .
+                                 $parametros["comision"] . "," .
+                                 $parametros["clase"] . "," .
+                                 $parametros["cant_inasist"] . ",".
+                                 "NULL);";
+        }
+        else
+        {
+            $tipo = $this->get_tipo_inasistencia($parametros);
+            if ($tipo['TIPO'] == 1) //Justificada
+            {
+                $sql = "EXECUTE PROCEDURE sp_u_justsaluclas(" .
+                                 $parametros["_ua"] . ",".
+                                 $parametros["carrera"] . "," .
+                                 $parametros["legajo"] . "," .
+                                 $parametros["comision"] . "," .
+                                 $parametros["clase"] . "," .
+                                 $parametros["cant_inasist"] . ",".
+                                 $parametros["motivo"] .");";   
+            }
+            else    //Injustificada
+            {
+                $sql = "EXECUTE PROCEDURE sp_u_asisaluclas(" .
+                                 $parametros["_ua"] . ",".
+                                 $parametros["carrera"] . "," .
+                                 $parametros["legajo"] . "," .
+                                 $parametros["comision"] . "," .
+                                 $parametros["clase"] . "," .
+                                 $parametros["cant_inasist"] . ",".
+                                 $parametros["motivo"] .");";
+            }
+        }
+        return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
     }	
+    
+    /**
+     * parametros: 
+     * cache: no
+     * filas: n
+     */
+    function get_motivos_inasistencia($parametros)
+    {
+        $sql = "SELECT motivo, descripcion, tipo FROM sga_inasis_motivos";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);        
+    }
+    
+    /**
+     * parametros: motivo
+     * cache: no
+     * filas: 1
+     */
+    function get_tipo_inasistencia($parametros)
+    {
+        $motivo = $parametros['motivo'];
+        $sql = "SELECT tipo FROM sga_inasis_motivos WHERE motivo = $motivo";
+        return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);        
+    }
+    
+    /**
+     * parametros: legajo, clase
+     * cache: no
+     * filas: 1
+     */
+    private function get_justificacion_inasist($parametros)
+    {
+        $legajo = $parametros['legajo'];
+        $clase = $parametros['clase'];
+        $sql = "SELECT motivo_justific FROM sga_inasistencias WHERE clase = '$clase' AND legajo = '$legajo'";
+        return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);        
+    }
 }
 ?>

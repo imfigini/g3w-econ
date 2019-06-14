@@ -12,12 +12,14 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 			
 			$(id).find('.box-asistencia').click(function() {
 				var box = $(this);
-				if (box.hasClass('ausente')) {
-					box.find('.check-asistencia input').prop('checked',true);
-					box.removeClass('ausente');
+                                console.log(box);
+                                console.log(box.find('.select-inasist select').val());
+                                if (box.find('.select-inasist select').val() == 0) {
+                                    box.removeClass('ausente');
+                                    box.addClass('asistio');
 				} else {
-					box.find('.check-asistencia input').prop('checked',false);
-					box.addClass('ausente');
+                                    box.addClass('ausente');
+                                    box.removeClass('asistio');
 				}
 			});
 			
