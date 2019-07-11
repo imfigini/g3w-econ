@@ -12,7 +12,10 @@ kernel.renderer.registrar_pagelet('planilla', function(info) {
 //                    $('#boton_pdf').hide();
                     $filtro = $('form').formulario();                
                     $("#boton_pdf").on('click', function(){
-                        var link = $(this).attr('href')+ '?ID=' +info.comision_hash+ '&cantidad=' +$('#formulario_filtro-cantidad').val()+ '&fecha=' +$('#formulario_filtro-fecha').val()+ '&tipo=' +$('#formulario_filtro-tipo').val()+ '&SUBCO=' + info.subcomision + '&TIPO=' + info.tipo_clase;
+                        console.log(info);
+                        var link = $(this).attr('href')+ '?comisiones='+info.comisiones
+                                                       + '&cantidad='+$('#formulario_filtro-cantidad').val() + '&fecha='+$('#formulario_filtro-fecha').val();
+                        console.log(link);
                         window.open(link);
 			return false;
                     });
@@ -23,7 +26,7 @@ kernel.renderer.registrar_pagelet('planilla', function(info) {
                     
                     $('#formulario_filtro').on('submit', function(){
                         var fecha_seleccionada = $filtro.find('#formulario_filtro-fecha').val();
-                        kernel.ajax.call($(this).attr('action')+ '?ID=' +info.comision_hash+ '&SUBCO=' + info.subcomision + '&TIPO=' + info.tipo_clase, {
+                        kernel.ajax.call($(this).attr('action')+ '?comisiones='+info.comisiones, {
                             data: $filtro.serialize(),
                             type: 'POST',
                             success: function(paquete) {

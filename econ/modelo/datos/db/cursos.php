@@ -653,7 +653,6 @@ class cursos
 //        print_r('<br>Parametros: ');
 //        print_r($parametros);
         $sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
-//        print_r($sql);
         $result['mensaje'] = util::ejecutar_procedure($sql);
         
         $sql = "SELECT descripcion FROM sga_eval_parc WHERE evaluacion = $evaluacion";
@@ -668,8 +667,6 @@ class cursos
                     WHERE comision = $comision 
                     AND evaluacion = $evaluacion";
             kernel::db()->ejecutar($sql);
-            
-            
             $result['mensaje'] = "Se dio de alta correctamente la evaluación $eval_descrip para la comisión $comision. ";
             return $result;
         }

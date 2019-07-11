@@ -7,36 +7,42 @@
 <ul class='lista' aria-labelledby="Materias">
     {% for materia in this.data.datos %}
 	<li class='materia'>
-	    <div class='materia-nombre js-materia-cabecera' tabindex='0'>{{ materia.NOMBRE }} ({{ materia.MATERIA }})</div>
+	    <div class='materia-nombre js-materia-cabecera' tabindex='0'>{{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})</div>
 		<div class="js-materia-contenido">
-                    {% for dia_clase in materia.DIAS_CLASE %}	
-                        {% for clase in dia_clase.CLASE %}
-                                <ul class='lista-comisiones' tabindex='0'>
-{#                                    {{ clase.ID }}#}
-                                    <li id='{{ clase.ID }}'
-                                        data-clase-id='{{ clase.ID }}' 
-                                        class='clase'
-                                    >
+                    {% for clase in materia.CLASES %}	
+                        <ul class='lista-comisiones' tabindex='0'>
+                            <li id='{{ clase.ID }}'
+                                data-clase-id='{{ clase.ID }}' 
+                                class='clase'
+                            >
+                                <input type="hidden" id="comisiones_{{clase.ID}}" value="{{clase.ID}}">
+                                <div class='comision-nombre clearfix'>
+                                    <strong>Comisiones:</strong> 
+                                    {% for comision in clase.COMISIONES %}	
+                                        {{ comision.COMISION_NOMBRE }} ({{ comision.COMISION }}) - 
+                                    {% endfor %}	
+                                    <strong>Per&iacute;odo Lectivo:</strong> {{ materia.PERIODO_LECTIVO}}
+                                    <br>
+                                    <strong>Día y hora:</strong>
+                                    {% for dia_clase in clase.DIAS_CLASE %}	
+                                        {{ dia_clase.DIA_NOMBRE}}: {{ dia_clase.HS_COMIENZO_CLASE}} a {{ dia_clase.HS_FINALIZ_CLASE }} - 
+                                    {% endfor %}
+                                    <strong>Cant. alumnos:</strong> {{ clase.CANT_INSCRIPTOS }} 
                                         
-                                        <input type="hidden" id="materia_{{clase.ID}}" value="{{materia.MATERIA}}">
-                                        <input type="hidden" id="dia_{{clase.ID}}" value="{{dia_clase.DIA}}">
-                                        <input type="hidden" id="hs_{{clase.ID}}" value="{{clase.HS_COMIENZO}}">     
-                                        <div class='comision-nombre clearfix'>
-                                                <strong>Día:</strong> {{ dia_clase.DIA_NOMBRE }} - <strong>Horario:</strong> {{ clase.HS_COMIENZO }} a {{ clase.HS_FINALIZ }} - <strong>Per&iacute;odo Lectivo:</strong> {{ clase.PERIODO_LECTIVO}} - <strong>Cant. alumnos:</strong> {{ clase.CANT_INSCRIPTOS }} 
-                                                {{ _self.boton_crear(true,clase.ID) }} {{ _self.boton_libres(comision.URL_LIBRES, comision.CANT_LIBRES) }} {{ _self.boton_planilla(comision.URL_PLANILLA, clase.CANT_INSCRIPTOS) }}
-                                        </div>		
-                                        <div class= 'js-clases-comision' style='display: none;' aria-live="assertive" id="{{clase.ID}}" >
-                                                {#resultado del ajax#}
-                                                <div class='js-clases-resumen' >
-                                                </div>
-                                                <div class='js-clases-completo' >
-                                                </div>
+                                        {{ _self.boton_crear(true,clase.ID) }} 
+                                        {{ _self.boton_planilla(clase.URL_PLANILLA, clase.CANT_INSCRIPTOS) }}
+                                        {{ _self.boton_resumen(clase.URL_RESUMEN, clase.CANT_INSCRIPTOS) }}
+                                </div>		
+                                <div class= 'js-clases-comision' style='display: none;' aria-live="assertive" id="{{clase.ID}}" >
+                                        {#resultado del ajax#}
+                                        <div class='js-clases-resumen' >
                                         </div>
-                                    </li>
-                                </ul>
-
-                            {% endfor %}
-                        {% endfor %}
+                                        <div class='js-clases-completo' >
+                                        </div>
+                                </div>
+                            </li>
+                        </ul>
+                    {% endfor %}
 		</div>
 	</li>
     {% endfor %}
@@ -54,10 +60,10 @@
     {% endif %}
 {% endmacro %}
 	
-{% macro boton_libres(url_libres, cantidad) %}
-    <button data-link="{{url_libres}}" class="btn btn-mini alumnos_libres pull-right"{% if cantidad <= 0 %} disabled="disabled"{% endif %}>{{ "asistencias.alumnos_libres"|trans|capitalize }}{% if cantidad > 0 %} <strong>({{cantidad}})</strong>{% endif %}</button>
-{% endmacro %}
-	
 {% macro boton_planilla(url_planilla, inscriptos) %}
-    <button data-link="{{url_planilla}}" class="btn btn-mini alumnos_libres pull-right"{% if inscriptos <= 0 %} disabled="disabled"{% endif %}>{#PLANILLA#} {{ "asistencias.imprimir_planilla"|trans|capitalize }}</button>
+    <button data-link="{{url_planilla}}" class="btn btn-mini planilla pull-right"{% if inscriptos <= 0 %} disabled="disabled"{% endif %}> {{ "asistencias.imprimir_planilla"|trans|capitalize }}</button>
+{% endmacro %}
+
+{% macro boton_resumen(url_resumen, inscriptos) %}
+    <button data-link="{{url_resumen}}" class="btn btn-mini resumen pull-right"{% if inscriptos <= 0 %} disabled="disabled"{% endif %}> {{ "resumen"|trans|capitalize }}</button>
 {% endmacro %}

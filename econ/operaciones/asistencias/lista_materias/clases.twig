@@ -52,11 +52,7 @@
 			</div>			
 
 			<div class="span5" style="text-align: right;">
-{#                            {{clase.__ID__}}
-                                <input type="hidden" id="materia" value="{{clase.MATERIA}}">
-                                <input type="hidden" id="fecha" value="{{clase.FECHA}}">
-                                <input type="hidden" id="hs" value="{{clase.HS_COMIENZO_CLASE}}">   
-#}				<a href='{{ clase.URL_EDITAR }}' class="btn btn-mini"><div class="icon-pencil"></div> {{ "asistencias"|trans |capitalize}}</a>
+				<a href='{{ clase.URL_EDITAR }}' class="btn btn-mini"><div class="icon-pencil"></div> {{ "asistencias"|trans |capitalize}}</a>
 			</div>
 		</div>
 	</li>

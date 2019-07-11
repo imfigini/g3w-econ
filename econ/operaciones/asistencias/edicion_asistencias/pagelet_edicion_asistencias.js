@@ -10,19 +10,32 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 				of: $('#js-info-mesa')
 			});
 			
-			$(id).find('.box-asistencia').click(function() {
+                        $(id).find('.box-asistencia').click(function() {
 				var box = $(this);
-                                console.log(box);
-                                console.log(box.find('.select-inasist select').val());
-                                if (box.find('.select-inasist select').val() == 0) {
-                                    box.removeClass('ausente');
-                                    box.addClass('asistio');
-				} else {
-                                    box.addClass('ausente');
-                                    box.removeClass('asistio');
+//                                console.log(box.parent());
+//                                console.log(box.parent().find('.box-justific'));
+				if (box.parent().hasClass('asistio')) {
+                                    box.find('.check-asistencia input').prop('checked',false);
+                                    box.parent().find('.box-justific').prop('disabled',true);
+                                    box.parent().find('.box-justific').removeClass('ocultar_select');
+                                    box.parent().find('.box-justific').addClass('mostrar_select');
+                                    $('#'+box.parent()[0].id + ' select' ).val(-1);
+                                    box.parent().removeClass('asistio');
+                                    box.parent().removeClass('ausente-justif');
+                                    box.parent().addClass('ausente');
+				} 
+                                else 
+                                {
+                                    box.find('.check-asistencia input').prop('checked',true);
+                                    box.parent().find('.box-justific').prop('disabled',false);
+                                    box.parent().find('.box-justific').addClass('ocultar_select');
+                                    box.parent().removeClass('ausente');
+                                    box.parent().removeClass('ausente-justif');
+                                    box.parent().addClass('asistio');
 				}
 			});
-			
+                        
+                        
 			$(id).find('.form-renglones').submit(function() {
 				var $form = $(this);
 				kernel.ajax.call($form.attr('action'), {
@@ -34,6 +47,24 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 				});
 				return false;
 			});
-        }
+        
     }
+    }
+    
+    
 })
+
+    function actualizar_background(objeto, id_div)
+    {
+        var div = document.getElementById(id_div);
+        if (objeto.value > 0)
+        {
+            div.classList.remove('ausente');    
+            div.classList.add('ausente-justif');
+        }
+        else
+        {
+            div.classList.remove('ausente-justif');    
+            div.classList.add('ausente');
+       }
+    }

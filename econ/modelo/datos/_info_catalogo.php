@@ -15,6 +15,30 @@ class _info_catalogo
 );
 	}
 
+	static function carga_asistencias__get_alumnos_inscriptos_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_asignac_com()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_asistencias__get_calidad_inscripcion()
 	{
 		return array (
@@ -25,6 +49,47 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_cant_inasistencias_justificadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_clase_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'fecha',
+    2 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_clases_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+    2 => 'filas',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
 );
 	}
 
@@ -40,37 +105,6 @@ class _info_catalogo
   'cache' => 'memoria',
   'cache_expiracion' => '3600',
   'filas' => 'n*',
-);
-	}
-
-	static function carga_asistencias__get_clases_especificas_docente()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-    1 => 'legajo',
-    2 => 'materia',
-    3 => 'dia_semana',
-    4 => 'hs_comienzo',
-    5 => 'filas',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
-	static function carga_asistencias__get_clases_materia_dia_hs()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'materia',
-    1 => 'fecha_clase',
-    2 => 'hs_comienzo_clase',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
 );
 	}
 
@@ -90,6 +124,97 @@ class _info_catalogo
 );
 	}
 
+	static function carga_asistencias__get_comisiones_en_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'materia',
+    2 => 'tipo_clase',
+    3 => 'dia_semana',
+    4 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_datos_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_datos_comision_enviada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'fecha',
+    2 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_docentes_com()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_horarios_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_inasistencias_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias__get_inscriptos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function carga_asistencias__get_justificacion_inasist()
 	{
 		return array (
@@ -103,11 +228,36 @@ class _info_catalogo
 );
 	}
 
+	static function carga_asistencias__get_materias_y_dias_clases()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function carga_asistencias__get_motivos_inasistencia()
 	{
 		return array (
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__get_nombre_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 
@@ -117,17 +267,16 @@ class _info_catalogo
   'parametros' => 
   array (
     0 => 'comision',
-    1 => 'subcomision',
-    2 => 'fecha',
-    3 => 'cantidad',
-    4 => 'tipo',
-    5 => 'tipo_clase',
+    1 => 'fecha',
+    2 => 'cantidad',
+    3 => 'tipo',
+    4 => 'tipo_clase',
   ),
   'param_null' => 
   array (
-    0 => 'subcomision',
-    1 => 'fecha',
-    2 => 'cantidad',
+    0 => 'fecha',
+    1 => 'cantidad',
+    2 => 'tipo',
     3 => 'tipo_clase',
   ),
   'cache' => 'no',
@@ -147,18 +296,6 @@ class _info_catalogo
 );
 	}
 
-	static function carga_asistencias__get_tipo_inasistencia()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'motivo',
-  ),
-  'cache' => 'no',
-  'filas' => '1',
-);
-	}
-
 	static function carga_asistencias__guardar()
 	{
 		return array (
@@ -170,11 +307,7 @@ class _info_catalogo
     3 => 'comision',
     4 => 'clase',
     5 => 'cant_inasist',
-    6 => 'motivo',
-  ),
-  'param_null' => 
-  array (
-    0 => 'motivo',
+    6 => 'justific',
   ),
   'cache' => 'no',
   'filas' => '1',
@@ -221,7 +354,177 @@ class _info_catalogo
 );
 	}
 
-	static function carga_asistencias__listado_dias_clases_docente()
+	static function carga_asistencias__recuperar_generar_asistencias()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias__tiene_cargadas_asistencias()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__clase_detalle()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__get_calidad_inscripcion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias_copia__get_clases_especificas_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'materia',
+    3 => 'dia_semana',
+    4 => 'hs_comienzo',
+    5 => 'filas',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__get_clases_materia_dia_hs()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'fecha_clase',
+    2 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__get_comisiones_materia_dia_hs()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'dia_semana',
+    2 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__get_justificacion_inasist()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'clase',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias_copia__get_motivos_inasistencia()
+	{
+		return array (
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__get_planilla()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'fecha',
+    2 => 'cantidad',
+    3 => 'tipo',
+    4 => 'tipo_clase',
+  ),
+  'param_null' => 
+  array (
+    0 => 'fecha',
+    1 => 'cantidad',
+    2 => 'tipo',
+    3 => 'tipo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__get_resumen()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'dia_semana',
+    2 => 'hs_comienzo_clase',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_asistencias_copia__guardar()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'comision',
+    4 => 'clase',
+    5 => 'cant_inasist',
+    6 => 'justific',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_asistencias_copia__listado_dias_clases_docente()
 	{
 		return array (
   'parametros' => 

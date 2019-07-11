@@ -13,41 +13,48 @@ class pagelet_lista_materias extends \siu\operaciones\asistencias\pagelet_lista_
         if (!isset($this->perfil_activo)) {
                 $this->perfil_activo = kernel::persona()->get_id_perfil_activo();
         }
-        $dias_clases = array();
-        if($this->perfil_activo == 'DOC') {	
-            $dias_clases = $this->controlador->modelo()->listado_dias_clases_docente();
-        }
-        
-        $datos	= array();
-        foreach ($dias_clases as $dc) 
-        {
-            $mat = $dc['MATERIA'];
-            $datos[$mat]['MATERIA'] = $mat;
-            $datos[$mat]['NOMBRE'] = $dc['MATERIA_NOMBRE'];
-
-            $dia_semana = $dc['DIA_SEMANA'];
-            $clase = $dc['HS_COMIENZO_CLASE'];
-            
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['DIA'] = $dia_semana;
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['DIA_NOMBRE'] = $dc['DIA_NOMBRE'];
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['HS_COMIENZO'] = $clase;
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['HS_FINALIZ'] = $dc['HS_FINALIZ_CLASE'];
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['ANIO_ACADEMICO'] = $dc['ANIO_ACADEMICO'];
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['PERIODO_LECTIVO'] = $dc['PERIODO_LECTIVO'];
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['ID'] = $dc[catalogo::id];
-            if (!isset($datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['CANT_INSCRIPTOS'])) {
-                $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['CANT_INSCRIPTOS'] = $dc['CANT_INSCRIPTOS'];
+        $clases = array();
+        if($this->perfil_activo == 'DOC') 
+        {	
+//            kernel::log()->add_debug('get_lista_clases: GET: '.__FILE__.' - '.__LINE__, $_GET);
+//            kernel::log()->add_debug('get_lista_clases: POST: '.__FILE__.' - '.__LINE__, $_POST);
+            $materias_dias = $this->controlador->modelo()->get_materias_y_dias_clases();
+            $resultado = array();
+            $comisiones_vistas = array();
+            foreach($materias_dias as $dato)
+            {
+                $materia = $dato['MATERIA'];
+                $comisiones = $this->controlador->modelo()->get_comisiones_en_clase($dato);
+                if (!in_array($comisiones[0], $comisiones_vistas) )
+                {
+                    $clase['COMISIONES'] = $comisiones;
+                    $clase['DIAS_CLASE'] = $this->controlador->modelo()->get_horarios_comision($comisiones[0]['COMISION']);
+                    $clase['CANT_INSCRIPTOS'] = 0;
+                    $clase['ID'] = '';
+                    foreach ($comisiones AS $comision)
+                    {
+                        $clase['CANT_INSCRIPTOS'] += $comision['CANT_INSCRIPTOS'];
+                        $clase['ID'] = $clase['ID'].'-'.$comision['COMISION'];
+                    }
+                    $clase['ID'] = substr($clase['ID'], 1, strlen($clase['ID']));
+                    $parametros = array('comisiones'=>$clase['ID']);
+//                    kernel::log()->add_debug('get_lista_clases: $clase: '.__FILE__.' - '.__LINE__, $clase);
+//                    kernel::log()->add_debug('get_lista_clases: $parametros: '.__FILE__.' - '.__LINE__, $parametros);
+                    $clase['URL_PLANILLA'] = kernel::vinculador()->crear('asistencias', 'planilla', $parametros);
+                    $clase['URL_RESUMEN'] = kernel::vinculador()->crear('asistencias', 'resumen', $parametros);
+                    $resultado[$materia]['MATERIA'] = $materia;
+                    $resultado[$materia]['MATERIA_NOMBRE'] = $dato['MATERIA_NOMBRE'];
+                    $resultado[$materia]['ANIO_ACADEMICO'] = $dato['ANIO_ACADEMICO'];
+                    $resultado[$materia]['PERIODO_LECTIVO'] = $dato['PERIODO_LECTIVO'];
+                    $resultado[$materia]['CLASES'][] = $clase;
+                }
+                $comisiones_vistas = array_merge($comisiones_vistas, $comisiones);
             }
-            else  {
-                $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['CANT_INSCRIPTOS'] += $dc['CANT_INSCRIPTOS'];
-            }
-//VER::::::::
-            $datos[$mat]['DIAS_CLASE'][$dia_semana]['CLASE'][$clase]['URL_PLANILLA'] = kernel::vinculador()->crear('asistencias', 'planilla', array('ID' => $dias_clases[catalogo::id], 'TIPO_CLASE'=>''));
         }
-        return $datos;
+        kernel::log()->add_debug('get_lista_clases: '.__FILE__.' - '.__LINE__, $resultado);
+        return $resultado;
     }
 	
-
     
     function prepare()
     {
@@ -61,7 +68,6 @@ class pagelet_lista_materias extends \siu\operaciones\asistencias\pagelet_lista_
 
         $this->perfil_activo = kernel::persona()->get_id_perfil_activo();
     }
-	
-	
+
 }
 ?>

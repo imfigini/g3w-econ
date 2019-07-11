@@ -107,6 +107,8 @@ class pagelet_filtro extends pagelet {
                 
                 //print_R($datos);
                 $this->data['datos'] = $datos;
+                //kernel::log()->add_debug('prepare ', $datos);
+                
                 $this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
                 
                 $this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);

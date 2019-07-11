@@ -338,6 +338,14 @@ class controlador extends controlador_g3w2
                 $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_INTEG'] = $eval[0];
                 $comision['EVAL_INTEG']['READONLY'] = $this->is_eval_readonly($eval[0]);
+                
+                $parametros['evaluacion'] = 4;
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
+                $comision['EVAL_PROMRECUP1'] = $eval[0];
+                
+                $parametros['evaluacion'] = 5;
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
+                $comision['EVAL_PROMRECUP2'] = $eval[0];
             }
             
             //REGULAR
@@ -524,6 +532,9 @@ class controlador extends controlador_g3w2
         $mensaje = array();
         $datos = $this->get_parametros_grabar_comision();
 
+        $materia = catalogo::consultar('cursos', 'get_materia', array('comision'=>$datos['comision']));
+        $ciclo = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materia));
+
         //Instancias PROMO
         if (isset($datos['fecha_hora_promo1']))
         {
@@ -538,6 +549,13 @@ class controlador extends controlador_g3w2
             $datos['fecha_hora'] = $datos['fecha_hora_promo2'];
             $datos['estado'] = $datos['opcion_promo2'];
             $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+            if (strpos($ciclo, 'P') !== false)
+            {
+                $datos_recup = $datos;
+                $datos_recup['evaluacion'] = 4;
+                $datos_recup['escala_notas'] = 3;
+                $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos_recup);
+            }
         }
         if (isset($datos['fecha_hora_recup']))
         {
@@ -552,6 +570,13 @@ class controlador extends controlador_g3w2
             $datos['fecha_hora'] = $datos['fecha_hora_integ'];
             $datos['estado'] = $datos['opcion_integ'];
             $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+            if (strpos($ciclo, 'P') !== false)
+            {
+                $datos_recup = $datos;
+                $datos_recup['evaluacion'] = 5;
+                $datos_recup['escala_notas'] = 3;
+                $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos_recup);
+            }
         }
         
         //Instancias REGULAR
@@ -587,7 +612,6 @@ class controlador extends controlador_g3w2
         $msg = $this->formatear_mensaje($mensaje);
         $this->set_mensaje($msg[0]);
         $this->set_mensaje_error($msg[1]);
-        
     }
 
     private function formatear_mensaje($mensaje)
