@@ -8,6 +8,8 @@ use siu\operaciones\_comun\operaciones\reporte\generador_pdf;
 
 class pagelet_resumen extends pagelet
 {
+    public $comisiones = '';
+    
     function get_nombre()
     {
         return 'resumen';
@@ -46,21 +48,29 @@ class pagelet_resumen extends pagelet
 //		return $this->controlador->comision_hash;
 //	}
 
+        public function set_comisiones($comisiones)
+        {
+            $this->comisiones = $comisiones;
+        }
+
+        public function get_comisiones()
+        {
+            return $this->comisiones;
+        }
+        
 	function prepare()
 	{
             $operacion = kernel::ruteador()->get_id_operacion();
             //$operacion = 'asistencias'
-            //kernel::log()->add_debug('prepare resumen GET: ', $_GET);
-            //kernel::log()->add_debug('prepare resumen POST: ', $_POST);
+//            kernel::log()->add_debug('prepare resumen GET: ', $_GET);
+//            kernel::log()->add_debug('prepare resumen POST: ', $_POST);
             $this->data['resumen'] = $this->controlador->get_resumen();
+            $this->data['comisiones'] = $this->get_comisiones();
             
-            $link = kernel::vinculador()->crear($operacion, 'generar_pdf_resumen');
-            $this->data['url']['generar_pdf_resumen'] = $link;
-//            print_r('<br>Planilla: ');
-//            print_r($this->data['planilla']);
-//             die(__FILE__.':'.__LINE__);
+            $link = kernel::vinculador()->crear($operacion, 'generar_excel');
+            $this->data['url']['generar_excel'] = $link;
+
             $this->add_var_js('comisiones', $this->controlador->comisiones);           
-            $this->add_var_js('modo', $this->pantalla);           
 	}
         
   }      

@@ -15,6 +15,24 @@ class _info_catalogo
 );
 	}
 
+	static function carga_asistencias__eliminar_inasist_justificada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'comision',
+    4 => 'clase',
+    5 => 'cant_inasist',
+    6 => 'justific',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_asistencias__get_alumnos_inscriptos_comision()
 	{
 		return array (

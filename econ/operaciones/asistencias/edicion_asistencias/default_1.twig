@@ -11,13 +11,19 @@
         <input type="hidden" name="clase[HS_COMIENZO_CLASE]" value="{{this.data.hs_comienzo_clase}}">    
 	<input type="hidden" name="clase[FILAS]" value="{{ this.data.filas }}">
         
+       
+        
+{#        {{this.data.datos_json}}#}
 	{% for alumno in this.data.clase_detalle %}
             {% set asistio = (alumno.CANT_INASIST == 0) %}
             {% set motivo_alu = alumno.MOTIVO_JUSTIFIC %} 
           
-            <div class='box-asistencia-alumno' id='{{ alumno.__ID__ }}'> 
+{#              <h3>Asistio: {{asistio}}</h3>#}
+             <div class='box-asistencia-alumno {{(asistio) ? 'asistio' : ((motivo_alu) ? 'ausente-justif' : 'ausente') }}' id='alumno_{{ alumno.__ID__ }}'> 
+            <div class='box-asistencia-alumno {{(asistio) ? 'asistio' : ((motivo_alu) ? 'ausente-justif' : 'ausente') }}' id='alumno_{{ alumno.__ID__ }}'> 
                 <input type="hidden" name="alumnos[{{ alumno.__ID__ }}][PRESENTE]" value="off">
-                <div class='box-asistencia' id='click_{{ alumno.__ID__ }}' onclick="click_cuadro(this)">
+                {{alumno.datos_json}}
+                <div class='box-asistencia '>
                     <label class="checkbox check-asistencia" for="alumnos[{{ alumno.__ID__ }}][PRESENTE]" >
                         <input type='checkbox' id='alumnos[{{ alumno.__ID__ }}][PRESENTE]'
                                     name='alumnos[{{ alumno.__ID__ }}][PRESENTE]'  
@@ -34,8 +40,8 @@
                     </div>
                 </div>
 
-                    <div class='box-justific' id='select_{{ alumno.__ID__ }}'>
-                        <select id='alumnos[{{ alumno.__ID__ }}][JUSTIFIC]' name='alumnos[{{ alumno.__ID__ }}][JUSTIFIC]' onchange="actualizar_background(this, '{{ alumno.__ID__ }}')" >
+                    <div class='box-justific'  onload="set_display(this, {{asistio}})"> {#{{_self.check_disabled(asistio)}}>#}
+                        <select id='alumnos[{{ alumno.__ID__ }}][JUSTIFIC]' name='alumnos[{{ alumno.__ID__ }}][JUSTIFIC]' onchange="actualizar_background(this, 'alumno_{{ alumno.__ID__ }}')" >
                         <option value="-1"> </option>
                         {% for motivo in this.data.motivos_inasist %}
                             <option value="{{motivo.MOTIVO}}" {{ (motivo_alu == motivo.MOTIVO) ? 'selected' : ''}}>Ausente: {{motivo.DESCRIPCION}}</option>
@@ -58,3 +64,8 @@
 {% if calidad_insc == 'R' %}{{'Regular'}}{% endif %}
 {% if calidad_insc == 'L' %}{{'Libre'}}{% endif %}
 {% endmacro %}
+
+{% macro check_disabled(asistio) %}
+{% if (asistio) %} style="display:none;" {% endif %}
+{% endmacro %}
+

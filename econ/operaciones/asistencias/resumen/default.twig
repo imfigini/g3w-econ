@@ -2,7 +2,8 @@
 {% block contenido %}
 
     {% if this.data.resumen %}
-            <a id="boton_pdf" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_pdf_resumen}}"><span class="acchide">{{'descargar_pdf'|trans|capitalize}}</span><span class="g3w-icono-pdf"></span></a>
+{#            <a id="boton_pdf" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_pdf_resumen}}"><span class="acchide">{{'descargar_pdf'|trans|capitalize}}</span><span class="g3w-icono-pdf"></span></a>#}
+            <a id="boton_excel" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_excel}}"><span class="acchide">{{'descargar_xls'|trans|capitalize}}</span><span class="g3w-icono-xls"></span></a>
     {% endif %}            
 
     {% if this.data.resumen %}

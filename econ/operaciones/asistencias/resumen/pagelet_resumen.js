@@ -3,9 +3,8 @@ kernel.renderer.registrar_pagelet('resumen', function(info) {
 
 	return {
             onload: function() {
-//              $('#boton_pdf').hide();
 
-                $("#boton_pdf").on('click', function(){
+                $("#boton_excel").on('click', function(){
                     var link = $(this).attr('href')+ '?comisiones='+info.comisiones;
                     console.log(link);
                     window.open(link);

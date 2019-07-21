@@ -198,12 +198,12 @@ class coord_materia
                             )
                         AND  tipo_usuario = 'COORD'";
         
-        kernel::log()->add_info("EJECUTANDO ACCION IRIS is_usuario_coord", '');
-        kernel::log()->add_info($sql, '');
+//        kernel::log()->add_info("EJECUTANDO ACCION IRIS is_usuario_coord", '');
+//        kernel::log()->add_info($sql, '');
         
         $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         
-        kernel::log()->add_info($resultado, '');
+//        kernel::log()->add_info($resultado, '');
         
         if (count($resultado)>0 && isset($resultado[0]))
         {

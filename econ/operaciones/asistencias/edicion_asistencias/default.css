@@ -72,6 +72,10 @@
 	display: none;
 }
 
+#edicion_asistencias .mostrar_select {
+	display: block;
+}
+
 #edicion_asistencias .box-asistencia {
     margin: 0px;
     margin-left: 0px;

@@ -7,6 +7,7 @@ use kernel\util\validador;
 use kernel\kernel;
 use siu\modelo\datos\catalogo;
 use siu\operaciones\_comun\operaciones\reporte\generador_pdf;
+use siu\operaciones\_comun\operaciones\reporte\generador_excel;
 use econ\operaciones\asistencias\pagelet_planilla;
 
 class controlador extends \siu\operaciones\asistencias\controlador
@@ -52,8 +53,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	
     function accion__index()
     {
-        kernel::log()->add_debug('accion__index GET: ', $_GET);
-        kernel::log()->add_debug('accion__index POST: ', $_POST);
+//        kernel::log()->add_debug('accion__index GET: ', $_GET);
+//        kernel::log()->add_debug('accion__index POST: ', $_POST);
     }
 	
     function accion__mostrar_clases()
@@ -78,6 +79,10 @@ class controlador extends \siu\operaciones\asistencias\controlador
         else 
         {
             $alumnos = $_POST['alumnos'];
+//            kernel::log()->add_debug('accion__editar POST: '.__FILE__.' - '.__LINE__, $_POST);
+//            kernel::log()->add_debug('accion__editar GET: '.__FILE__.' - '.__LINE__, $_GET);
+            //kernel::log()->add_debug('accion__editar $alumnos: '.__FILE__.' - '.__LINE__, $alumnos);
+            
             foreach ($alumnos as $key => $alumno) {
                 $alumnos[$key]['CANT_INASIST'] = ($alumno['PRESENTE'] == 'on') ? 0 : 1;
             }
@@ -103,9 +108,10 @@ class controlador extends \siu\operaciones\asistencias\controlador
     {
 //        kernel::log()->add_debug('accion__resumen GET: ', $_GET);
 //        kernel::log()->add_debug('accion__resumen POST: ', $_POST);
-//        $comisiones = $this->validate_param('comisiones', 'get', validador::TIPO_ALPHANUM);
-//        kernel::log()->add_debug('accion__resumen $comisiones: ', $comisiones);
+        $this->comisiones = $this->validate_param('comisiones', 'get', validador::TIPO_ALPHANUM);
+//        kernel::log()->add_debug('accion__resumen $comisiones: ', $this->comisiones);
         $pagelet = $this->vista()->pagelet('resumen');
+        $pagelet->set_comisiones($this->comisiones);
     }
 	
 
@@ -135,10 +141,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
             $this->comisiones = $this->validate_param('comisiones', 'get', validador::TIPO_ALPHANUM);
         }
         $parametros = array('comisiones' => $this->comisiones);
-        $datos_resuemn = $this->modelo()->get_resumen($parametros);
-
-        //kernel::log()->add_debug('get_resumen $datos_resuemn', $datos_resuemn);
-        return $datos_resuemn;
+        return $this->modelo()->get_resumen($parametros);
     }   
 
     function get_clase_encabezado_econ()
@@ -362,6 +365,136 @@ class controlador extends \siu\operaciones\asistencias\controlador
     public function get_nombre_archivo(){
             return "planilla";
     }	
+  
+    
+    public function accion__generar_excel()
+    {
+        $excel = $this->get_generador_excel();
+        $this->comisiones = $this->validate_param('comisiones', 'get', validador::TIPO_ALPHANUM);
+        //kernel::log()->add_debug('accion__generar_excel $this->comisiones', $this->comisiones);
+        $data = $this->get_resumen();
+        //var_dump($data);
         
+        $excel->set_nombre_archivo('resumen_asistencias');
+
+        $institucion = guarani::ua()->get_nombre_institucion();
+        $facultad = guarani::ua()->get_nombre();
+        $titulo = utf8_encode($institucion.' - '.$facultad);
+
+        $estilo_titulo = array(
+ 			'font' => array('bold' => true),
+ 		);
+        $excel->agregar_texto_estilos($titulo, 1, $estilo_titulo);
+        $excel->agregar_texto_estilos('Resumen de Asistencias',1, $estilo_titulo);
+        
+        $materia = utf8_encode("Materia: ".$data['MATERIA_NOMBRE'].' ('.$data['MATERIA'].')');
+        $excel->agregar_texto($materia,1);
+        
+        $docentes = utf8_encode("Docentes: ".$data['DOCENTES']);
+        $excel->agregar_texto($docentes,1);
+        
+        $turno = utf8_encode("Turno: ".kernel::traductor()->trans('asistencias.turno_'.$data['TURNO']));
+        $excel->agregar_texto($turno,1);
+        
+        $anio_academico = utf8_encode("Año académico: ".$data['ANIO_ACADEMICO']);
+        $excel->agregar_texto($anio_academico,1);
+        
+        $periodo = utf8_encode("Período lectivo: ".$data['PERIODO_LECTIVO']);
+        $excel->agregar_texto($periodo,1);
+        
+        $comisiones = utf8_encode("Comisiones: ".$data['COMISION_NOMBRE']);
+        $excel->agregar_texto($comisiones,1);
+        
+        $horario_aulas = utf8_encode("Dia, hora, edificio y aula: ".$data['HORARIO_AULAS']);
+        $excel->agregar_texto($horario_aulas,1);
+        
+        $clases = utf8_encode("Cant. clases dictadas a la fecha: ".$data['CANT_CLASES']." de ".$data['TOTAL_CLASES']);
+        $excel->agregar_texto($clases,1);
+        
+        $titulos = $this->titulos_tabla($data['FECHAS']);
+        $datos = $this->datos_tabla($data['ALUMNOS']);
+        //print_r($datos);
+        $excel->agregar_tabla($datos, $titulos, '');
+        
+       
+        
+        $excel->generar();
+        //print_r($docentes);
+        
+//
+//        //TABLA PARA FIRMA DOCENTE
+//        $cantidad = $this->filtros_consulta['cantidad'];
+//
+//        $titulos_firma = array();
+//        $titulos_firma['DATOS'] = "Datos";
+//        for($i= 1; $i <= $cantidad; $i++){
+//            $titulos_firma['FECHA'.$i] = $datos_encabezado['FECHA'.$i];
+//        };
+//
+//        $datos_firma = array();
+//        $datos_firma[0]['DATOS'] = "Tema";
+//        $datos_firma[1]['DATOS'] = "Firma Docente";
+//
+//        $pdf->agregar_tabla($datos_firma,$titulos_firma,'');
+//        $pdf->agregar_texto("");
+//
+//        $pdf->set_nombre_archivo($this->get_nombre_archivo());
+//        $pdf->generar();
+    }   
+
+    protected function get_generador_excel()
+    {
+        return new \siu\operaciones\_comun\operaciones\reporte\generador_excel();
+    }
+
+    protected function titulos_tabla($fechas)
+    {
+        $titulo = array();
+        $titulo['nro'] = "Nro.";
+        $titulo['legajo'] = "Legajo";
+        $titulo['alumno'] = "Alumno";
+        $titulo['calidad_insc'] = "Calidad Insc.";
+        $titulo['inasist_acum'] = "Inasist. Acum.";
+        $titulo['inasist_justif'] = "Inasist. Justif";
+        $titulo['asist_real'] = "% Asist. Real";
+        $titulo['asist_justif'] = "% Asist. c/justif.";
+        $i=1;
+        foreach ($fechas as $fecha)
+        {
+            $titulo[$i] = $fecha;
+            $i++;
+        }
+//        print_r($titulo);
+//        print_r('<br>');
+        return $titulo;
+    }
+    
+    protected function datos_tabla($alumnos)
+    {
+        $i=0;
+        $datos = array();
+        foreach ($alumnos as $legajo=>$alumno)
+        {
+            $i++;
+            $data = array();
+            $data['nro'] = $i;
+            $data['legajo'] = $legajo;
+            $data['alumno'] = $alumno['ALUMNO'];
+            $data['calidad_insc'] = $alumno['CALIDAD_INSC'];
+            $data['inasist_acum'] = $alumno['CANT_ACUMULADAS'];
+            $data['inasist_justif'] = $alumno['CANT_JUSTIFICADAS'];
+            $data['asist_real'] = $alumno['PORC_REAL'];
+            $data['asist_justif'] = $alumno['PORC_JUST'];
+            $k=1;
+            foreach ($alumno['ASISTENCIAS'] as $fecha=>$asistencia)
+            {
+                $data[$k] = ($asistencia) ? $asistencia : '';
+                $k++;
+            }
+            $datos[] = $data;
+//            print_r($data); die;
+        }
+        return $datos;
+    }
 }
 ?>

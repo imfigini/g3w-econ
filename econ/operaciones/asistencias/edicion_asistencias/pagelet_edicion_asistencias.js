@@ -10,32 +10,6 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 				of: $('#js-info-mesa')
 			});
 			
-                        $(id).find('.box-asistencia').click(function() {
-				var box = $(this);
-//                                console.log(box.parent());
-//                                console.log(box.parent().find('.box-justific'));
-				if (box.parent().hasClass('asistio')) {
-                                    box.find('.check-asistencia input').prop('checked',false);
-                                    box.parent().find('.box-justific').prop('disabled',true);
-                                    box.parent().find('.box-justific').removeClass('ocultar_select');
-                                    box.parent().find('.box-justific').addClass('mostrar_select');
-                                    $('#'+box.parent()[0].id + ' select' ).val(-1);
-                                    box.parent().removeClass('asistio');
-                                    box.parent().removeClass('ausente-justif');
-                                    box.parent().addClass('ausente');
-				} 
-                                else 
-                                {
-                                    box.find('.check-asistencia input').prop('checked',true);
-                                    box.parent().find('.box-justific').prop('disabled',false);
-                                    box.parent().find('.box-justific').addClass('ocultar_select');
-                                    box.parent().removeClass('ausente');
-                                    box.parent().removeClass('ausente-justif');
-                                    box.parent().addClass('asistio');
-				}
-			});
-                        
-                        
 			$(id).find('.form-renglones').submit(function() {
 				var $form = $(this);
 				kernel.ajax.call($form.attr('action'), {
@@ -48,23 +22,119 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 				return false;
 			});
         
-    }
+                        actualiza_vista();
+        }
     }
     
     
 })
 
-    function actualizar_background(objeto, id_div)
+    function actualiza_vista()
     {
-        var div = document.getElementById(id_div);
-        if (objeto.value > 0)
+        var alumnos_json = $('#alumnos').val();
+        if (alumnos_json)
         {
-            div.classList.remove('ausente');    
-            div.classList.add('ausente-justif');
+            var alumnos  = JSON.parse(alumnos_json);
+            for(var key in alumnos)
+            {
+                var alumno = alumnos[key];
+                actualizar_cuadro(key, alumno);
+            }
+        }
+    }
+    
+    function actualizar_cuadro(id, datos)
+    {
+        var contenedor = $('#'+id);
+        var div_selector = $('#select_'+id);
+        var selector = $('select[id="alumnos['+id+'][JUSTIFIC]"]');
+        if (datos['CANT_INASIST'] == "0.00") {
+            setear_presente(contenedor, div_selector, selector);
+        }
+        else {
+            setear_ausente(datos, contenedor, div_selector, selector);
+        }
+    }
+    
+    function setear_presente(contenedor, div_selector, selector)
+    {
+        contenedor.addClass('asistio');
+        contenedor.removeClass('ausente-justif');
+        contenedor.removeClass('ausente');
+        contenedor.find('.check-asistencia input').prop('checked',true);
+        div_selector.addClass('ocultar_select');
+        selector.val(-1); 
+    }
+    
+    function setear_ausente(datos, contenedor, div_selector, selector)
+    {
+        contenedor.removeClass('asistio');
+        contenedor.find('.check-asistencia input').prop('checked',false);
+        div_selector.removeClass('ocultar_select');
+        if (datos['MOTIVO_JUSTIFIC'])
+        {
+            contenedor.removeClass('ausente');
+            selector.val(datos['MOTIVO_JUSTIFIC']); 
+            contenedor.addClass('ausente-justif');
         }
         else
         {
-            div.classList.remove('ausente-justif');    
-            div.classList.add('ausente');
-       }
+            contenedor.removeClass('ausente-justif');
+            contenedor.addClass('ausente');
+            selector.val(-1); 
+        }
     }
+    
+    function click_cuadro(contenedor)
+    {
+        var click_id = contenedor.id;
+        var id = click_id.split('_')[1];
+        var alumnos_json = $('#alumnos').val();
+        var alumnos  = JSON.parse(alumnos_json);
+        alumno = find_alumno(alumnos, id);    
+        if (alumno['CANT_INASIST'] == "0.00")
+        {
+            alumno['CANT_INASIST'] = "1.00";
+        }
+        else
+        {
+            alumno['CANT_INASIST'] = "0.00";
+            alumno['MOTIVO_JUSTIFIC'] = null;
+        }
+        $('#alumnos').val(JSON.stringify(alumnos));
+        actualizar_cuadro(id, alumno);
+    }
+    
+
+    function find_alumno(alumnos, id)
+    {
+        if (alumnos) {
+            for(var key in alumnos) {
+                if (key == id) {
+                    return alumnos[key];
+                }
+            }
+        }
+        return null;
+    }
+    
+    function actualizar_background(objeto, id)
+    {
+        if (id == null || id == undefined)  {
+            return;
+        }
+
+        var valor_justif = objeto.value;
+
+        var alumnos_json = $('#alumnos').val();
+        var alumnos  = JSON.parse(alumnos_json);
+        alumno = find_alumno(alumnos, id);      
+
+        alumno['CANT_INASIST'] = "1.00";
+        alumno['MOTIVO_JUSTIFIC'] = (valor_justif != -1) ? valor_justif : null;
+        console.log(alumno);
+
+        $('#alumnos').val(JSON.stringify(alumnos));
+        actualizar_cuadro(id, alumno);
+    }
+

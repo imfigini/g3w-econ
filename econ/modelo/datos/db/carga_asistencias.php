@@ -9,175 +9,6 @@ use siu\modelo\entidades\alumno_foto;
 
 class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
 {
-//    /**
-//    * parametros: _ua, legajo
-//    * cache: no
-//    * filas: n
-//    */
-//    function listado_dias_clases_docente($parametros)
-//    {
-//        $sql = "SELECT DISTINCT sga_materias.materia,
-//                                sga_materias.nombre as materia_nombre,
-//                                sga_asignaciones.dia_semana, 
-//                                CASE 
-//                                    when sga_asignaciones.dia_semana = 1 then 'Domingo'
-//                                    when sga_asignaciones.dia_semana = 2 then 'Lunes'
-//                                    when sga_asignaciones.dia_semana = 3 then 'Martes'
-//                                    when sga_asignaciones.dia_semana = 4 then 'Miércoles'
-//                                    when sga_asignaciones.dia_semana = 5 then 'Jueves'
-//                                    when sga_asignaciones.dia_semana = 6 then 'Viernes'
-//                                    when sga_asignaciones.dia_semana = 7 then 'Sábado'
-//                                END AS dia_nombre,
-//                                to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') as hs_comienzo_clase, 
-//                                to_char(sga_asignaciones.hs_finaliz_clase ,'%H:%M') as hs_finaliz_clase,
-//                                sga_periodos_lect.anio_academico,
-//                                sga_periodos_lect.periodo_lectivo,
-//                                sga_asign_clases.tipo_clase,
-//                                (SELECT COUNT(DISTINCT sga_insc_cursadas.legajo) FROM sga_insc_cursadas WHERE comision = sga_docentes_com.comision AND estado in ('A','P','E')) as cant_inscriptos,
-//                                (SELECT COUNT(DISTINCT sga_inasis_acum.legajo) FROM sga_inasis_acum WHERE sga_inasis_acum.comision = sga_docentes_com.comision AND sga_inasis_acum.estado = 'L') as cant_libres
-//                    FROM sga_docentes_com
-//                    JOIN sga_comisiones ON (sga_comisiones.comision = sga_docentes_com.comision)
-//                    JOIN sga_materias ON (sga_materias.materia = sga_comisiones.materia)
-//                    JOIN sga_asign_clases ON (sga_asign_clases.comision = sga_docentes_com.comision)
-//                    JOIN sga_asignaciones ON (sga_asignaciones.asignacion = sga_asign_clases.asignacion)
-//                    JOIN sga_periodos_lect ON (sga_periodos_lect.anio_academico = sga_comisiones.anio_academico AND sga_periodos_lect.periodo_lectivo = sga_comisiones.periodo_lectivo)
-//                        WHERE sga_docentes_com.legajo = {$parametros['legajo']}
-//                        AND sga_periodos_lect.fecha_inactivacion >= TODAY
-//                        ORDER BY    sga_materias.materia, 
-//                                    sga_asignaciones.dia_semana, 
-//                                    to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') ";
-//				
-//        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//        $resultado = array();
-//        foreach(array_keys($datos) as $id) {
-//            $resultado[$id] = $datos[$id];
-//            $resultado[$id][catalogo::id] = catalogo::generar_id($datos[$id]['MATERIA'].$datos[$id]['DIA_SEMANA'].$datos[$id]['HS_COMIENZO_CLASE']);
-//        }
-//        return $resultado;
-//    }
-//    
-//    /**
-//    * parametros: _ua, legajo, materia, dia_semana, hs_comienzo, filas
-//    * cache: no
-//    * filas: n
-//    */
-//    function get_clases_especificas_docente($parametros)
-//    {
-//        $first = '';
-//        $filas = filter_var($parametros['filas'], FILTER_SANITIZE_NUMBER_INT);
-//        if ($filas > 0) {
-//            $first = "FIRST $filas";
-//        }	
-//        $legajo = $parametros['legajo'];
-//        $materia = $parametros['materia'];
-//        $dia_semana = $parametros['dia_semana'];
-//        $hs_comienzo = $parametros['hs_comienzo'];
-//        
-//        $sql = "SELECT $first DISTINCT
-//                                sga_materias.materia as materia,
-//                                sga_materias.nombre  as materia_nombre,
-//                                sga_asignaciones.dia_semana as dia_semana,
-//                                CASE 
-//                                    when sga_asignaciones.dia_semana = 1 then 'Domingo'
-//                                    when sga_asignaciones.dia_semana = 2 then 'Lunes'
-//                                    when sga_asignaciones.dia_semana = 3 then 'Martes'
-//                                    when sga_asignaciones.dia_semana = 4 then 'Miércoles'
-//                                    when sga_asignaciones.dia_semana = 5 then 'Jueves'
-//                                    when sga_asignaciones.dia_semana = 6 then 'Viernes'
-//                                    when sga_asignaciones.dia_semana = 7 then 'Sábado'
-//                                END AS dia_nombre,
-//                                to_char(sga_calendcursada.fecha, '%d/%m/%Y') as fecha_clase,
-//                                sga_tipo_clase.descripcion as tipo_clase,
-//                                to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') as hs_comienzo_clase,
-//                                to_char(sga_asignaciones.hs_finaliz_clase ,'%H:%M') as hs_finaliz_clase,
-//                                sga_asign_clases.cantidad_horas,
-//                                sga_calendcursada.fecha
-//
-//                    FROM    sga_comisiones,
-//                            sga_docentes_com,
-//                            sga_materias,   
-//                            sga_calendcursada,   
-//                            sga_asignaciones,
-//                            sga_asign_clases,
-//                            sga_periodos_lect,
-//                            OUTER sga_tipo_clase
-//
-//                    WHERE   sga_asignaciones.dia_semana = $dia_semana
-//                            AND to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') = $hs_comienzo
-//                            AND sga_materias.materia = $materia
-//                            AND sga_docentes_com.legajo = $legajo
-//                            AND	sga_materias.unidad_academica = sga_comisiones.unidad_academica
-//                            AND	sga_materias.materia = sga_comisiones.materia
-//                            AND sga_docentes_com.comision = sga_comisiones.comision
-//                            AND	sga_comisiones.comision = sga_calendcursada.comision
-//                            AND	sga_calendcursada.asignacion = sga_asignaciones.asignacion 
-//                            AND sga_calendcursada.valido = 'S'
-//                            AND	sga_calendcursada.comision = sga_asign_clases.comision
-//                            AND	sga_calendcursada.asignacion = sga_asign_clases.asignacion
-//                            AND	sga_calendcursada.fecha <= TODAY
-//                            AND sga_tipo_clase.tipo_clase = sga_asign_clases.tipo_clase
-//                            AND sga_periodos_lect.anio_academico = sga_comisiones.anio_academico 
-//                            AND sga_periodos_lect.periodo_lectivo = sga_comisiones.periodo_lectivo
-//                            AND sga_periodos_lect.fecha_inactivacion >= TODAY
-//                    ORDER BY sga_calendcursada.fecha DESC ";
-//				
-//        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//        $resultado = array();
-//        foreach(array_keys($datos) as $id) {
-//            $resultado[$id] = $datos[$id];
-//            $resultado[$id][catalogo::id] = catalogo::generar_id($datos[$id]['MATERIA'].$datos[$id]['FECHA'].$datos[$id]['HS_COMIENZO_CLASE']);
-//        }
-//        return $resultado;
-//    }
-
-    
-//    /**
-//    * parametros: materia, fecha_clase, hs_comienzo_clase
-//    * cache: no
-//    * filas: n
-//    */
-//    function get_clases_materia_dia_hs($parametros)
-//    {
-//        $materia = $parametros['materia'];
-//        $fecha_clase = $parametros['fecha_clase'];
-//        $hs_comienzo_clase = $parametros['hs_comienzo_clase'];
-//        
-//        $sql = "SELECT clase 
-//                        FROM sga_calendcursada
-//                        JOIN sga_comisiones ON (sga_comisiones.comision = sga_calendcursada.comision)
-//                        JOIN sga_asignaciones ON (sga_asignaciones.asignacion = sga_calendcursada.asignacion)
-//                WHERE sga_comisiones.materia = $materia
-//                AND sga_calendcursada.fecha = $fecha_clase
-//                AND to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') = $hs_comienzo_clase ";
-//        
-//        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//    }
-    
-//    /**
-//    * parametros: materia, dia_semana, hs_comienzo_clase
-//    * cache: no
-//    * filas: n
-//    */
-//    function get_comisiones_materia_dia_hs($parametros)
-//    {
-//        $materia = $parametros['materia'];
-//        $dia_semana = $parametros['dia_semana'];
-//        $hs_comienzo_clase = $parametros['hs_comienzo_clase'];
-//        
-//        $sql = "SELECT DISTINCT sga_comisiones.comision 
-//                FROM sga_comisiones
-//                JOIN sga_periodos_lect ON (sga_comisiones.anio_academico = sga_periodos_lect.anio_academico AND sga_comisiones.periodo_lectivo = sga_periodos_lect.periodo_lectivo)
-//                JOIN sga_calendcursada ON (sga_comisiones.comision = sga_calendcursada.comision)
-//                JOIN sga_asignaciones ON (sga_asignaciones.asignacion = sga_calendcursada.asignacion)
-//                        WHERE TODAY BETWEEN sga_periodos_lect.fecha_inicio AND sga_periodos_lect.fecha_fin
-//                        AND sga_comisiones.materia = $materia
-//                        AND sga_asignaciones.dia_semana = $dia_semana
-//                        AND to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') = $hs_comienzo_clase ";
-//        
-//        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//    }
-    
-    
     /**
     * parametros: clase
     * cache: no
@@ -201,7 +32,6 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
         }
         return false;
     }
-    
     
     /**
     * parametros: clase
@@ -254,7 +84,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
     function recuperar_generar_asistencias($parametros)
     {
         $sql = "execute procedure sp_AsisAluClas({$parametros["clase"]})";
-        kernel::log()->add_debug('recuperar_generar_asistencias $sql: '.__FILE__.' - '.__LINE__, $sql);
+        //kernel::log()->add_debug('recuperar_generar_asistencias $sql: '.__FILE__.' - '.__LINE__, $sql);
         return kernel::db()->consultar($sql, db::FETCH_NUM);
     }
     
@@ -275,7 +105,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
             $datos = $this->get_inscriptos($parametros);
         }
         
-        kernel::log()->add_debug('clase_detalle $datos', $datos);
+      //  kernel::log()->add_debug('clase_detalle $datos', $datos);
         
         $nuevo = array();
         foreach($datos as $id => $dato) 
@@ -307,7 +137,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                     $nuevo[$id]['URL_IMAGEN_GRANDE'] = kernel::vinculador()->vinculo_recurso('img/iconos/mm_grande.png');
             }			
         }
-        kernel::log()->add_debug('clase_detalle $nuevo', $nuevo);
+        //kernel::log()->add_debug('clase_detalle $nuevo', $nuevo);
         return $nuevo;
     }
     
@@ -346,17 +176,17 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
     */
    function guardar($parametros) 
    {
-        kernel::log()->add_debug('guardar iris', $parametros);
+        //kernel::log()->add_debug('guardar iris', $parametros);
 
         if (!$this->tiene_cargadas_asistencias($parametros)) 
         {
             $sql = "execute procedure sp_AsisAluClas({$parametros["clase"]})";
-            kernel::db()->consultar($sql, db::FETCH_NUM);
+            //kernel::db()->consultar($sql, db::FETCH_NUM);
         }
         
         if ($parametros["cant_inasist"] == "'1'" && $parametros["justific"] <> "'-1'") //Ausencia justificada
         {
-            $sql = "EXECUTE PROCEDURE sp_u_justsaluclas(" .
+            $sql1 = "EXECUTE PROCEDURE sp_u_justsaluclas(" .
                                  $parametros["_ua"] . ",".
                                  $parametros["carrera"] . "," .
                                  $parametros["legajo"] . "," .
@@ -364,10 +194,19 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                                  $parametros["clase"] . "," .
                                  $parametros["cant_inasist"] . ",".
                                  $parametros["justific"] .");";   
+            
+            $sql2 = "EXECUTE PROCEDURE sp_u_asisaluclas(" .
+                                 $parametros["_ua"] . ",".
+                                 $parametros["carrera"] . "," .
+                                 $parametros["legajo"] . "," .
+                                 $parametros["comision"] . "," .
+                                 $parametros["clase"] . "," .
+                                 $parametros["cant_inasist"] . ",".
+                                 "NULL);";
         }
         else
         {
-            $sql = "EXECUTE PROCEDURE sp_u_asisaluclas(" .
+            $sql1 = "EXECUTE PROCEDURE sp_u_asisaluclas(" .
                              $parametros["_ua"] . ",".
                              $parametros["carrera"] . "," .
                              $parametros["legajo"] . "," .
@@ -375,10 +214,19 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                              $parametros["clase"] . "," .
                              $parametros["cant_inasist"] . ",".
                              "NULL);";
+            $sql2 = "EXECUTE PROCEDURE sp_u_justsaluclas(" .
+                                 $parametros["_ua"] . ",".
+                                 $parametros["carrera"] . "," .
+                                 $parametros["legajo"] . "," .
+                                 $parametros["comision"] . "," .
+                                 $parametros["clase"] . "," .
+                                 0 . ",".
+                                 "NULL" .");";   
         }
-        kernel::log()->add_debug('$sql', $sql);
-        return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
+        kernel::db()->consultar_fila($sql2, db::FETCH_NUM);
+        return kernel::db()->consultar_fila($sql1, db::FETCH_NUM);
     }	
+    
     
     /**
      * parametros: 
@@ -667,72 +515,6 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
         return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
     }
 
-//    /**
-//    * parametros: comision
-//    * cache: no
-//    * filas: n
-//    */
-//    function get_resumen($parametros)
-//    {
-//        $resumen = array();
-//        
-//        $comision = $parametros['comision'];
-//        $sql = "EXECUTE PROCEDURE sp_docentes_com($comision)";
-//        $docentes = kernel::db()->consultar_fila($sql, db::FETCH_NUM);
-//
-//        $sql = "EXECUTE PROCEDURE sp_asignac_com($comision)";
-//        $aulas = kernel::db()->consultar_fila($sql, db::FETCH_NUM);
-//
-//        $resumen['DOCENTES'] = $docentes[0];
-//        $resumen['HORARIO_AULAS'] = $aulas[0];
-//        
-//        $datos_comision = $this->get_datos_comision($parametros);
-//        kernel::log()->add_debug('get_resumen $datos_comision', $datos_comision);
-//        
-//        $resumen['COMISION'] = $comision;
-//        $resumen['COMISION_NOMBRE'] = $datos_comision[0]['COMISION_NOMBRE'];
-//        $resumen['MATERIA'] = $datos_comision[0]['MATERIA'];
-//        $resumen['MATERIA_NOMBRE'] = $datos_comision[0]['MATERIA_NOMBRE'];
-//        
-//        foreach ($datos_comision as $comision)
-//        {
-//             $resumen['FECHAS'][$comision['FECHA']] = date("d/m/y", strtotime($comision['FECHA'])); 
-//        }
-//        //kernel::log()->add_debug('get_resumen $resumen', $resumen); 
-//        
-//        $alumnos = $this->get_alumnos_inscriptos_comision($parametros);
-//        //kernel::log()->add_debug('get_resumen $alumnos', $alumnos); 
-//        
-//        foreach($alumnos AS $alumno)
-//        {
-//            $parametros['legajo'] = "'".$alumno['LEGAJO']."'";
-//            $inasistencias = $this->get_inasistencias_alumno($parametros);
-//
-//            foreach($inasistencias AS $inasistencia)
-//            {
-//                $fecha_clase = $inasistencia['FECHA'];
-//
-//                if ((int)$inasistencia['CANT_JUSTIFICADAS'] == 1)
-//                {
-//                    $alumno['ASISTENCIAS'][$fecha_clase] = 'J';
-//                }
-//                else 
-//                {
-//                    if ((int)$inasistencia['CANT_INASISTENCIAS'] == 1)
-//                    {
-//                        $alumno['ASISTENCIAS'][$fecha_clase] = 'A';
-//                    }
-//                    else 
-//                    {
-//                        $alumno['ASISTENCIAS'][$fecha_clase] = 'P';
-//                    }
-//                }
-//                
-//            }
-//            $resumen['ALUMNOS'][$alumno['LEGAJO']] = $alumno;
-//        }        
-//        return $resumen;
-//    }
     
     /**
     * parametros: comision

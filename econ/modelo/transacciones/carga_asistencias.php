@@ -79,14 +79,11 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
         foreach($comisiones as $comision)
         {
             $parametros['comision'] = $comision;
-//            kernel::log()->add_debug('info__clase_detalle $parametros: '.__FILE__.' - '.__LINE__, $parametros);
             $clase = catalogo::consultar('carga_asistencias', 'get_clase_comision', $parametros);
-//            kernel::log()->add_debug('info__clase_detalle $clase: '.__FILE__.' - '.__LINE__, $clase);
             $r = catalogo::consultar('carga_asistencias', 'clase_detalle', array('clase'=>$clase['CLASE']));
-//            kernel::log()->add_debug('info__clase_detalle $r: '.__FILE__.' - '.__LINE__, $r);
             $result = array_merge($result, $r);
         }
-        kernel::log()->add_debug('$result: '.__FILE__.' - '.__LINE__, $result);
+//        kernel::log()->add_debug('$result: '.__FILE__.' - '.__LINE__, $result);
         return $result;
     }
 
@@ -94,15 +91,16 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
     function generar_asistencias($comisiones_id, $fecha, $hs_comienzo_clase)
     {
         $comisiones = explode ('-', $comisiones_id);
-        kernel::log()->add_debug('generar_asistencias $comisiones: '.__FILE__.' - '.__LINE__, $comisiones);
+        //kernel::log()->add_debug('generar_asistencias $comisiones: '.__FILE__.' - '.__LINE__, $comisiones);
         foreach($comisiones as $comision)
         {
             $clase = catalogo::consultar('carga_asistencias', 'get_clase_comision', array('comision'=>$comision, 'fecha'=>$fecha, 'hs_comienzo_clase'=>$hs_comienzo_clase));
-            kernel::log()->add_debug('generar_asistencias $clase: '.__FILE__.' - '.__LINE__, $clase);
+            //kernel::log()->add_debug('generar_asistencias $clase: '.__FILE__.' - '.__LINE__, $clase);
             $tiene = catalogo::consultar('carga_asistencias', 'tiene_cargadas_asistencias', array('clase'=>$clase['CLASE']));
-            kernel::log()->add_debug('generar_asistencias $tiene: '.__FILE__.' - '.__LINE__, $tiene);
+            //kernel::log()->add_debug('generar_asistencias $tiene: '.__FILE__.' - '.__LINE__, $tiene);
             if (! $tiene) 
             {
+               // kernel::log()->add_debug('Entra a generar asistencias $tiene: '.__FILE__.' - '.__LINE__, $tiene);
                 catalogo::consultar('carga_asistencias', 'recuperar_generar_asistencias', array('clase'=>$clase['CLASE']));
             }
         }
@@ -114,11 +112,8 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
         $hay_renglones_actualizados = false;
         
         $this->generar_asistencias($comisiones_id, $fecha, $hs_comienzo_clase);
-        //die;
         $clases = $this->info__clase_detalle($comisiones_id, $fecha, $hs_comienzo_clase, 0);
         
-        kernel::log()->add_debug('grabar $clases', $clases);
-        kernel::log()->add_debug('grabar $alumnos', $alumnos);
         foreach ($alumnos as $id => $alumno)
         {
             try
@@ -240,7 +235,6 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
             $r['HORARIO_AULAS'] = $aulas[0];
 
             $datos_comision = catalogo::consultar('carga_asistencias', 'get_datos_comision', array('comision'=>$comision));
-            kernel::log()->add_debug('get_resumen $datos_comision', $datos_comision);
 
             $r['COMISION'] = $comision;
             $r['COMISION_NOMBRE'] = $datos_comision[0]['COMISION_NOMBRE'];
