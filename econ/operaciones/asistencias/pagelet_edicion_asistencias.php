@@ -61,7 +61,7 @@ class pagelet_edicion_asistencias extends \siu\operaciones\asistencias\pagelet_e
         $this->data['clase_detalle'] = $this->get_clase_detalle();
         $this->data['datos_json'] = $this->set_asistencias_json($this->data['clase_detalle']);
         $this->data['motivos_inasist'] = $this->get_motivos_inasistencia();
-        kernel::log()->add_debug('prepare edicion asistencias', $this->data);
+        //kernel::log()->add_debug('prepare edicion asistencias', $this->data);
         
         $this->data['comisiones'] = $this->controlador->comisiones;
         $this->data['fecha'] = $this->controlador->fecha;

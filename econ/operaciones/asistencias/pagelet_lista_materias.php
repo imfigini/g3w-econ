@@ -51,7 +51,7 @@ class pagelet_lista_materias extends \siu\operaciones\asistencias\pagelet_lista_
                 $comisiones_vistas = array_merge($comisiones_vistas, $comisiones);
             }
         }
-        kernel::log()->add_debug('get_lista_clases: '.__FILE__.' - '.__LINE__, $resultado);
+        //kernel::log()->add_debug('get_lista_clases: '.__FILE__.' - '.__LINE__, $resultado);
         return $resultado;
     }
 	

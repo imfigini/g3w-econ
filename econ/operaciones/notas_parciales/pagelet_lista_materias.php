@@ -79,7 +79,7 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
     {
 		$this->data = array();
                 
-                kernel::log()->add_debug('Entro al prepare'.__FILE__, $this->data);
+//                kernel::log()->add_debug('Entro al prepare'.__FILE__, $this->data);
                 switch ($this->estado) {
 			case 'crear_parcial':
 				$this->set_template('parcial');
