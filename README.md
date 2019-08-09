@@ -4,8 +4,8 @@ Descargar con git el contenido de la personalización y ubicarlo en la carpeta:
 /var/guarani3w/src/pers
 Debería quedar la carpeta "econ" dentro de la carpeta "/var/guarani3w/src/pers".
 
-Luego regenerar el catálogo (desde /home/guarani3w/bin/): 
+Desde /var/guarani3w/bin/
+1) Regenerar el catálogo: 
 ./guarani generar_catalogo FCE
-
-
-# Pruebas
+2) Compilar recursos: 
+./guarani compilar_recursos
