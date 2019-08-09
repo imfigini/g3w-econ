@@ -244,17 +244,23 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
             $r['PERIODO_LECTIVO'] = $datos_comision[0]['PERIODO_LECTIVO'];
             $r['TURNO'] = $datos_comision[0]['TURNO'];
 
-            $i=$t=0;
-            $hoy = date("d/m/y");
+            $i=0;
+            $t=0;
+            $hoy = time("d/m/y");
+            //kernel::log()->add_debug('hoy', $hoy);
             foreach ($datos_comision as $dc)
             {
-                $r['FECHAS'][$dc['FECHA']] = $dc['DIA_NOMBRE'].' '.date("d/m/y", strtotime($dc['FECHA']));
-                if ($r['FECHAS'][$dc['FECHA']] <= $hoy) {
+                $fecha = date("d/m/y", strtotime($dc['FECHA']));
+                $r['FECHAS'][$dc['FECHA']] = $dc['DIA_NOMBRE'].' '.$fecha;
+                
+                if (strtotime($dc['FECHA']) <= $hoy) {
+                    // kernel::log()->add_debug('fecha', $fecha);
+                    // kernel::log()->add_debug('strtotime', strtotime($dc['FECHA']));
                     $i++;
                 }
                 $t++;
             }
-            $r['CANT_CLASES'] = count($r['FECHAS']);
+            $r['CANT_CLASES'] = $i; // count($r['FECHAS']);
             $r['TOTAL_CLASES'] = $t;
 
             //kernel::log()->add_debug('get_resumen $resumen', $resumen);
