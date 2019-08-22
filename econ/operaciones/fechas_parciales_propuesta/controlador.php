@@ -79,6 +79,7 @@ class controlador extends controlador_g3w2
                 
                 $comisiones = $this->get_evaluaciones_existentes($comisiones);
                 //[EVAL_XXXX] FECHA_HORA, ESTADO, READONLY (son las fechas que ya tiene reservada la comisión, en cada instancia)
+
                 $promocionables = array();
                 $regulares = array();
 
@@ -120,7 +121,8 @@ class controlador extends controlador_g3w2
     {
         //print_r($parametros);
         $materias_mismo_mix = catalogo::consultar('cursos', 'get_materias_mismo_mix', $parametros); 
-        
+        //print_r($materias_mismo_mix);
+
         $fechas = array();
         foreach($materias_mismo_mix AS $mat)
         {
@@ -128,6 +130,7 @@ class controlador extends controlador_g3w2
             $fechas_mat = catalogo::consultar('cursos', 'get_fechas_eval_asignadas', $parametros); 
             $fechas = array_merge($fechas, $fechas_mat);
         }
+        //print_r($fechas);
         return $fechas;
     }
     
@@ -372,11 +375,17 @@ class controlador extends controlador_g3w2
 
     function get_mensaje()
     {
+        if (!isset($this->datos_filtro['mensaje'])) {
+            return '';
+        }
         return $this->datos_filtro['mensaje'];
     }
     
     function get_mensaje_error()
     {
+        if (!isset($this->datos_filtro['mensaje_error'])) {
+            return '';
+        }
         return $this->datos_filtro['mensaje_error'];
     }
     

@@ -61,7 +61,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
     {
         $filas = $this->validate_param('cant', 'post', validador::TIPO_INT);
         $comisiones_id = $this->validate_param('comisiones', 'post', validador::TIPO_ALPHANUM);
-	$resultado['clases'] = $this->modelo()->get_clases_comisiones($comisiones_id, $filas);
+	    $resultado['clases'] = $this->modelo()->get_clases_comisiones($comisiones_id, $filas);
         //kernel::log()->add_debug('accion__mostrar_clases $resultado: '.__FILE__.' - '.__LINE__, $resultado);
         $this->render_template('lista_materias/clases.twig', $resultado);
     }

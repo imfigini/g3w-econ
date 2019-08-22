@@ -68,6 +68,8 @@
                                     <td scope="row" colspan="4">Ciclo: {{ _self.get_nombre_ciclo(materia.CICLO) }}</td>
                                 </tr>
                                 {% set hoy = "now"|date("Y-m-d") %}
+                                {# Hoy: {{hoy}}
+                                Periodo: {{this.data.priodo_solicitud_fechas.FECHA_INICIO}} - {{this.data.priodo_solicitud_fechas.FECHA_FIN}} #}
                                 {% if ((this.data.priodo_solicitud_fechas.FECHA_INICIO <= hoy) and (hoy <= this.data.priodo_solicitud_fechas.FECHA_FIN)) %}
 
                                     {# -------Se muestra la opción de aplicar las mismas fechas a todas las comisiones, si todas pertenecen a un mismo ciclo   #}
@@ -336,7 +338,7 @@
            {% if (instancia =='promo2') or (instancia == 'recup') or (instancia == 'integ') or (instancia == 'recup1') or (instancia == 'recup2')%}
                onchange="verifica_fechas_comision(this)"
            {% endif %}
-           value="{{fecha_hora}}" readonly {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> 
+           value="{{fecha_hora}}" readonly {% if solo_lectura %} readonly {% else %} class="no_editable_comision" {% endif %} /> 
 {#            value="{{fecha_hora}}" {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> #}
     <input type="hidden" id="{{instancia}}_readonly_{{comision}}" name="{{instancia}}_readonly_{{comision}}" 
             value="{{solo_lectura}}">

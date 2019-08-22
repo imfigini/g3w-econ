@@ -37,6 +37,12 @@ input[readonly].no_editable
     cursor: default;
 }
 
+input[readonly].no_editable_comision
+{
+    background-color: whitesmoke;
+    cursor: not-allowed;
+}
+
 input[readonly] 
 {
     background-color: #afd8af;

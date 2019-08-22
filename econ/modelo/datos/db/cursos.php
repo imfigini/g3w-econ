@@ -61,7 +61,7 @@ class cursos
                     JOIN sga_materias_ciclo MC ON (MC.materia = M.materia)
                     JOIN sga_ciclos CIC ON (CIC.ciclo = MC.ciclo)
                     JOIN sga_ciclos_plan CP ON (CIC.ciclo = CP.ciclo)
-                    WHERE CP.plan IN (SELECT plan FROM sga_planes WHERE carrera = CP.carrera AND plan = CP.plan AND estado = 'V')
+                    WHERE CP.plan IN (SELECT plan FROM sga_planes WHERE carrera = CP.carrera AND plan = CP.plan AND version_actual = CP.version AND estado = 'V')
                     AND M.materia = $materia ";
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         switch (count($result))
@@ -427,7 +427,11 @@ class cursos
         $sql = "SELECT DISTINCT materia 
                     FROM ufce_mixes A 
                     WHERE anio_de_cursada IN (
-                                    SELECT anio_de_cursada FROM ufce_mixes WHERE ufce_mixes.mix = A.mix AND materia = $materia
+                                    SELECT anio_de_cursada 
+                                        FROM ufce_mixes 
+                                        WHERE   ufce_mixes.mix = A.mix 
+                                            AND ufce_mixes.carrera = A.carrera 
+                                            AND materia = $materia
                             )
                     AND materia <> $materia";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
