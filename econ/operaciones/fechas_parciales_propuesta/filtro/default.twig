@@ -72,76 +72,71 @@
                                 Periodo: {{this.data.priodo_solicitud_fechas.FECHA_INICIO}} - {{this.data.priodo_solicitud_fechas.FECHA_FIN}} #}
                                 {% if ((this.data.priodo_solicitud_fechas.FECHA_INICIO <= hoy) and (hoy <= this.data.priodo_solicitud_fechas.FECHA_FIN)) %}
 
-                                    {# -------Se muestra la opción de aplicar las mismas fechas a todas las comisiones, si todas pertenecen a un mismo ciclo   #}
-                                    {% if (materia.CICLO == 'F' or materia.CICLO == 'P') %}
-                                        {% if (materia.CALIDAD == 'P' or materia.CALIDAD == 'PyR') %}
-                                            {% if (materia.DIAS_PROMO) %}
-                                                <tr>
-                                                    <td scope="row" colspan="4">Cursos por Promoción: 
-                                                        {% for dia in materia.DIAS_PROMO %}
-                                                            {{dia.DIA_NOMBRE}}
-                                                        {% endfor %}
-                                                    </td> 
-                                                </tr>
-                                                <tr>
-                                                    <td>1er. Parcial Promoción: 
-                                                        <input type="text" id="datepicker_materia_promo1_{{materia.MATERIA}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" 
-                                                               class="no_editable" />
-                                                    </td>  
-                                                    <td>2do. Parcial Promoción: 
-                                                        <input type="text" id="datepicker_materia_promo2_{{materia.MATERIA}}" name="datepicker_materia_promo2_{{materia.MATERIA}}" 
-                                                               class="no_editable" onchange="verifica_fechas_materia(this)" />
+                                    {# Para las materias que son por Promoción #}
+                                    {% if (materia.CALIDAD == 'P' or materia.CALIDAD == 'PyR') %}
+                                        {% if (materia.DIAS_PROMO) %}
+                                            <tr>
+                                                <td scope="row" colspan="4">Cursos por Promoción: 
+                                                    {% for dia in materia.DIAS_PROMO %}
+                                                        {{dia.DIA_NOMBRE}}
+                                                    {% endfor %}
+                                                </td> 
+                                            </tr>
+                                            <tr>
+                                                <td>1er. Parcial Promoción: 
+                                                    <input type="text" id="datepicker_materia_promo1_{{materia.MATERIA}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" 
+                                                            class="no_editable" />
+                                                </td>  
+                                                <td>2do. Parcial Promoción: 
+                                                    <input type="text" id="datepicker_materia_promo2_{{materia.MATERIA}}" name="datepicker_materia_promo2_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)" />
 
+                                                </td>                               
+                                                {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
+                                                    <td>Recuperatorio Unico: 
+                                                        <input type="text" id="datepicker_materia_recup_{{materia.MATERIA}}" name="datepicker_materia_recup_{{materia.MATERIA}}" 
+                                                                class="no_editable" onchange="verifica_fechas_materia(this)"/>
                                                     </td>                               
-                                                    {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
-                                                        <td>Recuperatorio Unico: 
-                                                            <input type="text" id="datepicker_materia_recup_{{materia.MATERIA}}" name="datepicker_materia_recup_{{materia.MATERIA}}" 
-                                                                   class="no_editable" onchange="verifica_fechas_materia(this)"/>
-                                                        </td>                               
-                                                    {% endif %}
-                                                    <td>Integrador: 
-                                                        <input type="text" id="datepicker_materia_integ_{{materia.MATERIA}}" name="datepicker_materia_integ_{{materia.MATERIA}}" 
-                                                               class="no_editable" onchange="verifica_fechas_materia(this)"/>
-                                                    </td>                               
-                                                </tr>
-                                            {% else %}
-                                                <tr>
-                                                    <td> No todos los cursos promocionables se dictan los mismos días. Debe definir las fechas de evaluación por cada comisión. </td>
-                                                </tr>
-                                            {% endif %}
+                                                {% endif %}
+                                                <td>Integrador: 
+                                                    <input type="text" id="datepicker_materia_integ_{{materia.MATERIA}}" name="datepicker_materia_integ_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)"/>
+                                                </td>                               
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td> No todos los cursos promocionables se dictan los mismos días. Debe solicitar a la DD la asignación de las fechas para las instancias de evaluación. </td>
+                                            </tr>
                                         {% endif %}
-                                        {% if (materia.CALIDAD == 'R' or materia.CALIDAD == 'R  ' or materia.CALIDAD == 'PyR') %}
-                                            {% if (materia.DIAS_REGU) %}
-                                                <tr>
-                                                    <td scope="row" colspan="4">Cursos Regulares:
-                                                        {% for dia in materia.DIAS_REGU %}
-                                                            {{dia.DIA_NOMBRE}}
-                                                        {% endfor %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Parcial Regular: 
-                                                        <input type="text" id="datepicker_materia_regu1_{{materia.MATERIA}}" name="datepicker_materia_regu1_{{materia.MATERIA}}" class="no_editable" />
-                                                    </td>  
-                                                    <td>1er. Recuperatorio: 
-                                                        <input type="text" id="datepicker_materia_recup1_{{materia.MATERIA}}" name="datepicker_materia_recup1_{{materia.MATERIA}}" 
-                                                               class="no_editable" onchange="verifica_fechas_materia(this)" />
-                                                    </td>                               
-                                                    <td>2do. Recuperatorio: 
-                                                        <input type="text" id="datepicker_materia_recup2_{{materia.MATERIA}}" name="datepicker_materia_recup2_{{materia.MATERIA}}" 
-                                                               class="no_editable" onchange="verifica_fechas_materia(this)" />
-                                                    </td>                               
-                                                </tr>
-                                            {% else %}   
-                                                <tr>
-                                                    <td> No todos los cursos regulares se dictan los mismos días. Debe definir las fechas de evaluación por cada comisión. </td>
-                                                </tr>
-                                            {% endif %}
+                                    {% endif %}
+                                    {# Para las materias que son por Regulares #}
+                                    {% if (materia.CALIDAD == 'R' or materia.CALIDAD == 'R  ' or materia.CALIDAD == 'PyR') %}
+                                        {% if (materia.DIAS_REGU) %}
+                                            <tr>
+                                                <td scope="row" colspan="4">Cursos Regulares:
+                                                    {% for dia in materia.DIAS_REGU %}
+                                                        {{dia.DIA_NOMBRE}}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Parcial Regular: 
+                                                    <input type="text" id="datepicker_materia_regu1_{{materia.MATERIA}}" name="datepicker_materia_regu1_{{materia.MATERIA}}" class="no_editable" />
+                                                </td>  
+                                                <td>1er. Recuperatorio: 
+                                                    <input type="text" id="datepicker_materia_recup1_{{materia.MATERIA}}" name="datepicker_materia_recup1_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)" />
+                                                </td>                               
+                                                <td>2do. Recuperatorio: 
+                                                    <input type="text" id="datepicker_materia_recup2_{{materia.MATERIA}}" name="datepicker_materia_recup2_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)" />
+                                                </td>                               
+                                            </tr>
+                                        {% else %}   
+                                            <tr>
+                                                <td> No todos los cursos regulares se dictan los mismos días. Debe solicitar a la DD la asignación de las fechas para las instancias de evaluación. </td>
+                                            </tr>
                                         {% endif %}
-                                    {% else %}
-                                        <tr>
-                                            <td> No todos los cursos se dictan para el mismo ciclo. Debe definir las fechas de evaluación por cada comisión. </td>
-                                        </tr>
                                     {% endif %}
                                     <tr>
                                         <td colspan="4">Observaciones: 
@@ -158,7 +153,7 @@
                                             </div>
                                         </td>
                                     </tr>                        
-                                {% endif %}
+                                {% endif %} 
                             </table>
                         </form>
                     </div>
