@@ -82,6 +82,5 @@ return array(
     'fechas_parciales_calendario' => 'Visualización de fechas para parciales, integrador y recuperatorios',
     'fechas_parciales_calendario.sin_resultados' => 'No hay información',    
 
-    /* Asistencias */
-    'asistencias' => 'Asistencias',
+    
 );

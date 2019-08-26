@@ -235,7 +235,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
      */
     function get_motivos_inasistencia($parametros)
     {
-        // Sï¿½lo recupera los motivos cuyo tipo son "Justificados"
+        // Solo recupera los motivos cuyo tipo son "Justificados"
         $sql = "SELECT motivo, descripcion FROM sga_inasis_motivos WHERE tipo = 1";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);        
     }
@@ -390,10 +390,10 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                         CASE when sga_asignaciones.dia_semana = 1 then 'Domingo'
                             WHEN sga_asignaciones.dia_semana = 2 THEN 'Lunes'
                             WHEN sga_asignaciones.dia_semana = 3 THEN 'Martes'
-                            WHEN sga_asignaciones.dia_semana = 4 THEN 'Miï¿½rcoles'
+                            WHEN sga_asignaciones.dia_semana = 4 THEN 'Miércoles'
                             WHEN sga_asignaciones.dia_semana = 5 THEN 'Jueves'
                             WHEN sga_asignaciones.dia_semana = 6 THEN 'Viernes'
-                            WHEN sga_asignaciones.dia_semana = 7 THEN 'Sï¿½bado'
+                            WHEN sga_asignaciones.dia_semana = 7 THEN 'Sábado'
                         END AS dia_nombre,
                         to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') as hs_comienzo_clase,
                         to_char(sga_asignaciones.hs_finaliz_clase ,'%H:%M') as hs_finaliz_clase
@@ -537,7 +537,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                                 WHEN sga_asignaciones.dia_semana = 4 THEN 'Mie'
                                 WHEN sga_asignaciones.dia_semana = 5 THEN 'Jue'
                                 WHEN sga_asignaciones.dia_semana = 6 THEN 'Vie'
-                                WHEN sga_asignaciones.dia_semana = 7 THEN 'Sï¿½b'
+                                WHEN sga_asignaciones.dia_semana = 7 THEN 'Sab'
                             END AS dia_nombre,
                             sga_tipo_clase.descripcion as tipo_clase,
                             sga_calendcursada.fecha
