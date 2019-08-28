@@ -103,12 +103,12 @@
                                                 <td>Integrador: <strong>{{comision.EVAL_INTEG.FECHA_HORA}}</strong></td>
                                                 {{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA, comision.EVAL_INTEG.READONLY) }}
                                             </tr>
-                                            {% if materia.CICLO == 'P' %}
+                                            {% if materia.CICLO == 'P' and comision.ESCALA == 'P  ' %}
                                                 <tr>
-                                                    <td colspan="3">1º Recuperatorio: <strong>{{comision.EVAL_PROMRECUP1.FECHA_HORA}}</strong></td>
+                                                    <td colspan="3">1er. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP1.FECHA_HORA}}</strong></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="3">2º Recuperatorio: <strong>{{comision.EVAL_PROMRECUP2.FECHA_HORA}}</strong></td>
+                                                    <td colspan="3">2do. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP2.FECHA_HORA}}</strong></td>
                                                 </tr>
                                             {% endif %}
                                         {% endif %}
@@ -133,7 +133,7 @@
                                             
                                     <div style="text-align: right">
 {#                                        <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>#}
-                                        <div class="btn btn-info btn-lg" onclick="grabar_comision({{comision.COMISION}})" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
+                                        <div class="btn btn-info btn-lg" onclick="grabar_comision('{{comision.COMISION}}')" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
                                     </div>
                                 </form>
                         {% endfor %}
@@ -191,7 +191,7 @@
 
 {% macro set_input(comision, instancia, fecha_hora, estado) %}
     <input type="hidden" id="fecha_hora_{{instancia}}_{{comision}}" name="fecha_hora_{{instancia}}_{{comision}}" value="{{fecha_hora}}">
-    <td><select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, {{comision}}, '{{instancia}}', {{estado}})" >
+    <td><select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, '{{comision}}', '{{instancia}}', '{{estado}}')" >
             <option value="P">--Seleccionar--</option>
             <option value="A">Aceptar</option>
             <option value="R">Modificar</option>
@@ -200,6 +200,6 @@
         Asignar: <input type="text" id="datepicker_{{instancia}}_{{comision}}" name="datepicker_{{instancia}}_{{comision}}" class="datepicker" value="" />
     </div>
     <div id='div_aceptado_{{instancia}}_{{comision}}' style='display:none'>
-        <p style="color:green">La fecha ya está aceptada y asignada</p>
+        <p style="color:green">La fecha se encuentra aceptada y asignada</p>
     </div></td>
 {% endmacro %}

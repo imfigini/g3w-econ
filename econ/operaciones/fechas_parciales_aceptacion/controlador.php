@@ -543,13 +543,14 @@ class controlador extends controlador_g3w2
             $datos['estado'] = $datos['opcion_promo1'];
             $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
         }
+//        kernel::log()->add_debug('fecha_hora_promo2: ', $datos);
         if (isset($datos['fecha_hora_promo2']))
         {
             $datos['evaluacion'] = 2;
             $datos['fecha_hora'] = $datos['fecha_hora_promo2'];
             $datos['estado'] = $datos['opcion_promo2'];
             $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-            if (strpos($ciclo, 'P') !== false)
+            if (strpos($ciclo, 'P') !== false and $datos['escala_notas'] == 6)
             {
                 $datos_recup = $datos;
                 $datos_recup['evaluacion'] = 4;
@@ -570,7 +571,7 @@ class controlador extends controlador_g3w2
             $datos['fecha_hora'] = $datos['fecha_hora_integ'];
             $datos['estado'] = $datos['opcion_integ'];
             $mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-            if (strpos($ciclo, 'P') !== false)
+            if (strpos($ciclo, 'P') !== false and $datos['escala_notas'] == 6)
             {
                 $datos_recup = $datos;
                 $datos_recup['evaluacion'] = 5;
