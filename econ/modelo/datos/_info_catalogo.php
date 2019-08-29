@@ -555,7 +555,7 @@ class _info_catalogo
   array (
     0 => 'coord_anterior',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -573,7 +573,7 @@ class _info_catalogo
   array (
     0 => 'periodo',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -635,7 +635,7 @@ class _info_catalogo
     2 => 'anio_academico_anterior',
     3 => 'periodo_anterior',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -677,7 +677,7 @@ class _info_catalogo
     2 => 'periodo',
     3 => 'coordinador',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
