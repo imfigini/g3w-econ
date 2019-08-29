@@ -88,7 +88,7 @@ class pagelet_filtro extends pagelet {
                 $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
                 $this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
 
-                //print_r($this->data);
+//                print_r($this->data);
 //                $this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
 //                $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
 
@@ -97,53 +97,87 @@ class pagelet_filtro extends pagelet {
         
     public function get_eventos($datos)
     {
+        //print_r($datos); die;
         $resultado = array();
-        $i = 0;
+        // $i = 0;
+        kernel::log()->add_debug('$get_eventos: ', $datos);
         foreach ($datos as $evento)
         {
+            $id                 = $evento['MATERIA']. ' - '.trim($evento['EVALUACION']);
             $materia_nombre     = $evento['MATERIA_NOMBRE'];
-            $title              = $evento['EVALUACION'].' - '.$materia_nombre;
+            $title              = trim($evento['EVALUACION']).' - '.trim($materia_nombre);
             $start              = $evento['FECHA'];
             $end                = $evento['FECHA'];
             $tip                = $evento['MATERIA_NOMBRE'];
             $url                = '';
             $backgroundColor	= $evento['COLOR'];
+            $evaluacion         = $evento['EVALUACION'];
 
-            $calendarEvent = self::buildEvent($title, $start, $end, $url, $tip, $backgroundColor);
+            $calendarEvent = self::buildEvent($id, $title, $start, $end, $url, $tip, $backgroundColor, $evaluacion);
             $resultado[] = $calendarEvent;
             
-            if ($i<4)
-                $i++;
-            else
-                $i=0;
+            // if ($i<4)
+            //     $i++;
+            // else
+            //     $i=0;
         }
+        //Para probar lo  de los feriados
+        // $calendarEvent = self::buildEvent('All Day Event', '2019-09-10', '', '', 'feriado', NCURSES_COLOR_YELLOW);
+        // $resultado[] = $calendarEvent;
+
+        // red areas where no events can be dropped
+        // $calendarEvent = self::buildFeriado('2019-09-17');
+        // $resultado[] = $calendarEvent;
+        // $calendarEvent = self::buildFeriado('2019-09-05');
+        // $resultado[] = $calendarEvent;
 
         $resultado = implode(',', $resultado);
         $resultado = '['.$resultado.']';
-        //print_r($resultado);
+        
+        //print_r($resultado); 
         return $resultado;
     }
 
-    static function buildEvent($title, $start, $end, $url, $tip, $backgroundColor)
+    static function buildEvent($id, $title, $start, $end, $url, $tip, $backgroundColor, $evaluacion)
     {
         $resultado = array();
         $evento = array (
+                        'id'            => $id,
                         'title'			=> $title,
-                        'tip'                   => $tip,
+                        'tip'           => $tip,
                         'start'			=> $start,
-                        'end'			=> $end,
-                        'url'			=> $url,
-                        'textColor'             => 'black',
-                        'backgroundColor'       => $backgroundColor
+                        //'url'			=> $url,
+                        'textColor'     => 'black',
+                        'backgroundColor'       => $backgroundColor,
+                        'evaluacion'    => $evaluacion
                         );
 
-        foreach($evento as $colName => $dataValue)
-        {
+        foreach($evento as $colName => $dataValue)  {
             $resultado[] = '"'.$colName . '":"'. $dataValue . '"'; 
         }
-
         $resultado = implode(',', $resultado);
         $resultado = '{'.$resultado.'}';	
         return $resultado;
     }
+
+    static function buildFeriado($fecha)
+    {
+        $resultado = array();
+        $evento = array (
+                        'id'            => 'feriado',
+                        'start'			=> $fecha,
+                        'end'			=> $fecha,
+                        'overlap'       => 'false',
+                        'rendering'     => 'background',
+                        'color'         => 'LightCoral'
+                        );
+
+        foreach($evento as $colName => $dataValue)  {
+            $resultado[] = '"'.$colName . '":"'. $dataValue . '"'; 
+        }
+        $resultado = implode(',', $resultado);
+        $resultado = '{'.$resultado.'}';	
+        return $resultado;
+    }
+
 }

@@ -242,7 +242,7 @@ class coord_materia
                     FROM ufce_coordinadores_materias
                     WHERE coordinador = '$coord_anterior' ";
         $existe = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        if (empty($existe) && !isset($existe[0]))
+        if (!empty($existe) && isset($existe[0]))
         {
             $sql = "SELECT nro_inscripcion FROM sga_docentes WHERE legajo = '$coord_anterior'";
             $nro_inscripcion = kernel::db()->consultar($sql, db::FETCH_ASSOC);

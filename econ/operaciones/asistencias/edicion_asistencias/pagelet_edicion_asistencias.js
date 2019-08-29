@@ -22,7 +22,7 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 				return false;
 			});
         
-                        actualiza_vista();
+            actualiza_vista();
         }
     }
     
