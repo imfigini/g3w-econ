@@ -460,7 +460,7 @@ class controlador extends \siu\operaciones\asistencias\controlador
             $data = array();
             $data['nro'] = $i;
             $data['legajo'] = $legajo;
-            $data['alumno'] = $alumno['ALUMNO'];
+            $data['alumno'] = utf8_encode($alumno['ALUMNO']);
             $data['calidad_insc'] = $alumno['CALIDAD_INSC'];
             $data['inasist_acum'] = $alumno['CANT_ACUMULADAS'];
             $data['inasist_justif'] = $alumno['CANT_JUSTIFICADAS'];
