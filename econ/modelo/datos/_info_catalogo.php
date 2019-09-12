@@ -555,7 +555,7 @@ class _info_catalogo
   array (
     0 => 'coord_anterior',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -573,7 +573,7 @@ class _info_catalogo
   array (
     0 => 'periodo',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -635,7 +635,7 @@ class _info_catalogo
     2 => 'anio_academico_anterior',
     3 => 'periodo_anterior',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -677,7 +677,7 @@ class _info_catalogo
     2 => 'periodo',
     3 => 'coordinador',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -1305,6 +1305,46 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales_calendario__get_fechas_propuestas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales_calendario__get_hora_comienzo_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function evaluaciones_parciales_calendario__tiene_notas_cargadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function mixes__add_materia_a_mix()
 	{
 		return array (
@@ -1588,6 +1628,19 @@ class _info_catalogo
 		return array (
   'cache' => 'memoria',
   'filas' => 'n',
+);
+	}
+
+	static function unidad_academica_econ__get_limites_periodo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

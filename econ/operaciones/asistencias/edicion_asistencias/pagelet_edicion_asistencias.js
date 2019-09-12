@@ -11,7 +11,8 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 			});
 			
 			$(id).find('.form-renglones').submit(function() {
-				var $form = $(this);
+                var $form = $(this);
+                console.log($form.attr('action'));
 				kernel.ajax.call($form.attr('action'), {
 					type: 'POST',
 					data: $form.serializeArray(),

@@ -101,7 +101,7 @@ class coord_materia
     /**
     * parametros: materia, anio_academico, periodo
     * param_null: periodo
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function get_coordinador($parametros)
@@ -128,7 +128,7 @@ class coord_materia
     
     /**
     * parametros: materia, anio_academico, periodo, coordinador
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function update_coordinador($parametros)
@@ -203,8 +203,6 @@ class coord_materia
         
         $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         
-//        kernel::log()->add_info($resultado, '');
-        
         if (count($resultado)>0 && isset($resultado[0]))
         {
             return true;
@@ -232,7 +230,7 @@ class coord_materia
     
     /**
     * parametros: coord_anterior
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function del_coordinador_anterior($parametros)
@@ -242,7 +240,7 @@ class coord_materia
                     FROM ufce_coordinadores_materias
                     WHERE coordinador = '$coord_anterior' ";
         $existe = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        if (!empty($existe) && isset($existe[0]))
+        if (empty($existe) || !isset($existe[0]))
         {
             $sql = "SELECT nro_inscripcion FROM sga_docentes WHERE legajo = '$coord_anterior'";
             $nro_inscripcion = kernel::db()->consultar($sql, db::FETCH_ASSOC);
@@ -256,7 +254,7 @@ class coord_materia
     
     /**
     * parametros: anio_academico, periodo, anio_academico_anterior, periodo_anterior
-    * cache: memoria
+    * cache: no
     * filas: n
     */
     function replicar_coordinador($parametros)

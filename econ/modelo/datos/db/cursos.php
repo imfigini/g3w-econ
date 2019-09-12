@@ -510,7 +510,7 @@ class cursos
     {
         $comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-        //$escala = $parametros['escala_notas'];
+//        $escala = $parametros['escala_notas'];
         $fecha_hora = $parametros['fecha_hora'];
         
         $sql = "SELECT estado, fecha_hora FROM ufce_cron_eval_parc 
@@ -654,8 +654,8 @@ class cursos
         $fecha_hora = $parametros['fecha_hora'];
         $estado = $parametros['estado'];
 
-//        print_r('<br>Parametros: ');
-//        print_r($parametros);
+        // print_r('<br>Parametros: ');
+        // print_r($parametros);
         $sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
         $result['mensaje'] = util::ejecutar_procedure($sql);
         

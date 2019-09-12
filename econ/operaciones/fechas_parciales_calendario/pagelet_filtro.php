@@ -7,9 +7,9 @@ use kernel\kernel;
 
 class pagelet_filtro extends pagelet {
 	
-        public function get_nombre()
-        {
-            return 'filtro';
+    public function get_nombre()
+    {
+        return 'filtro';
 	}
 
 	/**
@@ -20,8 +20,8 @@ class pagelet_filtro extends pagelet {
             return $this->get_form_builder()->get_formulario();
 	}
 
-	function get_vista_form()
-        {
+    function get_vista_form()
+    {
             return $this->get_form_builder()->get_vista();
 	}
 	
@@ -43,113 +43,108 @@ class pagelet_filtro extends pagelet {
             return $this->controlador->get_anio_academico();
 	}
         
-        function get_carrera()
+    function get_carrera()
 	{
             return $this->controlador->get_carrera();
 	}
         
-        function get_mix()
+    function get_mix()
 	{
             return $this->controlador->get_mix();
 	}
-        
+     
+   
 	public function prepare()
 	{   
-            $operacion = kernel::ruteador()->get_id_operacion();
-            $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
-//            $this->add_var_js('url_buscar_carreras', kernel::vinculador()->crear($operacion, 'buscar_carreras'));
+        $operacion = kernel::ruteador()->get_id_operacion();
+        $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
+        $this->add_var_js('url_correr_evaluacion', kernel::vinculador()->crear($operacion, 'correr_evaluacion'));
 
-            $periodo_hash = $this->get_periodo();
-            $anio_academico_hash = $this->get_anio_academico();
-            $carrera = $this->get_carrera();
-            $mix = $this->get_mix();
-            $form = $this->get_form_builder();
-            $form->set_anio_academico($anio_academico_hash);
-            $form->set_periodo($periodo_hash);
-            $form->set_carrera($carrera);
-            $form->set_mix($mix);
+        $periodo_hash = $this->get_periodo();
+        $anio_academico_hash = $this->get_anio_academico();
+        $carrera = $this->get_carrera();
+        $mix = $this->get_mix();
+        $form = $this->get_form_builder();
+        $form->set_anio_academico($anio_academico_hash);
+        $form->set_periodo($periodo_hash);
+        $form->set_carrera($carrera);
+        $form->set_mix($mix);
 
-            $this->add_var_js('periodo_hash', $periodo_hash);
-            $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
-            $this->add_var_js('carrera', $carrera);        
-            $this->add_var_js('mix', $mix);        
+        $this->add_var_js('periodo_hash', $periodo_hash);
+        $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
+        $this->add_var_js('carrera', $carrera);        
+        $this->add_var_js('mix', $mix);        
 
-            $this->data['periodo_hash'] = $periodo_hash;
-            $this->data['anio_academico_hash'] = $anio_academico_hash;
-            $this->data['carrera'] = $carrera;
-            $this->data['mix'] = $mix;
-            
-            if (!empty($anio_academico_hash) && !empty($periodo_hash))
-            {
-                $datos = $this->controlador->get_evaluaciones($anio_academico_hash, $periodo_hash, $carrera, $mix);
-                $this->data['eventos'] = $this->get_eventos($datos);
-                //print_r($this->data['eventos']);
+        $this->data['periodo_hash'] = $periodo_hash;
+        $this->data['anio_academico_hash'] = $anio_academico_hash;
+        $this->data['carrera'] = $carrera;
+        $this->data['mix'] = $mix;
+        $this->data['limites_periodo'] = $this->controlador->get_limites_periodo($anio_academico_hash, $periodo_hash);
+        
+        if (!empty($anio_academico_hash) && !empty($periodo_hash))
+        {
+            $evaluaciones = $this->controlador->get_evaluaciones($anio_academico_hash, $periodo_hash, $carrera, $mix);
+            $evaluaciones = $this->eliminar_acentos($evaluaciones);
+            $evaluaciones = $this->asignar_colores($evaluaciones);
+            $this->data['eventos'] = $this->get_eventos($evaluaciones);
 
-                $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
-                $this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
-
-//                print_r($this->data);
-//                $this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
-//                $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
-
-            }
+            $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
+            $this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
         }
+    }
         
     public function get_eventos($datos)
     {
         //print_r($datos); die;
         $resultado = array();
-        // $i = 0;
-        kernel::log()->add_debug('$get_eventos: ', $datos);
+        
         foreach ($datos as $evento)
         {
-            $id                 = $evento['MATERIA']. ' - '.trim($evento['EVALUACION']);
-            $materia_nombre     = $evento['MATERIA_NOMBRE'];
-            $title              = trim($evento['EVALUACION']).' - '.trim($materia_nombre);
+            $evaluacion         = trim($evento['EVALUACION']);
+            $materia_nombre     = trim($evento['MATERIA_NOMBRE']);
+            $materia            = $evento['MATERIA'];
+            $eval               = $evento['EVAL_ID'];
+            $estado             = $evento['ESTADO'];
+            $color_acep         = $evento['COLOR_ACEP'];
+            $color_pend         = $evento['COLOR_PEND'];
+
+            $id                 = $materia.'-'.$eval;
+            $title              = $evaluacion.' - '.$materia_nombre;
             $start              = $evento['FECHA'];
-            $end                = $evento['FECHA'];
             $tip                = $evento['MATERIA_NOMBRE'];
-            $url                = '';
-            $backgroundColor	= $evento['COLOR'];
-            $evaluacion         = $evento['EVALUACION'];
 
-            $calendarEvent = self::buildEvent($id, $title, $start, $end, $url, $tip, $backgroundColor, $evaluacion);
+            $calendarEvent = self::buildEvent($id, $title, $start, $tip, $materia, $eval, $estado, $color_acep, $color_pend);
             $resultado[] = $calendarEvent;
-            
-            // if ($i<4)
-            //     $i++;
-            // else
-            //     $i=0;
         }
-        //Para probar lo  de los feriados
-        // $calendarEvent = self::buildEvent('All Day Event', '2019-09-10', '', '', 'feriado', NCURSES_COLOR_YELLOW);
-        // $resultado[] = $calendarEvent;
-
-        // red areas where no events can be dropped
-        // $calendarEvent = self::buildFeriado('2019-09-17');
-        // $resultado[] = $calendarEvent;
-        // $calendarEvent = self::buildFeriado('2019-09-05');
-        // $resultado[] = $calendarEvent;
 
         $resultado = implode(',', $resultado);
         $resultado = '['.$resultado.']';
         
-        //print_r($resultado); 
         return $resultado;
     }
 
-    static function buildEvent($id, $title, $start, $end, $url, $tip, $backgroundColor, $evaluacion)
+    static function buildEvent($id, $title, $start, $tip, $materia, $eval, $estado, $color_acep, $color_pend)
     {
+        switch ($estado)
+        {
+            case 'A': $backgroundColor = $color_acep; break;
+            case 'P': $backgroundColor = $color_pend; break;
+        }
+
         $resultado = array();
         $evento = array (
-                        'id'            => $id,
-                        'title'			=> $title,
-                        'tip'           => $tip,
-                        'start'			=> $start,
-                        //'url'			=> $url,
-                        'textColor'     => 'black',
-                        'backgroundColor'       => $backgroundColor,
-                        'evaluacion'    => $evaluacion
+                        '_id'               => $id,
+                        'title'			    => $title,
+                        'tip'               => $tip,
+                        'start'			    => $start,
+                        'textColor'         => 'black',
+                        'backgroundColor'   => $backgroundColor,
+                        'materia'           => $materia,
+                        'evaluacion'        => $eval,
+                        'estado'            => $estado,
+                        'color_acep'        => $color_acep,
+                        'color_pend'        => $color_pend,
+                        'delta'             => 0
                         );
 
         foreach($evento as $colName => $dataValue)  {
@@ -160,24 +155,81 @@ class pagelet_filtro extends pagelet {
         return $resultado;
     }
 
-    static function buildFeriado($fecha)
+    function asignar_colores($evaluaciones)
     {
-        $resultado = array();
-        $evento = array (
-                        'id'            => 'feriado',
-                        'start'			=> $fecha,
-                        'end'			=> $fecha,
-                        'overlap'       => 'false',
-                        'rendering'     => 'background',
-                        'color'         => 'LightCoral'
-                        );
+        $colores = array(0=>'DodgerBlue', 1=>'LimeGreen', 2=>'Gold', 3=>'LightCoral', 4=>'DarkTurquoise');
+        $colores_claros = array(0=>'LightSkyBlue', 1=>'Lime', 2=>'LightGoldenRodYellow', 3=>'LightPink', 4=>'PaleTurquoise'); 
 
-        foreach($evento as $colName => $dataValue)  {
-            $resultado[] = '"'.$colName . '":"'. $dataValue . '"'; 
+        $materias = array();
+        foreach($evaluaciones as $e)
+        {
+            $mat = $e['MATERIA'];
+            if (!in_array($mat, $materias))
+            {
+                $materias[] = $mat;
+            }
         }
-        $resultado = implode(',', $resultado);
-        $resultado = '{'.$resultado.'}';	
-        return $resultado;
+        $cant = count($evaluaciones);
+        foreach($materias as $k=>$mat)
+        {
+            for ($i=0; $i<$cant; $i++)
+            {
+                if ($evaluaciones[$i]['MATERIA'] == $mat)
+                {
+                    $evaluaciones[$i]['COLOR_ACEP'] = $colores[$k];
+                    $evaluaciones[$i]['COLOR_PEND'] = $colores_claros[$k];
+                }
+            }
+        }
+        //print_r($evaluaciones);
+        return $evaluaciones;
     }
 
+    private function eliminar_acentos($arreglo)
+    {
+        $resultado = array();
+        foreach ($arreglo as $a)
+        {
+            $a['MATERIA_NOMBRE'] = $this->eliminar_tildes($a['MATERIA_NOMBRE']);
+            $resultado[] = $a;
+        }
+        return $resultado;
+    }
+    
+    private function eliminar_tildes($cadena)
+    {
+        $cadena = str_replace(
+            array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
+            array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
+            $cadena
+        );
+
+        $cadena = str_replace(
+            array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
+            array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
+            array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
+            array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
+            array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
+            $cadena );
+
+        $cadena = str_replace(
+            array('ñ', 'Ñ', 'ç', 'Ç'),
+            array('n', 'N', 'c', 'C'),
+            $cadena
+        );
+
+        return $cadena;
+    }
 }

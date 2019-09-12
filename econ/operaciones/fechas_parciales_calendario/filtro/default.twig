@@ -16,7 +16,12 @@
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
     
-    {% if this.data.eventos %}
+	{% if this.data.limites_periodo %}
+		<input type="hidden" id="inicio_periodo" value="{{this.data.limites_periodo.FECHA_INICIO }}">
+		<input type="hidden" id="fin_periodo" value="{{this.data.limites_periodo.FECHA_FIN }}">
+	{% endif %}
+
+	{% if this.data.eventos %}
         <input type="hidden" id="evaluaciones" value="{{this.data.eventos}}">
     {% endif %}
         

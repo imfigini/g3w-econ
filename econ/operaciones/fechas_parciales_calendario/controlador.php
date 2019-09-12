@@ -5,13 +5,14 @@ use kernel\kernel;
 use siu\extension_kernel\controlador_g3w2;
 use siu\modelo\datos\catalogo;
 use kernel\util\validador;
+use siu\errores\error_guarani;
 //use siu\modelo\guarani_notificacion;
 
 
 class controlador extends controlador_g3w2
 {
     protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'carrera'=>"", 'mix'=>"");
-    
+
     function modelo()
     {
     }
@@ -42,7 +43,7 @@ class controlador extends controlador_g3w2
     {
         return $this->datos_filtro['mix'];
     }
-    
+
     function set_periodo($periodo)
     {
         $this->datos_filtro['periodo'] = $periodo;
@@ -74,7 +75,78 @@ class controlador extends controlador_g3w2
         }
         $this->render_raw_json($datos);
     }
-    
+
+    function accion__correr_evaluacion() 
+    {
+        $parametros['materia'] = $this->validate_param('materia', 'post', validador::TIPO_TEXTO);      
+        $parametros['evaluacion'] = $this->validate_param('evaluacion', 'post', validador::TIPO_TEXTO);
+        $parametros['fecha_orig'] = $this->validate_param('fecha_orig', 'post', validador::TIPO_TEXTO);
+        $parametros['fecha_dest'] = $this->validate_param('fecha_dest', 'post', validador::TIPO_TEXTO);
+        $color_acep = $this->validate_param('color_acep', 'post', validador::TIPO_TEXTO);
+        $anio_academico_hash = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
+        $periodo_hash = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO);  
+        $parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
+        $parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
+        
+        //kernel::log()->add_debug('accion__confirmar_evaluacion parametros: ', $parametros);
+
+        try
+        {
+            kernel::db()->abrir_transaccion();
+
+            $datos_propuestos = catalogo::consultar('evaluaciones_parciales_calendario', 'get_fechas_propuestas', $parametros);
+            //kernel::log()->add_debug('accion__confirmar_evaluacion datos: ', $datos_propuestos);
+
+            //throw new error_guarani('probando supeusto error!!!!!!!!!!!!!');
+
+            $exito = true;
+
+            foreach($datos_propuestos as $dato)
+            {
+
+                //print_r($dato);
+                $param['comision'] = $dato['COMISION'];
+                $param['evaluacion'] = $parametros['evaluacion'];
+
+                $tiene_notas_cargadas = catalogo::consultar('evaluaciones_parciales_calendario', 'tiene_notas_cargadas', $param);
+                if ($tiene_notas_cargadas) {
+                    throw new error_guarani('La comisión '.$dato['COMISION'].' tiene notas cragadas. ');
+                }
+
+                $fecha = date("Y-m-d", strtotime($dato['FECHA']));
+                $estado = 'R';
+                if ($fecha == $parametros['fecha_dest']) {
+                    $estado = 'A';
+                }
+                $hora_inicio = catalogo::consultar('evaluaciones_parciales_calendario', 'get_hora_comienzo_clase', $param);
+                
+                $param['escala_notas'] = $dato['ESCALA_NOTAS'];
+                $param['fecha_hora'] = $parametros['fecha_dest'].' '.$hora_inicio[0];
+                $param['estado'] = $estado;
+                
+                $alta = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $param);
+                if (!$alta['success']) {
+                    $exito = false;
+                }
+            }
+            //$resultado = array();
+            if ($exito)
+            {
+                $resultado['fecha'] = $parametros['fecha_dest'];
+                $resultado['backgroundColor'] = $color_acep;
+            }
+            kernel::db()->cerrar_transaccion();
+            //kernel::log()->add_debug('accion__confirmar_evaluacion: ', $resultado);
+            $this->render_ajax('mensaje', $resultado);
+        }
+        catch (error_guarani $e)
+        {
+            kernel::db()->abortar_transaccion();
+            $this->finalizar_request_con_notificaciones('No se puede modificar la fecha de la evaluación. ', $e);
+        }
+    }
+
+   
     /**
     * @return guarani_form
     */
@@ -128,6 +200,18 @@ class controlador extends controlador_g3w2
         return false;
     }
 
+    function get_limites_periodo($anio_academico_hash = null, $periodo_hash = null)
+    {
+        if (!empty($anio_academico_hash) && !empty($periodo_hash))
+        {
+            $parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
+            $parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
+            if (!is_null($anio_academico_hash) && !is_null($periodo_hash)) {
+                return catalogo::consultar('unidad_academica_econ', 'get_limites_periodo', $parametros);
+            }
+        }
+        return null;
+    }
     
     function get_evaluaciones($anio_academico_hash, $periodo_hash, $carrera, $mix)
     {
@@ -146,50 +230,16 @@ class controlador extends controlador_g3w2
                             'mix' => substr($mix, 1, 1)
                         );
                 
-                $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_aceptadas', $parametros);
-                $evaluaciones_aceptadas = $this->eliminar_acentos($resultado);
-                $resultado = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_pendientes', $parametros);
-                $evaluaciones_pendientes = $this->eliminar_acentos($resultado);
-                $evaluaciones = self::asignar_colores($evaluaciones_aceptadas, $evaluaciones_pendientes);
+                $evaluaciones_aceptadas = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_aceptadas', $parametros);
+                $evaluaciones_pendientes = catalogo::consultar('evaluaciones_parciales', 'get_evaluaciones_pendientes', $parametros);
+                $evaluaciones = array_merge($evaluaciones_aceptadas, $evaluaciones_pendientes);
                 return $evaluaciones;
             }
         }
         return null;
     }
 
-    function asignar_colores($evaluaciones_aceptadas, $evaluaciones_pendientes)
-    {
-        $colores = array(0=>'DodgerBlue', 1=>'LimeGreen', 2=>'Gold', 3=>'LightCoral', 4=>'DarkTurquoise');
-        $colores_claros = array(0=>'LightSkyBlue', 1=>'Lime', 2=>'LightGoldenRodYellow', 3=>'LightPink', 4=>'PaleTurquoise'); 
-        $evaluaciones = array_merge($evaluaciones_aceptadas, $evaluaciones_pendientes);
-        $materias = array();
-        foreach($evaluaciones as $e)
-        {
-            $mat = $e['MATERIA'];
-            if (!in_array($mat, $materias))
-            {
-                $materias[] = $mat;
-            }
-        }
-        $cant = count($evaluaciones);
-        foreach($materias as $k=>$mat)
-        {
-            for ($i=0; $i<$cant; $i++)
-            {
-                if ($evaluaciones[$i]['MATERIA'] == $mat)
-                {
-                    switch ($evaluaciones[$i]['ESTADO'])
-                    {
-                        case 'A': $evaluaciones[$i]['COLOR'] = $colores[$k]; break;
-                        case 'P': $evaluaciones[$i]['COLOR'] = $colores_claros[$k]; break;
-                    }
-                }
-            }
-        }
-        //print_r($evaluaciones);
-        return $evaluaciones;
-    }
-    
+   
     function get_dias_no_laborales($anio_academico_hash, $periodo_hash)
     {
         if (!empty($anio_academico_hash))
@@ -208,52 +258,5 @@ class controlador extends controlador_g3w2
         return null;
     }
     
-    private function eliminar_acentos($arreglo)
-    {
-        $resultado = array();
-        foreach ($arreglo as $a)
-        {
-            $a['MATERIA_NOMBRE'] = $this->eliminar_tildes($a['MATERIA_NOMBRE']);
-            $resultado[] = $a;
-        }
-        return $resultado;
-    }
-    
-    private function eliminar_tildes($cadena)
-    {
-        $cadena = str_replace(
-            array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
-            array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
-            $cadena
-        );
-
-        $cadena = str_replace(
-            array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
-            array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
-            $cadena );
-
-        $cadena = str_replace(
-            array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
-            array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
-            $cadena );
-
-        $cadena = str_replace(
-            array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
-            array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
-            $cadena );
-
-        $cadena = str_replace(
-            array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
-            array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
-            $cadena );
-
-        $cadena = str_replace(
-            array('ñ', 'Ñ', 'ç', 'Ç'),
-            array('n', 'N', 'c', 'C'),
-            $cadena
-        );
-
-        return $cadena;
-    }
 }
 ?>

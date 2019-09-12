@@ -745,7 +745,7 @@ class controlador extends controlador_g3w2
         }
         try 
         {
-            kernel::db()->abrir_transaccion();
+            kernel::db()->abrir_transaccion(); 
             $parametros['evaluacion'] = $inst;
             $fecha_instancia = 'fecha_'.$instancia;
             $parametros['fecha_hora'] = $this->get_fecha_hora($datos["$fecha_instancia"], $dias_clase);

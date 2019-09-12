@@ -313,6 +313,7 @@ class evaluaciones_parciales
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
                                 END as evaluacion, 
+                                sga_eval_parc.evaluacion as eval_id,
                                 sga_cron_eval_parc.fecha_hora::DATE as fecha,
                                 'A' as estado
                     FROM sga_cron_eval_parc
@@ -363,6 +364,7 @@ class evaluaciones_parciales
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
                                 END as evaluacion, 
+                                sga_eval_parc.evaluacion as eval_id,
                                 ufce_cron_eval_parc.fecha_hora::DATE as fecha,
                                 'P' as estado
                     FROM ufce_cron_eval_parc
