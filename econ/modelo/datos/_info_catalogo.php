@@ -689,9 +689,7 @@ class _info_catalogo
   array (
     0 => 'comision',
     1 => 'evaluacion',
-    2 => 'escala_notas',
-    3 => 'fecha_hora',
-    4 => 'estado',
+    2 => 'fecha_hora',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -710,6 +708,18 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function cursos__existe_evaluacion_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
 );
 	}
 
@@ -773,6 +783,33 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_estado_comision_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+    2 => 'fecha',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function cursos__get_evaluacion_asignada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function cursos__get_evaluaciones_de_materia()
 	{
 		return array (
@@ -811,6 +848,19 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function cursos__get_fecha_solicitada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

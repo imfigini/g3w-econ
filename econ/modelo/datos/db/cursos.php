@@ -1,5 +1,7 @@
 <?php
 namespace econ\modelo\datos\db;
+
+use kernel\error_kernel_notificaciones;
 use kernel\kernel;
 use kernel\util\validador;
 use kernel\util\db\db;
@@ -39,7 +41,6 @@ class cursos
                       AND X.mix = '$mix'  ";
         }
         $sql .= " ORDER BY 2";
-        //print_r($sql);
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $result;
     }
@@ -289,6 +290,7 @@ class cursos
                         C.nombre AS comision_nombre, 
                         C.anio_academico, 
                         C.periodo_lectivo,
+						C.escala_notas,
                         CASE 
                             WHEN C.escala_notas = 3 THEN 'R'
                             WHEN C.escala_notas = 4 THEN 'PyR'
@@ -311,8 +313,6 @@ class cursos
         {
             $sql .= " AND C.periodo_lectivo = $periodo";
         }
-//        print_r('<br>Sql: ');
-//        print_r($sql);
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
  
@@ -488,8 +488,6 @@ class cursos
      */
     function get_hora_inicio($parametros)
     {
-//        print_r('<br>'.__FILE__.'-'.__LINE__.'<br>');
-//        print_r($parametros);
         $comision = $parametros['comision'];
         $dia_semana = $parametros['dia_semana'];
         $sql = "SELECT hs_comienzo_clase
@@ -502,7 +500,7 @@ class cursos
     }
     
     /**
-    * parametros: comision, evaluacion, escala_notas, fecha_hora
+    * parametros: comision, evaluacion, fecha_hora
     * cache: no
     * filas: n
     */
@@ -510,51 +508,35 @@ class cursos
     {
         $comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-//        $escala = $parametros['escala_notas'];
         $fecha_hora = $parametros['fecha_hora'];
-        
-        $sql = "SELECT estado, fecha_hora FROM ufce_cron_eval_parc 
+        		
+		$sql = "SELECT estado, fecha_hora FROM ufce_cron_eval_parc 
                     WHERE comision = $comision 
-                        AND evaluacion = $evaluacion
-                        AND estado = 'A'";
-        $eval = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+                        AND evaluacion = $evaluacion";
 
-//        print_r('<br sql2: ');
-//        print_r($sql);
-        
-        if (count($eval) > 0)
+        $eval = kernel::db()->consultar-fila($sql, db::FETCH_ASSOC);
+        if (!empty($eval))
         {
-            return;
-        }    
-
-        $sql = "SELECT estado, fecha_hora FROM ufce_cron_eval_parc 
-                    WHERE comision = $comision 
-                        AND evaluacion = $evaluacion
-                        AND estado <> 'A'";
-        $eval = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-//        print_r('<br sql: ');
-//        print_r($sql);
-
-        if (!empty($eval) AND $eval[0]['ESTADO'] == 'P')
-        {
-            if ($eval[0]['FECHA_HORA'] != $fecha_hora)
-            {
-                $sql = "UPDATE ufce_cron_eval_parc
-                        SET fecha_hora = $fecha_hora
-                    WHERE comision = $comision 
-                    AND evaluacion = $evaluacion";
-                $result = kernel::db()->ejecutar($sql);
-//                print_r('<br sql if: ');
-//                print_r($sql);
-            }
-        }
+			if ($eval['ESTADO'] != 'P') {//Si el estado es distinto de 'P' es que la instancia de evaluación ya ha sido creada
+				return;
+			}
+			else
+			{
+	            if ($eval[0]['FECHA_HORA'] != $fecha_hora)
+    	        {
+        	        $sql = "UPDATE ufce_cron_eval_parc
+            	        	    SET fecha_hora = $fecha_hora
+                		    WHERE comision = $comision 
+	                    	AND evaluacion = $evaluacion";
+    	            $result = kernel::db()->ejecutar($sql);
+	            }
+			}
+		}
         else
         {
             $sql = "INSERT INTO ufce_cron_eval_parc (comision, evaluacion, fecha_hora, estado)
                         VALUES ($comision, $evaluacion, $fecha_hora, 'P')";
             $result = kernel::db()->ejecutar($sql);
-//            print_r('<br sql else: ');
-//            print_r($sql);
         }
         return $result;
      }
@@ -583,8 +565,96 @@ class cursos
         }
         return $resultado;
     }
-    
-    
+
+    /**
+    * parametros: comision, evaluacion
+    * cache: no
+    * filas: 1
+    */
+    function get_evaluacion_asignada($parametros)
+    {
+        $comision = $parametros['comision'];
+        $evaluacion = $parametros['evaluacion'];
+        $sql = "SELECT E.fecha_hora, NVL(U.estado, 'U') AS estado
+					FROM sga_cron_eval_parc E
+					LEFT JOIN ufce_cron_eval_parc U ON (U.comision = E.comision AND U.evaluacion = E.evaluacion)
+                        WHERE E.comision = $comision
+						AND E.evaluacion = $evaluacion";
+		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		if (count($resultado) == 0) 
+		{
+			$resultado['FECHA_HORA'] = null;
+			$resultado['ESTADO'] = null;
+		}
+		if ($resultado['ESTADO'] == 'U')
+		{
+			$parametros['fecha'] = json_encode($resultado['FECHA_HORA']);
+			$resultado['ESTADO'] = $this->get_estado_comision_fecha($parametros);
+		}
+		// print_r('<br>Resultado: ');
+		// print_r($resultado);
+		return $resultado;
+	}
+
+
+    /**
+    * parametros: comision, evaluacion, fecha
+    * cache: no
+    * filas: 1
+    */
+    function get_estado_comision_fecha($parametros)
+    {
+		//Si la fecha corresponde con la solicitada por el coordinador, devuelve 'A'
+		//Sino, si la fecha corresponde a un día de cursada de la comisión devuelve 'C'
+		//En todo otro caso devuelve 'R'
+
+		$comision = $parametros['comision'];
+		$evaluacion = $parametros['evaluacion'];
+		$fecha = substr($parametros['fecha'], 1, 10);
+
+		$sql = "SELECT DATE(fecha_hora) as fecha
+					FROM ufce_cron_eval_parc 
+					WHERE comision = $comision 
+					AND evaluacion = $evaluacion";
+
+		$existe = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		if ($existe['FECHA'] && $existe['FECHA'] == $fecha) {
+			$estado = 'A';
+		} else {
+			$sql = "SELECT dia_semana
+					FROM   sga_asignaciones
+					WHERE  asignacion IN (SELECT asignacion
+											FROM   sga_calendcursada
+											WHERE  comision = $comision)";
+			$r = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+
+			$dia_semana = date('N', strtotime($fecha)) + 1;
+			$estado = 'R';	
+			foreach ($r as $dia) {
+				if ($dia['DIA_SEMANA'] == $dia_semana) {
+					$estado = 'C';
+				}
+			}
+		}
+		return $estado;
+	}
+
+	/**
+    * parametros: comision, evaluacion
+    * cache: no
+    * filas: 1
+    */
+	function get_fecha_solicitada($parametros)
+    {
+        $comision = $parametros['comision'];
+        $evaluacion = $parametros['evaluacion'];
+		$sql = "SELECT fecha_hora, estado
+				FROM ufce_cron_eval_parc 
+					WHERE comision = $comision
+					AND evaluacion = $evaluacion";
+		return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+	}
+	    
      /**
     * parametros: materia, anio_academico, periodo
     * cache: no
@@ -624,39 +694,57 @@ class cursos
                     WHERE materia = $materia
                     AND anio_academico = $anio_academico
                     AND periodo_lectivo = $periodo_lectivo";
-        $obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+		$obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+		$oper = '';
         if (count($obs) > 0)
         {
             $sql = "UPDATE ufce_cron_eval_parc_obs 
                         SET observaciones = $observaciones
                     WHERE materia = $materia
                     AND anio_academico = $anio_academico
-                    AND periodo_lectivo = $periodo_lectivo";
+					AND periodo_lectivo = $periodo_lectivo
+					AND observaciones NOT LIKE $observaciones ";
+			$oper = 'U';
         }
         else
         {
             $sql = "INSERT INTO ufce_cron_eval_parc_obs (materia, anio_academico, periodo_lectivo, observaciones)
-                        VALUES ($materia, $anio_academico, $periodo_lectivo, $observaciones)";
+						VALUES ($materia, $anio_academico, $periodo_lectivo, $observaciones)";
+			$oper = 'I';
         }
-        return kernel::db()->ejecutar($sql);
+		$exito = kernel::db()->ejecutar($sql);
+		if ($exito) 
+		{
+			$sql_log = "INSERT INTO ufce_cron_eval_parc_obs_log 
+							(materia, anio_academico, periodo_lectivo, observaciones, fecha, oper)
+						VALUES ($materia, $anio_academico, $periodo_lectivo, $observaciones, CURRENT, '$oper')";
+			kernel::db()->ejecutar($sql_log);
+		}
+		return $exito;
     }
     
     /**
-    * parametros: comision, evaluacion, escala_notas, fecha_hora, estado
+    * parametros: comision, evaluacion, fecha_hora
     * cache: no
     * filas: n
     */
     function alta_evaluacion_parcial($parametros)
     {
-        $comision = $parametros['comision'];
+		kernel::log()->add_debug('alta_evaluacion_parcial', $parametros); 
+		$comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-        $escala = $parametros['escala_notas'];
+        $escala = 3;	//Las instancias de evaluación parcial siempre deben tener escala: 3 (Reales Regular)
         $fecha_hora = $parametros['fecha_hora'];
-        $estado = $parametros['estado'];
+        ///$estado = $parametros['estado'];
 
-        // print_r('<br>Parametros: ');
-        // print_r($parametros);
-        $sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
+		$estado_notif = 'U';
+		if ($this->existe_evaluacion_parcial($parametros)) {
+			$estado_notif = 'M';
+		}
+
+		$sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
+		kernel::log()->add_debug('sp_i_atrcroevalpar', $sql); 
+	//	die;
         $result['mensaje'] = util::ejecutar_procedure($sql);
         
         $sql = "SELECT descripcion FROM sga_eval_parc WHERE evaluacion = $evaluacion";
@@ -665,26 +753,40 @@ class cursos
         
         if ($result['mensaje'] == 'OK')
         {
-            $result['success'] = 1;
+			$result['success'] = 1;
+			$estado = $this->get_estado_comision_fecha(array('comision'=>$comision, 'evaluacion'=>$evaluacion, 'fecha'=>$fecha_hora));	
+			$estado = json_encode($estado);
+
             $sql = "UPDATE ufce_cron_eval_parc
-                        SET estado = $estado
+                        SET estado = $estado,
+							estado_notific = '$estado_notif'
                     WHERE comision = $comision 
                     AND evaluacion = $evaluacion";
             kernel::db()->ejecutar($sql);
             $result['mensaje'] = "Se dio de alta correctamente la evaluación $eval_descrip para la comisión $comision. ";
-            return $result;
         }
         else
         {
-            if ($estado != 'P')
-            {
-                $result['success'] = -1;
-                $result['mensaje'] .= " Evaluación $eval_descrip en la comisión $comision. ";
-            }
-            return $result;
-        }
+			$result['success'] = -1;
+			$result['mensaje'] .= " Evaluación $eval_descrip en la comisión $comision. ";
+            
+		}
+		return $result;
     }
-    
+	
+    /**
+    * parametros: comision, evaluacion
+    * cache: no
+    */
+	private function existe_evaluacion_parcial($parametros)
+	{
+		$sql = "SELECT COUNT(*) AS cant
+				FROM sga_atr_eval_parc
+				WHERE comision = {$parametros['comision']}
+					AND evaluacion = {$parametros['evaluacion']}";
+		$existe = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		return ($existe['CANT'] > 0);
+	}
 
     /**
     * parametros: comision
@@ -758,22 +860,5 @@ class cursos
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
 
-//    private function get_datetime_from_string($datetime_str, $format = 'Y-m-d H:i:s')
-//    {
-//        $result = \DateTime::createFromFormat(trim($format), $datetime_str);
-//        $errs = \DateTime::getLastErrors();
-//        var_dump($result, $errs);
-//        return ($result && $errs['warning_count'] == 0 && $errs['error_count'] == 0)
-//            ? $result
-//            : false;
-//    }
-
-//    private function dateValidation($d) 
-//    {
-//        $result = !!new Date($d).getTime();
-//        print_r('<br>dateValidation: ');
-//        print_r($result);
-//        return $result;
-//    }
 }
 

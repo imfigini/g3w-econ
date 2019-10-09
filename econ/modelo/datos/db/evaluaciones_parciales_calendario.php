@@ -59,5 +59,6 @@ class evaluaciones_parciales_calendario
             return true;
         }
         return false;
-    }
+	}
+
 }

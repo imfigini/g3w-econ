@@ -34,9 +34,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             
             buscarPeriodos($('#formulario_filtro-anio_academico').val());
             
-			$(id).delegate(".link-js", "click", function() {
+            //Para que despliegue u oculte la información de las comisiones de cada materia. 
+            $(id).delegate(".link-js", "click", function() {
                         $(this).find('.toggle').toggleClass(function(){
-                            //console.log($(this));
+                            console.log($(this));
                                 if ($(this).is('.icon-chevron-up')) {
                                         return 'icon-chevron-down';
                                 } else {
@@ -47,13 +48,18 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         return true;
                 });
             
+    
+            //setear_calendarios();  
             inicio();
-            //set_focus(info.comision);
+            set_focus(info.comision);
+            //set_values('datepicker_promo1_6879', '2018-01-01', '2018-12-31');
+            
         }
     };
     
     
     function buscarPeriodos(anio_academico){
+            //console.log(anio_academico.valueOf());    
             $.ajax({
                     url: info.url_buscar_periodos,
                     dataType: 'json',
@@ -94,29 +100,38 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 for(var j=0; j<cant_com; j++)
                 {
                     var comision = comisiones[j];
-					var com = comision.COMISION;
+                    var com = comision.COMISION;
+                    if (comision.ESCALA == 'P  ' || comision.ESCALA == 'PyR')
+                    {
+                        setear_estado('aceptar_promo1_'+com, comision.EVAL_PROMO1);
+                        setear_estado('aceptar_promo2_'+com, comision.EVAL_PROMO2);
+                        if (materia.CICLO == 'F' || materia.CICLO == 'FyP' )
+                        {
+                            setear_estado('aceptar_recup_'+com, comision.EVAL_RECUP);
+                        }
+                        setear_estado('aceptar_integ_'+com, comision.EVAL_INTEG);
+                    }
 
-					if (comision.ESCALA.trim() == 'P' || comision.ESCALA == 'PyR')
-					{
-						set_div_mensaje_aceptado(com, 'promo1', comision.EVAL_PROMO1_ASIGN.ESTADO, comision.EVAL_PROMO1_ASIGN.FECHA_HORA);
-						set_div_mensaje_aceptado(com, 'promo2', comision.EVAL_PROMO2_ASIGN.ESTADO, comision.EVAL_PROMO2_ASIGN.FECHA_HORA);
-						if (materia.CICLO.trim() == 'F' || materia.CICLO == 'FyP' ) {
-							set_div_mensaje_aceptado(com, 'recup', comision.EVAL_RECUP_ASIGN.ESTADO, comision.EVAL_RECUP_ASIGN.FECHA_HORA);
-						}
-						set_div_mensaje_aceptado(com, 'integ', comision.EVAL_INTEG_ASIGN.ESTADO, comision.EVAL_INTEG_ASIGN.FECHA_HORA);										
-					}
-
-					if (comision.ESCALA.trim() == 'R' || comision.ESCALA == 'PyR')
-					{
-						set_div_mensaje_aceptado(com, 'regu1', comision.EVAL_REGU1_ASIGN.ESTADO, comision.EVAL_REGU1_ASIGN.FECHA_HORA);
-						set_div_mensaje_aceptado(com, 'recup1', comision.EVAL_RECUP1_ASIGN.ESTADO, comision.EVAL_RECUP1_ASIGN.FECHA_HORA);
-						set_div_mensaje_aceptado(com, 'recup2', comision.EVAL_RECUP2_ASIGN.ESTADO, comision.EVAL_RECUP2_ASIGN.FECHA_HORA);
-					}
+                    if (comision.ESCALA == 'R  ' || comision.ESCALA == 'PyR')
+                    {
+                        setear_estado('aceptar_regu1_'+com, comision.EVAL_REGU1);
+                        setear_estado('aceptar_recup1_'+com, comision.EVAL_RECUP1);
+                        setear_estado('aceptar_recup2_'+com, comision.EVAL_RECUP2);
+                    }
                 }
             }
         }
     }
 
+    function setear_estado(boton, eval)
+    {
+        var estado = 'P'
+        if (eval.hasOwnProperty("ESTADO"))
+        {
+             estado = eval.ESTADO;
+        }                            
+        $('#'+boton).val(estado).change();
+    }
         
 });
     
@@ -128,11 +143,11 @@ function calendarioVisible(estado, comision, instancia, estado_orig)
     var div_aceptado = 'div_aceptado_'+instancia+'_'+comision;
     switch(estado.value)
     {
-        case 'C': 
+        case 'R': 
             setear_calendario_restringido(comision, instancia);
             $('#'+div).show();
             break;
-        case 'R': 
+        case 'N': 
             setear_calendario_abierto(comision, instancia);
             $('#'+div).show();
             break;
@@ -140,11 +155,15 @@ function calendarioVisible(estado, comision, instancia, estado_orig)
             $('#'+div).hide();
     }
     
-    if (estado_orig) {
+    if (estado_orig)
+    {
         $('#'+div_aceptado).show();
-    } else {
+    }
+    else
+    {
         $('#'+div_aceptado).hide();
     }
+
 }
 
 
@@ -299,170 +318,25 @@ function fecha_valida(dias_no_validos, fecha)
     return true;
 }
 
-function set_div_mensaje_aceptado(comision, instancia, estado, fecha)
-{
-	var div = $('#div_aceptado_'+instancia+'_'+comision);
-	var p = $('#mensaje_estado_'+instancia+'_'+comision);
-	if (!estado || !fecha) {
-		estado = 'P';
-	}
-	switch (estado.trim())
-	{
-		case 'A':		p.text('Aceptada: '+fecha);
-						p.removeClass('resaltar_azul');
-						p.addClass('resaltar_verde');
-						div.show();
-						break;
-		case 'C': 		p.text('Asignada en día de cursada: '+fecha)
-						p.removeClass('resaltar_azul');
-						p.addClass('resaltar_verde');
-						div.show();
-						break;
-		case 'R': 		p.text('Asignada en otro día: '+fecha)
-						p.removeClass('resaltar_verde');
-						p.addClass('resaltar_azul');
-						div.show();
-						break;
-		default: 		div.hide();
-						break;
-	}
-}
-
 function grabar_comision(comision)
 {
-	var promo1 = grabar_instancia_evaluacion(comision, 'promo1', 1);
-	var promo2 = grabar_instancia_evaluacion(comision, 'promo2', 2);
-	var recup = grabar_instancia_evaluacion(comision, 'recup', 7);
-	var integ = grabar_instancia_evaluacion(comision, 'integ', 14);
-
-	var regu1 = grabar_instancia_evaluacion(comision, 'regu1', 21);
-	var recup1 = grabar_instancia_evaluacion(comision, 'recup1', 4);
-	var recup2 = grabar_instancia_evaluacion(comision, 'recup2', 5);
-
-	var mensaje = armar_mensaje(promo1, promo2, recup, integ, regu1, recup1, recup2);
-	kernel.ui.show_mensaje(mensaje);
-}
-
-function grabar_instancia_evaluacion(comision, instancia, evaluacion)
-{
-	var datos = get_datos_instancia_evaluacion(comision, instancia, evaluacion);
-
-	if (datos)
-	{
-		console.log(datos);
-		var formulario = $('#comision_seleccionada_'+comision);
-		//console.log(formulario.attr('action'));
-		//console.log(formulario);
-
-		var resultado = '';
-		kernel.ajax.call(formulario.attr('action'), {
-				async: false,
-				type: "post",
-				dataType: 'json',
-				data: datos,
-				success: function(data) { 
-					console.log(data);
-					//console.log(data.cont[0].mensaje);
-					$('#aceptar_'+instancia+'_'+comision).val('P');
-					$('#div_'+instancia+'_'+comision).hide();
-
-					if (data.cont[0].success == -1) {
-							alert(data.cont[0].mensaje);
-					} else {
-						set_div_mensaje_aceptado(comision, instancia, datos.estado, datos.fecha_hora);
-						resultado = data.cont[0].mensaje;
-					}
-				}, 
-				error: function(response) {
-					console.log('Falló');
-					console.log(response);
-					kernel.ui.show_mensaje(response.msj, {tipo: 'alert-error'});
-				}
-		});
-		return resultado;
-	}
-
-}
-
-function get_datos_instancia_evaluacion(comision, instancia, evaluacion)
-{
-	var opcion = $('#aceptar_'+instancia+'_'+comision).val();
-	console.log(opcion);
-	if (!opcion || opcion == 'P') {
-		return null;
-	}
-
-	var fecha_hora = $('#fecha_hora_'+instancia+'_'+comision).val();
-	var estado;
-
-	if (opcion == 'A') {
-		estado = 'A';
-	}
-	if (opcion == 'C' || opcion == 'R')
-	{
-		var dias_clase = $('#dias_clase_'+comision).val();
-
-		var datepicker = $('#datepicker_'+instancia+'_'+comision).val();
-		var fecha_slpit = datepicker.split('/');
-		var fecha_string = fecha_slpit[2] + '-' + fecha_slpit[1] + '-' + fecha_slpit[0];
-		var fecha = new Date(fecha_slpit[2], parseInt(fecha_slpit[1])-1, fecha_slpit[0]);
-		var diaSemana = fecha.getDay();
-
-		estado = 'R';
-		if (contiene(dias_clase, diaSemana))
-		{
-			if (fecha_hora.substring(0,10) == fecha_string) {
-				estado = 'A';
-			} else {
-				estado = 'C';
-			}
-		}
-		var hora = get_hora_clase(dias_clase, diaSemana);
-		fecha_hora = fecha_string + ' ' + hora;
-    }
-	ciclo = $('#escala_'+comision).val().trim();
-
-	return {comision: comision, evaluacion: evaluacion, ciclo: ciclo, fecha_hora: fecha_hora, estado: estado};
-}
-
-function get_hora_clase(dias_clase, diaSemana)
-{
-	var dias = JSON.parse(dias_clase);
-    for (var i in dias)
-    {
-        if (dias[i].DIA_SEMANA == diaSemana)
-        {
-            return dias[i].HS_COMIENZO_CLASE;
-        }
-    }
-    return dias[0].HS_COMIENZO_CLASE;
-}
-
-function armar_mensaje(promo1, promo2, recup, integ, regu1, recup1, recup2)
-{
-	var mensaje = '';
-	if (promo1)	{
-		mensaje += promo1;
-	}
-	if (promo2)	{
-		mensaje += promo2;
-	}
-	if (recup)	{
-		mensaje += recup;
-	}
-	if (integ)	{
-		mensaje += integ;
-	}
-	if (regu1)	{
-		mensaje += regu1;
-	}
-	if (recup1)	{
-		mensaje += recup1;
-	}
-	if (recup2)	{
-		mensaje += recup2;
-	}
-	return mensaje;
+    var formulario_id = 'comision_seleccionada_'+comision;
+    var formulario = $('#'+formulario_id);
+    //var contenedor = $('#h4_'+comision); 
+    formulario.submit();
+//    var titulo = 'h4_'+comision;
+//    console.log(titulo)
+//    document.getElementById(titulo).focus();
+//    console.log(contenedor);
+//    $.ajax({
+//        type: "POST",
+//        url: form_url_comision,
+//        data: formulario.serialize(), // serializes the form's elements. 
+//        success: function(data) { 
+//            //alert(data); // show response from the php script. 
+//            contenedor.
+//            } 
+//        });
 }
 
 function set_focus(comision)

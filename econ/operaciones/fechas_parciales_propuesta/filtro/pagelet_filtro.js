@@ -248,7 +248,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         return posibles_fechas.substring(0, posibles_fechas.length-1) + ']';
     }
     
-    //  Verifica que ese mismo día no esté ocupado por otra materia del mismo mix, y tampoco el día anterior o posterior consecutivo. 
+    //  Verifica que ese mismo día no este ocupado por otra materia del mismo mix, y tampoco el día anterior o posterior consecutivo. 
     //  En caso de tener que comparar con un recuperatorio unico, sólo verifica el mimo día
     function fecha_disponible(fechas_no_disponibles, fecha, instancia_evaluacion)
     {
@@ -515,4 +515,3 @@ function fechas_en_orden(fecha1, fecha2)
     }
     return true;
 }
-

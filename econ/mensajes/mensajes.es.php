@@ -74,12 +74,12 @@ return array(
     
     /* Aceptación de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales, integrador y recuperatorios',
-    'fechas_parciales_aceptacion' => 'Aceptación o modificación de fechas para parciales, integrador y recuperatorios',
+    'fechas_parciales_aceptacion' => 'Gestión por listado para fechas de evaluaciones',
     'fechas_parciales_aceptacion.sin_resultados' => 'No hay información',    
 
     /* Visualización de fechas para parciales y recuperatorios (en calenadario)*/
     'tit_fechas_parciales_calendario' => 'Revisión de fechas para parciales, integrador y recuperatorios',
-    'fechas_parciales_calendario' => 'Visualización de fechas para parciales, integrador y recuperatorios',
+    'fechas_parciales_calendario' => 'Gestión por calendario para fechas de evaluaciones',
     'fechas_parciales_calendario.sin_resultados' => 'No hay información',    
 
     

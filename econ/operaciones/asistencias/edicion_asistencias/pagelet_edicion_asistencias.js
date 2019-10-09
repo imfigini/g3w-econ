@@ -133,7 +133,7 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 
         alumno['CANT_INASIST'] = "1.00";
         alumno['MOTIVO_JUSTIFIC'] = (valor_justif != -1) ? valor_justif : null;
-        console.log(alumno);
+       // console.log(alumno);
 
         $('#alumnos').val(JSON.stringify(alumnos));
         actualizar_cuadro(id, alumno);

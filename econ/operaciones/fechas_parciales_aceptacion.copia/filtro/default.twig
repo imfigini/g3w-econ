@@ -82,7 +82,7 @@
                                     </div>
                                     
                                     <div id="contenedor_{{comision.COMISION}}">
-                                    <table id="tabla_{{comision.COMISION}}" class="table table-striped table-condensed" tabindex="0">
+                                    <table class="table table-striped table-condensed" tabindex="0">
 
                                         {% if (comision.ESCALA == 'P  ' or comision.ESCALA == 'PyR') %}
                                             <tr>
@@ -130,11 +130,11 @@
 
                                     </table>
                                     </div>
-								  
-									{# <input id='js-grabar_comision' type='submit' style='position:absolute' value='{{"guardar"|trans|capitalize}}' class="hide btn btn-info btn-small" /> #}
+                                            
                                     <div style="text-align: right">
-										<div class="btn btn-info btn-lg" onclick="grabar_comision('{{comision.COMISION}}')" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
-									</div>
+{#                                        <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>#}
+                                        <div class="btn btn-info btn-lg" onclick="grabar_comision('{{comision.COMISION}}')" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
+                                    </div>
                                 </form>
                         {% endfor %}
                         </div>
@@ -192,19 +192,14 @@
 {% macro set_input(comision, instancia, fecha_hora, estado) %}
     <input type="hidden" id="fecha_hora_{{instancia}}_{{comision}}" name="fecha_hora_{{instancia}}_{{comision}}" value="{{fecha_hora}}">
     <td><select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, '{{comision}}', '{{instancia}}', '{{estado}}')" >
-            <option value="P" selected>--Seleccionar--</option>
+            <option value="P">--Seleccionar--</option>
             <option value="A">Aceptar</option>
-            <option value="C">Asignar en día de cursada</option>
-			<option value="R">Asignar sin restricción</option>
-			<option value="H">Modificar horario</option> 
-		</select></td>
-	<td>
-    <div id='div_{{instancia}}_{{comision}}' style='display:none'>
+            <option value="R">Modificar</option>
+            <option value="N">Asignar otra fecha</option> </select></td>
+    <td><div id='div_{{instancia}}_{{comision}}' style='display:none'>
         Asignar: <input type="text" id="datepicker_{{instancia}}_{{comision}}" name="datepicker_{{instancia}}_{{comision}}" class="datepicker" value="" />
     </div>
-    {# <div id='div_aceptado_{{instancia}}_{{comision}}' style='display:none'> #}
-	<div id='div_aceptado_{{instancia}}_{{comision}}'>
-		<p id='mensaje_estado_{{instancia}}_{{comision}}'></p>
-        {# <p style="color:green">La fecha se encuentra aceptada y asignada</p> #}
+    <div id='div_aceptado_{{instancia}}_{{comision}}' style='display:none'>
+        <p style="color:green">La fecha se encuentra aceptada y asignada</p>
     </div></td>
 {% endmacro %}

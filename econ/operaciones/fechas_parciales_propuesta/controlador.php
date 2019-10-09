@@ -6,8 +6,11 @@ use siu\extension_kernel\controlador_g3w2;
 use siu\modelo\datos\catalogo;
 use kernel\util\validador;
 use siu\errores\error_guarani;
+use kernel\util\MailJob;
+use kernel\util\mail;
 //include 'func_util.php';
 //use siu\modelo\guarani_notificacion;
+
 
 
 class controlador extends controlador_g3w2
@@ -75,10 +78,10 @@ class controlador extends controlador_g3w2
                 //DIAS_CLASE [DIA_SEMANA, HS_COMIENZO_CLASE, HS_FINALIZ_CLASE, DIA_NOMBRE]
                 
                 $comisiones = $this->get_fechas_no_validas($comisiones);
-                //DIAS_NO_VALIDOS (son los días que por razones particulares del docente no se dictan clases en la comisión)
+                //DIAS_NO_VALIDOS (son los dias que por razones particulares del docente no se dictan clases en la comision)
                 
                 $comisiones = $this->get_evaluaciones_existentes($comisiones);
-                //[EVAL_XXXX] FECHA_HORA, ESTADO, READONLY (son las fechas que ya tiene reservada la comisión, en cada instancia)
+                //[EVAL_XXXX] FECHA_HORA, ESTADO, READONLY (son las fechas que ya tiene reservada la comision, en cada instancia)
 
                 $promocionables = array();
                 $regulares = array();
@@ -179,8 +182,8 @@ class controlador extends controlador_g3w2
     }
 
     /*
-     * Retorna los días de la semana asignados a cada comisión, y la banda horaria
-     * y las fechas de clase específicas asignadas a cada comisión (válidas)
+     * Retorna los dias de la semana asignados a cada comision, y la banda horaria
+     * y las fechas de clase especificas asignadas a cada comision (validas)
      */
     function get_dias_de_clase_comision($comisiones)
     {
@@ -196,7 +199,7 @@ class controlador extends controlador_g3w2
     }
     
     /*
-     * Retorna las fechas indicadas como no válidas para cada comisión
+     * Retorna las fechas indicadas como no validas para cada comisian
      */
     function get_fechas_no_validas($comisiones)
     {
@@ -491,7 +494,7 @@ class controlador extends controlador_g3w2
 //    }
 
     /** 
-     * Verifica que ese día, el anterior y el posterior no esté ya asignado a otra comisión del mismo mix
+     * Verifica que ese daa, el anterior y el posterior no esta ya asignado a otra comisian del mismo mix
      * En caso de ser "Recuperatorio Unico" no debe verificar anterior y posterior
      */
     function verificar_si_fecha_posible($anio_academico, $periodo, $fecha_hora, $comision, $instancia_evaluacion)
@@ -544,15 +547,15 @@ class controlador extends controlador_g3w2
                     }
                 }
                 else if ($f_ocup['EVALUACION'] == $recup
-                        || $f_ocup['EVALUACION'] == $regu1
-                        || $f_ocup['EVALUACION'] == $regu2 )
+                        || $f_ocup['EVALUACION'] == $recup1
+                        || $f_ocup['EVALUACION'] == $recup2 )
                 {
                     if ($f_ocup['FECHA'] == $fecha)
                     {
                         $ocupada = true;
                     }
                 }
-            }
+            } 
             if (instancia_evaluacion == 'recup')
             {
                 if ($f_ocup['EVALUACION'] == $promo2 
@@ -660,10 +663,10 @@ class controlador extends controlador_g3w2
             {
                 $parametros['comision'] = $comision['COMISION'];
 
-                switch ($comision['ESCALA'])
+                switch (trim($comision['ESCALA']))
                 {
-                    case 'R  ': $parametros['escala_notas'] = 3; break;    
-                    case 'P  ': $parametros['escala_notas'] = 6; break;   
+                    case 'R': $parametros['escala_notas'] = 3; break;    
+                    case 'P': $parametros['escala_notas'] = 6; break;   
                     case 'PyR': $parametros['escala_notas'] = 4; break;   
                 }
 
@@ -716,7 +719,7 @@ class controlador extends controlador_g3w2
                 $param['anio_academico'] = $datos['anio_academico'];
                 $param['periodo_lectivo'] = $datos['periodo'];
                 $param['observaciones'] = $datos['observaciones'];
-                $resultado_obs = catalogo::consultar('cursos', 'set_evaluaciones_observaciones', $param);
+				$resultado_obs = catalogo::consultar('cursos', 'set_evaluaciones_observaciones', $param);
             }
 
             $this->set_anio_academico($datos['anio_academico_hash']);
@@ -724,24 +727,66 @@ class controlador extends controlador_g3w2
             
             if ($resultado_obs == '1')
             {
-                $resultado .= 'Se han guardado las observaciones. Materia: ';
-            }
-            $resultado .= $datos['materia_nombre'];
+				$this->enviar_mensaje_x_mail_a_DD($param);
+				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la DirecciÃ³n de Docentes. Materia: ');
+			}
+			if (!empty($resultado)) {
+				$resultado .= $datos['materia_nombre'];
+			}
             $this->set_mensaje($resultado);
         }
     }
     
+    private function enviar_mensaje_x_mail_a_DD($param)
+    {
+		$observaciones = $param['observaciones'];
+
+		if (!isset($observaciones) || empty($observaciones) || trim($observaciones) == '')
+		{
+			return;
+		}
+		
+		$mail_coordinador = kernel::persona()->get_mail();
+		$coordinador_nombre = kernel::persona()->get_nombre();
+		$materia = $param['materia'];
+		$materia_nombre = catalogo::consultar('cursos', 'get_nombre_materia', array('materia'=>$materia));
+		$fecha = date('d/m/Y H:m:s');
+
+		$asunto = utf8_decode("Propuesta de fechas para evaluaciones: Nueva observaciÃ³n (").$materia_nombre.")";
+	
+		$tpl = kernel::load_template('mail/mail_titulo.twig');
+        $cuerpo = $tpl->render(
+				array( 'coordinador_nombre' => $coordinador_nombre,
+					'mail_coordinador' => $mail_coordinador,
+					'materia_nombre' => $materia_nombre,
+					'materia' => $materia,
+					'fecha' => $fecha,
+					'observaciones' => $observaciones)
+                );
+		
+		$dir_to = 'imfigini@slab.exa.unicen.edu.ar';
+		//$dir_to = 'bosch.marcela@gmail.com';
+		
+		$dir_reply = 'no-reply-guarani@econ.unicen.edu.ar';
+		$dir_from = $dir_reply;
+
+		$mail = new mail($dir_to, $asunto, $cuerpo, $dir_from);
+		$mail->set_reply($dir_reply);
+        $mail->set_html(true);
+        $mail->enviar();
+    }
+
     private function grabar_instancia($parametros, $datos, $dias_clase, $instancia)
     {        
         switch ($instancia)
         {
-            case 'promo1': $inst = 1; $inst_nombre = '1º Parcial Promo'; break;
-            case 'promo2': $inst = 2; $inst_nombre = '2º Parcial Promo'; break;
+            case 'promo1': $inst = 1; $inst_nombre = '1a Parcial Promo'; break;
+            case 'promo2': $inst = 2; $inst_nombre = '2a Parcial Promo'; break;
             case 'recup': $inst = 7; $inst_nombre = 'Recuperatorio Promo'; break;
             case 'integ': $inst = 14; $inst_nombre = 'Integrador'; break;
             case 'regu1': $inst = 21; $inst_nombre = 'Parcial Regular'; break;
-            case 'recup1': $inst = 4; $inst_nombre = '1º Recuperatorio Regular'; break;
-            case 'recup2': $inst = 5; $inst_nombre = '2º Recuperatorio Regular'; break;
+            case 'recup1': $inst = 4; $inst_nombre = '1a Recuperatorio Regular'; break;
+            case 'recup2': $inst = 5; $inst_nombre = '2a Recuperatorio Regular'; break;
         }
         try 
         {
@@ -902,7 +947,7 @@ class controlador extends controlador_g3w2
         }
         if ($ocupada)
         {
-            $msj = "Verifique la cronología de las fechas. Instancia posterior de evaluación debe tener fecha posterior, y viceversa.";
+            $msj = "Verifique la cronologaa de las fechas. Instancia posterior de evaluacian debe tener fecha posterior, y viceversa.";
             throw new error_guarani($msj);
         }
         return true;

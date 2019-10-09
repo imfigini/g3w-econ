@@ -80,18 +80,23 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         if (!$('#evaluaciones').val()) {
             return;
         }
-       
+	   
         var inicio_periodo = $('#inicio_periodo').val();
-        var fin_periodo = $('#fin_periodo').val();
+		var fin_periodo = $('#fin_periodo').val();
+		
+		var periodos_evaluacion = JSON.parse($('#priodos_evaluacion').val());
+		var primer_dia_visible = periodos_evaluacion[0]['FECHA_INICIO'];
 
         var eventos = JSON.parse($('#evaluaciones').val());
         var feriados = get_feriados();
-        var domingos = get_domingos(inicio_periodo, fin_periodo);
+		var domingos = get_domingos(inicio_periodo, fin_periodo);
+		var periodos_validos = get_periodos_validos();
 
         eventos = eventos.concat(feriados);
-        eventos = eventos.concat(domingos);
+		eventos = eventos.concat(domingos);
+		eventos = eventos.concat(periodos_validos);
 
-        console.log(eventos);
+//        console.log(eventos);
 
         $('#calendar').fullCalendar({
                 lang: 'es',
@@ -109,7 +114,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                         start: inicio_periodo,
                         end: fin_periodo
                 },
-                defaultDate: inicio_periodo,           
+                defaultDate: primer_dia_visible,           
                 
                 events: eventos,
 
@@ -120,36 +125,28 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 eventDrop: function(event, delta, revertFunc) { 
                         //console.log(event);
                         //console.log(delta);
-                        //console.log(revertFunc);
-                        var texto = "Está seguro de modificar la fecha para "+ info.title + '?. Tenga en consideración que si la fecha sólo estaba propuesta y sin aceptar, la misma será creada y se dará por aceptada con modificación. Si la instancia de evaluación ya estaba creada, sólo se le modificará la fecha que tenía asignada.';
-
-                        //alert(event.title + " was dropped on " + event.start.format());
-                            
+						//console.log(revertFunc);
+						console.log(event);
+                        var texto = "Está seguro de modificar la fecha solicitada para "+ event.title + '?. Priorice modificar a días de cursada.';
                         if (!confirm(texto)) {
                                 revertFunc();
+                        } else {
+                                mover_evaluacion(event, delta, revertFunc);
                         }
-                        else
-                        {
-                                var datos = new Object();
-                                datos['evaluacion'] = event.evaluacion;
-                                datos['materia'] = event.materia;
-                                datos['fecha_orig'] = event.start._i;
-                                var fecha = new Date(datos['fecha_orig'].replace(/-/g, '\/'));
-                                var dif = parseInt(event.delta) + delta._days;
-                                fecha.setDate(fecha.getDate() + dif);
-                                datos['fecha_dest'] = fecha.toISOString().substring(0, 10);
-                                datos['color_acep'] = event.color_acep;
-                                datos['anio_academico_hash'] = $('#formulario_filtro-anio_academico').val();
-                                datos['periodo_hash'] = $('#formulario_filtro-periodo').val();
-                                datos['delta'] = dif;
-                                mover_evaluacion(datos, event, revertFunc);
-                        }
-                       
                },
 
                eventClick: function(info) {
-                        console.log(info);
-                        alert('Desea confirmar la fecha para ' + info.title + '?. En caso afirmativo la instancia de evaluación será creada si no lo estaba, se dará por aceptada sin modificaciones y cambiará el color a más oscuro. Si ya estaba creada no hará nada. ');
+                        if (info.estado != 'A')
+                        {
+							var texto = 'Desea confirmar la fecha solicitada para ' + info.title + '?.';
+							if (confirm(texto)) {
+								confirmar_evaluacion(info);
+							}
+                        }
+                        else
+                        {
+							kernel.ui.show_mensaje('La evaluación ya se encuentra creada y aceptada en esta fecha. ', {tipo: 'alert-info'});
+                        }
                 },
             
                 monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
@@ -205,31 +202,84 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         };
         //console.log(domingos);
         return domingos;
-    }
+	}
+	
+	function get_periodos_validos()
+	{
+		var periodos = JSON.parse($('#priodos_evaluacion').val());
+        var eventos =  new Array();
+        var i = 0;
+        var key;
+        for(key in periodos)
+        {
+                 var evento =  new Object();
+				 evento['start'] = periodos[key]['FECHA_INICIO'];
+				 evento['end'] = periodos[key]['FECHA_FIN'];
+                 evento['rendering'] = 'background';
+                 evento['color'] = 'PaleGreen';
+                 eventos[i] = evento;
+                 i++;
+        }
+        return eventos;
+	}
 
-    function mover_evaluacion(datos, event, revertFunc)
+    function mover_evaluacion(event, delta, revertFunc)
     {
-        console.log(event);
-        console.log(datos);
+        var fecha_orig = event.start._i;
+        var fecha = new Date(fecha_orig.replace(/-/g, '\/'));
+        var dif = parseInt(event.delta) + delta._days;
+        fecha.setDate(fecha.getDate() + dif);
+        var fecha_dest = fecha.toISOString().substring(0, 10);
+        var anio_academico_hash = $('#formulario_filtro-anio_academico').val();
+        var periodo_hash = $('#formulario_filtro-periodo').val();
+
         $.ajax({
                 url: info.url_correr_evaluacion,
                 dataType: 'json',
-                data: { materia: datos['materia'], evaluacion: datos['evaluacion'], 
-                        fecha_orig: datos['fecha_orig'], fecha_dest: datos['fecha_dest'],
-                        color_acep: datos['color_acep'],
-                        anio_academico_hash: datos['anio_academico_hash'], periodo_hash: datos['periodo_hash']},
+                data: { materia: event.materia, evaluacion: event.evaluacion, 
+                        fecha_orig: fecha_orig, fecha_dest: fecha_dest,
+                        color_acep: event.color_acep,
+                        anio_academico_hash: anio_academico_hash, periodo_hash: periodo_hash },
+                type: 'post',
+                success: function(data) {
+					console.log(data);
+                        if (data.cod < 0) {
+                                revertFunc();
+                                var msg = data.titulo + data.mensajes[2];
+                                kernel.ui.show_mensaje(msg, {tipo: 'alert-error'});
+                        } else {
+                                event.backgroundColor = data.backgroundColor;
+                                event.borderColor = 'grey';
+                                event.delta = dif;
+                                $('#calendar').fullCalendar('updateEvent', event);
+                                kernel.ui.show_mensaje('Se modificó la fecha de la evualución correctamente. ');
+                        }
+                }
+        });
+    }
+
+    function confirmar_evaluacion(event)
+    {
+        var anio_academico_hash = $('#formulario_filtro-anio_academico').val();
+        var periodo_hash = $('#formulario_filtro-periodo').val();
+
+//        console.log(event);
+        $.ajax({
+                url: info.url_confirmar_evaluacion,
+                dataType: 'json',
+                data: { materia: event.materia, evaluacion: event.evaluacion, fecha: event.start._i,
+                        anio_academico_hash: anio_academico_hash, periodo_hash: periodo_hash },
                 type: 'post',
                 success: function(data) {
                         if (data.cod < 0) {
                                 var msg = data.titulo + data.mensajes[2];
-                                console.log(msg);
-                                revertFunc();
                                 kernel.ui.show_mensaje(msg, {tipo: 'alert-error'});
                         } else {
-                                event.backgroundColor = data.backgroundColor;
-                                event.delta = datos.delta;
+                                event.backgroundColor = event.color_acep;
+                                event.borderColor = 'grey';
+                                event.estado = 'A';
                                 $('#calendar').fullCalendar('updateEvent', event);
-                                kernel.ui.show_mensaje(data.titulo);
+                                kernel.ui.show_mensaje(data.mensaje);
                         }
                 }
         });

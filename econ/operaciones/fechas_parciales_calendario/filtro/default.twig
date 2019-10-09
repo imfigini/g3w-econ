@@ -23,11 +23,15 @@
 
 	{% if this.data.eventos %}
         <input type="hidden" id="evaluaciones" value="{{this.data.eventos}}">
-    {% endif %}
-        
+	{% endif %}
+	
     {% if this.data.dias_no_laborales_json %}
         <input type="hidden" id="dias_no_laborales" value="{{this.data.dias_no_laborales_json }}">
     {% endif %}
+
+	{% if this.data.periodos_evaluacion_json %}
+		<input type="hidden" id="priodos_evaluacion" value="{{this.data.periodos_evaluacion_json }}">
+	{% endif %}
 
     <div id='calendar'>        
     </div>    

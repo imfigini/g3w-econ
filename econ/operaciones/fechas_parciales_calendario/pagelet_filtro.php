@@ -52,13 +52,18 @@ class pagelet_filtro extends pagelet {
 	{
             return $this->controlador->get_mix();
 	}
-     
+	 
+	function get_periodos_evaluacion()
+	{
+            return $this->controlador->get_periodos_evaluacion();
+	}
    
 	public function prepare()
 	{   
         $operacion = kernel::ruteador()->get_id_operacion();
         $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
         $this->add_var_js('url_correr_evaluacion', kernel::vinculador()->crear($operacion, 'correr_evaluacion'));
+        $this->add_var_js('url_confirmar_evaluacion', kernel::vinculador()->crear($operacion, 'confirmar_evaluacion'));
 
         $periodo_hash = $this->get_periodo();
         $anio_academico_hash = $this->get_anio_academico();
@@ -68,8 +73,8 @@ class pagelet_filtro extends pagelet {
         $form->set_anio_academico($anio_academico_hash);
         $form->set_periodo($periodo_hash);
         $form->set_carrera($carrera);
-        $form->set_mix($mix);
-
+		$form->set_mix($mix);
+		
         $this->add_var_js('periodo_hash', $periodo_hash);
         $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
         $this->add_var_js('carrera', $carrera);        
@@ -89,7 +94,10 @@ class pagelet_filtro extends pagelet {
             $this->data['eventos'] = $this->get_eventos($evaluaciones);
 
             $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
-            $this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
+			$this->data['dias_no_laborales_json'] = json_encode($dias_no_laborales, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
+			
+			$periodos_evaluacion = $this->get_periodos_evaluacion();
+			$this->data['periodos_evaluacion_json'] = json_encode($periodos_evaluacion, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
         }
     }
         
@@ -127,8 +135,8 @@ class pagelet_filtro extends pagelet {
     {
         switch ($estado)
         {
-            case 'A': $backgroundColor = $color_acep; break;
-            case 'P': $backgroundColor = $color_pend; break;
+            case 'A': $backgroundColor = $color_acep; $borderColor = null; break;
+            case 'P': $backgroundColor = $color_pend; $borderColor = 'red'; break;
         }
 
         $resultado = array();
@@ -139,6 +147,7 @@ class pagelet_filtro extends pagelet {
                         'start'			    => $start,
                         'textColor'         => 'black',
                         'backgroundColor'   => $backgroundColor,
+                        'borderColor'       => $borderColor,
                         'materia'           => $materia,
                         'evaluacion'        => $eval,
                         'estado'            => $estado,

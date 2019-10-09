@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales_propuesta;
+namespace econ\operaciones\fechas_parciales_aceptacion;
 
 use kernel\interfaz\pagelet;
 use siu\modelo\datos\catalogo;
@@ -43,57 +43,80 @@ class pagelet_filtro extends pagelet {
             return $this->controlador->get_anio_academico();
 	}
         
+        function get_carrera()
+	{
+            return $this->controlador->get_carrera();
+	}
+        
+        function get_mix()
+	{
+            return $this->controlador->get_mix();
+	}
+     
+        function get_comision()
+	{
+            return $this->controlador->get_comision();
+	}
+        
         function get_mensaje()
 	{
             return $this->controlador->get_mensaje();
 	}
-
+        
         function get_mensaje_error()
 	{
             return $this->controlador->get_mensaje_error();
 	}
-        
+
+
 	public function prepare()
 	{   
             $operacion = kernel::ruteador()->get_id_operacion();
             $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
-           
+
             $periodo_hash = $this->get_periodo();
             $anio_academico_hash = $this->get_anio_academico();
+            $carrera = $this->get_carrera();
+            $mix = $this->get_mix();
+            $comision = $this->get_comision();
+            
             $form = $this->get_form_builder();
             $form->set_anio_academico($anio_academico_hash);
             $form->set_periodo($periodo_hash);
-            
-            $this->data['mensaje'] = $this->get_mensaje();
-            $this->data['mensaje_error'] = $this->get_mensaje_error();
+            $form->set_carrera($carrera);
+            $form->set_mix($mix);
             
             $this->add_var_js('periodo_hash', $periodo_hash);
             $this->add_var_js('anio_academico_hash', $anio_academico_hash);        
+            $this->add_var_js('carrera', $carrera);        
+            $this->add_var_js('mix', $mix);        
+            $this->add_var_js('comision', $comision); 
+
+            $this->data['mensaje'] = $this->get_mensaje();
+            $this->data['mensaje_error'] = $this->get_mensaje_error();
             $this->data['periodo_hash'] = $periodo_hash;
             $this->data['anio_academico_hash'] = $anio_academico_hash;
-         
+            $this->data['carrera'] = $carrera;
+            $this->data['mix'] = $mix;
+            $this->data['comision'] = $comision;
+
             if (!empty($anio_academico_hash) && !empty($periodo_hash))
             {
-                $datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash);
-                //kernel::log()->add_debug('$datos '.__LINE__, $datos);
-                //print_r($datos);
-
+                $datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash, $carrera, $mix);
                 $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
                 
                 //print_R($datos);
                 $this->data['datos'] = $datos;
+                //kernel::log()->add_debug('prepare ', $datos);
+                
                 $this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
                 
                 $this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
                 $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
-                $priodo_solicitud_fechas = $this->controlador->get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash);
-                $this->data['priodo_solicitud_fechas'] = $priodo_solicitud_fechas[0];
                 
-//                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_comision');
-//                $this->data['form_url_comision'] = $link_form_comision;     
+                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_aceptacion', 'grabar_comision');
+                $this->data['form_url_comision'] = $link_form_comision;     
 
-                $link_form_materia = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_materia');
-                $this->data['form_url_materia'] = $link_form_materia;     
             }
         }
 }

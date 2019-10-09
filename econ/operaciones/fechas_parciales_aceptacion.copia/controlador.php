@@ -69,8 +69,7 @@ class controlador extends controlador_g3w2
                 $comisiones = $this->get_fechas_no_validas($comisiones);
                 //DIAS_NO_VALIDOS
                 
-				$comisiones = $this->get_fechas_solicitadas($comisiones);
-				$comisiones = $this->get_eval_asignadas($comisiones);
+                $comisiones = $this->get_evaluaciones_existentes($comisiones);
                 
                 $promocionables = array();
                 $regulares = array();
@@ -184,7 +183,7 @@ class controlador extends controlador_g3w2
     
     /*
      * Retorna los días de la semana asignados a cada comisión, y la banda horaria
-     * y las fechas de clase específicas asignadas a cada comisión (válidas)
+     //* y las fechas de clase específicas asignadas a cada comisión (válidas)
      */
     function get_dias_de_clase_comision($comisiones)
     {
@@ -309,7 +308,7 @@ class controlador extends controlador_g3w2
         return null;
     }
 
-    function get_fechas_solicitadas($comisiones)
+    function get_evaluaciones_existentes($comisiones)
     {
         $result = array();
         foreach($comisiones as $comision)
@@ -321,31 +320,31 @@ class controlador extends controlador_g3w2
             if ($escala == 'P  ' || $escala == 'PyR')
             {
                 $parametros['evaluacion'] = 1;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_PROMO1'] = $eval[0];
                 $comision['EVAL_PROMO1']['READONLY'] = $this->is_eval_readonly($eval[0]);
 
                 $parametros['evaluacion'] = 2;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_PROMO2'] = $eval[0];
                 $comision['EVAL_PROMO2']['READONLY'] = $this->is_eval_readonly($eval[0]);
 
                 $parametros['evaluacion'] = 7;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_RECUP'] = $eval[0];
                 $comision['EVAL_RECUP']['READONLY'] = $this->is_eval_readonly($eval[0]);
 
                 $parametros['evaluacion'] = 14;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_INTEG'] = $eval[0];
                 $comision['EVAL_INTEG']['READONLY'] = $this->is_eval_readonly($eval[0]);
                 
                 $parametros['evaluacion'] = 4;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_PROMRECUP1'] = $eval[0];
                 
                 $parametros['evaluacion'] = 5;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_PROMRECUP2'] = $eval[0];
             }
             
@@ -353,17 +352,17 @@ class controlador extends controlador_g3w2
             if ($escala == 'R  ' || $escala == 'PyR')
             {
                 $parametros['evaluacion'] = 21;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_REGU1'] = $eval[0];
                 $comision['EVAL_REGU1']['READONLY'] = $this->is_eval_readonly($eval[0]);
 
                 $parametros['evaluacion'] = 4;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_RECUP1'] = $eval[0];
                 $comision['EVAL_RECUP1']['READONLY'] = $this->is_eval_readonly($eval[0]);
 
                 $parametros['evaluacion'] = 5;
-                $eval = catalogo::consultar('cursos', 'get_fecha_solicitada', $parametros);
+                $eval = catalogo::consultar('cursos', 'get_evaluaciones_existentes', $parametros);
                 $comision['EVAL_RECUP2'] = $eval[0];
                 $comision['EVAL_RECUP2']['READONLY'] = $this->is_eval_readonly($eval[0]);            
             }
@@ -373,13 +372,13 @@ class controlador extends controlador_g3w2
     }
     
     /*
-     * Si hay fecha cargada y el estado es NULL o distinto de 'P' (pendiente) no puede modificar el docente
+     * Si hay fecha cargada y el estado es NULL o 'A' no puede modificar el docente
      */
     private function is_eval_readonly($evaluacion)
     {
         if (!empty($evaluacion['FECHA_HORA']))
         {
-            if (empty($evaluacion['ESTADO']) || $evaluacion['ESTADO'] != 'P')
+            if (empty($evaluacion['ESTADO']) || $evaluacion['ESTADO'] == 'A')
             {
                 return true;
             }
@@ -387,54 +386,7 @@ class controlador extends controlador_g3w2
         return false;
     }
     
-    function get_eval_asignadas($comisiones)
-    {
-        $result = array();
-        foreach($comisiones as $comision)
-        {
-            $parametros['comision'] = $comision['COMISION'];
-            $escala = $comision['ESCALA'];
-
-            //PROMO
-            if (trim($escala) == 'P' || trim($escala) == 'PyR')
-            {
-                $parametros['evaluacion'] = 1;
-                $comision['EVAL_PROMO1_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-
-                $parametros['evaluacion'] = 2;
-                $comision['EVAL_PROMO2_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-
-                $parametros['evaluacion'] = 7;
-                $comision['EVAL_RECUP_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-
-                $parametros['evaluacion'] = 14;
-                $comision['EVAL_INTEG_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-                
-                $parametros['evaluacion'] = 4;
-                $comision['EVAL_PROMRECUP1_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-                
-                $parametros['evaluacion'] = 5;
-                $comision['EVAL_PROMRECUP2_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-            }
-            
-            //REGULAR
-            if (trim($escala) == 'R' || trim($escala) == 'PyR')
-            {
-                $parametros['evaluacion'] = 21;
-                $comision['EVAL_REGU1_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-
-                $parametros['evaluacion'] = 4;
-                $comision['EVAL_RECUP1_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-
-                $parametros['evaluacion'] = 5;
-                $comision['EVAL_RECUP2_ASIGN'] = catalogo::consultar('cursos', 'get_evaluacion_asignada', $parametros);
-            }
-			$result[] = $comision;
-        }
-		return $result;
-    }
-
-	function get_ciclo_de_materias($materia)
+    function get_ciclo_de_materias($materia)
     {
         $parametros = array('materia' => $materia);
         return catalogo::consultar('cursos', 'get_ciclo_de_materias', $parametros);
@@ -577,33 +529,6 @@ class controlador extends controlador_g3w2
     /** Graba sólo la comisión */
     function accion__grabar_comision()
     {
-		$datos['comision'] = $this->validate_param('comision', 'post', validador::TIPO_ALPHANUM);
-		$datos['evaluacion'] = $this->validate_param('evaluacion', 'post', validador::TIPO_ALPHANUM);
-		$datos['fecha_hora'] = $this->validate_param('fecha_hora', 'post', validador::TIPO_TEXTO);
-		$datos['estado'] = $this->validate_param('estado', 'post', validador::TIPO_TEXTO);
-		$ciclo = $this->validate_param('ciclo', 'post', validador::TIPO_ALPHANUM);
-
-		kernel::log()->add_debug('accion__grabar_comision', $datos); 
-		//print_r($datos);
-		$mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-		//Si la instancia es 2º parcial Promo, también debe crearse un 1º Recuperatorio Regular
-		if ($datos['evaluacion'] == 2 and strpos($ciclo, 'P') !== false)
-		{
-			$datos['evaluacion'] = 4;
-			$mensaje[] .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-		}
-		//Si la instancia es Integrador (Promo), también debe crearse un 2º Recuperatorio Regular
-		if ($datos['evaluacion'] == 14 and strpos($ciclo, 'P') !== false)
-		{
-			$datos['evaluacion'] = 5;
-			$mensaje[] .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
-		}
-		
-		$this->render_ajax($mensaje);
-		//$this->render_ajax(kernel::traductor()->trans('asistencia_guardado_exitoso'));
-	}
-	/*
-
         $mensaje = array();
         $datos = $this->get_parametros_grabar_comision();
 
@@ -689,7 +614,6 @@ class controlador extends controlador_g3w2
         $this->set_mensaje($msg[0]);
         $this->set_mensaje_error($msg[1]);
     }
-*/
 
     private function formatear_mensaje($mensaje)
     {
