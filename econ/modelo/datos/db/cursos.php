@@ -650,7 +650,7 @@ class cursos
     {
         $comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-        $escala = $parametros['escala_notas'];
+        $escala = 3;    // $parametros['escala_notas']; Las evaluaciones parciales siempre deben crearse con escala de notas = 3
         $fecha_hora = $parametros['fecha_hora'];
         $estado = $parametros['estado'];
 
