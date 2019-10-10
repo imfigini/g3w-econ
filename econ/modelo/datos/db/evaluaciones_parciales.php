@@ -24,7 +24,8 @@ class evaluaciones_parciales
                         LEFT JOIN ufce_eval_parc_periodos ON 
                                     (ufce_eval_parc_periodos.orden = ufce_orden_periodo.orden
                                         AND ufce_eval_parc_periodos.anio_academico = $anio_academico 
-                                        AND ufce_eval_parc_periodos.periodo_lectivo = $periodo) ";
+										AND ufce_eval_parc_periodos.periodo_lectivo = $periodo) 
+				ORDER BY 1 ";
         
         $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $datos;

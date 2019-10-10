@@ -141,7 +141,8 @@ class pagelet_filtro extends pagelet {
 
         $resultado = array();
         $evento = array (
-                        '_id'               => $id,
+						'id'				=> $id.'-'.$start,
+						'resourceIds'		=> 'evt',
                         'title'			    => $title,
                         'tip'               => $tip,
                         'start'			    => $start,
@@ -153,7 +154,7 @@ class pagelet_filtro extends pagelet {
                         'estado'            => $estado,
                         'color_acep'        => $color_acep,
                         'color_pend'        => $color_pend,
-                        'delta'             => 0
+						'delta'             => 0
                         );
 
         foreach($evento as $colName => $dataValue)  {

@@ -61,4 +61,26 @@ class evaluaciones_parciales_calendario
         return false;
 	}
 
+	//  /**
+    //  * parametros: comision, evaluacion
+    //  * cache: no
+    //  * filas: 1
+    //  */
+    // function get_fecha_asignada_o_propuesta($parametros)
+    // {
+    //     $sql = "SELECT  fecha_hora::DATE as fecha
+    //                 from sga_cron_eval_parc
+    //                 where comision = {$parametros['comision']}
+    //                 and evaluacion = {$parametros['evaluacion']}";
+	// 	$fecha = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+	// 	if (isset($fecha) and isset($fecha['FECHA']))
+	// 	{
+	// 		return $fecha;
+	// 	}
+	// 	$sql = "SELECT  fecha_hora::DATE as fecha
+	// 				from ufce_cron_eval_parc
+	// 				where comision = {$parametros['comision']}
+	// 				and evaluacion = {$parametros['evaluacion']}";
+	// 	return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+    // }
 }

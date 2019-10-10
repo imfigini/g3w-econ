@@ -86,22 +86,20 @@ class controlador extends controlador_g3w2
         $anio_academico_hash = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
         $periodo_hash = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO);  
         $parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
-        $parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
+		$parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
         
-        //kernel::log()->add_debug('accion__confirmar_evaluacion parametros: ', $parametros);
-
+       // kernel::log()->add_debug('accion__confirmar_evaluacion parametros: ', $parametros);
         try
         {
             kernel::db()->abrir_transaccion();
 
-			//$datos_propuestos = catalogo::consultar('evaluaciones_parciales_calendario', 'get_fechas_propuestas', $parametros);
 			$comisiones = catalogo::consultar('cursos', 'get_comisiones_de_materia_con_dias_de_clase', $parametros);
 
 			foreach($comisiones as $comision)
             {
-                $param['comision'] = $comision['COMISION'];
-                $param['evaluacion'] = $parametros['evaluacion'];
-
+				$param['comision'] = $comision['COMISION'];
+				$param['evaluacion'] = $parametros['evaluacion'];
+				
                 $tiene_notas_cargadas = catalogo::consultar('evaluaciones_parciales_calendario', 'tiene_notas_cargadas', $param);
                 if ($tiene_notas_cargadas) {
                     throw new error_guarani('La comisión '.$param['comision'].' tiene notas cragadas. ');

@@ -703,8 +703,7 @@ class _info_catalogo
   array (
     0 => 'comision',
     1 => 'evaluacion',
-    2 => 'escala_notas',
-    3 => 'fecha_hora',
+    2 => 'fecha_hora',
   ),
   'cache' => 'no',
   'filas' => 'n',
