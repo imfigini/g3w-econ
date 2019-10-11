@@ -121,32 +121,66 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 });
     
 
-function calendarioVisible(estado, comision, instancia, estado_orig)
+function calendarioVisible(estado, comision, instancia)
 {
 //    console.log(estado.value);
-    var div = 'div_'+instancia+'_'+comision;
+	var div_date = 'div_date_'+instancia+'_'+comision;
+	var div_time = 'div_time_'+instancia+'_'+comision;
     var div_aceptado = 'div_aceptado_'+instancia+'_'+comision;
     switch(estado.value)
     {
         case 'C': 
             setear_calendario_restringido(comision, instancia);
-            $('#'+div).show();
+			$('#'+div_date).show();
+			$('#'+div_time).hide();
             break;
         case 'R': 
             setear_calendario_abierto(comision, instancia);
-            $('#'+div).show();
+			$('#'+div_date).show();
+			$('#'+div_time).hide();
+            break;
+		case 'H': 
+            setear_timepicker(comision, instancia);
+			$('#'+div_date).hide();
+			$('#'+div_time).show();
             break;
         default: 
-            $('#'+div).hide();
-    }
-    
-    if (estado_orig) {
-        $('#'+div_aceptado).show();
-    } else {
-        $('#'+div_aceptado).hide();
-    }
+			$('#'+div_date).hide();
+			$('#'+div_time).hide();
+	}
+	console.log($('#'+div_aceptado));
+	$('#'+div_aceptado).show();
+	
+    // if (estado_orig) {
+    //     $('#'+div_aceptado).show();
+    // } else {
+    //     $('#'+div_aceptado).hide();
+    // }
 }
+function setear_timepicker(comision, instancia)
+{
+	var timepick = 'timepicker_'+instancia+'_'+comision;
+	var dias_clase = $('#dias_clase_'+comision).val();
+	dias_clase = JSON.parse(dias_clase);
 
+	var default_time = '08:00';
+	if (dias_clase[0] && dias_clase[0].HS_COMIENZO_CLASE) {
+		default_time = dias_clase[0].HS_COMIENZO_CLASE;
+	}
+
+	$('#'+timepick).timepicker( "destroy" );
+    $('#'+timepick).timepicker({
+			timeFormat: 'HH:mm',
+			interval: 60,
+			minTime: '08:00',
+			maxTime: '20:00',
+			defaultTime: default_time,
+			//startTime: '08:00',
+			dynamic: false,
+			dropdown: true,
+			scrollbar: true
+		});
+}
 
 function setear_calendario_restringido(comision, instancia)
 {
@@ -323,6 +357,21 @@ function set_div_mensaje_aceptado(comision, instancia, estado, fecha)
 						p.addClass('resaltar_azul');
 						div.show();
 						break;
+		case 'AH':		p.text('Aceptada en otro horario: '+fecha);
+						p.removeClass('resaltar_azul');
+						p.addClass('resaltar_verde');
+						div.show();
+						break;
+		case 'CH': 		p.text('Asignada en día de cursada y otro horario: '+fecha)
+						p.removeClass('resaltar_azul');
+						p.addClass('resaltar_verde');
+						div.show();
+						break;
+		case 'RH': 		p.text('Asignada en otro día y otro horario: '+fecha)
+						p.removeClass('resaltar_verde');
+						p.addClass('resaltar_azul');
+						div.show();
+						break;
 		default: 		div.hide();
 						break;
 	}
@@ -349,11 +398,8 @@ function grabar_instancia_evaluacion(comision, instancia, evaluacion)
 
 	if (datos)
 	{
-		console.log(datos);
+		//console.log(datos);
 		var formulario = $('#comision_seleccionada_'+comision);
-		//console.log(formulario.attr('action'));
-		//console.log(formulario);
-
 		var resultado = '';
 		kernel.ajax.call(formulario.attr('action'), {
 				async: false,
@@ -361,15 +407,18 @@ function grabar_instancia_evaluacion(comision, instancia, evaluacion)
 				dataType: 'json',
 				data: datos,
 				success: function(data) { 
-					console.log(data);
+					//console.log(data);
 					//console.log(data.cont[0].mensaje);
 					$('#aceptar_'+instancia+'_'+comision).val('P');
-					$('#div_'+instancia+'_'+comision).hide();
+					$('#div_date_'+instancia+'_'+comision).hide();
+					$('#div_time_'+instancia+'_'+comision).hide();
 
 					if (data.cont[0].success == -1) {
 							alert(data.cont[0].mensaje);
 					} else {
-						set_div_mensaje_aceptado(comision, instancia, datos.estado, datos.fecha_hora);
+						var estado_new = data.cont[0].estado;
+						var fecha_hora_asign = data.cont[0].fecha_hora;
+						set_div_mensaje_aceptado(comision, instancia, estado_new, fecha_hora_asign);
 						resultado = data.cont[0].mensaje;
 					}
 				}, 
@@ -387,13 +436,13 @@ function grabar_instancia_evaluacion(comision, instancia, evaluacion)
 function get_datos_instancia_evaluacion(comision, instancia, evaluacion)
 {
 	var opcion = $('#aceptar_'+instancia+'_'+comision).val();
-	console.log(opcion);
 	if (!opcion || opcion == 'P') {
 		return null;
 	}
-
-	var fecha_hora = $('#fecha_hora_'+instancia+'_'+comision).val();
+	console.log('opcion: '+opcion);
+	var fecha_hora = $('#fecha_hora_solic_'+instancia+'_'+comision).val();
 	var estado;
+	var ciclo = $('#escala_'+comision).val().trim();
 
 	if (opcion == 'A') {
 		estado = 'A';
@@ -419,9 +468,14 @@ function get_datos_instancia_evaluacion(comision, instancia, evaluacion)
 		}
 		var hora = get_hora_clase(dias_clase, diaSemana);
 		fecha_hora = fecha_string + ' ' + hora;
-    }
-	ciclo = $('#escala_'+comision).val().trim();
-
+	}
+	if (opcion == 'H')
+	{
+		var timepicker = $('#timepicker_'+instancia+'_'+comision).val();
+		fecha_hora = timepicker + ':00'; //solo envío la hora
+		estado = 'H';
+	}
+	
 	return {comision: comision, evaluacion: evaluacion, ciclo: ciclo, fecha_hora: fecha_hora, estado: estado};
 }
 

@@ -580,23 +580,30 @@ class controlador extends controlador_g3w2
 		$datos['comision'] = $this->validate_param('comision', 'post', validador::TIPO_ALPHANUM);
 		$datos['evaluacion'] = $this->validate_param('evaluacion', 'post', validador::TIPO_ALPHANUM);
 		$datos['fecha_hora'] = $this->validate_param('fecha_hora', 'post', validador::TIPO_TEXTO);
-		$datos['estado'] = $this->validate_param('estado', 'post', validador::TIPO_TEXTO);
+		$estado = $this->validate_param('estado', 'post', validador::TIPO_TEXTO);
 		$ciclo = $this->validate_param('ciclo', 'post', validador::TIPO_ALPHANUM);
 
+		if (trim($estado) == 'H') {
+			$fecha_hora = catalogo::consultar('cursos', 'get_evaluacion_asignada', $datos);
+			$fecha = substr($fecha_hora['FECHA_HORA'], 0, 10);
+			$hora = trim($datos['fecha_hora']); //Si es un cambio de horario, sólo viene la hora
+			$datos['fecha_hora'] = $fecha.' '.$hora;
+		}
+
 		kernel::log()->add_debug('accion__grabar_comision', $datos); 
-		//print_r($datos);
 		$mensaje[] = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+		kernel::log()->add_debug('accion__grabar_comision mensaje', $mensaje); 
 		//Si la instancia es 2º parcial Promo, también debe crearse un 1º Recuperatorio Regular
-		if ($datos['evaluacion'] == 2 and strpos($ciclo, 'P') !== false)
+		if ($datos['evaluacion'] == 2 and trim($ciclo) == 'P')
 		{
 			$datos['evaluacion'] = 4;
-			$mensaje[] .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+			catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
 		}
 		//Si la instancia es Integrador (Promo), también debe crearse un 2º Recuperatorio Regular
-		if ($datos['evaluacion'] == 14 and strpos($ciclo, 'P') !== false)
+		if ($datos['evaluacion'] == 14 and trim($ciclo) == 'P')
 		{
 			$datos['evaluacion'] = 5;
-			$mensaje[] .= catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
+			catalogo::consultar('cursos', 'alta_evaluacion_parcial', $datos);
 		}
 		
 		$this->render_ajax($mensaje);

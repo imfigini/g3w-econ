@@ -167,8 +167,8 @@ class pagelet_filtro extends pagelet {
 
     function asignar_colores($evaluaciones)
     {
-        $colores = array(0=>'DodgerBlue', 1=>'LimeGreen', 2=>'Gold', 3=>'LightCoral', 4=>'DarkTurquoise');
-        $colores_claros = array(0=>'LightSkyBlue', 1=>'Lime', 2=>'LightGoldenRodYellow', 3=>'LightPink', 4=>'PaleTurquoise'); 
+        $colores = array(0=>'DodgerBlue', 1=>'LimeGreen', 2=>'Gold', 3=>'LightCoral', 4=>'DarkTurquoise', 5=>'plum');
+        $colores_claros = array(0=>'LightSkyBlue', 1=>'Lime', 2=>'LightGoldenRodYellow', 3=>'LightPink', 4=>'PaleTurquoise', 5=>'thistle'); 
 
         $materias = array();
         foreach($evaluaciones as $e)

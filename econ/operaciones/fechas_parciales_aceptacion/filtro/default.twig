@@ -87,28 +87,36 @@
                                         {% if (comision.ESCALA == 'P  ' or comision.ESCALA == 'PyR') %}
                                             <tr>
                                                 <td>1er. Parcial Promoción: <strong>{{comision.EVAL_PROMO1.FECHA_HORA}}</strong></td>
-                                                {{ _self.set_input(comision.COMISION, 'promo1', comision.EVAL_PROMO1.FECHA_HORA, comision.EVAL_PROMO1.READONLY) }}
+												{# {{ _self.set_input(comision.COMISION, 'promo1', comision.EVAL_PROMO1.FECHA_HORA, comision.EVAL_PROMO1.READONLY) }} #}
+												{{ _self.set_input(comision.COMISION, 'promo1', comision.EVAL_PROMO1.FECHA_HORA) }}
                                             </tr>
                                             <tr>
                                                 <td>2do. Parcial Promoción: <strong>{{comision.EVAL_PROMO2.FECHA_HORA}}</strong></td>
-                                                {{ _self.set_input(comision.COMISION, 'promo2', comision.EVAL_PROMO2.FECHA_HORA, comision.EVAL_PROMO2.READONLY) }}             
+												{# {{ _self.set_input(comision.COMISION, 'promo2', comision.EVAL_PROMO2.FECHA_HORA, comision.EVAL_PROMO2.READONLY) }} #}
+												{{comision.EVAL_PROMO2_ASIGN.FECHA_HORA}}            
+												{{ _self.set_input(comision.COMISION, 'promo2', comision.EVAL_PROMO2.FECHA_HORA) }}
                                             </tr>
                                             {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
                                                 <tr>
                                                     <td>Recuperatorio Unico: <strong>{{comision.EVAL_RECUP.FECHA_HORA}}</strong></td>
-                                                    {{ _self.set_input(comision.COMISION, 'recup', comision.EVAL_RECUP.FECHA_HORA, comision.EVAL_RECUP.READONLY) }}
+													{# {{ _self.set_input(comision.COMISION, 'recup', comision.EVAL_RECUP.FECHA_HORA, comision.EVAL_RECUP.READONLY) }} #}
+													{{ _self.set_input(comision.COMISION, 'recup', comision.EVAL_RECUP.FECHA_HORA) }}
                                                 </tr>
                                             {% endif %}
                                             <tr>    
                                                 <td>Integrador: <strong>{{comision.EVAL_INTEG.FECHA_HORA}}</strong></td>
-                                                {{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA, comision.EVAL_INTEG.READONLY) }}
+												{# {{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA, comision.EVAL_INTEG.READONLY) }} #}
+												{{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA) }}
                                             </tr>
                                             {% if materia.CICLO == 'P' and comision.ESCALA == 'P  ' %}
                                                 <tr>
-                                                    <td colspan="3">1er. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP1.FECHA_HORA}}</strong></td>
+													<td colspan="3">1er. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP1.FECHA_HORA}}</strong>
+													Asignada: <strong>{{comision.EVAL_PROMRECUP1_ASIGN.FECHA_HORA}}</strong>
+													</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="3">2do. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP2.FECHA_HORA}}</strong></td>
+													<td colspan="3">2do. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP2.FECHA_HORA}}</strong></td>
+													Asignada: <strong>{{comision.EVAL_PROMRECUP2_ASIGN.FECHA_HORA}}</strong>
                                                 </tr>
                                             {% endif %}
                                         {% endif %}
@@ -116,15 +124,18 @@
                                         {% if (comision.ESCALA == 'R  ' or comision.ESCALA == 'PyR') %}
                                             <tr>
                                                 <td>Parcial Regular: <strong>{{comision.EVAL_REGU1.FECHA_HORA}}</strong></td>
-                                                {{ _self.set_input(comision.COMISION, 'regu1', comision.EVAL_REGU1.FECHA_HORA, comision.EVAL_REGU1.READONLY) }}
+												{# {{ _self.set_input(comision.COMISION, 'regu1', comision.EVAL_REGU1.FECHA_HORA, comision.EVAL_REGU1.READONLY) }} #}
+												{{ _self.set_input(comision.COMISION, 'regu1', comision.EVAL_REGU1.FECHA_HORA) }}
                                             </tr>
                                             <tr>
                                                 <td>1er. Recuperatorio: <strong>{{comision.EVAL_RECUP1.FECHA_HORA}}</strong></td>
-                                                {{ _self.set_input(comision.COMISION, 'recup1', comision.EVAL_RECUP1.FECHA_HORA, comision.EVAL_RECUP1.READONLY) }}
+												{# {{ _self.set_input(comision.COMISION, 'recup1', comision.EVAL_RECUP1.FECHA_HORA, comision.EVAL_RECUP1.READONLY) }} #}
+												{{ _self.set_input(comision.COMISION, 'recup1', comision.EVAL_RECUP1.FECHA_HORA) }}
                                             </tr>
                                             <tr>
                                                 <td>2do. Recuperatorio: <strong>{{comision.EVAL_RECUP2.FECHA_HORA}}</strong></td>
-                                                {{ _self.set_input(comision.COMISION, 'recup2', comision.EVAL_RECUP2.FECHA_HORA, comision.EVAL_RECUP2.READONLY) }}
+												{# {{ _self.set_input(comision.COMISION, 'recup2', comision.EVAL_RECUP2.FECHA_HORA, comision.EVAL_RECUP2.READONLY) }} #}
+												{{ _self.set_input(comision.COMISION, 'recup2', comision.EVAL_RECUP2.FECHA_HORA) }}
                                             </tr>
                                         {% endif %}
 
@@ -189,9 +200,9 @@
 {% endmacro %}
 
 
-{% macro set_input(comision, instancia, fecha_hora, estado) %}
-    <input type="hidden" id="fecha_hora_{{instancia}}_{{comision}}" name="fecha_hora_{{instancia}}_{{comision}}" value="{{fecha_hora}}">
-    <td><select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, '{{comision}}', '{{instancia}}', '{{estado}}')" >
+{% macro set_input(comision, instancia, fecha_hora_solic) %}
+	<input type="hidden" id="fecha_hora_solic_{{instancia}}_{{comision}}" name="fecha_hora_{{instancia}}_{{comision}}" value="{{fecha_hora_solic}}">
+    <td><select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, '{{comision}}', '{{instancia}}')" >
             <option value="P" selected>--Seleccionar--</option>
             <option value="A">Aceptar</option>
             <option value="C">Asignar en día de cursada</option>
@@ -199,8 +210,11 @@
 			<option value="H">Modificar horario</option> 
 		</select></td>
 	<td>
-    <div id='div_{{instancia}}_{{comision}}' style='display:none'>
-        Asignar: <input type="text" id="datepicker_{{instancia}}_{{comision}}" name="datepicker_{{instancia}}_{{comision}}" class="datepicker" value="" />
+    <div id='div_date_{{instancia}}_{{comision}}' style='display:none'>
+		Asignar: <input type="text" id="datepicker_{{instancia}}_{{comision}}" name="datepicker_{{instancia}}_{{comision}}" class="datepicker" value="" />
+	</div>
+	<div id='div_time_{{instancia}}_{{comision}}' style='display:none'>
+		Hora: <input type="text" id="timepicker_{{instancia}}_{{comision}}" name="timepicker_{{instancia}}_{{comision}}" class="timepicker" value="" />
     </div>
     {# <div id='div_aceptado_{{instancia}}_{{comision}}' style='display:none'> #}
 	<div id='div_aceptado_{{instancia}}_{{comision}}'>

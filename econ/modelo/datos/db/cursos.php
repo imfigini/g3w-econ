@@ -1,12 +1,9 @@
 <?php
 namespace econ\modelo\datos\db;
 
-use kernel\error_kernel_notificaciones;
 use kernel\kernel;
-use kernel\util\validador;
 use kernel\util\db\db;
 use siu\modelo\datos\util;
-
 
 class cursos 
 {
@@ -607,10 +604,13 @@ class cursos
 		//Si la fecha corresponde con la solicitada por el coordinador, devuelve 'A'
 		//Sino, si la fecha corresponde a un día de cursada de la comisión devuelve 'C'
 		//En todo otro caso devuelve 'R'
+		//Si el horario NO corresponde al de la cursada: agrega una H al final ('AH' / 'CH' / 'RH')
 
 		$comision = $parametros['comision'];
 		$evaluacion = $parametros['evaluacion'];
 		$fecha = substr($parametros['fecha'], 1, 10);
+		$hora = substr($parametros['fecha'], 12, 8);
+		kernel::log()->add_debug('get_estado_comision_fecha hora: ', $hora);
 
 		$sql = "SELECT DATE(fecha_hora) as fecha
 					FROM ufce_cron_eval_parc 
@@ -618,8 +618,22 @@ class cursos
 					AND evaluacion = $evaluacion";
 
 		$existe = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-		if ($existe['FECHA'] && $existe['FECHA'] == $fecha) {
-			$estado = 'A';
+		if ($existe['FECHA'] && $existe['FECHA'] == $fecha) 
+		{
+			$dia_semana = date('N', strtotime($fecha)) + 1;
+			$sql = "SELECT hs_comienzo_clase
+						FROM   	sga_asignaciones
+						WHERE  	asignacion IN (SELECT asignacion
+												FROM   sga_calendcursada
+												WHERE  comision = $comision)
+								AND dia_semana = $dia_semana";
+			$result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+			if (isset($result['HS_COMIENZO_CLASE']) and trim($result['HS_COMIENZO_CLASE']) == trim($hora)) {
+				$estado = 'A';
+			}
+			else {
+				$estado = 'AH';
+			}
 		} else {
 			$sql = "SELECT dia_semana
 					FROM   sga_asignaciones
@@ -631,8 +645,36 @@ class cursos
 			$dia_semana = date('N', strtotime($fecha)) + 1;
 			$estado = 'R';	
 			foreach ($r as $dia) {
-				if ($dia['DIA_SEMANA'] == $dia_semana) {
-					$estado = 'C';
+				if ($dia['DIA_SEMANA'] == $dia_semana) 
+				{
+					$sql = "SELECT hs_comienzo_clase
+						FROM   	sga_asignaciones
+						WHERE  	asignacion IN (SELECT asignacion
+												FROM   sga_calendcursada
+												WHERE  comision = $comision)
+								AND dia_semana = $dia_semana";
+					$result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+					if (isset($result['HS_COMIENZO_CLASE']) and trim($result['HS_COMIENZO_CLASE']) == trim($hora)) {
+						$estado = 'C';
+					}
+					else {
+						$estado = 'CH';
+					}
+				}
+			}
+			if ($estado == 'R')
+			{
+				$sql = "SELECT FIRST 1 hs_comienzo_clase
+						FROM   	sga_asignaciones
+						WHERE  	asignacion IN (SELECT asignacion
+												FROM   sga_calendcursada
+												WHERE  comision = $comision)";
+				$result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+				if (isset($result['HS_COMIENZO_CLASE']) and trim($result['HS_COMIENZO_CLASE']) == trim($hora)) {
+					$estado = 'R';
+				}
+				else {
+					$estado = 'RH';
 				}
 			}
 		}
@@ -735,7 +777,6 @@ class cursos
         $evaluacion = $parametros['evaluacion'];
         $escala = 3;	//Las instancias de evaluación parcial siempre deben tener escala: 3 (Reales Regular)
         $fecha_hora = $parametros['fecha_hora'];
-        ///$estado = $parametros['estado'];
 
 		$estado_notif = 'U';
 		if ($this->existe_evaluacion_parcial($parametros)) {
@@ -748,13 +789,16 @@ class cursos
         $result['mensaje'] = util::ejecutar_procedure($sql);
         
         $sql = "SELECT descripcion FROM sga_eval_parc WHERE evaluacion = $evaluacion";
-        $eval_descrip = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        $eval_descrip = $eval_descrip[0]['DESCRIPCION'];
+        $eval_descrip = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+        $eval_descrip = $eval_descrip['DESCRIPCION'];
         
         if ($result['mensaje'] == 'OK')
         {
 			$result['success'] = 1;
 			$estado = $this->get_estado_comision_fecha(array('comision'=>$comision, 'evaluacion'=>$evaluacion, 'fecha'=>$fecha_hora));	
+			$result['estado'] = $estado;
+			$result['fecha_hora'] = $fecha_hora;
+
 			$estado = json_encode($estado);
 
             $sql = "UPDATE ufce_cron_eval_parc
@@ -763,13 +807,12 @@ class cursos
                     WHERE comision = $comision 
                     AND evaluacion = $evaluacion";
             kernel::db()->ejecutar($sql);
-            $result['mensaje'] = "Se dio de alta correctamente la evaluación $eval_descrip para la comisión $comision. ";
+			$result['mensaje'] = "Se dio de alta correctamente la evaluación $eval_descrip para la comisión $comision. ";
         }
         else
         {
 			$result['success'] = -1;
 			$result['mensaje'] .= " Evaluación $eval_descrip en la comisión $comision. ";
-            
 		}
 		return $result;
     }
