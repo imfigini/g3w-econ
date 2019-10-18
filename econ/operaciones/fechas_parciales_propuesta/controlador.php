@@ -764,11 +764,18 @@ class controlador extends controlador_g3w2
 					'observaciones' => $observaciones)
                 );
 		
+		$dir_from = catalogo::consultar('parametros', 'get_parametro', array('operacion'=>'mail_sistema'));
+		$dir_from = $dir_from['PARAMETRO'];
+		
+		$dir_reply = $mail_coordinador;
+
+		$dir_to = catalogo::consultar('parametros', 'get_parametro', array('operacion'=>'mail_dd'));
+		$dir_to = $dir_to['PARAMETRO'];
+
+		//Iris: Comentar esta secci?n en producci?n-------------------------------------
 		$dir_to = 'imfigini@slab.exa.unicen.edu.ar';
 		//$dir_to = 'bosch.marcela@gmail.com';
-		
-		$dir_reply = 'no-reply-guarani@econ.unicen.edu.ar';
-		$dir_from = $dir_reply;
+		//Iris: Fin comentar esta secci?n en producci?n---------------------------------
 
 		$mail = new mail($dir_to, $asunto, $cuerpo, $dir_from);
 		$mail->set_reply($dir_reply);

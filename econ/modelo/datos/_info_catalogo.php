@@ -1510,6 +1510,18 @@ class _info_catalogo
 );
 	}
 
+	static function parametros__get_parametro()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'operacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function sistema__cache_lista_alumnos_carrera()
 	{
 		return array (

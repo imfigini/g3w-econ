@@ -511,7 +511,7 @@ class cursos
                     WHERE comision = $comision 
                         AND evaluacion = $evaluacion";
 
-        $eval = kernel::db()->consultar-fila($sql, db::FETCH_ASSOC);
+        $eval = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
         if (!empty($eval))
         {
 			if ($eval['ESTADO'] != 'P') {//Si el estado es distinto de 'P' es que la instancia de evaluación ya ha sido creada
@@ -736,7 +736,7 @@ class cursos
                     WHERE materia = $materia
                     AND anio_academico = $anio_academico
                     AND periodo_lectivo = $periodo_lectivo";
-		$obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+		$obs = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 		$oper = '';
         if (count($obs) > 0)
         {

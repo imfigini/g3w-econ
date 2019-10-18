@@ -141,8 +141,10 @@
                                     {% endif %}
                                     <tr>
                                         <td colspan="4">Observaciones: 
-                                            <input type="text" id="observaciones_{{materia.MATERIA}}" name="observaciones_{{materia.MATERIA}}" style="width:100%"
-                                                    value="{{materia.OBSERVACIONES}}"  /> 
+                                            {# <input type="text" id="observaciones_{{materia.MATERIA}}" name="observaciones_{{materia.MATERIA}}" style="width:100%"
+													maxlength="600" value="{{materia.OBSERVACIONES}}"  />  #}
+											<textarea type="text" id="observaciones_{{materia.MATERIA}}" name="observaciones_{{materia.MATERIA}}" style="width:100%"
+													maxlength="600" >{{materia.OBSERVACIONES}}</textarea>
                                         </td>
                                     </tr>
                                     <tr>
