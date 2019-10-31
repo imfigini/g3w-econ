@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\definicion_cursos\filtro;
+namespace econ\operaciones\ponderacion_notas\filtro;
 
 use kernel\interfaz\componentes\forms\form_elemento_config;
 use kernel\kernel;
@@ -19,7 +19,7 @@ class builder_form_filtro extends builder_formulario
 
 	function get_action() 
 	{
-		return kernel::vinculador()->crear('definicion_cursos', 'index');
+		return kernel::vinculador()->crear('ponderacion_notas', 'index');
 	}
 
 	protected function generar_definicion(guarani_form $form, fabrica_formularios $fabrica) 
@@ -31,7 +31,7 @@ class builder_form_filtro extends builder_formulario
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_anios_academicos(),
 				form_elemento_config::validar_select => false,
-                                form_elemento_config::valor_default  =>   $this->anio_academico_hash,
+				form_elemento_config::valor_default  =>   $this->anio_academico_hash,
 				form_elemento_config::clase_css => 'filtros_comunes',
 		)));
 		

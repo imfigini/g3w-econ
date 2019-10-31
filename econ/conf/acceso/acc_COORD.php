@@ -21,13 +21,13 @@ return array(
                   )
             ),
         
-           'definicion_cursos' => array(
+           'ponderacion_notas' => array(
                  'activa' => true,
-                 'url' => 'definicion_cursos',
+                 'url' => 'ponderacion_notas',
                  'menu' => array(
                      'submenu' => 'parciales',
                      'visible' => true,
-                     'texto' => 'definicion_cursos'
+                     'texto' => 'ponderacion_notas'
                  )
            ),
             

@@ -66,31 +66,70 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 
 });
 
-    function actualiza_porcentaje(porc)
-    {
-        x = porc.id.split('_');
-        indice = x[2];
-        A = $("#"+'porc_parciales_'+indice).val();
-        B = $("#"+'porc_integrador_'+indice).val();
-        total = 100-A-B;
-        $("#"+'porc_trabajos_'+indice).val(total);
-        C = $("#"+'porc_trabajos_'+indice).val();
-        if (C < 0)
-        {
-            alert("No se puede asignar un número negativo. Verifique los porcentajes ingresados.");
-            
-        }
-    }
-    
-    function validar_porcentaje(porc)
-    {
-        x = porc.id.split('_');
-        indice = x[2];
-        C = parseInt ( $("#"+'porc_trabajos_'+indice).val() );
-        if (C < 0)
-        {
-            return false;
-        }
-        return true;
-    }
-    
+function actualiza_porcentaje_con_integrador(porc)
+{
+	x = porc.id.split('_');
+	indice = x[3];
+	A = $("#"+'porc_parciales_P_'+indice).val();
+	B = $("#"+'porc_integrador_P_'+indice).val();
+	total = 100-A-B;
+	$("#"+'porc_trabajos_P_'+indice).val(total);
+	C = $("#"+'porc_trabajos_P_'+indice).val();
+	if (C < 0) {
+		alert("No se puede asignar un número negativo. Verifique los porcentajes ingresados.");
+	}
+}
+
+function actualiza_porcentaje_sin_integrador(porc)
+{
+	x = porc.id.split('_');
+	console.log(x);
+	indice = x[3];
+	A = $("#"+'porc_parciales_R_'+indice).val();
+	total = 100-A;
+	$("#"+'porc_trabajos_R_'+indice).val(total);
+	C = $("#"+'porc_trabajos_R_'+indice).val();
+	if (C < 0) {
+		alert("No se puede asignar un número negativo. Verifique los porcentajes ingresados.");
+	}
+}
+
+function validar_datos(porc)
+{
+	x = porc.id.split('_');
+	indice = x[2];
+	CP = parseInt ( $("#"+'porc_trabajos_P_'+indice).val() );
+	CR = parseInt ( $("#"+'porc_trabajos_R_'+indice).val() );
+	if (CP < 0 || CR < 0)
+	{
+		alert("Los trabajos prácticos no pueden tener una ponderación negativa. Verifique los porcentajes ingresados.");
+		return false;
+	}
+
+	return tiene_todos_los_valores(porc);
+}
+
+function tiene_todos_los_valores(porc)
+{
+	x = porc.id.split('_');
+	indice = x[2];
+	PP = parseInt ( $("#"+'porc_parciales_P_'+indice).val() );
+	IP = parseInt ( $("#"+'porc_integrador_P_'+indice).val() );
+	PR = parseInt ( $("#"+'porc_parciales_R_'+indice).val() );
+	if (!PP)
+	{
+		alert("Debe asignar al menos un valor para la ponderación de Parciales.");
+		return false;
+	}
+	if (!IP)
+	{
+		alert("Debe asignar al menos un valor para la ponderación de Integrador.");
+		return false;
+	}
+	if (!PR)
+	{
+		alert("Debe asignar al menos un valor para la ponderación de Parciales (sin instancia de integrador).");
+		return false;
+	}
+	return true;
+}

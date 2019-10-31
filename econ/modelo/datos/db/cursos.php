@@ -139,69 +139,6 @@ class cursos
     * cache: memoria
     * filas: n
     */
-    function get_porcentajes_instancias($parametros)
-    {
-        $comision = $parametros['comision'];
-        $sql = "SELECT porc_parciales, porc_integrador, porc_trabajos
-                    FROM ufce_comisiones_porc_notas
-                WHERE   comision = $comision";
-        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        return $datos[0];  
-    }
-    
-    /**
-    * parametros: comision, porc_parciales, porc_integrador, porc_trabajos
-    * cache: memoria
-    * filas: n
-    */
-    function update_porcentajes_instancias($parametros)
-    {
-        $comision = $parametros['comision'];
-        $porc_parciales = $parametros['porc_parciales'];
-        $porc_integrador = $parametros['porc_integrador'];
-        $porc_trabajos = $parametros['porc_trabajos'];
-
-        $sql = "UPDATE ufce_comisiones_porc_notas 
-                    SET porc_parciales = $porc_parciales,
-                        porc_integrador = $porc_integrador,
-                        porc_trabajos = $porc_trabajos
-                    WHERE comision = $comision";
-        $datos = kernel::db()->ejecutar($sql);
-        return $datos;
-    }
-    
-    /**
-    * parametros: comision, porc_parciales, porc_integrador, porc_trabajos
-    * cache: memoria
-    * filas: n
-    */
-    function set_porcentajes_instancias($parametros)
-    {
-        $existe = $this->get_porcentajes_instancias($parametros);
-        if ($existe)
-        {
-            return $this->update_porcentajes_instancias($parametros);
-        }
-        else
-        {
-            $comision = $parametros['comision'];
-            $porc_parciales = $parametros['porc_parciales'];
-            $porc_integrador = $parametros['porc_integrador'];
-            $porc_trabajos = $parametros['porc_trabajos'];
-
-            $sql = "INSERT INTO ufce_comisiones_porc_notas (comision, porc_parciales, porc_integrador, porc_trabajos) VALUES
-                        ($comision, $porc_parciales, $porc_integrador, $porc_trabajos)";
-            $datos = kernel::db()->ejecutar($sql);
-            return $datos;
-        }
-    }
-    
-    
-    /**
-    * parametros: comision
-    * cache: memoria
-    * filas: n
-    */
     function get_nombre_comision($parametros)
     {
         $comision = $parametros['comision'];

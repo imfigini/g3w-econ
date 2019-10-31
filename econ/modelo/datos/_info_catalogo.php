@@ -1022,18 +1022,6 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_porcentajes_instancias()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
-  ),
-  'cache' => 'memoria',
-  'filas' => 'n',
-);
-	}
-
 	static function cursos__get_tipo_escala_de_materia()
 	{
 		return array (
@@ -1059,36 +1047,6 @@ class _info_catalogo
     3 => 'observaciones',
   ),
   'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
-	static function cursos__set_porcentajes_instancias()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
-    1 => 'porc_parciales',
-    2 => 'porc_integrador',
-    3 => 'porc_trabajos',
-  ),
-  'cache' => 'memoria',
-  'filas' => 'n',
-);
-	}
-
-	static function cursos__update_porcentajes_instancias()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
-    1 => 'porc_parciales',
-    2 => 'porc_integrador',
-    3 => 'porc_trabajos',
-  ),
-  'cache' => 'memoria',
   'filas' => 'n',
 );
 	}
@@ -1518,6 +1476,65 @@ class _info_catalogo
     0 => 'operacion',
   ),
   'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__get_ponderaciones_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__set_ponderaciones_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+    4 => 'porc_parciales',
+    5 => 'porc_integrador',
+    6 => 'porc_trabajos',
+  ),
+  'param_null' => 
+  array (
+    0 => 'porc_integrador',
+  ),
+  'cache' => 'memoria',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__update_ponderaciones_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+    4 => 'porc_parciales',
+    5 => 'porc_integrador',
+    6 => 'porc_trabajos',
+  ),
+  'param_null' => 
+  array (
+    0 => 'porc_integrador',
+  ),
+  'cache' => 'memoria',
   'filas' => '1',
 );
 	}

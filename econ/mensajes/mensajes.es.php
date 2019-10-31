@@ -4,7 +4,7 @@ return array(
     'header.menu.inicio_oficina_docentes' => 'Inicio Dirección de Docentes',
     'header.menu.inicio_coordinador' => 'Coordinador de materia',
     'header.menu.coord_materias' => 'Coordinadores de materias',
-    'header.menu.definicion_cursos' => 'Cursadas',
+    'header.menu.ponderacion_notas' => 'Cursadas',
     'header.menu.detalle_cursos' => 'Cursadas',
     'header.menu.parciales' => 'Parciales',
     'header.menu.mixes' => 'Mixs',
@@ -42,10 +42,10 @@ return array(
     'asignacion_coord_materias.filtro.sin_resultados' => 'No hay información',
     'asignacion_coord_materias.filtro_seleccione' => '-- Todos --',
     
-    /* Definción de los cursos */
-    'tit_definicion_cursos' => 'Definición de Cursos por Promoción',
-    'definicion_cursos' => 'Ponderación de instancias de evaluación en los Cursos por Promoción',
-    'definicion_cursos.filtro.sin_resultados' => 'No hay información',
+    /* Ponderación de notas en las instancias de evaluación */
+    'tit_ponderacion_notas' => 'Ponderación de notas en las instancias de evaluación',
+    'ponderacion_notas' => 'Ponderación de notas en las instancias de evaluación',
+    'ponderacion_notas.filtro.sin_resultados' => 'No hay información',
     
     /* Detalle de los cursos con sus %*/
     'tit_detalle_cursos' => 'Listado de Cursos por Promoción',

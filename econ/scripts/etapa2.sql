@@ -66,3 +66,19 @@ insert into ufce_cron_eval_parc_estados (estado, descripcion)
 --select * from ufce_cron_eval_parc_estados;
 
 ------------------------------------------------------------------------------------------------------------
+----------- PARA ADMINISTRAR PORCENTAJE EN EL PESO DE LAS NOTAS --------------------------------------------------
+DROP TABLE dba.ufce_comisiones_porc_notas;
+--DROP TABLE dba.ufce_ponderacion_notas;
+CREATE TABLE dba.ufce_ponderacion_notas
+(
+	anio_academico 		INT NOT NULL,
+	periodo_lectivo 	VARCHAR(20) NOT NULL,
+	materia 			VARCHAR(5) NOT NULL, 
+	calidad				VARCHAR(1) NOT NULL, 	--P:Promo, R:Regular
+	porc_parciales 		DECIMAL(4,2),
+	porc_integrador 	DECIMAL(4,2),
+	porc_trabajos		DECIMAL(4,2),
+	CHECK (calidad IN ('P', 'R')),	
+	PRIMARY KEY (anio_academico, periodo_lectivo, materia, calidad)
+);
+

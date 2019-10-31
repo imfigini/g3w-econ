@@ -43,7 +43,7 @@ class pagelet_filtro extends pagelet {
             return $this->controlador->get_anio_academico();
 	}
         
-        public function prepare()
+	public function prepare()
 	{   
             $operacion = kernel::ruteador()->get_id_operacion();
             $this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
