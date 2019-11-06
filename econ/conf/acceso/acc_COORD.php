@@ -11,15 +11,25 @@ return array(
         'mensajes' => array('activa' => true),
         'configuracion' => array('activa' => true),
 
-            'fechas_parciales_propuesta' => array(
+            'fechas_parciales_2019' => array(
                   'activa' => true,
-                  'url' => 'fechas_parciales_propuesta',
+                  'url' => 'fechas_parciales_2019',
                   'menu' => array(
                       'submenu' => 'parciales',
                       'visible' => true,
-                      'texto' => 'fechas_parciales_propuesta'
+                      'texto' => 'fechas_parciales_2019'
                   )
-            ),
+			),
+			
+			'fechas_parciales_propuesta' => array(
+				'activa' => true,
+				'url' => 'fechas_parciales_propuesta',
+				'menu' => array(
+					'submenu' => 'parciales',
+					'visible' => true,
+					'texto' => 'fechas_parciales_propuesta'
+				)
+		  	),
         
            'ponderacion_notas' => array(
                  'activa' => true,

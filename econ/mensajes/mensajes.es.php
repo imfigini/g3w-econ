@@ -67,12 +67,17 @@ return array(
     'mixes.carrera' => 'Carrera',
     'mixes_modificacion' => 'Modificación de Mix',
     
-    /* Propuestas de fechas para parciales y recuperatorios */
-    'tit_fechas_parciales_propuesta' => 'Carga de fechas de evaluación para parciales, integrador y recuperatorios',
-    'fechas_parciales_propuesta' => 'Carga de fechas de evaluación para parciales, integrador y recuperatorios',
-    'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
-    
-    /* Aceptación de fechas para parciales y recuperatorios */
+    /* Consulta de fechas para parciales y recuperatorios - 2019*/
+    'tit_fechas_parciales_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
+    'fechas_parciales_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
+    'fechas_parciales_2019.sin_resultados' => 'No hay información',
+	
+	/* Propuestas de fechas para parciales y recuperatorios */
+    'tit_fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
+    'fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
+	'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
+	
+	/* Aceptación de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales, integrador y recuperatorios',
     'fechas_parciales_aceptacion' => 'Gestión por listado para fechas de evaluaciones',
     'fechas_parciales_aceptacion.sin_resultados' => 'No hay información',    
@@ -82,5 +87,4 @@ return array(
     'fechas_parciales_calendario' => 'Gestión por calendario para fechas de evaluaciones',
     'fechas_parciales_calendario.sin_resultados' => 'No hay información',    
 
-    
 );

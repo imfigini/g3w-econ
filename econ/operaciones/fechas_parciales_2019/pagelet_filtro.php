@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales_propuesta;
+namespace econ\operaciones\fechas_parciales_2019;
 
 use kernel\interfaz\pagelet;
 use siu\modelo\datos\catalogo;
@@ -42,12 +42,12 @@ class pagelet_filtro extends pagelet {
 	{
 		return $this->controlador->get_anio_academico();
 	}
-        
+	 
 	function get_anio_seleccionado()
 	{
 		return $this->controlador->get_anio_seleccionado();
 	}
-		
+
 	function get_mensaje()
 	{
 		return $this->controlador->get_mensaje();
@@ -77,28 +77,30 @@ class pagelet_filtro extends pagelet {
 		$this->data['periodo_hash'] = $periodo_hash;
 		$this->data['anio_academico_hash'] = $anio_academico_hash;
 		
-		if (!empty($anio_academico_hash) && !empty($periodo_hash)) // and $this->get_anio_seleccionado() >= 2020)
+		if (!empty($anio_academico_hash) && !empty($periodo_hash))
 		{
-			$datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash);
-			kernel::log()->add_debug('$datos '.__LINE__, $datos);
-			//print_r($datos);
+			$anio_academico = $this->get_anio_seleccionado();
+			//print_r($anio_academico);
+			if ($anio_academico == 2019)
+			{
+				$datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash);
+				//kernel::log()->add_debug('$datos '.__LINE__, $datos);
+				//print_r($datos);
 
-			$dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
-			
-			//print_R($datos);
-			$this->data['datos'] = $datos;
-			$this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
-			
-			$this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
-			$this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
-			$priodo_solicitud_fechas = $this->controlador->get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash);
-			$this->data['priodo_solicitud_fechas'] = $priodo_solicitud_fechas[0];
-			
-//                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_comision');
-//                $this->data['form_url_comision'] = $link_form_comision;     
+				$dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
+				
+				//print_R($datos);
+				$this->data['datos'] = $datos;
+				$this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
+				
+				$this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
+				$this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
+				$priodo_solicitud_fechas = $this->controlador->get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash);
+				$this->data['priodo_solicitud_fechas'] = $priodo_solicitud_fechas[0];
 
-			$link_form_materia = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_materia');
-			$this->data['form_url_materia'] = $link_form_materia;     
+				$link_form_materia = kernel::vinculador()->crear('fechas_parciales_2019', 'grabar_materia');
+				$this->data['form_url_materia'] = $link_form_materia;     
+			}
 		}
 	}
 }

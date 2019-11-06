@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\fechas_parciales_propuesta\filtro;
+namespace econ\operaciones\fechas_parciales_2019\filtro;
 
 use kernel\interfaz\componentes\forms\form_elemento_config;
 use kernel\kernel;
@@ -19,7 +19,7 @@ class builder_form_filtro extends builder_formulario
 
 	function get_action() 
 	{
-		return kernel::vinculador()->crear('fechas_parciales_propuesta', 'index');
+		return kernel::vinculador()->crear('fechas_parciales_2019', 'index');
 	}
 
 	protected function generar_definicion(guarani_form $form, fabrica_formularios $fabrica) 
@@ -31,7 +31,7 @@ class builder_form_filtro extends builder_formulario
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_anios_academicos(),
 				form_elemento_config::validar_select => false,
-                                form_elemento_config::valor_default  =>   $this->anio_academico_hash,
+				form_elemento_config::valor_default  =>   $this->anio_academico_hash,
 				form_elemento_config::clase_css => 'filtros_comunes',
 		)));
 		
@@ -66,24 +66,24 @@ class builder_form_filtro extends builder_formulario
 		);
 	}
 	
-        function set_anio_academico($anio_academico_hash)
-        {
-            $this->anio_academico_hash = $anio_academico_hash;
-        }
-        
-        function set_periodo($periodo_hash)
-        {
-            $this->periodo_hash = $periodo_hash;
-        }
+	function set_anio_academico($anio_academico_hash)
+	{
+		$this->anio_academico_hash = $anio_academico_hash;
+	}
+	
+	function set_periodo($periodo_hash)
+	{
+		$this->periodo_hash = $periodo_hash;
+	}
         
 	function get_anios_academicos()
 	{
-            $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
-            return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
+		$datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
+		return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	
 	function get_periodos_lectivos()
 	{
-            return array(""=>  kernel::traductor()->trans('actas.filtro_seleccione'));
+		return array(""=>  kernel::traductor()->trans('actas.filtro_seleccione'));
 	}
 }

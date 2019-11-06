@@ -1,21 +1,22 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
-    {% set vista_form = this.get_vista_form() %}
+	{% set vista_form = this.get_vista_form() %}
 	{{ vista_form.render_encabezado() | raw }}
 	<div class="titulo_operacion">
 		<h2 class="clearfix">
 			<span class="pull-left">
-				{{"fechas_parciales_propuesta"|trans|capitalize}}
+				{{"fechas_parciales_2019"|trans|capitalize}}
 			</span>
 
-                        <span class="pull-right">
-			{{ vista_form.render_acciones() | raw }}
+			<span class="pull-right">
+				{{ vista_form.render_acciones() | raw }}
 			</span>
 		</h2>
 	</div>
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
 
+	
     {% if(this.data.periodos_evaluacion) %}
         {% for periodo in this.data.periodos_evaluacion %}
             <input type="hidden" id="inicio_periodo_{{periodo.ORDEN}}" value="{{periodo.FECHA_INICIO}}">
@@ -34,7 +35,6 @@
             {#  Mensaje si se guardo con exito      #}
             {% if (this.data.mensaje != '') %} 
                 <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
-{#                <div role='alert' class="alert alert-success">{{this.data.mensaje}}</div>#}
             {% endif %}
 
             {#  Mensaje si hubo error al guardar      #}
@@ -230,7 +230,7 @@
             </div>
         {% else %}
             <div role="alert" class="alert">
-                {{"fechas_parciales_propuesta.sin_resultados"|trans|capitalize}}
+                {{"fechas_parciales_2019.sin_resultados"|trans|capitalize}}
             </div>
         {% endif %}
     {% endif %}

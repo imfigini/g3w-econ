@@ -20,6 +20,7 @@ insert into ufce_parametros values
 
 ------------------------------------------------------------------------------------------------------------
 ----PARA LLEVAR REGISTRO DE LAS OBSERVACIONES QUE VA DEJANDO EL COORDINADOR EN LA OPERACIÓN DE SOLICITUD DE FECHAS PARA EVALUACIONES PARCIALES
+ALTER TABLE ufce_cron_eval_parc_obs MODIFY (observaciones VARCHAR(255));
 --drop table ufce_cron_eval_parc_obs_log;
 CREATE TABLE dba.ufce_cron_eval_parc_obs_log
 (
@@ -27,12 +28,11 @@ CREATE TABLE dba.ufce_cron_eval_parc_obs_log
 	materia VARCHAR(5),
 	anio_academico INT,
 	periodo_lectivo VARCHAR(20),
-	observaciones VARCHAR(600),
+	observaciones VARCHAR(255),
 	fecha DATETIME YEAR TO SECOND,
 	oper VARCHAR(1) CHECK (oper IN ('I', 'U', 'D')),
 	PRIMARY KEY (id)
 );
-
 ------------------------------------------------------------------------------------------------------------
 -----TIPOS DE ESTADOS EN LOS QUE PUEDE ESTAR LA SOLICITUD DE FECHAS DE EVALUACIONES POR PARCIALES
 ------------------------------------------------------------------------------------------------------------
@@ -42,8 +42,8 @@ ALTER TABLE ufce_cron_eval_parc MODIFY (estado VARCHAR(2) DEFAULT 'P' NOT NULL);
 ALTER TABLE ufce_cron_eval_parc ADD CONSTRAINT FOREIGN KEY (estado) REFERENCES ufce_cron_eval_parc_estados(estado);
 --select * from ufce_cron_eval_parc;
 
--- DROP TABLE ufce_cron_eval_parc_estados;
-CREATE TABLE ufce_cron_eval_parc_estados (
+-- DROP TABLE dba.ufce_cron_eval_parc_estados;
+CREATE TABLE dba.ufce_cron_eval_parc_estados (
 	estado varchar(2) NOT NULL,
 	descripcion varchar(255),
 	PRIMARY KEY (estado)

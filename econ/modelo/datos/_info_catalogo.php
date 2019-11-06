@@ -846,7 +846,7 @@ class _info_catalogo
     2 => 'periodo',
   ),
   'cache' => 'no',
-  'filas' => 'n',
+  'filas' => '1',
 );
 	}
 
@@ -1349,6 +1349,102 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => '1',
+);
+	}
+
+	static function fechas_parciales__get_comisiones_de_materia_con_dias_de_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_datos_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function fechas_parciales__get_dias_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_evaluaciones_observaciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function fechas_parciales__get_fechas_asignadas_o_solicitadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_eval_ocupadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_no_validas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
 );
 	}
 

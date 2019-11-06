@@ -4,6 +4,7 @@ namespace econ\modelo\datos\db;
 use kernel\kernel;
 use kernel\util\db\db;
 use siu\modelo\datos\util;
+use siu\errores\error_guarani;
 
 class cursos 
 {
@@ -208,12 +209,8 @@ class cursos
     {
         /*  3	Reales Regular
             4	Reales Promoció
-            5	Aprob/Desaprob
             6	Promocion Oblig
-            7	Talleres
-            8	Regulares 50
-            9	Promociones 50
-            10	Prom y Reg 50         */
+		*/
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         $materia = $parametros['materia'];
@@ -409,9 +406,9 @@ class cursos
      */
     function get_fechas_no_validas($parametros)
     {
-        $comision = $parametros['comision'];
         $sql = "SELECT fecha FROM sga_calendcursada
-                    WHERE comision = $comision AND valido = 'N'";
+                    WHERE comision = {$parametros['comision']}
+					AND valido = 'N'";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
     
@@ -448,11 +445,19 @@ class cursos
                     WHERE comision = $comision 
                         AND evaluacion = $evaluacion";
 
-        $eval = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-        if (!empty($eval))
+		$eval = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		
+		if (!empty($eval))
         {
 			if ($eval['ESTADO'] != 'P') {//Si el estado es distinto de 'P' es que la instancia de evaluación ya ha sido creada
-				return;
+				switch ($evaluacion)
+				{
+					case "'1'": $inst = '1º Parcial'; break;
+					case "'2'": $inst = '2º Parcial'; break;
+					case "'7'": $inst = 'Recuperatorio Global'; break;
+					case "'14'": $inst = 'Integrador'; break;
+				}
+				throw new error_guarani("No se puede modificar la fecha propuesta dado que ya ha sido creada la instancia de evaluación $inst para la comisión $comision. ");
 			}
 			else
 			{
@@ -461,8 +466,8 @@ class cursos
         	        $sql = "UPDATE ufce_cron_eval_parc
             	        	    SET fecha_hora = $fecha_hora
                 		    WHERE comision = $comision 
-	                    	AND evaluacion = $evaluacion";
-    	            $result = kernel::db()->ejecutar($sql);
+							AND evaluacion = $evaluacion";
+    	            return kernel::db()->ejecutar($sql);
 	            }
 			}
 		}
@@ -470,9 +475,8 @@ class cursos
         {
             $sql = "INSERT INTO ufce_cron_eval_parc (comision, evaluacion, fecha_hora, estado)
                         VALUES ($comision, $evaluacion, $fecha_hora, 'P')";
-            $result = kernel::db()->ejecutar($sql);
+			return kernel::db()->ejecutar($sql);
         }
-        return $result;
      }
     
     /**
@@ -525,8 +529,6 @@ class cursos
 			$parametros['fecha'] = json_encode($resultado['FECHA_HORA']);
 			$resultado['ESTADO'] = $this->get_estado_comision_fecha($parametros);
 		}
-		// print_r('<br>Resultado: ');
-		// print_r($resultado);
 		return $resultado;
 	}
 
@@ -634,10 +636,10 @@ class cursos
 		return kernel::db()->consultar($sql, db::FETCH_ASSOC);
 	}
 	    
-     /**
+	/**
     * parametros: materia, anio_academico, periodo
     * cache: no
-    * filas: n
+    * filas: 1
     */
     function get_evaluaciones_observaciones($parametros)
     {
@@ -648,11 +650,11 @@ class cursos
                 FROM ufce_cron_eval_parc_obs 
                     WHERE materia = $materia
                     AND anio_academico = $anio_academico
-                    AND periodo_lectivo = $periodo";
-        $obs = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+					AND periodo_lectivo = $periodo";
+        $obs = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
         if (count($obs) > 0) 
         {
-            return ($obs[0]['OBSERVACIONES']);
+            return ($obs['OBSERVACIONES']);
         }
         return null;
     }
@@ -820,7 +822,7 @@ class cursos
     */
     function get_evaluaciones_de_materia($parametros)
     {
-        $materia = $parametros['materia'];
+		$materia = $parametros['materia'];
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         $sql = "SELECT fecha_hora::DATE as fecha, evaluacion, 'A' as estado
