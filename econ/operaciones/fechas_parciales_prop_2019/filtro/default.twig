@@ -1,0 +1,333 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+	{% set vista_form = this.get_vista_form() %}
+	{{ vista_form.render_encabezado() | raw }}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+			<span class="pull-left">
+				{{"fechas_parciales_prop_2019"|trans|capitalize}}
+			</span>
+
+			<span class="pull-right">
+				{{ vista_form.render_acciones() | raw }}
+			</span>
+		</h2>
+	</div>
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+
+	
+    {% if(this.data.periodos_evaluacion) %}
+        {% for periodo in this.data.periodos_evaluacion %}
+            <input type="hidden" id="inicio_periodo_{{periodo.ORDEN}}" value="{{periodo.FECHA_INICIO}}">
+            <input type="hidden" id="fin_periodo_{{periodo.ORDEN}}" value="{{periodo.FECHA_FIN}}">
+        {% endfor %}
+
+        {% if(this.data.datos) %}
+
+            <div role='alert' class="alert">
+                <p>En caso que la materia disponga de comisiones por promoción y regular, recuerde solicitar la misma fecha de evaluación para: 
+                    <li>1º Parcial por promoción y Parcial Regular.</li>
+                    <li>2º Parcial por promoción y 1º Recuperatorio Regular.</li>
+                    <li>En el caso de las materias pertenecientes al ciclo de fundamento, Recuperatorio Unico o Integrador igual a la fecha del 2º Recuperatorio Regular.</li>
+            </div>
+
+            {#  Mensaje si se guardo con exito      #}
+            {% if (this.data.mensaje != '') %} 
+                <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+            {% endif %}
+
+            {#  Mensaje si hubo error al guardar      #}
+            {% if (this.data.mensaje_error != '') %}
+                <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+                <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
+            {% endif %}
+
+            <div>
+                {#  Le paso los datos para armar los calendarios al js  #}
+                <input type="hidden" id="materias" value="{{this.data.datos_json}}">
+                <input type="hidden" id="feriados" value="{{this.data.dias_no_laborales}}">
+                {% for materia in this.data.datos %}
+
+                    <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
+                        <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
+                            <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
+                            <span style="float: right;font-size: 10px;">Ver / Ocultar fechas por comisión</span>
+                        </h3>
+                    </div>
+
+                    {#     Parte general para toda la materia --- Aplica a todas las comisiones por igual               #}
+                    <div>
+                        <form name="materia_seleccionada" id="materia_seleccionada_{{materia.MATERIA}}" method="post" action="{{this.data.form_url_materia}}">
+                            <input type="hidden" name="materia" value="{{materia.MATERIA}}">
+                            <input type="hidden" name="materia_calidad" value="{{materia.CALIDAD}}">
+                            <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+                            <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+                            <table class="table table-striped table-condensed" tabindex="0">
+                                <tr>
+                                    <td scope="row" colspan="4">Ciclo: {{ _self.get_nombre_ciclo(materia.CICLO) }}</td>
+                                </tr>
+                                {% set hoy = "now"|date("Y-m-d") %}
+                                {# Hoy: {{hoy}}
+                                Periodo: {{this.data.priodo_solicitud_fechas.FECHA_INICIO}} - {{this.data.priodo_solicitud_fechas.FECHA_FIN}} #}
+                                {% if ((this.data.priodo_solicitud_fechas.FECHA_INICIO <= hoy) and (hoy <= this.data.priodo_solicitud_fechas.FECHA_FIN)) %}
+
+                                    {# Para las materias que son por Promoción #}
+                                    {% if (materia.CALIDAD == 'P' or materia.CALIDAD == 'PyR') %}
+                                        {% if (materia.DIAS_PROMO) %}
+                                            <tr>
+                                                <td scope="row" colspan="4">Cursos por Promoción: 
+                                                    {% for dia in materia.DIAS_PROMO %}
+                                                        {{dia.DIA_NOMBRE}}
+                                                    {% endfor %}
+                                                </td> 
+                                            </tr>
+                                            <tr>
+                                                <td><div>1er. Parcial Promoción:</div>
+                                                    <input type="text" id="datepicker_materia_promo1_{{materia.MATERIA}}" name="datepicker_materia_promo1_{{materia.MATERIA}}" 
+                                                            class="no_editable" />
+                                                </td>  
+                                                <td><div>2do. Parcial Promoción:</div> 
+                                                    <input type="text" id="datepicker_materia_promo2_{{materia.MATERIA}}" name="datepicker_materia_promo2_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)" />
+
+                                                </td>                               
+                                                {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
+                                                    <td><div>Recuperatorio Unico:</div>
+                                                        <input type="text" id="datepicker_materia_recup_{{materia.MATERIA}}" name="datepicker_materia_recup_{{materia.MATERIA}}" 
+                                                                class="no_editable" onchange="verifica_fechas_materia(this)"/>
+                                                    </td>                               
+                                                {% endif %}
+                                                <td>
+													<div>Integrador:</div>
+                                                    <input type="text" id="datepicker_materia_integ_{{materia.MATERIA}}" name="datepicker_materia_integ_{{materia.MATERIA}}" 
+															class="no_editable" onchange="verifica_fechas_materia(this)"/>	</div>
+                                                </td>                               
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td> No todos los cursos promocionables se dictan los mismos dí­as. Debe solicitar a la DD la asignación de las fechas para las instancias de evaluación. </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endif %}
+                                    {# Para las materias que son por Regulares #}
+                                    {% if (materia.CALIDAD == 'R' or materia.CALIDAD == 'R  ' or materia.CALIDAD == 'PyR') %}
+                                        {% if (materia.DIAS_REGU) %}
+                                            <tr>
+                                                <td scope="row" colspan="4">Cursos Regulares:
+                                                    {% for dia in materia.DIAS_REGU %}
+                                                        {{dia.DIA_NOMBRE}}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><div>Parcial Regular:</div>
+                                                    <input type="text" id="datepicker_materia_regu1_{{materia.MATERIA}}" name="datepicker_materia_regu1_{{materia.MATERIA}}" class="no_editable" />
+                                                </td>  
+                                                <td><div>1er. Recuperatorio:</div>
+                                                    <input type="text" id="datepicker_materia_recup1_{{materia.MATERIA}}" name="datepicker_materia_recup1_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)" />
+                                                </td>                               
+                                                <td><div>2do. Recuperatorio:</div>
+                                                    <input type="text" id="datepicker_materia_recup2_{{materia.MATERIA}}" name="datepicker_materia_recup2_{{materia.MATERIA}}" 
+                                                            class="no_editable" onchange="verifica_fechas_materia(this)" />
+                                                </td>                               
+                                            </tr>
+                                        {% else %}   
+                                            <tr>
+                                                <td> No todos los cursos regulares se dictan los mismos dí­as. Debe solicitar a la DD la asignación de las fechas para las instancias de evaluación. </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endif %}
+                                    <tr>
+                                        <td colspan="4">Observaciones: 
+                                            {# <input type="text" id="observaciones_{{materia.MATERIA}}" name="observaciones_{{materia.MATERIA}}" style="width:100%"
+													maxlength="600" value="{{materia.OBSERVACIONES}}"  />  #}
+											<textarea type="text" id="observaciones_{{materia.MATERIA}}" name="observaciones_{{materia.MATERIA}}" style="width:100%"
+													maxlength="600" >{{materia.OBSERVACIONES}}</textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" colspan="4">
+                                            <div style="text-align: right">
+                                                <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_materia" style="align-self:center;font-size:12px;" 
+                                                        title="Guardar y Aplicar a todas las comisiones las mismas fechas (Sólo graba las fechas que se ingresen, y aplica a las comisiones e instancias que no tengan ya aceptada y asignada una fecha en particular).">
+                                                    Grabar</button>
+                                            </div>
+                                        </td>
+                                    </tr>                        
+                                {% endif %} 
+                            </table>
+                        </form>
+                    </div>
+
+                    {#     Sección especí­fica para detallar cada comisión individualmente               #}            
+                    {% if (materia.COMISIONES) %}
+                        <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" style="display: block;">
+                            {% for comision in materia.COMISIONES %}
+
+                                    <form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
+                                        <input type="hidden" id="{{comision.COMISION}}" name="comision" value="{{comision.COMISION}}">
+                                        <input type="hidden" name="escala_{{comision.COMISION}}" value="{{comision.ESCALA}}">
+                                        <input type="hidden" name="dias_clase_{{comision.COMISION}}" value="{{comision.DIAS_CLASE_JSON}}">
+                                        <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+                                        <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+
+                                        <h4 class="comision">Comisión: {{comision.COMISION_NOMBRE}} ({{comision.COMISION}})</h4>
+                                            <div>
+                                                {% if (comision.CARRERA) %}
+                                                    Carrera: {{comision.CARRERA}} -
+                                                {% endif %}
+                                                Escala de notas: {{ _self.get_nombre_escala(comision.ESCALA)}} - 
+                                                Dí­as de dictado: 
+                                                {% for dias in comision.DIAS_CLASE %}
+                                                   {{dias.DIA_NOMBRE}} ({{dias.HS_COMIENZO_CLASE}} a {{dias.HS_FINALIZ_CLASE}}) -
+                                                {% endfor %}
+                                                {% if (comision.TURNO) %}
+                                                    Turno: {{ _self.get_nombre_turno(comision.TURNO)}}
+                                                {% endif %}                                            
+                                            </div>
+                                            <table class="table table-striped table-condensed" tabindex="0">
+                                                {% if (comision.ESCALA == 'P  ' or comision.ESCALA == 'PyR') %}
+                                                    <tr>
+                                                        <td><div>1er. Parcial Promoción:</div>
+                                                            {{ _self.set_input(comision.COMISION, 'promo1', comision.EVAL_PROMO1.FECHA_HORA, comision.EVAL_PROMO1.READONLY) }}
+                                                        </td>  
+                                                        <td><div>2do. Parcial Promoción:</div>
+                                                            {{ _self.set_input(comision.COMISION, 'promo2', comision.EVAL_PROMO2.FECHA_HORA, comision.EVAL_PROMO2.READONLY) }}
+                                                        </td>
+                                                        {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
+                                                            <td><div>Recuperatorio Unico:</div>
+                                                                {{ _self.set_input(comision.COMISION, 'recup', comision.EVAL_RECUP.FECHA_HORA, comision.EVAL_RECUP.READONLY) }}                                                    </td>                               
+                                                            </td>                               
+                                                        {% endif %}
+                                                        <td><div>Integrador:</div>
+                                                            {{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA, comision.EVAL_INTEG.READONLY) }}                                                        
+                                                        </td>                               
+                                                    </tr>
+                                                {% endif %}
+
+                                                {% if (comision.ESCALA == 'R  ' or comision.ESCALA == 'PyR') %}
+                                                    <tr>
+                                                        <td><div>Parcial Regular:</div>
+                                                            {{ _self.set_input(comision.COMISION, 'regu1', comision.EVAL_REGU1.FECHA_HORA, comision.EVAL_REGU1.READONLY) }}                                                                                                                
+                                                        </td>  
+                                                        <td><div>1er. Recuperatorio:</div> 
+                                                            {{ _self.set_input(comision.COMISION, 'recup1', comision.EVAL_RECUP1.FECHA_HORA, comision.EVAL_RECUP1.READONLY) }}                                                        
+                                                        </td>                               
+                                                        <td><div>2do. Recuperatorio:</div>
+                                                            {{ _self.set_input(comision.COMISION, 'recup2', comision.EVAL_RECUP2.FECHA_HORA, comision.EVAL_RECUP2.READONLY) }}                                                        
+                                                        </td>                               
+                                                    </tr>
+                                                {% endif %}
+
+                                            </table>
+                                    </form>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div role="alert" class="alert">
+                {{"fechas_parciales_propuesta.sin_resultados"|trans|capitalize}}
+            </div>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% macro get_nombre_escala(escala) %}
+    {% if escala == 'P  ' %}
+        {{'Promocion'}}
+    {% endif %}
+    {% if escala == 'R  ' %}
+        {{'Regular'}}
+    {% endif %}
+    {% if escala == 'PyR' %}
+        {{'Promoción y Regular'}}
+    {% endif %}
+{% endmacro %}
+
+{% macro get_nombre_ciclo(ciclo) %}
+    {% if ciclo == 'F' %}
+        {{'Fundamento'}}
+    {% endif %}
+    {% if ciclo == 'P' %}
+        {{'Profesional'}}
+    {% endif %}
+    {% if ciclo == 'FyP' %}
+        {{'Fundamento y Profesional'}}
+    {% endif %}
+{% endmacro %}
+
+{% macro get_nombre_turno(turno) %}
+    {% if turno == 'T' %}
+        {{'Tarde'}}
+    {% endif %}
+    {% if turno == 'N' %}
+        {{'Noche'}}
+    {% endif %}
+    {% if turno == 'M' %}
+        {{'Mañana'}}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro crear_boton(comision, ciclo, escala, 
+                    promo1_readonly, promo2_readonly, recup_readonly, integ_readonly,
+                    regu1_readonly, recup1_readonly, recup2_readonly) %}
+
+    {% if (escala == 'P  ') %}
+        {% if ciclo == 'F' or ciclo == 'FyP' %}
+            {% if (not promo1_readonly or not promo2_readonly or not recup_readonly or not integ_readonly) %}
+                <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>
+            {% else %}
+                Las fechas han sido confirmadas.
+            {% endif %}
+        {% else %}
+            {% if (not promo1_readonly or not promo2_readonly or not integ_readonly) %}
+                <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>
+            {% else %}
+                Las fechas han sido confirmadas.
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if (escala == 'R  ') %}
+        {% if (not regu1_readonly or not recup1_readonly or not recup2_readonly) %}
+            <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>
+        {% else %}
+                Las fechas han sido confirmadas.
+        {% endif %}
+    {% endif %}
+
+    {% if (escala == 'PyR') %}
+        {% if ciclo == 'F' or ciclo == 'FyP' %}
+            {% if (not promo1_readonly or not promo2_readonly or not recup_readonly or not integ_readonly or not regu1_readonly or not recup1_readonly or not recup2_readonly) %}
+                <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>
+            {% else %}
+                Las fechas han sido confirmadas. 
+            {% endif %}
+        {% else %}
+            {% if (not promo1_readonly or not promo2_readonly or not integ_readonly or not regu1_readonly or not recup1_readonly or not recup2_readonly) %}
+                <button class="btn btn-info btn-lg" type="submit" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</button>
+            {% else %}
+                Las fechas han sido confirmadas.
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+
+
+{% macro set_input(comision, instancia, fecha_hora, solo_lectura) %}    
+    <input type="text" {#id="datepicker_comision_{{instancia}}_{{comision}}" name="datepicker_comision_{{instancia}}_{{comision}}" #}
+           {% if (instancia =='promo2') or (instancia == 'recup') or (instancia == 'integ') or (instancia == 'recup1') or (instancia == 'recup2')%}
+               onchange="verifica_fechas_comision(this)"
+           {% endif %}
+           value="{{fecha_hora}}" readonly {% if solo_lectura %} readonly {% else %} class="no_editable_comision" {% endif %} /> 
+{#            value="{{fecha_hora}}" {% if solo_lectura %} readonly {% else %} class="no_editable" {% endif %} /> #}
+    <input type="hidden" id="{{instancia}}_readonly_{{comision}}" name="{{instancia}}_readonly_{{comision}}" 
+            value="{{solo_lectura}}">
+{% endmacro %}                                                        

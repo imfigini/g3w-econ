@@ -73,7 +73,7 @@ class cursos
     /**
      * parametros: anio_academico, periodo, materia
      * cache: no
-     * filas: n
+     * filas: 1
      */
     function get_observaciones_materia($parametros)
     {
@@ -84,11 +84,11 @@ class cursos
                     FROM ufce_cron_eval_parc_obs 
                     WHERE materia = $materia 
                         AND anio_academico = $anio_academico 
-                        AND periodo_lectivo = $periodo ";
-        $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+						AND periodo_lectivo = $periodo ";
+        $result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
         if (count($result) > 0)
         {
-            return $result[0]['OBSERVACIONES'];
+            return $result['OBSERVACIONES'];
         }
         return null;
     }

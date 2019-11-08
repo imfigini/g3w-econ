@@ -7,7 +7,6 @@ use siu\modelo\datos\catalogo;
 use kernel\util\validador;
 use econ\guarani;
 use siu\errores\error_guarani;
-//use siu\modelo\guarani_notificacion;
 
 class controlador extends controlador_g3w2
 {
@@ -38,7 +37,7 @@ class controlador extends controlador_g3w2
         }
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         $operacion = kernel::ruteador()->get_id_operacion(); 
-        foreach($materias as $key => $materia)
+        foreach($materias as $key => $materia) 
         {
             $materias[$key]['LINK'] = kernel::vinculador()->crear($operacion, 'info_materia', array('parametro'=>1));
         }
@@ -146,6 +145,7 @@ class controlador extends controlador_g3w2
 
 			$parametros_con_integrador = $this->get_parametros_grabar_con_integrador($parametros);
 
+			$mensaje_error = '';
 			if (isset($parametros_con_integrador)) 
 			{
 				$result = catalogo::consultar('ponderacion_notas', 'set_ponderaciones_notas', $parametros_con_integrador);

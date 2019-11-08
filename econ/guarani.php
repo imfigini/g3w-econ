@@ -27,6 +27,6 @@ class guarani extends \siu\guarani
 		}
 		return self::$fechas_parciales_propuesta;
 	}
-	
+
 }
 ?>

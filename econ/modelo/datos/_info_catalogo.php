@@ -1005,7 +1005,7 @@ class _info_catalogo
     2 => 'materia',
   ),
   'cache' => 'no',
-  'filas' => 'n',
+  'filas' => '1',
 );
 	}
 

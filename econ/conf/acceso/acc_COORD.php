@@ -3,7 +3,8 @@ return array(
     'id' => 'COORD',
     'parametros' => array(
         'index' => 'inicio_coordinador'
-    ),
+	),
+	
     'operaciones' => array(
 
         'acceso' => array('activa' => true),
@@ -11,17 +12,17 @@ return array(
         'mensajes' => array('activa' => true),
         'configuracion' => array('activa' => true),
 
-            'fechas_parciales_2019' => array(
-                  'activa' => true,
-                  'url' => 'fechas_parciales_2019',
-                  'menu' => array(
-                      'submenu' => 'parciales',
-                      'visible' => true,
-                      'texto' => 'fechas_parciales_2019'
-                  )
+			'ponderacion_notas' => array(
+				'activa' => true,
+				'url' => 'ponderacion_notas',
+				'menu' => array(
+					'submenu' => 'parciales',
+					'visible' => true,
+					'texto' => 'ponderacion_notas'
+				)
 			),
-			
-			'fechas_parciales_propuesta' => array(
+	
+		  'fechas_parciales_propuesta' => array(
 				'activa' => true,
 				'url' => 'fechas_parciales_propuesta',
 				'menu' => array(
@@ -30,17 +31,18 @@ return array(
 					'texto' => 'fechas_parciales_propuesta'
 				)
 		  	),
-        
-           'ponderacion_notas' => array(
-                 'activa' => true,
-                 'url' => 'ponderacion_notas',
-                 'menu' => array(
-                     'submenu' => 'parciales',
-                     'visible' => true,
-                     'texto' => 'ponderacion_notas'
-                 )
-           ),
-            
+
+			'fechas_parciales_prop_2019' => array(
+				'activa' => true,
+				'url' => 'fechas_parciales_prop_2019',
+				'menu' => array(
+					'submenu' => 'parciales',
+					'visible' => true,
+					'texto' => 'fechas_parciales_prop_2019'
+				)
+			),
+		  
+           
         //    'notas_parciales' => array(
         //          'activa' => true,
         //          'url' => 'parciales',

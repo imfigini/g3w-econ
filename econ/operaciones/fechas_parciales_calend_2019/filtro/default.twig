@@ -1,0 +1,39 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+    
+    {% set vista_form = this.get_vista_form() %}
+	{{ vista_form.render_encabezado() | raw }}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+			<span class="pull-left">
+				{{"fechas_parciales_calend_2019"|trans|capitalize}}
+			</span>
+			<span class="pull-right">
+			{{ vista_form.render_acciones() | raw }}
+			</span>
+		</h2>
+	</div>
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+    
+	{% if this.data.limites_periodo %}
+		<input type="hidden" id="inicio_periodo" value="{{this.data.limites_periodo.FECHA_INICIO }}">
+		<input type="hidden" id="fin_periodo" value="{{this.data.limites_periodo.FECHA_FIN }}">
+	{% endif %}
+
+	{% if this.data.eventos %}
+        <input type="hidden" id="evaluaciones" value="{{this.data.eventos}}">
+	{% endif %}
+	
+    {% if this.data.dias_no_laborales_json %}
+        <input type="hidden" id="dias_no_laborales" value="{{this.data.dias_no_laborales_json }}">
+    {% endif %}
+
+	{% if this.data.periodos_evaluacion_json %}
+		<input type="hidden" id="priodos_evaluacion" value="{{this.data.periodos_evaluacion_json }}">
+	{% endif %}
+
+    <div id='calendar'>        
+	</div>    
+    
+{% endblock %}

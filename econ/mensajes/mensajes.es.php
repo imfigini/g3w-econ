@@ -48,9 +48,9 @@ return array(
     'ponderacion_notas.filtro.sin_resultados' => 'No hay información',
     
     /* Detalle de los cursos con sus %*/
-    'tit_detalle_cursos' => 'Listado de Cursos por Promoción',
-    'detalle_cursos' => 'Listado de ponderación de instancias de evaluación en los Cursos por Promoción',
-    'detalle_cursos.sin_resultados' => 'No hay información',
+    'tit_ponder_notas_detalle' => 'Listado de Materias',
+    'ponder_notas_detalle' => 'Detalle de ponderación de notas en las instancias de evaluación',
+    'ponder_notas_detalle.sin_resultados' => 'No hay información',
     
     'parciales' => 'Carga de notas de evaluaciones parciales',
     
@@ -68,23 +68,30 @@ return array(
     'mixes_modificacion' => 'Modificación de Mix',
     
     /* Consulta de fechas para parciales y recuperatorios - 2019*/
-    'tit_fechas_parciales_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
-    'fechas_parciales_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
-    'fechas_parciales_2019.sin_resultados' => 'No hay información',
+    'tit_fechas_parciales_prop_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
+    'fechas_parciales_prop_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
 	
 	/* Propuestas de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
     'fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
 	'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
 	
+	/* Aceptación de fechas para parciales y recuperatorios (sólo 2019)*/
+	'tit_fechas_parciales_acept_2019' => 'Revisión de fechas para parciales, integrador y recuperatorios (sólo 2019)',
+	'fechas_parciales_acept_2019' => 'Gestión por listado para fechas de evaluaciones (sólo 2019)',
+
 	/* Aceptación de fechas para parciales y recuperatorios */
-    'tit_fechas_parciales_aceptacion' => 'Revisión de fechas para parciales, integrador y recuperatorios',
-    'fechas_parciales_aceptacion' => 'Gestión por listado para fechas de evaluaciones',
-    'fechas_parciales_aceptacion.sin_resultados' => 'No hay información',    
+    'tit_fechas_parciales_acept' => 'Revisión de fechas para parciales, integrador y recuperatorios',
+    'fechas_parciales_acept' => 'Gestión por listado para fechas de evaluaciones',
+    'fechas_parciales_acept.sin_resultados' => 'No hay información',    
 
-    /* Visualización de fechas para parciales y recuperatorios (en calenadario)*/
-    'tit_fechas_parciales_calendario' => 'Revisión de fechas para parciales, integrador y recuperatorios',
-    'fechas_parciales_calendario' => 'Gestión por calendario para fechas de evaluaciones',
-    'fechas_parciales_calendario.sin_resultados' => 'No hay información',    
+    /* Gestión de fechas para parciales y recuperatorios (en calenadario visual) - 2019*/
+    'tit_fechas_parciales_calend_2019' => 'Revisión de fechas para parciales, integrador y recuperatorios (sólo 2019)',
+    'fechas_parciales_calend_2019' => 'Gestión por calendario para fechas de evaluaciones (sólo 2019)',
 
+	/* Gestión de fechas para parciales y recuperatorios (en calenadario visual)*/
+	'tit_fechas_parciales_calend' => 'Revisión de fechas para parciales, integrador y recuperatorios',
+	'fechas_parciales_calend' => 'Gestión por calendario para fechas de evaluaciones',
+	'fechas_parciales_calend.sin_resultados' => 'No hay información',    
+	
 );
