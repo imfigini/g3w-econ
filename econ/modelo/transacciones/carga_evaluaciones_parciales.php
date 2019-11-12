@@ -97,7 +97,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 		if ($parametros['anio_academico'] < 2019) {
 			return true;
 		}
-		if ($parametros['evaluacion'] == 22 || $parametros['evaluacion'] == 23) {
+		//Las instancias de evaluación parcial 1 y 2 las pueden rendir todos. Las notas de TP se cargan para todos tambi?n
+		if ($parametros['evaluacion'] == 22 || $parametros['evaluacion'] == 23 || $parametros['evaluacion'] == 15) {
 			return true;
 		}
 		$parametros['porc_asist'] = 60;

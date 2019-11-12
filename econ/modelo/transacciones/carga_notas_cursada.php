@@ -52,7 +52,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		}
 
 		$notas_eval_alumno = self::get_notas_eval_alumno($comision, $legajo);
-		kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
+		//kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
 
 		$porc_asistencia = catalogo::consultar('carga_evaluaciones_parciales', 'get_porc_asistencia', Array('comision'=>$comision, 'legajo'=>$legajo));
 		//$porc_asistencia = round($porc_asistencia, 2, PHP_ROUND_HALF_DOWN);
