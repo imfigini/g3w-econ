@@ -15,7 +15,7 @@ class controlador extends controlador_g3w2
     
     function modelo()
     {
-		return guarani::fechas_parciales_propuesta();
+		return guarani::fechas_parciales();
     }
 
     function accion__index()
@@ -32,7 +32,7 @@ class controlador extends controlador_g3w2
             return null;
         }
         
-        $materias = $this->modelo()->get_materias_cincuentenario();
+        $materias = $this->modelo()->get_materias_cincuentenario(null, null);
         //MATERIA, MATERIA_NOMBRE
         $anio_academico =  $this->decodificar_anio_academico($anio_academico_hash);
         $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);

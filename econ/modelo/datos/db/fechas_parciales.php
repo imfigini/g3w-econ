@@ -108,7 +108,7 @@ class fechas_parciales
      * cache: no
      * filas: n
      */
-    function get_fechas_no_validas($parametros)
+    function get_fechas_no_validas_materia($parametros)
     {
 		//Retrona todas las fechas en las que alguna de las comisiones de la materia tiene asignado el día de cursada como no válido
         $sql = "SELECT DISTINCT fecha 
@@ -158,5 +158,55 @@ class fechas_parciales
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
 
+	/**
+    * parametros: comision
+    * cache: no
+    * filas: n
+    */
+    function get_fechas_eval_solicitadas($parametros)
+    {
+        $sql = "SELECT 	DISTINCT evaluacion, 
+						DECODE(evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+						fecha_hora,
+						estado
+				FROM ufce_cron_eval_parc
+				WHERE comision = {$parametros['comision']} ";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+	}
+
+	/**
+    * parametros: comision
+    * cache: no
+    * filas: n
+    */
+    function get_fechas_eval_asignadas($parametros)
+    {
+        $sql = "SELECT 	DISTINCT evaluacion, 
+						DECODE(evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+						fecha_hora
+				FROM sga_cron_eval_parc
+				WHERE comision = {$parametros['comision']} ";
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+	}
+
+	/**
+    * parametros: anio, periodo
+    * cache: no
+    * filas: 1
+    */
+	function hoy_dentro_de_periodo($parametros)
+	{
+		/* Verifica si el dia de hoy está dentro del cuatrimestre recibido como parametro */
+		$sql = "SELECT COUNT(*) as cant
+					FROM sga_periodos_lect 
+					WHERE anio_academico = {$parametros['anio']}
+						AND periodo_lectivo = {$parametros['periodo']}
+						AND today between fecha_inicio AND fecha_fin ";
+		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		if ($resultado['CANT'] > 0) {
+			return true;
+		}
+		return false;
+	}
 }
 

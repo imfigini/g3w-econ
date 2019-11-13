@@ -4,9 +4,9 @@ namespace econ\modelo\transacciones;
 use kernel\kernel;
 use siu\modelo\datos\catalogo;
 
-class fechas_parciales_propuesta
+class fechas_parciales
 {
-	function get_materias_cincuentenario()
+	function get_materias_cincuentenario($carrera, $mix)
 	{
 		$parametros = array();
 		$parametros['legajo'] = null;
@@ -14,11 +14,15 @@ class fechas_parciales_propuesta
         $parametros['mix'] = null;
 
         $perfil = kernel::persona()->perfil()->get_id();
-        if ($perfil == 'COORD')
-        {
+        if ($perfil == 'COORD') {
             $parametros['legajo'] = kernel::persona()->get_legajo_docente();
 		}
-		
+		if ($carrera) {
+			$parametros['carrera'] = $carrera;
+		}
+		if ($mix) {
+			$parametros['mix'] = $mix;
+		}
 		return catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
 	}
 
@@ -34,7 +38,7 @@ class fechas_parciales_propuesta
 
 	function get_fechas_no_validas($parametros)
 	{
-		return catalogo::consultar('fechas_parciales', 'get_fechas_no_validas',  $parametros);
+		return catalogo::consultar('fechas_parciales', 'get_fechas_no_validas_materia',  $parametros);
 		// 	print_r('<br>Dias : ');
 		// 	print_r($dias_no_validos);
 		// 	foreach ($dias_no_validos as $d)
@@ -82,5 +86,50 @@ class fechas_parciales_propuesta
 	function get_datos_comision($comision)
     {
 		return catalogo::consultar('fechas_parciales', 'get_datos_comision', Array('comision'=>$comision)); 
+	}
+
+	/* Retorna las fechas indicadas como no válidas para la comisión */
+    function get_fechas_no_validas_comision($comision)
+    {
+        $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas_comision', Array('comision'=>$comision));
+        $arreglo = Array();
+        foreach ($dias_no_validos AS $d)
+        {
+			$arreglo[] = $d['FECHA'];
+		}
+        return $arreglo;
+	}
+	
+	/* Retrona las fechas de evaluacion solicitadas o propuestas por el coordinador */
+	function get_fechas_eval_solicitadas($comision)
+    {
+		$datos = catalogo::consultar('fechas_parciales', 'get_fechas_eval_solicitadas', Array('comision'=>$comision)); 
+		$resultado = Array();
+		foreach($datos AS $dato)
+		{
+			//$resul = Array();
+			$eval = trim($dato['EVAL_NOMBRE']);
+			$resultado[$eval]['FECHA_HORA'] = $dato['FECHA_HORA'];
+			$resultado[$eval]['ESTADO'] = $dato['ESTADO'];
+			//$resultado[] = $resul;
+		}
+		return $resultado;
+	}
+
+	/* Retrona las fechas de evaluacion creadas y asignadas */
+	function get_fechas_eval_asignadas($comision)
+    {
+		$datos = catalogo::consultar('fechas_parciales', 'get_fechas_eval_asignadas', Array('comision'=>$comision)); 
+		$resultado = Array();
+		foreach($datos AS $dato)
+		{
+			// $resul = Array();
+			// $resul[$dato['EVAL_NOMBRE']]['FECHA_HORA'] = $dato['FECHA_HORA'];
+			// $resultado[] = $resul;
+			$eval = trim($dato['EVAL_NOMBRE']);
+			$resultado[$eval]['FECHA_HORA'] = $dato['FECHA_HORA'];
+		}
+		return $resultado;
+
 	}
 }

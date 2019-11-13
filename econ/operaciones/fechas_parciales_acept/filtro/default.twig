@@ -1,9 +1,6 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
-    
-{#    <p style="color: red">{{this.data.mensaje_error}}</p>
-    <p>{{this.data.mensaje}}</p>
-#}    
+
     {% if (this.data.mensaje != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
     {% endif %}
@@ -27,164 +24,140 @@
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
 
-    {% if(this.data.periodos_evaluacion) %}
+    {% if(this.data.periodos_evaluacion) and (this.data.datos) %}
         {% for periodo in this.data.periodos_evaluacion %}
-{#            <p>Periodo: {{periodo.ORDEN}}  [ {{periodo.FECHA_INICIO}} / {{periodo.FECHA_FIN}} ]</p>#}
             <input type="hidden" id="inicio_periodo_{{periodo.ORDEN}}" value="{{periodo.FECHA_INICIO}}">
             <input type="hidden" id="fin_periodo_{{periodo.ORDEN}}" value="{{periodo.FECHA_FIN}}">
         {% endfor %}
 
-        {% if(this.data.datos) %}
-            <div class="confirmacion_fechas_parciales">
-                {#  Le paso los datos para armar los calendarios al js  #}
-                <input type="hidden" id="materias" value="{{this.data.datos_json}}">
-                <input type="hidden" id="feriados" value="{{this.data.dias_no_laborales}}">
-                {% for materia in this.data.datos %}
+		<div class="confirmacion_fechas_parciales">
+			{#  Le paso los datos para armar los calendarios al js  #}
+			<input type="hidden" id="materias" value="{{this.data.datos_json}}">
+			<input type="hidden" id="feriados" value="{{this.data.dias_no_laborales}}">
+			{% for materia in this.data.datos %}
 
-                    <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
-                        <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
-                            <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
-                            <span style="float: right;font-size: 10px;">Ver / Ocultar comisiones</span>
-                        </h3>
-                    </div>
+				<div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
+					<h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
+						<span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
+						<span style="float: right;font-size: 10px;">Ver / Ocultar comisiones</span>
+					</h3>
+				</div>
 
-                    <div>
-                        <label {% if (materia.OBSERVACIONES) %} style="color: red" {% endif %}>Observaciones: {{materia.OBSERVACIONES}}</label>
-                    </div>
+				<div>
+					<label {% if (materia.OBSERVACIONES) %} style="color: red" {% endif %}>Observaciones: {{materia.OBSERVACIONES}}</label>
+				</div>
 
-                    {% if (materia.COMISIONES) %}
-                        <div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" >
-                            {% for comision in materia.COMISIONES %}
+				{% if (materia.COMISIONES) %}
+					<div id="detalle_{{materia.MATERIA}}" class="detalle" aria-live="assertive" >
+						{% for comision in materia.COMISIONES %}
 
-                                <form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
-                                    <input type="hidden" id="{{comision.COMISION}}" name="comision" value="{{comision.COMISION}}">                                
-                                    <input type="hidden" id="dias_no_validos_{{comision.COMISION}}" value="{{comision.DIAS_NO_VALIDOS_JOSN}}">
-                                    <input type="hidden" id="escala_{{comision.COMISION}}" name="escala_{{comision.COMISION}}" value="{{comision.ESCALA}}">
-                                    <input type="hidden" id="dias_clase_{{comision.COMISION}}" value="{{comision.DIAS_CLASE_JSON}}">
-                                    <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
-                                    <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
-                                    <input type="hidden" name="carrera" value="{{this.data.carrera}}">
-                                    <input type="hidden" name="mix" value="{{this.data.mix}}">
+							<form name="comision_seleccionada_{{comision.COMISION}}" id="comision_seleccionada_{{comision.COMISION}}" method="post" action="{{this.data.form_url_comision}}">
+								<input type="hidden" id="{{comision.COMISION}}" name="comision" value="{{comision.COMISION}}">                                
+								<input type="hidden" id="dias_no_validos_{{comision.COMISION}}" value="{{comision.DIAS_NO_VALIDOS_JSON}}">
+								<input type="hidden" id="dias_clase_{{comision.COMISION}}" value="{{comision.DIAS_CLASE_JSON}}">
+								<input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+								<input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+								<input type="hidden" name="carrera" value="{{this.data.carrera}}">
+								<input type="hidden" name="mix" value="{{this.data.mix}}">
 
-                                    <h4 class="comision">Comisión: {{comision.COMISION_NOMBRE}} ({{comision.COMISION}})</h4>
-                                    <div class="descripcion_comision">
-                                        {% if (comision.CARRERA) %}
-                                            Carrera: {{comision.CARRERA}} -
-                                        {% endif %}
-                                        Escala de notas: {{ _self.get_nombre_escala(comision.ESCALA)}} - 
-                                        Días de dictado: 
-                                        {% for dias in comision.DIAS_CLASE %}
-                                           {{dias.DIA_NOMBRE}} ({{dias.HS_COMIENZO_CLASE}} a {{dias.HS_FINALIZ_CLASE}}) -
-                                        {% endfor %}
-                                        {% if (comision.TURNO) %}
-                                            Turno: {{ _self.get_nombre_turno(comision.TURNO)}}
-                                        {% endif %}                                            
-                                    </div>
-                                    
-                                    <div id="contenedor_{{comision.COMISION}}">
-                                    <table id="tabla_{{comision.COMISION}}" class="table table-striped table-condensed" tabindex="0">
-
-                                        {% if (comision.ESCALA == 'P  ' or comision.ESCALA == 'PyR') %}
-                                            <tr>
-                                                <td>1er. Parcial Promoción: <strong>{{comision.EVAL_PROMO1.FECHA_HORA}}</strong></td>
-												{# {{ _self.set_input(comision.COMISION, 'promo1', comision.EVAL_PROMO1.FECHA_HORA, comision.EVAL_PROMO1.READONLY) }} #}
-												{{ _self.set_input(comision.COMISION, 'promo1', comision.EVAL_PROMO1.FECHA_HORA) }}
-                                            </tr>
-                                            <tr>
-                                                <td>2do. Parcial Promoción: <strong>{{comision.EVAL_PROMO2.FECHA_HORA}}</strong></td>
-												{# {{ _self.set_input(comision.COMISION, 'promo2', comision.EVAL_PROMO2.FECHA_HORA, comision.EVAL_PROMO2.READONLY) }} #}
-												{{comision.EVAL_PROMO2_ASIGN.FECHA_HORA}}            
-												{{ _self.set_input(comision.COMISION, 'promo2', comision.EVAL_PROMO2.FECHA_HORA) }}
-                                            </tr>
-                                            {% if materia.CICLO == 'F' or materia.CICLO == 'FyP' %}
-                                                <tr>
-                                                    <td>Recuperatorio Unico: <strong>{{comision.EVAL_RECUP.FECHA_HORA}}</strong></td>
-													{# {{ _self.set_input(comision.COMISION, 'recup', comision.EVAL_RECUP.FECHA_HORA, comision.EVAL_RECUP.READONLY) }} #}
-													{{ _self.set_input(comision.COMISION, 'recup', comision.EVAL_RECUP.FECHA_HORA) }}
-                                                </tr>
-                                            {% endif %}
-                                            <tr>    
-                                                <td>Integrador: <strong>{{comision.EVAL_INTEG.FECHA_HORA}}</strong></td>
-												{# {{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA, comision.EVAL_INTEG.READONLY) }} #}
-												{{ _self.set_input(comision.COMISION, 'integ', comision.EVAL_INTEG.FECHA_HORA) }}
-                                            </tr>
-                                            {% if materia.CICLO == 'P' and comision.ESCALA == 'P  ' %}
-                                                <tr>
-													<td colspan="3">1er. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP1.FECHA_HORA}}</strong>
-													Asignada: <strong>{{comision.EVAL_PROMRECUP1_ASIGN.FECHA_HORA}}</strong>
-													</td>
-                                                </tr>
-                                                <tr>
-													<td colspan="3">2do. Recuperatorio: <strong>{{comision.EVAL_PROMRECUP2.FECHA_HORA}}</strong></td>
-													Asignada: <strong>{{comision.EVAL_PROMRECUP2_ASIGN.FECHA_HORA}}</strong>
-                                                </tr>
-                                            {% endif %}
-                                        {% endif %}
-
-                                        {% if (comision.ESCALA == 'R  ' or comision.ESCALA == 'PyR') %}
-                                            <tr>
-                                                <td>Parcial Regular: <strong>{{comision.EVAL_REGU1.FECHA_HORA}}</strong></td>
-												{# {{ _self.set_input(comision.COMISION, 'regu1', comision.EVAL_REGU1.FECHA_HORA, comision.EVAL_REGU1.READONLY) }} #}
-												{{ _self.set_input(comision.COMISION, 'regu1', comision.EVAL_REGU1.FECHA_HORA) }}
-                                            </tr>
-                                            <tr>
-                                                <td>1er. Recuperatorio: <strong>{{comision.EVAL_RECUP1.FECHA_HORA}}</strong></td>
-												{# {{ _self.set_input(comision.COMISION, 'recup1', comision.EVAL_RECUP1.FECHA_HORA, comision.EVAL_RECUP1.READONLY) }} #}
-												{{ _self.set_input(comision.COMISION, 'recup1', comision.EVAL_RECUP1.FECHA_HORA) }}
-                                            </tr>
-                                            <tr>
-                                                <td>2do. Recuperatorio: <strong>{{comision.EVAL_RECUP2.FECHA_HORA}}</strong></td>
-												{# {{ _self.set_input(comision.COMISION, 'recup2', comision.EVAL_RECUP2.FECHA_HORA, comision.EVAL_RECUP2.READONLY) }} #}
-												{{ _self.set_input(comision.COMISION, 'recup2', comision.EVAL_RECUP2.FECHA_HORA) }}
-                                            </tr>
-                                        {% endif %}
-
-                                    </table>
-                                    </div>
-								  
-									{# <input id='js-grabar_comision' type='submit' style='position:absolute' value='{{"guardar"|trans|capitalize}}' class="hide btn btn-info btn-small" /> #}
-                                    <div style="text-align: right">
+								<h4 class="comision">Comisión: {{comision.COMISION_NOMBRE}} ({{comision.COMISION}})</h4>
+								<div class="descripcion_comision">
+									Días de dictado: 
+									{% for dias in comision.DIAS_CLASE %}
+										{{ _self.get_nombre_dia(dias.DIA_SEMANA)}} ({{dias.HS_COMIENZO_CLASE}} a {{dias.HS_FINALIZ_CLASE}}) -
+									{% endfor %}
+									{% if (comision.TURNO) %}
+										Turno: {{ _self.get_nombre_turno(comision.TURNO)}}
+									{% endif %}                                            
+								</div>
+								
+								<div id="contenedor_{{comision.COMISION}}">
+								<table id="tabla_{{comision.COMISION}}" class="table table-striped table-condensed" tabindex="0">
+									<tr>
+										<td>1er. Parcial: <strong>{{comision.FECHAS_SOLICITADAS.PROMO1.FECHA_HORA}}</strong></td>
+										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'promo1', comision.FECHAS_SOLICITADAS.PROMO1.FECHA_HORA)}}
+									</tr>
+									<tr>
+										<td>2do. Parcial: <strong>{{comision.FECHAS_SOLICITADAS.PROMO2.FECHA_HORA}}</strong></td>
+										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'promo2', comision.FECHAS_SOLICITADAS.PROMO2.FECHA_HORA)}}
+									</tr>
+									<tr>
+										<td>Recuperatorio Global: <strong>{{comision.FECHAS_SOLICITADAS.RECUP.FECHA_HORA}}</strong></td>
+										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'recup', comision.FECHAS_SOLICITADAS.RECUP.FECHA_HORA)}}
+									</tr>
+									<tr>    
+										<td>Integrador: <strong>{{comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA}}</strong></td>
+										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'integ', comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA)}}
+									</tr>
+								</table>
+								</div>
+								{% if (this.data.es_editable) %}	
+									<div style="text-align: right">
 										<div class="btn btn-info btn-lg" onclick="grabar_comision('{{comision.COMISION}}')" id="boton_grabar_comision" style="align-self:center;font-size:12px;">Guardar</div>
 									</div>
-                                </form>
-                        {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}            
+								{% endif %}
+							</form>
+					{% endfor %}
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
     {% else %}
         <div role="alert" class="alert">
             {{"fechas_parciales_acept.sin_resultados"|trans|capitalize}}
         </div>
     {% endif %}
     
-    
-    
 {% endblock %}
 
-{% macro get_nombre_escala(escala) %}
-    {% if escala == 'P  ' %}
-	{{'Promocion'}}
-    {% endif %}
-    {% if escala == 'R  ' %}
-	{{'Regular'}}
-    {% endif %}
-    {% if escala == 'PyR' %}
-	{{'Promocion y Regular'}}
-    {% endif %}
+
+{% macro set_input(es_editable, comision, instancia, fecha_hora_solic) %}
+	<input type="hidden" id="fecha_hora_solic_{{instancia}}_{{comision}}" value="{{fecha_hora_solic}}">
+	<td>
+		{% if (es_editable) %}	
+			<select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, '{{comision}}', '{{instancia}}')" >
+				<option value="P" selected>--Seleccionar--</option>
+				<option value="A">Aceptar</option>
+				<option value="C">Asignar en día de cursada</option>
+				<option value="R">Asignar sin restricción</option>
+				<option value="H">Modificar horario</option> 
+			</select></td>
+			<td>
+			<div id='div_date_{{instancia}}_{{comision}}' style='display:none'>
+				Asignar: <input type="text" id="datepicker_{{instancia}}_{{comision}}" name="datepicker_{{instancia}}_{{comision}}" class="datepicker" value="" />
+			</div>
+			<div id='div_time_{{instancia}}_{{comision}}' style='display:none'>
+				Hora: <input type="text" id="timepicker_{{instancia}}_{{comision}}" name="timepicker_{{instancia}}_{{comision}}" class="timepicker" value="" />
+			</div>
+		{% endif %}
+		<div id='div_aceptado_{{instancia}}_{{comision}}'>
+			<p id='mensaje_estado_{{instancia}}_{{comision}}'></p>
+		</div>
+	</td>
 {% endmacro %}
 
-{% macro get_nombre_ciclo(ciclo) %}
-    {% if ciclo == 'F' %}
-	{{'Fundamento'}}
+{% macro get_nombre_dia(dia) %}
+	{% if dia == '0' %}
+        {{'Domingo'}}
     {% endif %}
-    {% if ciclo == 'P' %}
-	{{'Profesional'}}
+    {% if dia == '1' %}
+        {{'Lunes'}}
     {% endif %}
-    {% if ciclo == 'FyP' %}
-	{{'Fundamento y Profesional'}}
-    {% endif %}
+    {% if dia == '2' %}
+        {{'Martes'}}
+    {% endif %}	
+    {% if dia == '3' %}
+        {{'Miércoles'}}
+    {% endif %}	
+    {% if dia == '4' %}
+        {{'Jueves'}}
+    {% endif %}	
+    {% if dia == '5' %}
+        {{'Viernes'}}
+    {% endif %}	
+    {% if dia == '6' %}
+        {{'Sábado'}}
+    {% endif %}	
 {% endmacro %}
 
 {% macro get_nombre_turno(turno) %}
@@ -199,26 +172,3 @@
     {% endif %}
 {% endmacro %}
 
-
-{% macro set_input(comision, instancia, fecha_hora_solic) %}
-	<input type="hidden" id="fecha_hora_solic_{{instancia}}_{{comision}}" name="fecha_hora_{{instancia}}_{{comision}}" value="{{fecha_hora_solic}}">
-    <td><select id="aceptar_{{instancia}}_{{comision}}" name="aceptar_{{instancia}}_{{comision}}" onchange="calendarioVisible(this, '{{comision}}', '{{instancia}}')" >
-            <option value="P" selected>--Seleccionar--</option>
-            <option value="A">Aceptar</option>
-            <option value="C">Asignar en día de cursada</option>
-			<option value="R">Asignar sin restricción</option>
-			<option value="H">Modificar horario</option> 
-		</select></td>
-	<td>
-    <div id='div_date_{{instancia}}_{{comision}}' style='display:none'>
-		Asignar: <input type="text" id="datepicker_{{instancia}}_{{comision}}" name="datepicker_{{instancia}}_{{comision}}" class="datepicker" value="" />
-	</div>
-	<div id='div_time_{{instancia}}_{{comision}}' style='display:none'>
-		Hora: <input type="text" id="timepicker_{{instancia}}_{{comision}}" name="timepicker_{{instancia}}_{{comision}}" class="timepicker" value="" />
-    </div>
-    {# <div id='div_aceptado_{{instancia}}_{{comision}}' style='display:none'> #}
-	<div id='div_aceptado_{{instancia}}_{{comision}}'>
-		<p id='mensaje_estado_{{instancia}}_{{comision}}'></p>
-        {# <p style="color:green">La fecha se encuentra aceptada y asignada</p> #}
-    </div></td>
-{% endmacro %}

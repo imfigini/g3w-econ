@@ -68,8 +68,8 @@ return array(
     'mixes_modificacion' => 'Modificación de Mix',
     
     /* Consulta de fechas para parciales y recuperatorios - 2019*/
-    'tit_fechas_parciales_prop_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
-    'fechas_parciales_prop_2019' => 'Conuslta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
+    'tit_fechas_parciales_prop_2019' => 'Consulta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
+    'fechas_parciales_prop_2019' => 'Consulta de fechas de evaluación para parciales, integrador y recuperatorios (sólo 2019)',
 	
 	/* Propuestas de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',

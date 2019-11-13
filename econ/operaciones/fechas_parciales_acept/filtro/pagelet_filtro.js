@@ -48,7 +48,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 });
             
             inicio();
-            //set_focus(info.comision);
         }
     };
     
@@ -80,11 +79,12 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         
     function inicio()
     {
-        var materias_json = $('#materias').val();
+		var materias_json = $('#materias').val();
         if (materias_json)
         {
             var materias = JSON.parse(materias_json);
-            var cant = Object.keys(materias).length;
+			//console.log(materias);
+			var cant = Object.keys(materias).length;
             for(var i=0; i<cant; i++)
             {
                 var materia = materias[i];
@@ -96,34 +96,36 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                     var comision = comisiones[j];
 					var com = comision.COMISION;
 
-					if (comision.ESCALA.trim() == 'P' || comision.ESCALA == 'PyR')
-					{
-						set_div_mensaje_aceptado(com, 'promo1', comision.EVAL_PROMO1_ASIGN.ESTADO, comision.EVAL_PROMO1_ASIGN.FECHA_HORA);
-						set_div_mensaje_aceptado(com, 'promo2', comision.EVAL_PROMO2_ASIGN.ESTADO, comision.EVAL_PROMO2_ASIGN.FECHA_HORA);
-						if (materia.CICLO.trim() == 'F' || materia.CICLO == 'FyP' ) {
-							set_div_mensaje_aceptado(com, 'recup', comision.EVAL_RECUP_ASIGN.ESTADO, comision.EVAL_RECUP_ASIGN.FECHA_HORA);
-						}
-						set_div_mensaje_aceptado(com, 'integ', comision.EVAL_INTEG_ASIGN.ESTADO, comision.EVAL_INTEG_ASIGN.FECHA_HORA);										
-					}
-
-					if (comision.ESCALA.trim() == 'R' || comision.ESCALA == 'PyR')
-					{
-						set_div_mensaje_aceptado(com, 'regu1', comision.EVAL_REGU1_ASIGN.ESTADO, comision.EVAL_REGU1_ASIGN.FECHA_HORA);
-						set_div_mensaje_aceptado(com, 'recup1', comision.EVAL_RECUP1_ASIGN.ESTADO, comision.EVAL_RECUP1_ASIGN.FECHA_HORA);
-						set_div_mensaje_aceptado(com, 'recup2', comision.EVAL_RECUP2_ASIGN.ESTADO, comision.EVAL_RECUP2_ASIGN.FECHA_HORA);
-					}
+					set_div_mensaje(com, 'promo1', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
+					set_div_mensaje(com, 'promo2', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
+					set_div_mensaje(com, 'recup', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
+					set_div_mensaje(com, 'integ', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
                 }
             }
         }
     }
-
         
 });
     
 
+function set_div_mensaje (comision, instancia, fechas_solicitadas, fechas_asignadas)
+{
+	if (fechas_solicitadas && fechas_solicitadas[instancia.toUpperCase()]) {
+		estado = fechas_solicitadas[instancia.toUpperCase()].ESTADO;
+	} else {
+		estado = null;
+	}
+	if (fechas_asignadas && fechas_asignadas[instancia.toUpperCase()]) {
+		fecha_asignada = fechas_asignadas[instancia.toUpperCase()].FECHA_HORA; 
+	} else {
+		fecha_asignada = null;
+	}
+	set_div_mensaje_aceptado(comision, instancia, estado, fecha_asignada);
+}
+
 function calendarioVisible(estado, comision, instancia)
 {
-//    console.log(estado.value);
+    //console.log(estado.value);
 	var div_date = 'div_date_'+instancia+'_'+comision;
 	var div_time = 'div_time_'+instancia+'_'+comision;
     var div_aceptado = 'div_aceptado_'+instancia+'_'+comision;
@@ -148,15 +150,9 @@ function calendarioVisible(estado, comision, instancia)
 			$('#'+div_date).hide();
 			$('#'+div_time).hide();
 	}
-	console.log($('#'+div_aceptado));
 	$('#'+div_aceptado).show();
-	
-    // if (estado_orig) {
-    //     $('#'+div_aceptado).show();
-    // } else {
-    //     $('#'+div_aceptado).hide();
-    // }
 }
+
 function setear_timepicker(comision, instancia)
 {
 	var timepick = 'timepicker_'+instancia+'_'+comision;
@@ -184,11 +180,11 @@ function setear_timepicker(comision, instancia)
 
 function setear_calendario_restringido(comision, instancia)
 {
+	
     var datepick = 'datepicker_'+instancia+'_'+comision;
     var dias_no_validos = $('#dias_no_validos_'+comision).val();
     var dias_clase = $('#dias_clase_'+comision).val();
-
-    setear_calendario(instancia, datepick, dias_clase, dias_no_validos);
+	setear_calendario(instancia, datepick, dias_clase, dias_no_validos);
 }
 
 function setear_calendario_abierto(comision, instancia)
@@ -239,12 +235,10 @@ function setear_calendario(instancia, datepick, dias_clase, dias_no_validos)
 function get_fechas_and_set_values(objeto_id, inicio_periodo, fin_periodo, dias_clase, dias_no_validos)
 {
     var posibles_fechas;
-    if (dias_clase)
-    {
+    if (dias_clase) {
         posibles_fechas = get_posibles_fechas(dias_clase, inicio_periodo, fin_periodo, dias_no_validos);
     }
-    else
-    {
+    else {
         posibles_fechas = get_posibles_fechas_todas(inicio_periodo, fin_periodo, dias_no_validos);
     }
     set_values(objeto_id, posibles_fechas, inicio_periodo, fin_periodo);
@@ -299,7 +293,6 @@ function get_posibles_fechas_todas(inicio_periodo, fin_periodo, dias_no_validos)
     while (dia <= fin_periodo)
     {
         var diaSemana = dia.getDay();
-        //console.log(diaSemana);
         if (diaSemana != 0)
         {
             var diaFormateado = dia.toISOString().substring(0, 10);
@@ -314,11 +307,9 @@ function get_posibles_fechas_todas(inicio_periodo, fin_periodo, dias_no_validos)
 
 function contiene(dias_semana, dia)
 {
-    var dias = JSON.parse(dias_semana);
-    for (var i in dias)
-    {
-        if (dias[i].DIA_SEMANA == dia)
-        {
+	var dias = JSON.parse(dias_semana);
+    for (var i in dias) {
+        if (dias[i].DIA_SEMANA == dia) {
             return true;
         }
     }
@@ -328,53 +319,83 @@ function contiene(dias_semana, dia)
 function fecha_valida(dias_no_validos, fecha)
 {
     var fechas_no_validas = JSON.stringify(dias_no_validos);
-    if (fechas_no_validas.includes(fecha))
-        return false;
+    if (fechas_no_validas.includes(fecha)) {
+		return false;
+	}
     return true;
 }
 
-function set_div_mensaje_aceptado(comision, instancia, estado, fecha)
+function set_div_mensaje_aceptado(comision, inst_nombre, estado, fecha_asignada)
 {
-	var div = $('#div_aceptado_'+instancia+'_'+comision);
-	var p = $('#mensaje_estado_'+instancia+'_'+comision);
-	if (!estado || !fecha) {
-		estado = 'P';
+	if (!fecha_asignada) {
+		return;
 	}
+
+	if (!estado) {
+		estado = calcular_estado(comision, fecha_asignada);
+	}
+
+	var div = $('#div_aceptado_'+inst_nombre+'_'+comision);
+	var mensaje = $('#mensaje_estado_'+inst_nombre+'_'+comision);
+
 	switch (estado.trim())
 	{
-		case 'A':		p.text('Aceptada: '+fecha);
-						p.removeClass('resaltar_azul');
-						p.addClass('resaltar_verde');
+		case 'A':		mensaje.text('Aceptada: '+fecha_asignada);
+						mensaje.removeClass('resaltar_azul');
+						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'C': 		p.text('Asignada en día de cursada: '+fecha)
-						p.removeClass('resaltar_azul');
-						p.addClass('resaltar_verde');
+		case 'C': 		mensaje.text('Asignada en día de cursada: '+fecha_asignada)
+						mensaje.removeClass('resaltar_azul');
+						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'R': 		p.text('Asignada en otro día: '+fecha)
-						p.removeClass('resaltar_verde');
-						p.addClass('resaltar_azul');
+		case 'R': 		mensaje.text('Asignada en otro día: '+fecha_asignada)
+						mensaje.removeClass('resaltar_verde');
+						mensaje.addClass('resaltar_azul');
 						div.show();
 						break;
-		case 'AH':		p.text('Aceptada en otro horario: '+fecha);
-						p.removeClass('resaltar_azul');
-						p.addClass('resaltar_verde');
+		case 'AH':		mensaje.text('Aceptada en otro horario: '+fecha_asignada);
+						mensaje.removeClass('resaltar_azul');
+						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'CH': 		p.text('Asignada en día de cursada y otro horario: '+fecha)
-						p.removeClass('resaltar_azul');
-						p.addClass('resaltar_verde');
+		case 'CH': 		mensaje.text('Asignada en día de cursada y otro horario: '+fecha_asignada)
+						mensaje.removeClass('resaltar_azul');
+						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'RH': 		p.text('Asignada en otro día y otro horario: '+fecha)
-						p.removeClass('resaltar_verde');
-						p.addClass('resaltar_azul');
+		case 'RH': 		mensaje.text('Asignada en otro día y otro horario: '+fecha_asignada)
+						mensaje.removeClass('resaltar_verde');
+						mensaje.addClass('resaltar_azul');
 						div.show();
 						break;
 		default: 		div.hide();
 						break;
 	}
+}
+
+function calcular_estado(comision, fecha_string)
+{
+	var dias_clase = $('#dias_clase_'+comision).val();
+	var fecha_asign = fecha_string.substring(0,10);
+	var fecha_split = fecha_asign.split('-');
+	var fecha = new Date(fecha_split[0], parseInt(fecha_split[1])-1, fecha_split[2]);
+	var diaSemana = fecha.getDay();
+
+	var estado = '';
+	if (contiene(dias_clase, diaSemana)) {
+		estado = 'C';
+	} else {
+		estado = 'R';
+	}
+
+	var hora_asign = fecha_string.substr(11,8);
+	var hora = get_hora_clase(dias_clase, diaSemana);
+	if (hora_asign != hora) {
+		estado = estado + 'H';	
+	}
+	return estado;
 }
 
 function grabar_comision(comision)
@@ -398,7 +419,7 @@ function grabar_instancia_evaluacion(comision, instancia, evaluacion)
 
 	if (datos)
 	{
-		//console.log(datos);
+//		console.log(datos);
 		var formulario = $('#comision_seleccionada_'+comision);
 		var resultado = '';
 		kernel.ajax.call(formulario.attr('action'), {
@@ -407,8 +428,6 @@ function grabar_instancia_evaluacion(comision, instancia, evaluacion)
 				dataType: 'json',
 				data: datos,
 				success: function(data) { 
-					//console.log(data);
-					//console.log(data.cont[0].mensaje);
 					$('#aceptar_'+instancia+'_'+comision).val('P');
 					$('#div_date_'+instancia+'_'+comision).hide();
 					$('#div_time_'+instancia+'_'+comision).hide();
@@ -441,8 +460,8 @@ function get_datos_instancia_evaluacion(comision, instancia, evaluacion)
 	}
 	console.log('opcion: '+opcion);
 	var fecha_hora = $('#fecha_hora_solic_'+instancia+'_'+comision).val();
+	console.log(fecha_hora);
 	var estado;
-	var ciclo = $('#escala_'+comision).val().trim();
 
 	if (opcion == 'A') {
 		estado = 'A';
@@ -476,16 +495,14 @@ function get_datos_instancia_evaluacion(comision, instancia, evaluacion)
 		estado = 'H';
 	}
 	
-	return {comision: comision, evaluacion: evaluacion, ciclo: ciclo, fecha_hora: fecha_hora, estado: estado};
+	return {comision: comision, evaluacion: evaluacion, fecha_hora: fecha_hora, estado: estado};
 }
 
 function get_hora_clase(dias_clase, diaSemana)
 {
 	var dias = JSON.parse(dias_clase);
-    for (var i in dias)
-    {
-        if (dias[i].DIA_SEMANA == diaSemana)
-        {
+    for (var i in dias) {
+        if (dias[i].DIA_SEMANA == diaSemana) {
             return dias[i].HS_COMIENZO_CLASE;
         }
     }
@@ -517,25 +534,4 @@ function armar_mensaje(promo1, promo2, recup, integ, regu1, recup1, recup2)
 		mensaje += recup2;
 	}
 	return mensaje;
-}
-
-function set_focus(comision)
-{
-    if (!comision)
-    {
-        return;
-    }
-        
-    var titulo = 'aceptar_promo1_'+comision;
-    var elemento = document.getElementById(titulo);
-    if (elemento)
-    {
-        elemento.focus();
-    }
-    else
-    {
-        var titulo = 'aceptar_regu1_'+comision;
-        var elemento = document.getElementById(titulo);
-        elemento.focus();
-    }
 }

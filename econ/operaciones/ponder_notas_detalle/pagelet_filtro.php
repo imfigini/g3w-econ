@@ -59,14 +59,17 @@ class pagelet_filtro extends pagelet {
             $this->data['periodo_hash'] = $periodo_hash;
             $this->data['anio_academico_hash'] = $anio_academico_hash;
 
-            $materias = $this->controlador->get_materias_cincuentenario();
-
-			$cant = count($materias);
-			for ($i=0; $i<$cant; $i++)
+			if ($anio_academico_hash && $periodo_hash) 
 			{
-				$materias[$i]['PONDERACIONES'] = $this->controlador->get_ponderaciones_notas($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
-			}
+				$materias = $this->controlador->get_materias_cincuentenario();
 
-            $this->data['datos'] = $materias;
+				$cant = count($materias);
+				for ($i=0; $i<$cant; $i++)	
+				{
+					$materias[$i]['PONDERACIONES'] = $this->controlador->get_ponderaciones_notas($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
+				}
+
+				$this->data['datos'] = $materias;
+			}
 		}
 }

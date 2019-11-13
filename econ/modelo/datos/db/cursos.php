@@ -404,7 +404,7 @@ class cursos
      * cache: no
      * filas: n
      */
-    function get_fechas_no_validas($parametros)
+    function get_fechas_no_validas_comision($parametros)
     {
         $sql = "SELECT fecha FROM sga_calendcursada
                     WHERE comision = {$parametros['comision']}

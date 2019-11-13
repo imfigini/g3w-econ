@@ -104,19 +104,19 @@ class pagelet_filtro extends pagelet {
             {
                 $datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash, $carrera, $mix);
                 $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
-                
+				
                 //print_R($datos);
                 $this->data['datos'] = $datos;
-                //kernel::log()->add_debug('prepare ', $datos);
-                
                 $this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
-                
-                $this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
-                $this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
-                
-                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_acept', 'grabar_comision');
+	
+				$this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
+				$this->data['dias_no_laborales'] = json_encode($dias_no_laborales); 
+				$this->data['es_editable'] = $this->controlador->hoy_dentro_de_periodo($anio_academico_hash, $periodo_hash);
+
+				$link_form_comision = kernel::vinculador()->crear('fechas_parciales_acept', 'grabar_comision');
                 $this->data['form_url_comision'] = $link_form_comision;     
 
-            }
-        }
+			}
+		}
+		
 }

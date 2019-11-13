@@ -23,7 +23,7 @@ class controlador extends controlador_g3w2
         }
     }
     
-    function get_materias_cincuentenario($carrera, $mix)
+    function get_materias_cincuentenario($carrera, $mix) 
     {
         $parametros['legajo'] = null;
         $parametros['carrera'] = null;
@@ -208,7 +208,7 @@ class controlador extends controlador_g3w2
         foreach ($comisiones AS $comision)
         {
             $parametros['comision'] = $comision['COMISION'];
-            $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas', $parametros);
+            $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas_comision', $parametros);
             $arreglo = Array();
             foreach ($dias_no_validos AS $d)
             {
@@ -693,6 +693,14 @@ class controlador extends controlador_g3w2
             return $fecha_fromateada;
         }
         return $fecha;
-    }
+	}
+	
+	/* Verifica si el día de hoy está dentro del cuatrimestre que se consulta, para de acuerdo a eso habilitar la edición o no */
+	function hoy_dentro_de_periodo($anio_academico_hash, $periodo_hash)
+	{
+		$parametros['anio'] = $this->decodificar_anio_academico($anio_academico_hash);
+		$parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio']); 
+		return catalogo::consultar('fechas_parciales', 'hoy_dentro_de_periodo', $parametros);
+	}
 }
 ?>

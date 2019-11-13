@@ -2,6 +2,7 @@
 namespace econ\modelo\transacciones;
 
 use siu\modelo\datos\catalogo;
+use kernel\kernel;
 
 class ponderacion_notas 
 {
@@ -23,7 +24,7 @@ class ponderacion_notas
 			$datos['PORC_R_PARCIALES'] = $sin_integrador['PORC_PARCIALES'];
 			$datos['PORC_R_TRABAJOS'] = $sin_integrador['PORC_TRABAJOS'];
 		}
-		
+	
 		return $datos;
     }
  

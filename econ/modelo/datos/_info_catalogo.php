@@ -877,7 +877,7 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_fechas_no_validas()
+	static function cursos__get_fechas_no_validas_comision()
 	{
 		return array (
   'parametros' => 
@@ -1420,6 +1420,18 @@ class _info_catalogo
 );
 	}
 
+	static function fechas_parciales__get_fechas_eval_asignadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function fechas_parciales__get_fechas_eval_ocupadas()
 	{
 		return array (
@@ -1434,7 +1446,19 @@ class _info_catalogo
 );
 	}
 
-	static function fechas_parciales__get_fechas_no_validas()
+	static function fechas_parciales__get_fechas_eval_solicitadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_no_validas_materia()
 	{
 		return array (
   'parametros' => 
@@ -1445,6 +1469,19 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__hoy_dentro_de_periodo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 
@@ -1608,7 +1645,7 @@ class _info_catalogo
   array (
     0 => 'porc_integrador',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => '1',
 );
 	}
@@ -1630,7 +1667,7 @@ class _info_catalogo
   array (
     0 => 'porc_integrador',
   ),
-  'cache' => 'memoria',
+  'cache' => 'no',
   'filas' => '1',
 );
 	}

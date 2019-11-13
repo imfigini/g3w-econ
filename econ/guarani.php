@@ -6,7 +6,7 @@ use kernel\kernel;
 class guarani extends \siu\guarani
 {
 	static protected $ponderacion_notas;
-	static protected $fechas_parciales_propuesta;
+	static protected $fechas_parciales;
 
 	//----------------------------------------------------------------------
 	// Transacciones
@@ -20,12 +20,12 @@ class guarani extends \siu\guarani
 		return self::$ponderacion_notas;
 	}
 
-	static function fechas_parciales_propuesta()
+	static function fechas_parciales()
 	{
-		if (!self::$fechas_parciales_propuesta) {
-			self::$fechas_parciales_propuesta = kernel::localizador()->instanciar("modelo\\transacciones\\fechas_parciales_propuesta");
+		if (!self::$fechas_parciales) {
+			self::$fechas_parciales = kernel::localizador()->instanciar("modelo\\transacciones\\fechas_parciales");
 		}
-		return self::$fechas_parciales_propuesta;
+		return self::$fechas_parciales;
 	}
 
 }

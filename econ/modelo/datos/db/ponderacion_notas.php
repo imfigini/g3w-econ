@@ -26,7 +26,7 @@ class ponderacion_notas
     /**
 	* parametros: anio_academico, periodo, materia, calidad, porc_parciales, porc_integrador, porc_trabajos
 	* param_null: porc_integrador
-    * cache: memoria
+    * cache: no
     * filas: 1
     */
     function update_ponderaciones_notas($parametros)
@@ -48,7 +48,7 @@ class ponderacion_notas
     /**
     * parametros: anio_academico, periodo, materia, calidad, porc_parciales, porc_integrador, porc_trabajos
 	* param_null: porc_integrador
-	* cache: memoria
+	* cache: no
     * filas: 1
     */
     function set_ponderaciones_notas($parametros)

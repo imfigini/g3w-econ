@@ -737,7 +737,7 @@ class controlador extends controlador_g3w2
             if ($resultado_obs == '1')
             {
 				$this->enviar_mensaje_x_mail_a_DD($param);
-				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la Dirección de Docentes. Materia: ');
+				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la Direcci?n de Docentes. Materia: ');
 			}
 			if (!empty($resultado)) {
 				$resultado .= $datos['materia_nombre'];
