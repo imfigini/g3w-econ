@@ -75,9 +75,9 @@ CREATE TABLE dba.ufce_ponderacion_notas
 	periodo_lectivo 	VARCHAR(20) NOT NULL,
 	materia 			VARCHAR(5) NOT NULL, 
 	calidad				VARCHAR(1) NOT NULL, 	--P:Promo, R:Regular
-	porc_parciales 		DECIMAL(4,2),
-	porc_integrador 	DECIMAL(4,2),
-	porc_trabajos		DECIMAL(4,2),
+	porc_parciales 		DECIMAL(5,2),
+	porc_integrador 	DECIMAL(5,2),
+	porc_trabajos		DECIMAL(5,2),
 	CHECK (calidad IN ('P', 'R')),	
 	PRIMARY KEY (anio_academico, periodo_lectivo, materia, calidad)
 );

@@ -710,6 +710,19 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__baja_evaluacion_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function cursos__existe_evaluacion_parcial()
 	{
 		return array (

@@ -53,10 +53,9 @@ class ponderacion_notas
     */
     function set_ponderaciones_notas($parametros)
     {
-		kernel::log()->add_debug('set_ponderaciones_notas', $parametros);
+		//kernel::log()->add_debug('set_ponderaciones_notas', $parametros);
 		$existe = $this->get_ponderaciones_notas($parametros);
-        if ($existe)
-        {
+        if ($existe) {
             return $this->update_ponderaciones_notas($parametros);
         }
         else
@@ -67,7 +66,6 @@ class ponderacion_notas
 			$calidad = $parametros['calidad'];
             $porc_parciales = $parametros['porc_parciales'];
 			if ($calidad == "'P'") {
-				kernel::log()->add_debug('set_ponderaciones_notas - Entro por PPPPPPPPPP', $parametros);
 				$porc_integrador = $parametros['porc_integrador'];
 			} 
 			

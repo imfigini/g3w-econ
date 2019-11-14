@@ -39,17 +39,6 @@ class fechas_parciales
 	function get_fechas_no_validas($parametros)
 	{
 		return catalogo::consultar('fechas_parciales', 'get_fechas_no_validas_materia',  $parametros);
-		// 	print_r('<br>Dias : ');
-		// 	print_r($dias_no_validos);
-		// 	foreach ($dias_no_validos as $d)
-		// 	{
-		// 		$resultado[] = $d['FECHA'];
-		// 	}
-		// }
-		// print_r('<br>Dias : ');
-		// print_r($resultado);
-
-		// return $resultado;
 	}
 
 	/* Parametros: comision */

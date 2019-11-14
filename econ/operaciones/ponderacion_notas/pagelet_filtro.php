@@ -58,9 +58,6 @@ class pagelet_filtro extends pagelet {
 		$operacion = kernel::ruteador()->get_id_operacion();
 		$this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
 
-//            $this->add_var_js('msg_guardado_exitoso', trans('datos_censales.guardado_exitoso'));
-//            $this->add_var_js('msg_error_al_guardar', trans('datos_censales.error_al_guardar'));
-		
 		$periodo_hash = $this->get_periodo();
 		$anio_academico_hash = $this->get_anio_academico();
 		
@@ -77,7 +74,8 @@ class pagelet_filtro extends pagelet {
 		if (!empty($anio_academico_hash) && !empty($periodo_hash))
 		{
 			$this->data['mensaje'] = $this->get_mensaje();
-			$this->data['mensaje_error'] = $this->get_mensaje_error();			
+			$this->data['mensaje_error'] = $this->get_mensaje_error();		
+			$this->data['es_editable'] = $this->controlador->hoy_dentro_de_periodo($anio_academico_hash, $periodo_hash);	
 		
 			$materias = $this->controlador->get_materias_cincuentenario();
 		

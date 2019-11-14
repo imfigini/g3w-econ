@@ -723,8 +723,6 @@ class cursos
 		}
 
 		$sql = "EXECUTE PROCEDURE sp_i_atrcroevalpar($comision, $evaluacion, $escala, $fecha_hora)";
-		kernel::log()->add_debug('sp_i_atrcroevalpar', $sql); 
-	//	die;
         $result['mensaje'] = util::ejecutar_procedure($sql);
         
         $sql = "SELECT descripcion FROM sga_eval_parc WHERE evaluacion = $evaluacion";
@@ -757,6 +755,30 @@ class cursos
     }
 	
     /**
+    * parametros: comision, evaluacion
+    * cache: no
+    * filas: n
+    */
+    function baja_evaluacion_parcial($parametros)
+    {
+		kernel::log()->add_debug('baja_evaluacion_parcial', $parametros); 
+
+		$sql = "EXECUTE PROCEDURE sp_del_EvalCronAul({$parametros['comision']}, {$parametros['evaluacion']}) ";
+		kernel::log()->add_debug('sp_del_EvalCronAul', $sql); 
+	//	die;
+		$result['mensaje'] = util::ejecutar_procedure($sql);
+		kernel::log()->add_debug('sp_del_EvalCronAul', $result); 
+        
+        $sql = "UPDATE ufce_cron_eval_parc
+					SET estado = 'P',
+						estado_notific = 'U'
+                    WHERE comision = {$parametros['comision']} 
+                    AND evaluacion =  {$parametros['evaluacion']}" ;
+		kernel::db()->ejecutar($sql);
+		return $result;
+    }
+
+	/**
     * parametros: comision, evaluacion
     * cache: no
     */
