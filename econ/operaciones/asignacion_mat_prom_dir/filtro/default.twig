@@ -14,18 +14,18 @@
 	</div>
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
-    
-    <!-- {#  Mensaje si se guardó con éxito      #}
+	
+	{# Mensaje si se guardó con éxito
     {% if (this.data.mensaje != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
-    {% endif %}
-
-    {#  Mensaje si hubo error al guardar      #}
+    {% endif %} #}
+	
+	{#  Mensaje si hubo error al guardar      #}
     {% if (this.data.mensaje_error != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
         <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
     {% endif %}
- -->
+
 
     {% if(this.data.materias) %}
 		<form name="materias_promo_directa" method="post" action="{{this.data.form_url}}">
@@ -56,8 +56,6 @@
 						<td scope="row" colspan="3">
 							<div style="text-align: right">
 								<button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>
-								{# <button class="btn btn-info btn-lg" type="submit" style="align-self:right;font-size:12px;">
-									Guardar</button> #}
 							</div>
 						</td>
 					</tr>
@@ -65,17 +63,6 @@
 			</table>
 		</form>
 
-        
-        <!-- <div style="text-align: right">
-            <form name="replicar_coordinadores" id="replicar_coordinadores" method="post" action="{{this.data.form_url_replicar_coord}}">
-                <input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
-                <input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
-                <button class="btn btn-info btn-lg" type="submit" style="align-self:center;font-size:12px;"
-                        title="Replica los coordinadores asignados el cuatrimestre anterior.">
-                        Replicar</button>
-            </form>
-        </div> -->
-        
     {% else %}
         <div role="alert" class="alert">
             {{"sin_resultados"|trans|capitalize}}

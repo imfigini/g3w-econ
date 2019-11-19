@@ -3,7 +3,6 @@ namespace econ\modelo\datos\db;
 
 use kernel\kernel;
 use kernel\util\db\db;
-use siu\modelo\datos\util;
 
 class ponderacion_notas 
 {
@@ -82,6 +81,21 @@ class ponderacion_notas
 			}
             return kernel::db()->ejecutar($sql);
         }
-    }
+	}
+	
+	/**
+     * parametros: anio_academico, periodo, materia, calidad
+     * cache: no
+     * filas: 1
+     */ 
+	function eliminar_ponderacion($parametros)
+	{
+		$sql = "DELETE FROM ufce_ponderacion_notas
+					WHERE  	anio_academico = {$parametros['anio_academico']}
+						AND periodo_lectivo = {$parametros['periodo']}
+						AND materia = {$parametros['materia']} 
+						AND calidad = {$parametros['calidad']} ";
+		return kernel::db()->ejecutar($sql);
+	}
 
 }

@@ -1626,6 +1626,21 @@ class _info_catalogo
 );
 	}
 
+	static function ponderacion_notas__eliminar_ponderacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function ponderacion_notas__get_ponderaciones_notas()
 	{
 		return array (
@@ -1708,6 +1723,20 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function prom_directa__is_promo_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

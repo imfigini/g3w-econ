@@ -42,11 +42,6 @@ class pagelet_filtro extends pagelet {
 		return $this->controlador->get_anio_academico();
 	}
 
-	function get_mensaje()
-	{
-		return $this->controlador->get_mensaje();
-	}
-
 	function get_mensaje_error()
 	{
 		return $this->controlador->get_mensaje_error();

@@ -77,4 +77,24 @@ class prom_directa
 				AND materia = {$parametros['materia']} ";
 		return kernel::db()->ejecutar($sql);
 	}
+
+	/**
+    * parametros: anio_academico, periodo, materia
+    * cache: no
+    * filas: 1
+	*/
+	function is_promo_directa($parametros)
+	{
+		$sql = "SELECT COUNT(*) as existe
+                        FROM ufce_materias_promo_directa
+                    WHERE   anio_academico = {$parametros['anio_academico']}
+						AND periodo_lectivo = {$parametros['periodo']}
+						AND materia = {$parametros['materia']} 
+						AND promo_directa = 'S' ";
+		$existe = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		if ($existe['EXISTE'] > 0) {
+			return true;
+		}
+		return false;
+	}
 }

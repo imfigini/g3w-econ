@@ -80,7 +80,7 @@ function actualiza_porcentaje_con_integrador(porc)
 	}
 }
 
-function actualiza_porcentaje_sin_integrador(porc)
+function actualiza_porcentaje_regular(porc)
 {
 	x = porc.id.split('_');
 	console.log(x);
@@ -89,6 +89,20 @@ function actualiza_porcentaje_sin_integrador(porc)
 	total = 100-A;
 	$("#"+'porc_trabajos_R_'+indice).val(total);
 	C = $("#"+'porc_trabajos_R_'+indice).val();
+	if (C < 0) {
+		alert("No se puede asignar un número negativo. Verifique los porcentajes ingresados.");
+	}
+}
+
+function actualiza_porcentaje_prom_directa(porc)
+{
+	x = porc.id.split('_');
+	console.log(x);
+	indice = x[3];
+	A = $("#"+'porc_parciales_D_'+indice).val();
+	total = 100-A;
+	$("#"+'porc_trabajos_D_'+indice).val(total);
+	C = $("#"+'porc_trabajos_D_'+indice).val();
 	if (C < 0) {
 		alert("No se puede asignar un número negativo. Verifique los porcentajes ingresados.");
 	}

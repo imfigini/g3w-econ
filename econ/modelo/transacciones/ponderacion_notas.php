@@ -6,7 +6,8 @@ use kernel\kernel;
 
 class ponderacion_notas 
 {
-    function info__get_ponderaciones_notas($parametros)
+	/* Parametros: anio_academico, periodo, materia */
+	function info__get_ponderaciones_notas($parametros)
     {
 		$datos = Array();
 		$parametros['calidad'] = 'P';
@@ -25,7 +26,26 @@ class ponderacion_notas
 			$datos['PORC_R_TRABAJOS'] = $sin_integrador['PORC_TRABAJOS'];
 		}
 	
+		$parametros['calidad'] = 'D';
+		$prom_directa = catalogo::consultar('ponderacion_notas', 'get_ponderaciones_notas', $parametros);
+		if (count($prom_directa)> 0) {
+			$datos['PORC_D_PARCIALES'] = $prom_directa['PORC_PARCIALES'];
+			$datos['PORC_D_TRABAJOS'] = $prom_directa['PORC_TRABAJOS'];
+		}
+
 		return $datos;
     }
- 
+	
+	/* Parametros: anio_academico, periodo, materia */
+	function info__is_promo_directa($parametros)
+    {
+		return catalogo::consultar('prom_directa', 'is_promo_directa', $parametros);
+	}
+	
+	/* Parametros: anio_academico, periodo, materia */
+	function ctrl_no_tiene_ponderacion_prom_directa($parametros)
+    {
+		$parametros['calidad'] = 'D';
+		catalogo::consultar('ponderacion_notas', 'eliminar_ponderacion', $parametros);
+	}
 }

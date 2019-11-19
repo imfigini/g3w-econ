@@ -22,8 +22,9 @@
 		    <div> <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }}) </h3></div>
 			<table style="width:100%">
 				<tr>
-					<th>Alumnos que rinden integrador</th>
-					<th>Alumnos que no rinden integrador</th> 
+					<th>{{"Cursada por Promoción"|trans|capitalize}}</th>
+					<th>{{"Cursada Regular"|trans|capitalize}}</th>
+					<th>{{"Cursada por Promoción Directa"|trans|capitalize}}</th>
 				</tr>
 				<tr>
 					<td>
@@ -35,8 +36,18 @@
 					</td>
 					<td>
 						<ul>
-						<li>Porcentaje en Parciales:{{ _self.set_ponderacion(ponderaciones.PORC_R_PARCIALES) }}  </li>
+						<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_R_PARCIALES) }}  </li>
 						<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_R_TRABAJOS) }} </li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+						{% if (materia.PROMO_DIRECTA) %}
+							<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_D_PARCIALES) }}  </li>
+							<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_D_TRABAJOS) }} </li>
+						{% else %}
+							<li>No corresponde
+						{% endif %}
 						</ul>
 					</td>
 				</tr>

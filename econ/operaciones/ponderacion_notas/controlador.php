@@ -142,11 +142,6 @@ class controlador extends controlador_g3w2
             $parametros['legajo'] = kernel::persona()->get_legajo_docente();
         }
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
-        $operacion = kernel::ruteador()->get_id_operacion(); 
-        foreach($materias as $key => $materia) 
-        {
-            $materias[$key]['LINK'] = kernel::vinculador()->crear($operacion, 'info_materia', array('parametro'=>1));
-        }
         return $materias;
     }
 
@@ -175,6 +170,31 @@ class controlador extends controlador_g3w2
         return null;
 	}
 
+	function is_promo_directa($anio_academico_hash, $periodo_hash, $materia)
+	{
+		$periodo = null;
+        $anio_academico = null;
+
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+	                $parametros = array(
+                                'anio_academico' => $anio_academico,
+                                'periodo' => $periodo,
+                                'materia' => $materia
+							);
+					return $this->modelo()->info__is_promo_directa($parametros);
+				}
+            }
+        }
+        return null;
+	}
+
 	function accion__grabar_materia()
     {
         if (kernel::request()->isPost()) 
@@ -193,25 +213,45 @@ class controlador extends controlador_g3w2
 					$tiene_tp = ($parametros_con_integrador['porc_trabajos'] > 0);
 
 					if ($result) {
-						$mensaje .= 'Se actualizó correctamente los % de notas (CON integrador). ';
+						$mensaje .= 'Se actualizó correctamente los % de notas (Cursada por Promoción). ';
 					} else {
-						$mensaje_error .= 'ERROR en la asignación de ponderaciones para el caso CON integrador. ';
+						$mensaje_error .= 'ERROR en la asignación de ponderaciones para Cursada por Promoción. ';
 					}
 				}
 
-				$parametros_sin_integrador = $this->get_parametros_grabar_sin_integrador($parametros);
-				if (isset($parametros_sin_integrador)) 
+				$parametros_regular = $this->get_parametros_grabar_regular($parametros);
+				if (isset($parametros_regular)) 
 				{
-					$result = catalogo::consultar('ponderacion_notas', 'set_ponderaciones_notas', $parametros_sin_integrador);
-					$tiene_tp = $tiene_tp || ($parametros_sin_integrador['porc_trabajos'] > 0);
+					$result = catalogo::consultar('ponderacion_notas', 'set_ponderaciones_notas', $parametros_regular);
+					$tiene_tp = $tiene_tp || ($parametros_regular['porc_trabajos'] > 0);
 
 					if ($result) {
-						$mensaje .= 'Se actualizó correctamente los % de notas (SIN integrador). ';
+						$mensaje .= 'Se actualizó correctamente los % de notas (Cursada Regular). ';
 					} else {
-						$mensaje_error .= 'ERROR en la asignación de ponderaciones para el caso SIN integrador. ';
+						$mensaje_error .= 'ERROR en la asignación de ponderaciones para Cursada Regular. ';
 					}
 				}
 				
+				if (!$this->modelo()->info__is_promo_directa($parametros))
+				{
+					$this->modelo()->ctrl_no_tiene_ponderacion_prom_directa($parametros);
+				}
+				else
+				{
+					$parametros_promo_directa = $this->get_parametros_grabar_promo_directa($parametros);
+					if (isset($parametros_promo_directa)) 
+					{
+						$result = catalogo::consultar('ponderacion_notas', 'set_ponderaciones_notas', $parametros_promo_directa);
+						$tiene_tp = $tiene_tp || ($parametros_promo_directa['porc_trabajos'] > 0);
+
+						if ($result) {
+							$mensaje .= 'Se actualizó correctamente los % de notas (Promoción Directa). ';
+						} else {
+							$mensaje_error .= 'ERROR en la asignación de ponderaciones para Promoción Directa. ';
+						}
+					}
+				}
+
 				$this->set_mensaje($mensaje);
 				$this->set_mensaje_error($mensaje_error);
 
@@ -230,7 +270,32 @@ class controlador extends controlador_g3w2
 		}        
 		$this->set_anio_academico($parametros['anio_academico_hash']);
 		$this->set_periodo($parametros['periodo_hash']);
-    }
+	}
+	
+	function ctrl_no_tiene_ponderacion_prom_directa($anio_academico_hash, $periodo_hash, $materia)
+	{
+		$periodo = null;
+        $anio_academico = null;
+
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+	                $parametros = array(
+                                'anio_academico' => $anio_academico,
+                                'periodo' => $periodo,
+                                'materia' => $materia
+							);
+					return $this->modelo()->ctrl_no_tiene_ponderacion_prom_directa($parametros);
+				}
+            }
+        }
+        return null;
+	}
     
 	private function get_parametros_grabar_ponderaciones()
 	{
@@ -267,7 +332,7 @@ class controlador extends controlador_g3w2
         return $parametros;        
     }
 
-    private function get_parametros_grabar_sin_integrador($parametros)
+    private function get_parametros_grabar_regular($parametros)
     {
 		$parciales = 'porc_parciales_R_'.$parametros['materia'];
         $trabajos = 'porc_trabajos_R_'.$parametros['materia'];
@@ -283,7 +348,22 @@ class controlador extends controlador_g3w2
 		return $parametros;        
     }
         
-    
+    private function get_parametros_grabar_promo_directa($parametros)
+    {
+		$parciales = 'porc_parciales_D_'.$parametros['materia'];
+        $trabajos = 'porc_trabajos_D_'.$parametros['materia'];
+        
+		$parametros['porc_parciales']       = $this->validate_param($parciales, 'post', validador::TIPO_TEXTO);
+		$parametros['porc_integrador']		= null;
+        $parametros['porc_trabajos']        = $this->validate_param($trabajos, 'post', validador::TIPO_TEXTO);
+		$parametros['calidad']				= 'D';
+
+		if (empty($parametros['porc_parciales'])) {
+			return null;
+		}
+		return $parametros;        
+    }
+   
 	private function crear_instancia_evaluacion_tp($parametros)
 	{
 		try 

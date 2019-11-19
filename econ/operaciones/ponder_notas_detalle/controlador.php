@@ -56,6 +56,56 @@ class controlador extends controlador_g3w2
         return null;
 	}
 
+	function is_promo_directa($anio_academico_hash, $periodo_hash, $materia)
+	{
+		$periodo = null;
+        $anio_academico = null;
+
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+	                $parametros = array(
+                                'anio_academico' => $anio_academico,
+                                'periodo' => $periodo,
+                                'materia' => $materia
+							);
+					return $this->modelo()->info__is_promo_directa($parametros);
+				}
+            }
+        }
+        return null;
+	}
+
+	function ctrl_no_tiene_ponderacion_prom_directa($anio_academico_hash, $periodo_hash, $materia)
+	{
+		$periodo = null;
+        $anio_academico = null;
+
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+	                $parametros = array(
+                                'anio_academico' => $anio_academico,
+                                'periodo' => $periodo,
+                                'materia' => $materia
+							);
+					return $this->modelo()->ctrl_no_tiene_ponderacion_prom_directa($parametros);
+				}
+            }
+        }
+        return null;
+	}
+
 	function get_periodo()
     {
         return $this->datos_filtro['periodo'];
