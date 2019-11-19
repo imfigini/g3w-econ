@@ -74,11 +74,23 @@ CREATE TABLE dba.ufce_ponderacion_notas
 	anio_academico 		INT NOT NULL,
 	periodo_lectivo 	VARCHAR(20) NOT NULL,
 	materia 			VARCHAR(5) NOT NULL, 
-	calidad				VARCHAR(1) NOT NULL, 	--P:Promo, R:Regular
+	calidad				VARCHAR(1) NOT NULL, 	--P:Promo, R:Regular, D: Promo Directa
 	porc_parciales 		DECIMAL(5,2),
 	porc_integrador 	DECIMAL(5,2),
 	porc_trabajos		DECIMAL(5,2),
-	CHECK (calidad IN ('P', 'R')),	
+	CHECK (calidad IN ('P', 'R', 'D')),	
 	PRIMARY KEY (anio_academico, periodo_lectivo, materia, calidad)
 );
 
+
+----------- PARA ADMINISTRAR MATERIAS POR PROMOCIÓN DIRECTA --------------------------------------------------
+--DROP TABLE dba.ufce_materias_promo_directa;
+CREATE TABLE dba.ufce_materias_promo_directa
+(
+	anio_academico 		INT NOT NULL,
+	periodo_lectivo 	VARCHAR(20) NOT NULL,
+	materia 			VARCHAR(5) NOT NULL,
+	promo_directa		VARCHAR(1) NOT NULL,
+	CHECK (promo_directa IN ('S', 'N')),
+	PRIMARY KEY (anio_academico, periodo_lectivo, materia)
+);

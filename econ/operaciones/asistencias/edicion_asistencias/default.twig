@@ -8,7 +8,7 @@
     <form class='form-renglones' action='{{ this.data.url_guardar }}' method='post'>
 	<input type="hidden" name="clase[COMISIONES]" value="{{ this.data.comisiones}}">
 	<input type="hidden" name="clase[FECHA]" value="{{ this.data.fecha }}">
-        <input type="hidden" name="clase[HS_COMIENZO_CLASE]" value="{{this.data.hs_comienzo_clase}}">    
+	<input type="hidden" name="clase[HS_COMIENZO_CLASE]" value="{{this.data.hs_comienzo_clase}}">    
 	<input type="hidden" name="clase[FILAS]" value="{{ this.data.filas }}">
         
 	{% for alumno in this.data.clase_detalle %}

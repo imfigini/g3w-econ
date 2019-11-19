@@ -711,7 +711,7 @@ class cursos
     */
     function alta_evaluacion_parcial($parametros)
     {
-		kernel::log()->add_debug('alta_evaluacion_parcial', $parametros); 
+		//kernel::log()->add_debug('alta_evaluacion_parcial', $parametros); 
 		$comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
         $escala = 3;	//Las instancias de evaluación parcial siempre deben tener escala: 3 (Reales Regular)
@@ -749,7 +749,7 @@ class cursos
         else
         {
 			$result['success'] = -1;
-			$result['mensaje'] .= " Evaluación $eval_descrip en la comisión $comision. ";
+			$result['mensaje'] .= " Posiblemente esté sin definir la fecha. ";
 		}
 		return $result;
     }

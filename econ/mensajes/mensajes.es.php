@@ -20,7 +20,9 @@ return array(
     'filtro.carreras' => "carreras",
     'filtro.mix' => "mix",
     'filtro.todos' => "-- Todos --",
-    
+
+	'sin_resultados' => 'No hay información',    
+
      //Inicio Oficina de Docentes
     "inicio_oficina_docentes.titulo" => "Inicio Oficina de Docentes",
     "inicio_oficina_docentes.bienvenido" => "Bienvenido",
@@ -39,31 +41,26 @@ return array(
     'asignacion_coord_materias.materia.encabezado.anio_academico' => 'año académico',
     'asignacion_coord_materias.materia.encabezado.periodo' => 'período lectivo',
     'asignacion_coord_materias.materia.encabezado.docente' => 'Docentes',
-    'asignacion_coord_materias.filtro.sin_resultados' => 'No hay información',
     'asignacion_coord_materias.filtro_seleccione' => '-- Todos --',
     
     /* Ponderación de notas en las instancias de evaluación */
-    'tit_ponderacion_notas' => 'Ponderación de notas en las instancias de evaluación',
-    'ponderacion_notas' => 'Ponderación de notas en las instancias de evaluación',
-    'ponderacion_notas.filtro.sin_resultados' => 'No hay información',
+    'tit_ponderacion_notas' => 'Definición de nota final para cierre de cursada',
+    'ponderacion_notas' => 'Definición de nota final para cierre de cursada',
     
     /* Detalle de los cursos con sus %*/
     'tit_ponder_notas_detalle' => 'Listado de Materias',
-    'ponder_notas_detalle' => 'Detalle de ponderación de notas en las instancias de evaluación',
-    'ponder_notas_detalle.sin_resultados' => 'No hay información',
+    'ponder_notas_detalle' => 'Detalle de definición de nota final para cierre de cursada',
     
     'parciales' => 'Carga de notas de evaluaciones parciales',
     
     /* Períodos de evaluación */
     'tit_periodos_evaluacion' => 'Períodos de evaluación',
     'periodos_evaluacion' => 'Definición de los períodos de evaluación',
-    'periodos_evaluacion.sin_resultados' => 'No hay información, seleccionar un año académico y un período para comenzar.',
         
      /* Definción de los Mixes */
     'tit_mixes' => 'Mixs',
     'mixes' => 'Mixs',
     'definicion_mixes' => 'Definición de Mixs',
-    'mixes.sin_resultados' => 'No hay información cargada sobre mixes.',
     'mixes.carrera' => 'Carrera',
     'mixes_modificacion' => 'Modificación de Mix',
     
@@ -74,7 +71,6 @@ return array(
 	/* Propuestas de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
     'fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
-	'fechas_parciales_propuesta.sin_resultados' => 'No hay información',
 	
 	/* Aceptación de fechas para parciales y recuperatorios (sólo 2019)*/
 	'tit_fechas_parciales_acept_2019' => 'Revisión de fechas para parciales, integrador y recuperatorios (sólo 2019)',
@@ -83,7 +79,6 @@ return array(
 	/* Aceptación de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_acept' => 'Revisión de fechas para parciales, integrador y recuperatorios',
     'fechas_parciales_acept' => 'Gestión por listado para fechas de evaluaciones',
-    'fechas_parciales_acept.sin_resultados' => 'No hay información',    
 
     /* Gestión de fechas para parciales y recuperatorios (en calenadario visual) - 2019*/
     'tit_fechas_parciales_calend_2019' => 'Revisión de fechas para parciales, integrador y recuperatorios (sólo 2019)',
@@ -92,6 +87,9 @@ return array(
 	/* Gestión de fechas para parciales y recuperatorios (en calenadario visual)*/
 	'tit_fechas_parciales_calend' => 'Revisión de fechas para parciales, integrador y recuperatorios',
 	'fechas_parciales_calend' => 'Gestión por calendario para fechas de evaluaciones',
-	'fechas_parciales_calend.sin_resultados' => 'No hay información',    
+	
+	/* Asignación de materias por promoción directa*/
+	'tit_asignacion_mat_prom_dir' => 'Asignación de materias por Promoción Directa',
+	'asignacion_mat_prom_dir' => 'Asignación de materias por Promoción Directa',
 	
 );

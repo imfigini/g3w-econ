@@ -112,9 +112,6 @@ class fechas_parciales
 		$resultado = Array();
 		foreach($datos AS $dato)
 		{
-			// $resul = Array();
-			// $resul[$dato['EVAL_NOMBRE']]['FECHA_HORA'] = $dato['FECHA_HORA'];
-			// $resultado[] = $resul;
 			$eval = trim($dato['EVAL_NOMBRE']);
 			$resultado[$eval]['FECHA_HORA'] = $dato['FECHA_HORA'];
 		}

@@ -44,7 +44,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 		        AND a.evaluacion = sga_atr_eval_parc.evaluacion) as total_alumnos_eval,
 			sga_atr_eval_parc.evaluacion,
 			sga_eval_parc.evaluacion as evaluacion_cod_tipo,
-			sga_eval_parc.descripcion as evaluacion_nombre,
+			INITCAP(sga_eval_parc.descripcion) as evaluacion_nombre,
 			sga_tipo_eval_parc.descripcion as evaluacion_tipo,
 			sga_cron_eval_parc.fecha_hora as evaluacion_fecha,
 			sga_periodos_lect.anio_academico,

@@ -72,7 +72,19 @@ return array(
                 'texto' => 'fechas_parciales_acept'
             )
         ),
-        
+		
+		/* Definición de materias por promoción directa
+         */
+        'asignacion_mat_prom_dir' => array(
+            'url' => 'asignacion_mat_prom_dir',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'asignacion_mat_prom_dir'
+            )
+		),
+		
         /* Listado de Cursadas con sus %
          */
         'ponder_notas_detalle' => array(

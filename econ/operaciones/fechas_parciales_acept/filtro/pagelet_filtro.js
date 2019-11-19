@@ -220,15 +220,6 @@ function setear_calendario(instancia, datepick, dias_clase, dias_no_validos)
         case 'integ':
             get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
             break;
-        case 'regu1':
-            get_fechas_and_set_values(datepick, inicio_periodo[0], fin_periodo[0], dias_clase, dias_no_validos);
-            break;
-        case 'recup1':
-            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[1], dias_clase, dias_no_validos);
-            break;
-        case 'recup2':
-            get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[2], dias_clase, dias_no_validos);
-            break;
     }
 }
 
@@ -405,11 +396,7 @@ function grabar_comision(comision)
 	var recup = grabar_instancia_evaluacion(comision, 'recup', 7);
 	var integ = grabar_instancia_evaluacion(comision, 'integ', 14);
 
-	var regu1 = grabar_instancia_evaluacion(comision, 'regu1', 21);
-	var recup1 = grabar_instancia_evaluacion(comision, 'recup1', 4);
-	var recup2 = grabar_instancia_evaluacion(comision, 'recup2', 5);
-
-	var mensaje = armar_mensaje(promo1, promo2, recup, integ, regu1, recup1, recup2);
+	var mensaje = armar_mensaje(promo1, promo2, recup, integ);
 	kernel.ui.show_mensaje(mensaje);
 }
 
@@ -458,9 +445,7 @@ function get_datos_instancia_evaluacion(comision, instancia, evaluacion)
 	if (!opcion || opcion == 'P') {
 		return null;
 	}
-	console.log('opcion: '+opcion);
 	var fecha_hora = $('#fecha_hora_solic_'+instancia+'_'+comision).val();
-	console.log(fecha_hora);
 	var estado;
 
 	if (opcion == 'A') {
@@ -509,7 +494,7 @@ function get_hora_clase(dias_clase, diaSemana)
     return dias[0].HS_COMIENZO_CLASE;
 }
 
-function armar_mensaje(promo1, promo2, recup, integ, regu1, recup1, recup2)
+function armar_mensaje(promo1, promo2, recup, integ)
 {
 	var mensaje = '';
 	if (promo1)	{
@@ -523,15 +508,6 @@ function armar_mensaje(promo1, promo2, recup, integ, regu1, recup1, recup2)
 	}
 	if (integ)	{
 		mensaje += integ;
-	}
-	if (regu1)	{
-		mensaje += regu1;
-	}
-	if (recup1)	{
-		mensaje += recup1;
-	}
-	if (recup2)	{
-		mensaje += recup2;
 	}
 	return mensaje;
 }

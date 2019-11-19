@@ -1685,6 +1685,59 @@ class _info_catalogo
 );
 	}
 
+	static function prom_directa__alta_materias_prom_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__get_datos_materias_promo_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__resetear_prom_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__set_prom_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function sistema__cache_lista_alumnos_carrera()
 	{
 		return array (

@@ -182,7 +182,7 @@ class fechas_parciales
     function get_fechas_eval_asignadas($parametros)
     {
         $sql = "SELECT 	DISTINCT evaluacion, 
-						DECODE(evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+						DECODE(evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG', 15, 'TP') AS eval_nombre, 
 						fecha_hora
 				FROM sga_cron_eval_parc
 				WHERE comision = {$parametros['comision']} ";

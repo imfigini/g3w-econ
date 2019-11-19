@@ -89,6 +89,11 @@
 										<td>Integrador: <strong>{{comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA}}</strong></td>
 										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'integ', comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA)}}
 									</tr>
+									{% if (comision.EVAL_ASIGNADAS.TP) %}
+										<tr>    
+											<td colspan="3">Trabajos Prácticos: <b><i>Instancia creada</i></b></td>
+										</tr>
+									{% endif %}
 								</table>
 								</div>
 								{% if (this.data.es_editable) %}	
@@ -104,7 +109,7 @@
 		</div>
     {% else %}
         <div role="alert" class="alert">
-            {{"fechas_parciales_acept.sin_resultados"|trans|capitalize}}
+            {{"sin_resultados"|trans|capitalize}}
         </div>
     {% endif %}
     
