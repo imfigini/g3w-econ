@@ -12,6 +12,12 @@
 	color: white !important;
 }
 
+.cuadrado-listo {
+	/* width: 50px; 
+	height: 50px;  */
+	/*border: 1px solid #555;*/
+	background: #92a88f;
+}
 
 .abandono
 {
@@ -29,8 +35,15 @@
 	background-color:#cde4ff;
 }
 
+.falta-tp
+{
+	background-color:#ffa500;
+}
+
 #renglones .listo span.legajo,
 #renglones .abandono span.legajo
 {
 	color: white;
 }
+
+

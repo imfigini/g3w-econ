@@ -179,7 +179,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 				or ($nota_parcial1['RESULTADO'] == 'U' or $nota_parcial2['RESULTADO'] == 'U') ) {
 			return true;
 		}
-		//Si estuvo en los 2 parciales, y el promedio es >= 4 ya aprobó, no recupera
+		//Si estuvo en los 2 parciales, y el promedio es >= 4 ya aprobo, no recupera
 		$prom_parciales = ( $nota_parcial1['NOTA'] + $nota_parcial2['NOTA'] ) / 2;
 		if ($prom_parciales >= 4) {
 			return false;

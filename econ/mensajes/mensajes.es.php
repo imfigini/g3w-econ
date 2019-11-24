@@ -109,4 +109,5 @@ return array(
 	'alumno_abandono' => "El alumno abandonó (se ausentó a ambos parciales o no cumple con el % de asistencia), se puede hacer un cierre parcial de nota.",
 	'alumno_falta_integ' => "El alumno aún puede rendir el Integrador, no se puede calcular la nota aún.",
 	'alumno_falta_recup' => "El alumno aún puede rendir el Recuperatorio Global, no se puede calcular la nota aún.",
+	'alumno_falta_tp' => "El alumno no tiene nota cargada para los TP y es necesaria, no se le puede calcular la nota aún.",
 );

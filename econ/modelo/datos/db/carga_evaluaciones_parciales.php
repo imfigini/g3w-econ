@@ -227,17 +227,14 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
 
+	
 	/**
-	 * parametros: legajo, comision, porc_asist
+	 * parametros: legajo, comision
 	 * cache: no
 	 * filas: 1
 	 */
-    function tiene_asistencia($parametros)
-    {
-		/* Dado un alumno, una comisión y un porcentaje mínimo de asitencia requerido
-			retorna si el alumno cumple o no con dicho porcentaje 
-			0 <= porc_asist <= 100
-			*/
+	function get_porc_asistencia($parametros)
+	{
 		$sql = "SELECT 	SUM(motivo_justific) AS justif, 
 						SUM(cant_inasistencias) AS inasis 
 					FROM sga_inasistencias 
@@ -249,7 +246,21 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 		$cant_clases = $clases['CANT_CLASES'];
 
 		$cant_asistio = $cant_clases - $inasis_alu['INASIS'] + $inasis_alu['JUSTIF'];
-		$porc_asistencia_alu = ($cant_asistio / $cant_clases) * 100;
+		return ($cant_asistio / $cant_clases) * 100;
+	}
+
+	/**
+	 * parametros: legajo, comision, porc_asist
+	 * cache: no
+	 * filas: 1
+	 */
+    function tiene_asistencia($parametros)
+    {
+		/* Dado un alumno, una comisión y un porcentaje mínimo de asitencia requerido
+			retorna si el alumno cumple o no con dicho porcentaje 
+			0 <= porc_asist <= 100
+			*/
+		$porc_asistencia_alu = self::get_porc_asistencia($parametros);
 		if ($porc_asistencia_alu >= $parametros['porc_asist']) {
 			return true;
 		}
@@ -305,4 +316,55 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 					and fecha = {$parametros['fecha']}";
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
+
+	/**
+	 * parametros: legajo, comision, evaluacion
+	 * cache: no
+	 * filas: 1
+	 */
+	function get_nota_evaluacion($parametros)
+	{
+		$sql = "SELECT nota, resultado
+				FROM sga_eval_parc_alum
+				WHERE legajo = {$parametros['legajo']}
+					AND comision = {$parametros['comision']}
+					AND evaluacion = {$parametros['evaluacion']} 
+					AND resultado <> 'U' ";
+		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+	}
+
+	/**
+	 * parametros: comision, legajo
+	 * cache: no
+	 * filas: n
+	 */
+	function get_notas_eval_alumno($parametros)
+	{
+		$sql = "SELECT evaluacion, nota, resultado
+				FROM sga_eval_parc_alum
+				WHERE legajo = {$parametros['legajo']}
+					AND comision = {$parametros['comision']}
+					AND resultado <> 'U' ";
+		return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+	}
+	
+
+	/**
+	 * parametros: comision, evaluacion
+	 * cache: no
+	 * filas: 1
+	 */
+	function ya_paso_evaluacion($parametros)
+	{
+		$sql = "SELECT fecha_hora::DATE < TODAY AS ya_paso, fecha_hora, TODAY
+				FROM sga_cron_eval_parc
+				WHERE comision = {$parametros['comision']}
+				AND evaluacion = {$parametros['evaluacion']}";
+		kernel::log()->add_debug('paso_resultado_sql', $sql);
+		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		kernel::log()->add_debug('paso_resultado', $resultado);
+		return $resultado['YA_PASO'];
+	}
+
+
 }

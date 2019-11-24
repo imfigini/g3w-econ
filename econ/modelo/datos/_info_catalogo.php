@@ -495,6 +495,20 @@ class _info_catalogo
 );
 	}
 
+	static function carga_evaluaciones_parciales__get_nota_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+    2 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_evaluaciones_parciales__get_nota_parcial()
 	{
 		return array (
@@ -503,6 +517,32 @@ class _info_catalogo
     0 => 'legajo',
     1 => 'comision',
     2 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_notas_eval_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_porc_asistencia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
   ),
   'cache' => 'no',
   'filas' => '1',
@@ -642,6 +682,248 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__ya_paso_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__acta_cabecera()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__acta_folio()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+    2 => 'folio',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__acta_regular_estado()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__actualizar_acta()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__busqueda_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'term',
+  ),
+  'no_quote' => 'term',
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__condiciones_regularidad()
+	{
+		return array (
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__get_anio_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_carrera_incripto()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_datos_de_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_datos_ficha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_datos_parciales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__get_posible_nota_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+    2 => 'legajo',
+  ),
+  'cache' => 'no',
+  'cache_expiracion' => '300',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__guardar_renglon()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'comision',
+    4 => 'folio',
+    5 => 'renglon',
+    6 => 'fecha',
+    7 => 'condicion',
+    8 => 'nota',
+    9 => 'asistencia',
+    10 => 'promocional',
+    11 => 'fecha_inicio',
+    12 => 'legajo_docente',
+  ),
+  'param_null' => 
+  array (
+    0 => 'fecha',
+    1 => 'condicion',
+    2 => 'nota',
+    3 => 'asistencia',
+  ),
+  'param_tipo' => 
+  array (
+    0 => 'str/20',
+    1 => 'str/20',
+    2 => 'str/20',
+    3 => 'int',
+    4 => 'int',
+    5 => 'int',
+    6 => 'str/15',
+    7 => 'int',
+    8 => 'str/10',
+    9 => 'int',
+    10 => 'int',
+    11 => 'str/15',
+    12 => 'int',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__lista_actas_abiertas_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'cache_expiracion' => '300',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__porcentaje_carga_notas_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
 );
 	}
 

@@ -714,8 +714,8 @@ class cursos
 		//kernel::log()->add_debug('alta_evaluacion_parcial', $parametros); 
 		$comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-        $escala = 3;	//Las instancias de evaluación parcial siempre deben tener escala: 3 (Reales Regular)
-        $fecha_hora = $parametros['fecha_hora'];
+		$escala = 3;	//Las instancias de evaluación parcial siempre deben tener escala: 3 (Reales Regular)
+	    $fecha_hora = $parametros['fecha_hora'];
 
 		$estado_notif = 'U';
 		if ($this->existe_evaluacion_parcial($parametros)) {

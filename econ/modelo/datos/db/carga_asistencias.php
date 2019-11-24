@@ -174,8 +174,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
     */
    function guardar($parametros) 
    {
-//        kernel::log()->add_debug('guardar iris', $parametros);
-
+        //kernel::log()->add_debug('guardar iris', $parametros);
         if (!$this->tiene_cargadas_asistencias($parametros)) 
         {
             $sql = "execute procedure sp_AsisAluClas({$parametros["clase"]})";

@@ -8,19 +8,20 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
     
     function msj_error_ocultar(){
         $('#msj-autoerror').hide();
-    }
+	}
+	
+
     
     return {
         onload: function() {
-			
-			$('#precalcular_form').submit(function(e) {
+
+			document.getElementById("btn_autocalcular").addEventListener("click", function(e) {
 				e.preventDefault();
-				//autocalcular = true;
-				//console.log('Inicia autocalcular...');
 				var legajos = $("table .legajo");
 				var notas = $("table .nota");
 				var asistencias = $("table .asistencia");
 				var fechas = $("table .fecha");
+				var condiciones = $("table .condicion");
 				var solo_vacio = $('#preset_solo_vacio_autocalcular').is(':checked');
 
 				var cant = legajos.length;
@@ -28,17 +29,14 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
 				{
 					if (notas[i].value == '' || !solo_vacio)
 					{
-						actualizarNota(i, legajos, notas, asistencias, fechas);		
+						actualizarNota(i, legajos, notas, asistencias, fechas, condiciones);		
 					}
 				}
-				
 			});
-			
 		 }
-		 
 	}
 
-	function actualizarNota(posicion, legajos, notas, asistencias, fechas)
+	function actualizarNota(posicion, legajos, notas, asistencias, fechas, condiciones)
 	{
 		var legajo = legajos[posicion].innerHTML;
 		var comision = $('#comision_id').val();
@@ -54,31 +52,39 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
 				var renglon = $('#renglon_'+i);
 				var texto = ''; 
 				
-				switch (data.estado) 
-				{
-					case 'listo': 		setear_datos(data, posicion, notas, asistencias, fechas);
-										renglon.addClass('listo'); 
-										texto = decodeURIComponent(escape("El alumno no tiene más instancias para rendir"));
-										break;
-					case 'abandono': 	setear_datos(data, posicion, notas, asistencias, fechas);
-										renglon.addClass('abandono'); 
-										texto = decodeURIComponent(escape('El alumno abandonó.'));
-										break;
-					case 'va_recup': 	vaciar_datos(posicion, notas, asistencias, fechas);
-										renglon.addClass("va-recup"); 
-										texto = decodeURIComponent(escape('El alumno aún puede rendir el Recuperatorio Global'));
-										break;
-					case 'va_integ': 	vaciar_datos(posicion, notas, asistencias, fechas);
-										renglon.addClass("va-integ"); 
-										texto = decodeURIComponent(escape('El alumno aún puede rendir el Integrador'));
-										break;
+				if (data) {
+					switch (data.estado) 
+					{
+						case 'listo': 		setear_datos(data, posicion, notas, asistencias, fechas, condiciones);
+											renglon.addClass('listo'); 
+											texto = decodeURIComponent(escape("El alumno no tiene mas instancias para rendir"));
+											break;
+						case 'abandono': 	setear_datos(data, posicion, notas, asistencias, fechas, condiciones);
+											renglon.addClass('abandono'); 
+											texto = decodeURIComponent(escape('El alumno abandono.'));
+											break;
+						case 'va_recup': 	vaciar_datos(posicion, notas, asistencias, fechas, condiciones);
+											renglon.addClass("va-recup"); 
+											texto = decodeURIComponent(escape('El alumno aun puede rendir el Recuperatorio Global'));
+											break;
+						case 'va_integ': 	vaciar_datos(posicion, notas, asistencias, fechas, condiciones);
+											renglon.addClass("va-integ"); 
+											texto = decodeURIComponent(escape('El alumno aun puede rendir el Integrador'));
+											break;
+						case 'falta_tp': 	vaciar_datos(posicion, notas, asistencias, fechas, condiciones);
+											renglon.addClass("falta-tp"); 
+											texto = decodeURIComponent(escape('Falta la nota de los TP para poder calcular la nota de cursada'));
+											break;
+						default : 	texto = decodeURIComponent(escape('No se pudo calcular la nota.'));
+					}
+					renglon.prop('title', texto);
 				}
-				renglon.prop('title', texto);
 			}
+			
 		});
 	}
 
-	function setear_datos(data, posicion, notas, asistencias, fechas)
+	function setear_datos(data, posicion, notas, asistencias, fechas, condiciones)
 	{
 		var hoy = new Date();
 		var fecha = hoy.getDate() + "/" + (hoy.getMonth() +1) + "/" + hoy.getFullYear();
@@ -92,9 +98,11 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
 		notas.change();
 		asistencias[posicion].value = data.asistencia;
 		fechas[posicion].value = fecha;
+		condiciones[posicion].value = data.condicion;
+
 	}
 
-	function vaciar_datos(posicion, notas, asistencias, fechas)
+	function vaciar_datos(posicion, notas, asistencias, fechas, condiciones)
 	{
 		notas[posicion].value = '';
 		notas.change();

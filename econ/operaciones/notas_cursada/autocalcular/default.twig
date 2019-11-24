@@ -36,19 +36,17 @@
             <label role="menucheckbox" for='preset_solo_vacio_autocalcular' class="checkbox">
                 <input id='preset_solo_vacio_autocalcular' type="checkbox" checked="checked"/>{{ "solo_valores_vacios"|trans|capitalize }}
             </label>
-
-			{# <button id="btn_autocalcular" type="submit" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button> #}
-
-			<button type="submit" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button>
+			<button id="btn_autocalcular" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button>
             <input type="reset" value="{{ "deshacer"|trans|capitalize }}" class="btn btn-small" id='preset_undo' disabled="disabled" />
 		</fieldset>
 		<div role='alert' class="alert">
 			<p></p> 
 			<p><strong>Detalle:</strong></p>
-			<p><span style="color:green;">Verde: </span>{{"alumno_con_nota"|trans|capitalize }}</p>
-			<p><span style="color:red;">Rojo: </span>{{"alumno_abandono"|trans|capitalize }}</p>
-			<p><span style="color:blue;">Azul: </span>{{"alumno_falta_integ"|trans|capitalize }}</p>
-			<p><span style="color:yellow;">Amarillo: </span>{{"alumno_falta_recup"|trans|capitalize }}</p>
+			<p><span class="listo">Verde: </span> {{"alumno_con_nota"|trans|capitalize }}</p>
+			<p><span class="abandono">Rojo: </span>{{"alumno_abandono"|trans|capitalize }}</p>
+			<p><span class="va-integ">Azul: </span>{{"alumno_falta_integ"|trans|capitalize }}</p>
+			<p><span class="va-recup">Amarillo: </span>{{"alumno_falta_recup"|trans|capitalize }}</p>
+			<p><span class="falta-tp">Naranja: </span>{{"alumno_falta_tp"|trans|capitalize }}</p>
 		</div>
 	</form>
     <p class="autoerror" id="msj-autoerror">

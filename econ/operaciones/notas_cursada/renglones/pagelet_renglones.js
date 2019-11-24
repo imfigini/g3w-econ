@@ -158,12 +158,6 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 
 	function validar_renglon(row, tipo) {
 		var valido = true;
-
-		// if (!autocalcular) {
-		// 	row.removeClass("listo");
-		// }
-		
-
 		if (! chequeo_porcentaje_valido(row)) {
 			$(id).plugin_renglones('set_error', row.find('.asistencia'), info.mensajes.asistencia_invalida);
 			valido = false;
@@ -211,7 +205,6 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 	
 	function validar_fecha(row) {
 		var fecha = create_date(row.find('.fecha').val());
-		//console.log(fecha);
 		if (fecha.getTime() < fecha_inicio.getTime() || fecha_fin.getTime() < fecha.getTime()) {
 			$(id).plugin_renglones('set_error', row.find('.fecha'), info.mensajes.fecha_invalida);	
 		} else {
@@ -283,8 +276,41 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 		kernel.ui.pagelet_modal(url);
 	});
 
+	function conectaSelectores() {
+		var notas = $('table .nota');
+		var condiciones = $('table .condicion');
+		var asistencias = $('table .asistencia');
+
+		for (var i = 0; i < notas.length; i++)
+		{
+			nota = notas[i];
+			asociarEvento(nota);
+
+			condicion = condiciones[i];
+			asociarEvento(condicion);
+
+			asistencia = asistencias[i];
+			asociarEvento(asistencia);
+		}
+	}
+
+	function asociarEvento(elem) {
+		elem.addEventListener('change', function(e) {
+			var tr = elem.parentNode.parentNode;
+			tr.classList.remove('listo');
+			tr.classList.remove('abandono');
+			tr.classList.remove('va-recup');
+			tr.classList.remove('va-integ');
+			tr.classList.remove('falta-tp');
+		})
+		
+	}
+
 	return {
 		onload: function() {
+
+			conectaSelectores();
+
 			guarani.set_condicion_antes_de_navegar(hay_cambios, info.msj_navegacion);
 			
 			$(id).plugin_renglones({
