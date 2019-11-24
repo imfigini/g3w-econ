@@ -27,12 +27,10 @@ class pagelet_autocalcular extends pagelet
 		$this->add_var_js('nota_invalida', kernel::traductor()->trans('nota_invalida'));
 		$this->add_var_js('asistencia_invalida', kernel::traductor()->trans('asistencia_invalida'));
 		
+		//Iris: Se agregó para autocalcular nota
 		$operacion = kernel::ruteador()->get_id_operacion();
 		$this->add_var_js('url_autocalcular', kernel::vinculador()->crear($operacion, 'autocalcular'));
 		
-		// $notas = $this->controlador->get_escala_js();
-		// $this->add_var_js('escala', $notas);
-        
         $encabezado = $this->controlador->get_encabezado();
         $this->add_var_js('fecha_inicio', $encabezado['FECHA_INICIO']);
 		$this->add_var_js('fecha_fin', date('d/m/Y'));
@@ -40,9 +38,6 @@ class pagelet_autocalcular extends pagelet
 			'%1%' => $encabezado['FECHA_INICIO'],
 			'%2%' => date('d/m/Y')
 		)));
-
-		        
-        // $this->data['condiciones'] = $this->controlador->modelo()->info__condiciones();
     }
 }
 ?>

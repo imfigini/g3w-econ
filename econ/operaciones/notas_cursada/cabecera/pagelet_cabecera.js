@@ -42,6 +42,7 @@ kernel.renderer.registrar_pagelet('cabecera', function(info) {
 					barra.slideUp();
 				}
 
+				//Iris: Agregado para Autocalcular
 				var barra_autocalcu = $('.js-barra-autocalcular');
 				if (barra_autocalcu.is(':visible')) {
 					barra_autocalcu.slideUp();
@@ -63,6 +64,7 @@ kernel.renderer.registrar_pagelet('cabecera', function(info) {
 					detalle.slideUp();
 				}
 
+				//Iris: Agregado para Autocalcular
 				var barra_autocalcu = $('.js-barra-autocalcular');
 				if (barra_autocalcu.is(':visible')) {
 					barra_autocalcu.slideUp();
@@ -77,6 +79,7 @@ kernel.renderer.registrar_pagelet('cabecera', function(info) {
 				}
 			});
 
+			//Iris: Agregado para Autocalcular
 			$(id).find('button#js-colapsar-autocalcular').click(function() {
 				var detalle = $('.js-detalle-materia');
 				

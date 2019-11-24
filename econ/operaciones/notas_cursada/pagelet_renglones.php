@@ -2,117 +2,10 @@
 namespace econ\operaciones\notas_cursada;
 
 use kernel\kernel;
-use siu\guarani;
 use siu\modelo\datos\catalogo;
 
 class pagelet_renglones extends \siu\operaciones\notas_cursada\pagelet_renglones
 {
-	
-    function get_nombre()
-    {
-        return 'renglones';
-    }
-
-	/**
-	 * @return carga_notas_cursada
-	 */
-	protected function modelo()
-	{
-		return $this->controlador->modelo();
-	}
-
-	protected function get_escala()
-	{
-		$encabezado = $this->get_encabezado();
-		return $encabezado['ESCALA_NOTAS'];
-	}
-	
-	function mostrar_promocion_combo($estado_acta, $alumno_promocionable)
-	{
-		return $estado_acta == 'A' && $alumno_promocionable;
-	}
-	
-	protected function get_renglones()
-	{
-		// se pide al controlador para hacer validación con los datos enviados al guardar
-		$renglones = $this->controlador->get_folio();
-		
-		foreach ($renglones as $id => $renglon) {
-			$renglones[$id]['URL_FICHA'] = kernel::vinculador()->crear('notas_cursada', 'ficha_alumno', array(
-				'id' => $renglones[$id]['ID_IMAGEN'],
-				'legajo'	=> $renglones[$id]['LEGAJO'],
-				'carrera'	=> $renglones[$id]['CARRERA'],
-				'comision'	=> $renglones[$id]['COMISION']
-			));
-		}
-
-		if ($this->errores !== false && $this->errores->hay_renglones()) {
-			$renglones_error = $this->errores->get_renglones();
-			foreach ($renglones_error as $id => $renglon) {
-				$renglones[$id]['ERROR']		= $renglon['msg'];
-				$renglones[$id]['NOTA']			= $renglon['renglon']['NOTA'];
-				$renglones[$id]['ASISTENCIA']	= $renglon['renglon']['ASISTENCIA'];
-				$renglones[$id]['CONDICION']	= $renglon['renglon']['CONDICION'];
-				$renglones[$id]['FECHA']		= $renglon['renglon']['FECHA'];
-			}
-		}
-		
-		return $renglones;
-	}
-	
-	protected function get_condiciones()
-	{
-		return $this->modelo()->info__condiciones();
-	}
-	
-	function hay_renglones()
-	{
-		$encabezado = $this->get_encabezado();
-		return $encabezado['FOLIOS'] > 0;
-	}
-	
-	function get_pagina_actual()
-	{
-		return $this->controlador->folio;
-	}
-	
-	function get_paginas()
-	{
-		$encabezado = $this->get_encabezado();
-		$paginas = array();
-		for ($pagina = 1; $pagina <= $encabezado['FOLIOS']; $pagina++) {
-			$paginas[$pagina] = kernel::vinculador()->crear('notas_cursada', 'edicion', array($this->controlador->acta, $pagina));
-		}
-		
-		return $paginas;
-	}
-
-	protected function get_url_guardar() 
-	{
-		return kernel::vinculador()->crear('notas_cursada', 'guardar', array($this->controlador->acta, $this->controlador->folio));
-	}
-	
-	function get_comision()
-	{
-		$cabecera = $this->controlador->get_encabezado();
-		return $cabecera[catalogo::id];
-	}
-	
-	function get_url_comision()
-	{
-		$cabecera = $this->controlador->get_encabezado();
-		return $cabecera['URL_COMISION'];
-	}
-
-	protected function get_escala_notas()
-	{
-		$encabezado = $this->get_encabezado();
-		$escala_id = $encabezado['ESCALA_NOTAS'];
-		if($escala_id==4 || $escala_id==6)
-			$escala_id = 1;
-		return $this->controlador->modelo()->info__escala_notas($escala_id);
-	}
-	
     function prepare()
     {
 		parent::prepare();
@@ -133,6 +26,8 @@ class pagelet_renglones extends \siu\operaciones\notas_cursada\pagelet_renglones
 		$this->data['encabezado']  = $encabezado;
 		$this->data['condiciones'] = $this->get_condiciones();
 		$this->add_var_js('url_autocomplete', kernel::vinculador()->crear('notas_cursada', 'auto_alumno', $this->get_comision()));
+		
+		//Iris: se agreg? para Autocalcular nota
 		$this->add_var_js('url_autocalcular', kernel::vinculador()->crear('notas_cursada', 'autocalcular', $this->get_comision()));
 
 		$this->add_mensaje_js('no_se_encontraron_alumnos', kernel::traductor()->trans('no_se_encontraron_alumnos'));

@@ -18,6 +18,7 @@ class vista_folio extends \siu\operaciones\notas_cursada\vista_folio
 		$pl = kernel::localizador()->instanciar($clase, 'herramientas');
 		$this->add_pagelet($pl);
 		
+		//Iris: Se agregó para la funcionalidad de Autocalcular
 		$clase = 'operaciones\notas_cursada\pagelet_autocalcular';
 		$pl = kernel::localizador()->instanciar($clase, 'autocalcular');
 		$this->add_pagelet($pl);

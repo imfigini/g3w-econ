@@ -838,21 +838,6 @@ class _info_catalogo
 );
 	}
 
-	static function carga_notas_cursada__get_posible_nota_alumno()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-    1 => 'comision',
-    2 => 'legajo',
-  ),
-  'cache' => 'no',
-  'cache_expiracion' => '300',
-  'filas' => 'n',
-);
-	}
-
 	static function carga_notas_cursada__guardar_renglon()
 	{
 		return array (

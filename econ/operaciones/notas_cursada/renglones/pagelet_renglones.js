@@ -294,6 +294,7 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 		}
 	}
 
+	//Iris: Para la funcionalidad de Autompletar
 	function asociarEvento(elem) {
 		elem.addEventListener('change', function(e) {
 			var tr = elem.parentNode.parentNode;
@@ -341,6 +342,7 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 			
 			fecha_inicio = create_date(info.fecha_inicio);
 			fecha_fin = create_date(info.fecha_fin);
+			//Iris: Para la funcionalidad de Autompletar
 			setup_autocomplete();
 			$('.btn-primary').focus();
 

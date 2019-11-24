@@ -10,8 +10,6 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
         $('#msj-autoerror').hide();
 	}
 	
-
-    
     return {
         onload: function() {
 
