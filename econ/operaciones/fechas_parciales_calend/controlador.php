@@ -319,7 +319,14 @@ class controlador extends controlador_g3w2
 			{
 				$periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
 				$parametros = array('anio_academico'=>$anio_academico, 'periodo'=>$periodo);
-				return catalogo::consultar('evaluaciones_parciales', 'get_periodos_evaluacion', $parametros);
+				$resultado = catalogo::consultar('evaluaciones_parciales', 'get_periodos_evaluacion', $parametros);
+				foreach ($resultado as $key=>$row) {
+					//Descarto el período de examenes con suspención de clases
+					if ($row['PERIODO'] == 4) {
+						unset( $resultado[$key]);
+					}
+				}
+				return $resultado;
 			}
 		}
 		return null;

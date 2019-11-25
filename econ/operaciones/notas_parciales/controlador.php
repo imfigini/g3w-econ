@@ -149,5 +149,34 @@ class controlador extends \siu\operaciones\notas_parciales\controlador
 		}
 		return $resultado;
 	}
+
+	protected function guardar($renglones_post)
+	{
+		kernel::log()->add_debug('renglones_post', $renglones_post);
+		$renglones_sesion = kernel::sesion()->get($this->get_clave_sesion_parcial());
+		$renglones_modificados = array();
+		foreach($renglones_sesion as $id => $fila_s) {
+			$renglon = $fila_s['RENGLON'];
+			kernel::log()->add_debug('renglon', $renglon);
+			kernel::log()->add_debug('renglones_post', $renglones_post);
+			if(isset($renglones_post[$renglon])) {
+				if (!isset($renglones_post[$renglon]['OBSERVACIONES'])) $renglones_post[$renglon]['OBSERVACIONES'] = "";
+				if (!isset($renglones_post[$renglon]['CORREGIDO_POR'])) $renglones_post[$renglon]['CORREGIDO_POR'] = "";
+				if( ($renglones_post[$renglon]['NOTA'] != $fila_s['NOTA'])
+					|| ($renglones_post[$renglon]['OBSERVACIONES'] != $fila_s['OBSERVACIONES']) 
+					|| ($renglones_post[$renglon]['CORREGIDO_POR'] != $fila_s['CORREGIDO_POR']) 
+					) {
+					$renglones_modificados[$id] = $fila_s;
+					$renglones_modificados[$id]['NOTA'] = $this->vacio_a_null($renglones_post[$renglon]['NOTA']);
+					$renglones_modificados[$id]['CORREGIDO_POR'] = $this->vacio_a_null($renglones_post[$renglon]['CORREGIDO_POR']);
+					$renglones_modificados[$id]['OBSERVACIONES'] = $this->vacio_a_null($renglones_post[$renglon]['OBSERVACIONES']);
+				}
+			}
+		}
+		
+		if ($renglones_modificados){
+			$this->modelo()->evt__procesar_evaluaciones($this->evaluacion_id, $renglones_modificados);
+		}
+	}
 }
 ?>

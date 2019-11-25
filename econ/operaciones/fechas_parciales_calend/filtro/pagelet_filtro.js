@@ -89,6 +89,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 		var domingos = get_domingos(inicio_periodo, fin_periodo);
 		
 		var periodos_validos = get_periodos_validos();
+		console.log(periodos_validos);
 		var primer_dia_visible = periodos_validos[0].start;
 
         $('#calendar').fullCalendar({
@@ -213,7 +214,12 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         {
                  var evento =  new Object();
 				 evento['start'] = periodos[key]['FECHA_INICIO'];
-				 evento['end'] = periodos[key]['FECHA_FIN'];
+				 //evento['end'] = periodos[key]['FECHA_FIN'];
+				 //El fin del periódo lo toma con la hora cero, con lo cual el último día que debiera incluirlo no lo hace.. 
+				 var fecha = new Date(periodos[key]['FECHA_FIN'].replace(/-/g, '\/'));
+				 fecha.setDate(fecha.getDate() + 1);
+				 evento['end'] = fecha.toISOString().substring(0, 10);
+				 
                  evento['rendering'] = 'background';
                  evento['color'] = 'PaleGreen';
                  eventos[i] = evento;

@@ -55,7 +55,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
 
 		$porc_asistencia = catalogo::consultar('carga_evaluaciones_parciales', 'get_porc_asistencia', Array('comision'=>$comision, 'legajo'=>$legajo));
-		$porc_asistencia = round($porc_asistencia, 2, PHP_ROUND_HALF_DOWN);
+		//$porc_asistencia = round($porc_asistencia, 2, PHP_ROUND_HALF_DOWN);
 
 		if ($porc_asistencia < 60) {
 			return Array('nota'=>null, 'resultado'=>'U', 'condicion'=>$cond['U'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');

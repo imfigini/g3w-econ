@@ -255,7 +255,7 @@ class evaluaciones_parciales
      * parametros: strFecha
      * cache: no
      * filas: n
-     * El formato de strFecha debe ser: d/m/Y ó Y-m-d
+     * El formato de strFecha debe ser: d/m/Y รณ Y-m-d
      */
     private function strToMDY($strFecha)
     {
@@ -312,15 +312,15 @@ class evaluaciones_parciales
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
                                 CASE 
-                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1ºPromo'
-                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2ºPromo'
+                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1er Promo'
+                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2do Promo'
                                     WHEN sga_eval_parc.evaluacion = 7 THEN 'R.Unico'
                                     WHEN sga_eval_parc.evaluacion = 14 THEN 'Integ'
                                     WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
-									WHEN sga_eval_parc.evaluacion = 22 THEN '1ºParcial'
-									WHEN sga_eval_parc.evaluacion = 23 THEN '2ºParcial'
+									WHEN sga_eval_parc.evaluacion = 22 THEN '1er Parcial'
+									WHEN sga_eval_parc.evaluacion = 23 THEN '2do Parcial'
 									WHEN sga_eval_parc.evaluacion = 24 THEN 'Recup'
 									ELSE sga_eval_parc.descripcion
                                 END as evaluacion, 
@@ -362,15 +362,15 @@ class evaluaciones_parciales
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
                                 CASE 
-                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1ºPromo'
-                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2ºPromo'
+                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1er Promo'
+                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2do Promo'
                                     WHEN sga_eval_parc.evaluacion = 7 THEN 'R.Unico'
                                     WHEN sga_eval_parc.evaluacion = 14 THEN 'Integ'
                                     WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
-									WHEN sga_eval_parc.evaluacion = 22 THEN '1ºParcial'
-									WHEN sga_eval_parc.evaluacion = 23 THEN '2ºParcial'
+									WHEN sga_eval_parc.evaluacion = 22 THEN '1er Parcial'
+									WHEN sga_eval_parc.evaluacion = 23 THEN '2do Parcial'
 									WHEN sga_eval_parc.evaluacion = 24 THEN 'Recup'
 									ELSE sga_eval_parc.descripcion
                                 END as evaluacion, 
@@ -437,7 +437,7 @@ class evaluaciones_parciales
 
 		$cuatrim = self::get_cuatrimestre(Array('fecha'=>$fecha_inicio));
 
-		//Las clases de 1º año, 1º cuatrimestre no tienen suspensión de clases, con lo cual no deben invalidarse las clases
+		//Las clases de 1er anio, 1er cuatrimestre no tienen suspension de clases, con lo cual no deben invalidarse las clases
 		if ($cuatrim['CUATRIM'] == '1' || $cuatrim['CUATRIM'] == "'1'")
 		{
 			$sql .= " AND comision NOT IN

@@ -1760,7 +1760,7 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
-  'El formato de strFecha debe ser' => 'd/m/Y ó Y-m-d',
+  'El formato de strFecha debe ser' => 'd/m/Y รณ Y-m-d',
 );
 	}
 

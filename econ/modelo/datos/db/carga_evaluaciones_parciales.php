@@ -245,8 +245,18 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 		$clases = $this->get_cant_clases_al_dia_de_hoy($parametros);
 		$cant_clases = $clases['CANT_CLASES'];
 
+		/*
+		//Si hay instancias de evaluacion posteriores a la fecha de finalización de clases, se deben contabilizar
+		$comision = str_replace("'","",$parametros['comision']);
+		$eval_posterior = catalogo::consultar('carga_asistencias', 'get_evaluaciones_posterior_fin_clases', Array('comision'=>$comision));
+		if (isset($eval_posterior)) {
+			$cant_clases += count($eval_posterior);
+		}
+		*/
+
 		$cant_asistio = $cant_clases - $inasis_alu['INASIS'] + $inasis_alu['JUSTIF'];
-		return ($cant_asistio / $cant_clases) * 100;
+		$porc_asistencia = ($cant_asistio / $cant_clases) * 100;
+		return round($porc_asistencia, 2, PHP_ROUND_HALF_DOWN);
 	}
 
 	/**

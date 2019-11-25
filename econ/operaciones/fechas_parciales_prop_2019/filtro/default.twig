@@ -57,7 +57,7 @@
                     </div>
 
                     {#     Parte general para toda la materia --- Aplica a todas las comisiones por igual               #}
-                    <div>
+                    <div hidden>
                         <form name="materia_seleccionada" id="materia_seleccionada_{{materia.MATERIA}}" method="post" action="{{this.data.form_url_materia}}">
                             <input type="hidden" name="materia" value="{{materia.MATERIA}}">
                             <input type="hidden" name="materia_calidad" value="{{materia.CALIDAD}}">

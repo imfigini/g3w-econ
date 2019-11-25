@@ -240,6 +240,8 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
             $r['PERIODO_LECTIVO'] = $datos_comision[0]['PERIODO_LECTIVO'];
             $r['TURNO'] = $datos_comision[0]['TURNO'];
 
+
+			
             $i=0;
             $t=0;
             $hoy = time("d/m/y");
@@ -253,8 +255,23 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
                 }
                 $t++;
             }
+			
+			// //Si hay instancias de evaluacion posteriores a la fecha de finalización de clases, se deben contabilizar
+			// $eval_posterior = catalogo::consultar('carga_asistencias', 'get_evaluaciones_posterior_fin_clases', array('comision'=>$comision));
+
+			// foreach ($eval_posterior as $eval) 
+			// {
+			// 	$fecha = date("d/m/y", strtotime($eval['FECHA']));
+			// 	$r['FECHAS'][$eval['FECHA']] = $eval['DIA_NOMBRE'].' '.$fecha;
+				
+			// 	if (strtotime($eval['FECHA']) <= $hoy) {
+			// 		$i++;
+			// 	}
+			// 	$t++;
+			// }
+
             $r['CANT_CLASES'] = $i; // count($r['FECHAS']);
-            $r['TOTAL_CLASES'] = $t;
+			$r['TOTAL_CLASES'] = $t;
 
             $alumnos = catalogo::consultar('carga_asistencias', 'get_alumnos_inscriptos_comision', array('comision'=>$comision));
 
