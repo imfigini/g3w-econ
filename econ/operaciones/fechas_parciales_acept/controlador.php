@@ -30,14 +30,15 @@ class controlador extends controlador_g3w2
 		if (empty($anio_academico_hash) || empty($periodo_hash)) {
             return null;
         }
-        
-        $materias = $this->modelo()->get_materias_cincuentenario($carrera, $mix);
-        //MATERIA, MATERIA_NOMBRE
-        $anio_academico =  $this->decodificar_anio_academico($anio_academico_hash);
+		
+		$anio_academico =  $this->decodificar_anio_academico($anio_academico_hash);
         $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
         
 		$parametros = array('anio_academico' => $anio_academico,
 							'periodo' => $periodo);
+
+        $materias = $this->modelo()->get_materias_cincuentenario($carrera, $mix, $anio_academico, $periodo);
+        //MATERIA, MATERIA_NOMBRE
 
 		$datos = array();
         $cant = count($materias);

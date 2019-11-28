@@ -129,8 +129,7 @@ class controlador extends controlador_g3w2
             $this->render_raw_json($datos);
 	}
 	
-	/** Graba las ponderaciones asignadas a la materia */
-    function get_materias_cincuentenario()
+    function get_materias_cincuentenario($anio_academico_hash, $periodo_hash)
     {
         $parametros['legajo'] = null;
         $parametros['carrera'] = null;
@@ -140,7 +139,10 @@ class controlador extends controlador_g3w2
         if ($perfil == 'COORD')
         {
             $parametros['legajo'] = kernel::persona()->get_legajo_docente();
-        }
+		}
+		$parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
+		$parametros['periodo_lectivo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
+		
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         return $materias;
     }

@@ -23,7 +23,7 @@ class controlador extends controlador_g3w2
         }
     }
     
-    function get_materias_cincuentenario($carrera, $mix) 
+    function get_materias_cincuentenario($carrera, $mix, $anio_academico, $periodo_lectivo) 
     {
         $parametros['legajo'] = null;
         $parametros['carrera'] = null;
@@ -36,6 +36,14 @@ class controlador extends controlador_g3w2
         if (isset($mix))
         {
             $parametros['mix'] = $mix;
+		}
+		if (isset($anio_academico))
+        {
+            $parametros['anio_academico'] = $anio_academico;
+		}
+		if (isset($periodo_lectivo))
+        {
+            $parametros['periodo_lectivo'] = $periodo_lectivo;
         }
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         return $materias;
@@ -43,7 +51,10 @@ class controlador extends controlador_g3w2
     
     function get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash, $carrera, $mix)
     {
-        $materias = $this->get_materias_cincuentenario($carrera, $mix); 
+		$anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+		$periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+
+        $materias = $this->get_materias_cincuentenario($carrera, $mix, anio_academico, $periodo); 
         //MATERIA, MATERIA_NOMBRE
 
         $datos = array();

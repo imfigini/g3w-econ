@@ -6,7 +6,7 @@ use siu\modelo\datos\catalogo;
 
 class fechas_parciales
 {
-	function get_materias_cincuentenario($carrera, $mix)
+	function get_materias_cincuentenario($carrera, $mix, $anio_academico, $periodo_lectivo)
 	{
 		$parametros = array();
 		$parametros['legajo'] = null;
@@ -22,6 +22,12 @@ class fechas_parciales
 		}
 		if ($mix) {
 			$parametros['mix'] = $mix;
+		}
+		if ($anio_academico) {
+			$parametros['anio_academico'] = $anio_academico;
+		}
+		if ($periodo_lectivo) {
+			$parametros['periodo_lectivo'] = $periodo_lectivo;
 		}
 		return catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
 	}

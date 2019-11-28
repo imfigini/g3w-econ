@@ -33,10 +33,11 @@ class controlador extends controlador_g3w2
             return null;
         }
         
-        $materias = $this->modelo()->get_materias_cincuentenario(null, null);
-        //MATERIA, MATERIA_NOMBRE
         $anio_academico =  $this->decodificar_anio_academico($anio_academico_hash);
-        $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+		$periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+		
+		$materias = $this->modelo()->get_materias_cincuentenario(null, null, $anio_academico, $periodo);
+        //MATERIA, MATERIA_NOMBRE
         
 		$parametros = array('anio_academico' => $anio_academico,
 							'periodo' => $periodo);

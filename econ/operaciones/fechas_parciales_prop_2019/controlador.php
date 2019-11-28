@@ -28,17 +28,25 @@ class controlador extends controlador_g3w2
         }
     }
     
-    function get_materias_cincuentenario()
+    function get_materias_cincuentenario($anio_academico, $periodo_lectivo)
     {
         $parametros['legajo'] = null;
         $parametros['carrera'] = null;
-        $parametros['mix'] = null;
+		$parametros['mix'] = null;
+		$parametros['anio_academico'] = null;
+		$parametros['periodo_lectivo'] = null;
 
         $perfil = kernel::persona()->perfil()->get_id();
         if ($perfil == 'COORD')
         {
             $parametros['legajo'] = kernel::persona()->get_legajo_docente();
-        }
+		}
+		if ($anio_academico) {
+			$parametros['anio_academico'] = $anio_academico;
+		}
+		if ($periodo_lectivo) {
+			$parametros['periodo_lectivo'] = $periodo_lectivo;
+		}
         $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         return $materias;
     }
@@ -50,11 +58,12 @@ class controlador extends controlador_g3w2
             return null;
         }
         
-        $materias = $this->get_materias_cincuentenario(); 
         //MATERIA, MATERIA_NOMBRE
         $anio_academico =  $this->decodificar_anio_academico($anio_academico_hash);
-        $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
-        
+		$periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+
+		$materias = $this->get_materias_cincuentenario($anio_academico, $periodo); 
+
         $datos = array();
         $cant = count($materias);
         for ($i=0; $i<$cant; $i++)

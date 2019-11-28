@@ -27,7 +27,9 @@ class controlador extends controlador_g3w2
     {
         $parametros['legajo'] = null;
         $parametros['carrera'] = null;
-        $parametros['mix'] = null;
+		$parametros['mix'] = null;
+		$parametros['anio_academico'] = null;
+        $parametros['periodo_lectivo'] = null;
         return catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
 	}
 	

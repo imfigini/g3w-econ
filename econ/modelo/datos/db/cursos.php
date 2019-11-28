@@ -9,8 +9,8 @@ use siu\errores\error_guarani;
 class cursos 
 {
     /**
-     * parametros: legajo, carrera, mix
-     * param_null: legajo, carrera, mix
+     * parametros: legajo, carrera, mix, anio_academico, periodo_lectivo
+     * param_null: legajo, carrera, mix, anio_academico, periodo_lectivo
      * cache: no
      * filas: n
      */
@@ -21,10 +21,20 @@ class cursos
                     FROM sga_materias M, ufce_mixes X 
                     WHERE X.materia = M.materia ";
 
-        if ($parametros['legajo'] != "''")
+        if (isset($parametros['legajo']) && $parametros['legajo'] != "''")
         {
-            $legajo = $parametros['legajo'];
-            $sql .= " AND M.materia IN (SELECT materia FROM ufce_coordinadores_materias WHERE coordinador = $legajo) ";
+			$legajo = $parametros['legajo'];
+			if (isset($parametros['anio_academico']) && $parametros['anio_academico'] != "''"
+					&& isset($parametros['periodo_lectivo']) && $parametros['periodo_lectivo'] != "''") {
+				$anio = $parametros['anio_academico'];
+				$periodo = $parametros['periodo_lectivo'];			
+				$sql .= " AND M.materia IN (SELECT materia FROM ufce_coordinadores_materias 
+												WHERE coordinador = $legajo
+												AND anio_academico = $anio
+												AND periodo_lectivo = $periodo) ";
+			} else {
+				$sql .= " AND M.materia IN (SELECT materia FROM ufce_coordinadores_materias WHERE coordinador = $legajo) ";
+			}
         }
         if (isset($parametros['carrera']) and $parametros['carrera'] != "''")
         {

@@ -77,7 +77,7 @@ class pagelet_filtro extends pagelet {
 			$this->data['mensaje_error'] = $this->get_mensaje_error();		
 			$this->data['es_editable'] = $this->controlador->hoy_dentro_de_periodo($anio_academico_hash, $periodo_hash);	
 		
-			$materias = $this->controlador->get_materias_cincuentenario();
+			$materias = $this->controlador->get_materias_cincuentenario($anio_academico_hash, $periodo_hash);
 		
 			$cant = count($materias);
 			for ($i=0; $i<$cant; $i++)
