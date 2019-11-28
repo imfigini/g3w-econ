@@ -69,52 +69,6 @@ class cursos
             case 2: return ('FyP'); 
         }
     }
-                
-    // /**
-    //  * parametros: anio_academico, periodo, materia
-    //  * cache: no
-    //  * filas: 1
-    //  */
-    // function get_observaciones_materia($parametros)
-    // {
-    //     $materia = $parametros['materia'];
-    //     $anio_academico = $parametros['anio_academico'];
-    //     $periodo = $parametros['periodo'];
-    //     $sql = "SELECT observaciones
-    //                 FROM ufce_cron_eval_parc_obs 
-    //                 WHERE materia = $materia 
-    //                     AND anio_academico = $anio_academico 
-	// 					AND periodo_lectivo = $periodo ";
-    //     $result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-    //     if (count($result) > 0)
-    //     {
-    //         return $result['OBSERVACIONES'];
-    //     }
-    //     return null;
-	// }
-	
-	// 	/**
-    // * parametros: materia, anio_academico, periodo
-    // * cache: no
-    // * filas: 1
-    // */
-    // function get_evaluaciones_observaciones($parametros)
-    // {
-    //     $materia = $parametros['materia'];
-    //     $anio_academico = $parametros['anio_academico'];
-    //     $periodo = $parametros['periodo'];
-    //     $sql = "SELECT observaciones
-    //             FROM ufce_cron_eval_parc_obs 
-    //                 WHERE materia = $materia
-    //                 AND anio_academico = $anio_academico
-	// 				AND periodo_lectivo = $periodo";
-    //     $obs = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-    //     if (count($obs) > 0) 
-    //     {
-    //         return ($obs['OBSERVACIONES']);
-    //     }
-    //     return null;
-    // }
 
     /**
      * parametros: anio_academico, periodo, materia
@@ -749,7 +703,7 @@ class cursos
         else
         {
 			$result['success'] = -1;
-			$result['mensaje'] .= " Posiblemente esté sin definir la fecha. ";
+			$result['mensaje'] .= " Falta definir la fecha. ";
 		}
 		return $result;
     }
