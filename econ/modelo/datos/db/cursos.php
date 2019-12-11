@@ -70,28 +70,51 @@ class cursos
         }
     }
                 
-    /**
-     * parametros: anio_academico, periodo, materia
-     * cache: no
-     * filas: 1
-     */
-    function get_observaciones_materia($parametros)
-    {
-        $materia = $parametros['materia'];
-        $anio_academico = $parametros['anio_academico'];
-        $periodo = $parametros['periodo'];
-        $sql = "SELECT observaciones
-                    FROM ufce_cron_eval_parc_obs 
-                    WHERE materia = $materia 
-                        AND anio_academico = $anio_academico 
-						AND periodo_lectivo = $periodo ";
-        $result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-        if (count($result) > 0)
-        {
-            return $result['OBSERVACIONES'];
-        }
-        return null;
-    }
+    // /**
+    //  * parametros: anio_academico, periodo, materia
+    //  * cache: no
+    //  * filas: 1
+    //  */
+    // function get_observaciones_materia($parametros)
+    // {
+    //     $materia = $parametros['materia'];
+    //     $anio_academico = $parametros['anio_academico'];
+    //     $periodo = $parametros['periodo'];
+    //     $sql = "SELECT observaciones
+    //                 FROM ufce_cron_eval_parc_obs 
+    //                 WHERE materia = $materia 
+    //                     AND anio_academico = $anio_academico 
+	// 					AND periodo_lectivo = $periodo ";
+    //     $result = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+    //     if (count($result) > 0)
+    //     {
+    //         return $result['OBSERVACIONES'];
+    //     }
+    //     return null;
+	// }
+	
+	// 	/**
+    // * parametros: materia, anio_academico, periodo
+    // * cache: no
+    // * filas: 1
+    // */
+    // function get_evaluaciones_observaciones($parametros)
+    // {
+    //     $materia = $parametros['materia'];
+    //     $anio_academico = $parametros['anio_academico'];
+    //     $periodo = $parametros['periodo'];
+    //     $sql = "SELECT observaciones
+    //             FROM ufce_cron_eval_parc_obs 
+    //                 WHERE materia = $materia
+    //                 AND anio_academico = $anio_academico
+	// 				AND periodo_lectivo = $periodo";
+    //     $obs = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+    //     if (count($obs) > 0) 
+    //     {
+    //         return ($obs['OBSERVACIONES']);
+    //     }
+    //     return null;
+    // }
 
     /**
      * parametros: anio_academico, periodo, materia
@@ -452,16 +475,16 @@ class cursos
 			if ($eval['ESTADO'] != 'P') {//Si el estado es distinto de 'P' es que la instancia de evaluación ya ha sido creada
 				switch ($evaluacion)
 				{
-					case "'1'": $inst = '1º Parcial'; break;
-					case "'2'": $inst = '2º Parcial'; break;
-					case "'7'": $inst = 'Recuperatorio Global'; break;
+					case "'22'": $inst = '1º Parcial'; break;
+					case "'23'": $inst = '2º Parcial'; break;
+					case "'24'": $inst = 'Recuperatorio Global'; break;
 					case "'14'": $inst = 'Integrador'; break;
 				}
 				throw new error_guarani("No se puede modificar la fecha propuesta dado que ya ha sido creada la instancia de evaluación $inst para la comisión $comision. ");
 			}
 			else
 			{
-	            if ($eval[0]['FECHA_HORA'] != $fecha_hora)
+	            if ($eval['FECHA_HORA'] != $fecha_hora)
     	        {
         	        $sql = "UPDATE ufce_cron_eval_parc
             	        	    SET fecha_hora = $fecha_hora
@@ -636,29 +659,6 @@ class cursos
 		return kernel::db()->consultar($sql, db::FETCH_ASSOC);
 	}
 	    
-	/**
-    * parametros: materia, anio_academico, periodo
-    * cache: no
-    * filas: 1
-    */
-    function get_evaluaciones_observaciones($parametros)
-    {
-        $materia = $parametros['materia'];
-        $anio_academico = $parametros['anio_academico'];
-        $periodo = $parametros['periodo'];
-        $sql = "SELECT observaciones
-                FROM ufce_cron_eval_parc_obs 
-                    WHERE materia = $materia
-                    AND anio_academico = $anio_academico
-					AND periodo_lectivo = $periodo";
-        $obs = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-        if (count($obs) > 0) 
-        {
-            return ($obs['OBSERVACIONES']);
-        }
-        return null;
-    }
- 
     /**
     * parametros: materia, anio_academico, periodo_lectivo, observaciones
     * cache: no

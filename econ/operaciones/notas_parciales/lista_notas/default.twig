@@ -1,0 +1,43 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+{% if this.data.renglones %}
+	<a id="boton_pdf" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_pdf}}">
+		<span class="acchide">{{'descargar_pdf'|trans|capitalize}}</span>
+		<span class="g3w-icono-pdf"></span></a>
+	<a id="boton_excel" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_excel}}">
+		<span class="acchide">{{'descargar_xls'|trans|capitalize}}</span>
+		<span class="g3w-icono-xls"></span></a>
+
+	<table class="tabla-renglones table table-striped table-bordered table-condensed" summary="Notas">
+	    <thead>
+		<th scope="col">{{ 'nombre_alumno'|trans|capitalize }}</th>
+		<th scope="col">{{ 'nota'|trans|capitalize }}</th>
+		<th scole="col">{{ 'resultado'|trans|capitalize }}</th>
+		<th scope="col">{{ 'corregido_por'|trans|capitalize }}</th>
+		<th scope="col">{{ 'observaciones'|trans|capitalize }}</th>
+	    </thead>
+	    <tbody>
+		{% for alumno in this.data.renglones %}
+		    <tr>
+				<td>
+					<div class="ficha-alumno clearfix">
+						<img src='{{alumno.URL_IMAGEN}}' width='35' height="35" alt='{{ alumno.NOMBRE }}' class="pull-left" />
+						<div class="pull-left">
+							<span class="nombre">{{ alumno.NOMBRE }}</span>
+							<span class="legajo">{{'legajo'|trans|capitalize}}: {{ alumno.LEGAJO }}</span>
+						</div>
+					</div>
+				</td>
+				<td>{{ alumno.NOTA }}</td>
+				<td>{{ alumno.RESULTADO }}</td>
+				<td>{{ alumno.CORREGIDO_POR }}</td>
+				<td>{{ alumno.OBSERVACIONES }}</td>
+		    </tr>
+		{% endfor %}
+	    </tbody>
+	</table>
+{% else %}
+    <div class="alert">{{"no_hay_renglones"|trans|capitalize}}</div>
+{% endif %}
+
+{% endblock %}

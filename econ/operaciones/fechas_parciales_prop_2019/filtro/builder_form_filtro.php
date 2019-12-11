@@ -79,7 +79,16 @@ class builder_form_filtro extends builder_formulario
 	function get_anios_academicos()
 	{
 		$datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
-		return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
+		//Esta operación sólo sirve para 2019, sólo permito seleccionar dicho año			
+		$datos_2019 = Array();
+		foreach($datos as $dato)
+		{
+			if ($dato['ANIO_ACADEMICO'] == 2019) {
+				$datos_2019[] = $dato;
+				break;
+			}
+		}
+		return guarani_form_elemento::armar_combo_opciones($datos_2019, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	
 	function get_periodos_lectivos()

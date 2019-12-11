@@ -64,7 +64,8 @@ class pagelet_filtro extends pagelet {
 		$this->data['anio_academico_hash'] = $anio_academico_hash;
 		$this->data['materias'] = $this->controlador->get_materias_promo_directa($anio_academico_hash, $periodo_hash);
 		//kernel::log()->add_debug('get_materias_promo_directa', $this->data['materias']);
-		$link_form = kernel::vinculador()->crear('asignacion_mat_prom_dir', 'grabar');
-        $this->data['form_url'] = $link_form;        
+
+		$this->data['form_url_grabar'] = kernel::vinculador()->crear('asignacion_mat_prom_dir', 'grabar');
+		$this->data['form_url_replicar_promo_directa'] = kernel::vinculador()->crear('asignacion_mat_prom_dir', 'replicar_promo_directa');
 	}
 }

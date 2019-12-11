@@ -106,8 +106,9 @@ class controlador extends controlador_g3w2
                 
                 $materias[$i]['FECHAS_OCUPADAS'] = $this->get_fechas_ya_asignadas($parametros);
                 //FECHA, EVALUACION
-                
-                $materias[$i]['OBSERVACIONES'] = catalogo::consultar('cursos', 'get_evaluaciones_observaciones', $parametros);
+				
+				$observaciones = catalogo::consultar('fechas_parciales', 'get_evaluaciones_observaciones', $parametros);
+                $materias[$i]['OBSERVACIONES'] = $observaciones['OBSERVACIONES'];
                 //OBSERVACIONES
                 
                 $materias[$i]['COMISIONES'] = $comisiones;
@@ -207,7 +208,7 @@ class controlador extends controlador_g3w2
         foreach ($comisiones AS $comision)
         {
             $parametros['comision'] = $comision['COMISION'];
-            $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas', $parametros);
+            $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas_comision', $parametros);
             $arreglo = Array();
             foreach ($dias_no_validos AS $d)
             {

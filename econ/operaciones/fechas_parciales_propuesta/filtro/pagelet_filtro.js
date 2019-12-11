@@ -104,13 +104,13 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 		var dias_ocupados = materia.FECHAS_OCUPADAS;
 		var dias_no_validos = materia.FECHAS_NO_VALIDAS;
 		
-		var dp_promo1 = 'datepicker_materia_promo1_'+m;
-        var posibles_fechas_promo1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_ocupados, dias_no_validos);
-        set_values(dp_promo1, inicio_periodo[0], fin_periodo[0], posibles_fechas_promo1);
+		var dp_parcial1 = 'datepicker_materia_parcial1_'+m;
+        var posibles_fechas_parcial1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_ocupados, dias_no_validos);
+        set_values(dp_parcial1, inicio_periodo[0], fin_periodo[0], posibles_fechas_parcial1);
 
-        var dp_promo2 = 'datepicker_materia_promo2_'+m;
-        var posibles_fechas_promo2 = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_ocupados, dias_no_validos);
-        set_values(dp_promo2, inicio_periodo[1], fin_periodo[1], posibles_fechas_promo2);
+        var dp_parcial2 = 'datepicker_materia_parcial2_'+m;
+        var posibles_fechas_parcial2 = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[1], dias_ocupados, dias_no_validos);
+        set_values(dp_parcial2, inicio_periodo[1], fin_periodo[1], posibles_fechas_parcial2);
 
         var dp_integ = 'datepicker_materia_integ_'+m;
         var posibles_fechas_integ = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_ocupados, dias_no_validos);
@@ -125,8 +125,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         {
 			var comision = comisiones[j];
 			var fechas_evaluacion = comision.FECHAS_EVAL;
-			var promo1 = $('#promo1_'+comision.COMISION);
-			var promo2 = $('#promo2_'+comision.COMISION);
+			var parcial1 = $('#parcial1_'+comision.COMISION);
+			var parcial2 = $('#parcial2_'+comision.COMISION);
 			var recup = $('#recup_'+comision.COMISION);
 			var integ = $('#integ_'+comision.COMISION);
 
@@ -139,10 +139,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 					fecha = fechas_evaluacion[i]['FECHA'];
 					switch( (fechas_evaluacion[i]['EVAL_NOMBRE']).trim() )
 					{
-						case 'PROMO1': 	set_value_instancia(promo1, fecha, estado)
-										break;
-						case 'PROMO2': 	set_value_instancia(promo2, fecha, estado)
-										break;
+						case 'PARCIAL1': 	set_value_instancia(parcial1, fecha, estado)
+											break;
+						case 'PARCIAL2': 	set_value_instancia(parcial2, fecha, estado)
+											break;
 						case 'RECUP': 	set_value_instancia(recup, fecha, estado)
 										break;
 						case 'INTEG': 	set_value_instancia(integ, fecha, estado)
@@ -260,30 +260,30 @@ function verifica_fechas_materia(componente)
     var x = componente.id.split('_');
     var comision = x[3];
     
-	var promo1 = $("#"+'datepicker_materia_promo1_'+comision).val();
-	var promo2 = $("#"+'datepicker_materia_promo2_'+comision).val();
+	var parcial1 = $("#"+'datepicker_materia_parcial1_'+comision).val();
+	var parcial2 = $("#"+'datepicker_materia_parcial2_'+comision).val();
     var integ = $("#"+'datepicker_materia_integ_'+comision).val();
 
-	verifica_fechas(componente, promo1, promo2, integ);
+	verifica_fechas(componente, parcial1, parcial2, integ);
 }
     
 
-function verifica_fechas(componente, promo1, promo2, integ)
+function verifica_fechas(componente, parcial1, parcial2, integ)
 {
   
-    if (!fechas_en_orden(promo1, promo2))
+    if (!fechas_en_orden(parcial1, parcial2))
     {
         alert ('La fecha para el 1º Parcial debe ser anterior a la del 2º Parcial');
         componente.value = null;
     }
 
-	if (!fechas_en_orden(promo2, integ))
+	if (!fechas_en_orden(parcial2, integ))
     {
         alert ('La fecha para el 2º Parcial debe ser anterior a la del Integrador / Recuperatorio Global');
         componente.value = null;
 	}
 	
-	if (!fechas_en_orden(promo1, integ))
+	if (!fechas_en_orden(parcial1, integ))
     {
         alert ('La fecha para el 1º Parcial debe ser anterior a la del Integrador / Recuperatorio Global');
         componente.value = null;

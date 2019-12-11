@@ -9,16 +9,15 @@
 		{{ vista_form.render_cierre() | raw }}
 
 		<div class="titulo_operacion">
-				<span class="pull-right">
-				{{ vista_form.render_acciones() | raw }}
-				</span>
-                    {% if this.data.modo == 'planilla' %}
-                        {% if this.data.planilla %}
-				<a id="boton_pdf" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_pdf}}"><span class="acchide">{{'descargar_pdf'|trans|capitalize}}</span><span class="g3w-icono-pdf"></span></a>
-                        {% endif %}            
-                    {% endif %}            
-
-                </div>
+			<span class="pull-right">
+			{{ vista_form.render_acciones() | raw }}
+			</span>
+				{% if this.data.modo == 'planilla' %}
+					{% if this.data.planilla %}
+						<a id="boton_pdf" class="btn no-ajax" target="_blank" href="{{this.data.url.generar_pdf}}"><span class="acchide">{{'descargar_pdf'|trans|capitalize}}</span><span class="g3w-icono-pdf"></span></a>
+					{% endif %}            
+				{% endif %}            
+			</div>
 
     {% if this.data.modo == 'planilla' %}
 	<!-- ENCABEZADO --> 
@@ -36,12 +35,12 @@
 				<tr>
 					<th scope="row" id="info_turno"><strong>{{"turno" | trans | capitalize}}:</strong></th>
 					<td headers="info_turno">
-                                        {% if (ENCABEZADO.TURNO) %}
-                                            {{("asistencias.turno_" ~ ENCABEZADO.TURNO) |trans|capitalize}}
-                                        {% else %}
-                                            {{'ficha_alumno.sin_informacion'|trans |capitalize}}
-                                        {% endif %}                                             
-                                        </td>				
+						{% if (ENCABEZADO.TURNO) %}
+							{{("asistencias.turno_" ~ ENCABEZADO.TURNO) |trans|capitalize}}
+						{% else %}
+							{{'ficha_alumno.sin_informacion'|trans |capitalize}}
+						{% endif %}                                             
+					</td>				
 				</tr>
 				<tr>
 					<th scope="row" id="info_anio"><strong>{{"anio_academico" | trans | capitalize}}:</strong> </th>
@@ -58,12 +57,12 @@
 				<tr>
 					<th scope="row" id="info_aula"><strong>{{"dia, hora, edificio y aula" | trans | capitalize}}:</strong></th>
 					<td headers="info_aula" colspan="3">
-                                            {% if (ENCABEZADO.AULA) %}
-                                                {{ENCABEZADO.AULA}}
-                                            {% else %}
-                                                {{'ficha_alumno.sin_informacion'|trans |capitalize}}
-                                            {% endif %}                                            
-                                        </td>
+						{% if (ENCABEZADO.AULA) %}
+							{{ENCABEZADO.AULA}}
+						{% else %}
+							{{'ficha_alumno.sin_informacion'|trans |capitalize}}
+						{% endif %}                                            
+					</td>
 				</tr>
 			</table>
 
@@ -75,13 +74,12 @@
 					<th scope="col" id="legajo">{{"legajo" | trans | capitalize}}</th>
 					<th scope="col" id="apellido_y_nombre">{{"apellido_y_nombre" | trans | capitalize}}</th>
 					<th scope="col" id="calidad_insc">{{"calidad insc." | trans | capitalize}}</th>
-                                        <th scope="col" id="inasistencias">{{"inasist. acum." | trans | capitalize}}</th>
-                                        <th scope="col" id="justificadas">{{"justificadas" | trans | capitalize}}</th>
-                                        
-                                        
-                                        {% for i in 1.. this.data.filtro_cantidad %}
-                                            <th scope="col" id="fecha~i">{{ ENCABEZADO.FECHAS[i] }}</th>
-                                        {% endfor %}
+					<th scope="col" id="inasistencias">{{"inasist. acum." | trans | capitalize}}</th>
+					<th scope="col" id="justificadas">{{"justificadas" | trans | capitalize}}</th>
+					
+					{% for i in 1.. this.data.filtro_cantidad %}
+						<th scope="col" id="fecha~i">{{ ENCABEZADO.FECHAS[i] }}</th>
+					{% endfor %}
 				</tr>
 				</thead>
 				<tbody>
@@ -90,12 +88,12 @@
 						<td headers="nro">{{alumno.NRO|raw}}</td>
 						<td headers="legajo">{{alumno.LEGAJO|raw}}</td>
 						<td headers="apellido_y_nombre">{{alumno.ALUMNO|raw}}</td>
-                                                <td headers="calidad_insc">{{_self.get_calidad_insc_descripcion(alumno.CALIDAD_INSC)}}</td>
+						<td headers="calidad_insc">{{_self.get_calidad_insc_descripcion(alumno.CALIDAD_INSC)}}</td>
 						<td headers="inasistencias">{{alumno.ACUMULADAS|raw}}</td>
-                                                <td headers="justificadas">{{alumno.JUSTIFICADAS|raw}}</td>
-                                                {% for i in 1.. this.data.filtro_cantidad%}
-                                                    <th scope="col" id="fecha~i"> </th>
-                                                {% endfor %}
+						<td headers="justificadas">{{alumno.JUSTIFICADAS|raw}}</td>
+						{% for i in 1.. this.data.filtro_cantidad%}
+							<th scope="col" id="fecha~i"> </th>
+						{% endfor %}
 					</tr>
 					{% endfor %}
 				</tbody>	

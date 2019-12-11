@@ -94,3 +94,16 @@ CREATE TABLE dba.ufce_materias_promo_directa
 	CHECK (promo_directa IN ('S', 'N')),
 	PRIMARY KEY (anio_academico, periodo_lectivo, materia)
 );
+
+----------- Crea instancias de evaluación parcial con denominación acorde a la nueva reglamentación -----------
+INSERT INTO sga_eval_parc
+(evaluacion, descripcion, descripcion_abrev, tipo_evaluac_parc, evaluacion_origen)
+VALUES(22, 'Primer Parcial', '1er Parcial', 1, NULL);
+
+INSERT INTO sga_eval_parc
+(evaluacion, descripcion, descripcion_abrev, tipo_evaluac_parc, evaluacion_origen)
+VALUES(23, 'Segundo Parcial', '2do Parcial', 1, NULL);
+
+INSERT INTO sga_eval_parc
+(evaluacion, descripcion, descripcion_abrev, tipo_evaluac_parc, evaluacion_origen)
+VALUES(24, 'Recuperatorio Global', 'Recup. Global', 2, NULL);

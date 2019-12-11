@@ -31,7 +31,7 @@ class builder_form_filtro extends builder_formulario
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_anios_academicos(),
 				form_elemento_config::validar_select => false,
-                                form_elemento_config::valor_default  =>   $this->anio_academico_hash,
+				form_elemento_config::valor_default  =>   $this->anio_academico_hash,
 				form_elemento_config::clase_css => 'filtros_comunes',
 		)));
 		
@@ -78,8 +78,16 @@ class builder_form_filtro extends builder_formulario
         
 	function get_anios_academicos()
 	{
-            $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
-            return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('asignacion_mat_prom_dir.filtro_seleccione')));
+		$datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
+		//Esta operación sólo sirve a partir del año 2019, restirnjo los años anteriores
+		$datos_2019 = Array();
+		foreach($datos as $dato)
+		{
+			if ($dato['ANIO_ACADEMICO'] >= 2018) {
+				$datos_2019[] = $dato;
+			}
+		}
+		return guarani_form_elemento::armar_combo_opciones($datos_2019, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	
 	function get_periodos_lectivos()

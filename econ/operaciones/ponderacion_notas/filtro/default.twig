@@ -30,10 +30,8 @@
     {% if(this.data.datos) %}
         <div>
             {% for materia in this.data.datos %}
-                <div class="link-js" data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
+				<div data-link="detalle_{{materia.MATERIA}}" aria-controls="detalle_{{materia.MATERIA}}">
                     <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }})
-                        <span class="toggle icon-white icon-chevron-down" style="float: right; color: white"></span> 
-                        <span style="float: right;font-size: 10px;">VER / EDITAR POR COMISION</span>
                     </h3>
 				</div>
 				{% set ponderaciones = materia.PONDERACIONES %}
@@ -54,19 +52,20 @@
 										id="porc_parciales_P_{{materia.MATERIA}}" 
 										onchange="actualiza_porcentaje_con_integrador(this)" 
 										value="{{ponderaciones.PORC_P_PARCIALES}}"
-										{% if not(this.data.es_editable) %} readonly {% endif %}>
+										{% if not(this.data.es_editable) %} disabled {% endif %}>
 								</td>
 								<td><div>Ponderación para la nota de Integrador: </div>
 									<input type="number" min="0" max="100" name="porc_integrador_P_{{materia.MATERIA}}" 
 										id="porc_integrador_P_{{materia.MATERIA}}" 
 										onchange="actualiza_porcentaje_con_integrador(this)" 
 										value="{{ponderaciones.PORC_P_INTEGRADOR}}" 
-										{% if not(this.data.es_editable) %} readonly {% endif %}>
+										{% if not(this.data.es_editable) %} disabled {% endif %}>
 								</td>  
 								<td><div>Ponderación para la nota de Trabajos Prácticos: </div>
 									<input type="number" min="0" max="100" name="porc_trabajos_P_{{materia.MATERIA}}" 
 										id="porc_trabajos_P_{{materia.MATERIA}}" 
-										readonly onchange="actualiza_porcentaje_con_integrador(this)" 
+										onchange="actualiza_porcentaje_con_integrador(this)" 
+										{% if not(this.data.es_editable) %} disabled {% else %} readonly {% endif %}
 										value="{{ponderaciones.PORC_P_TRABAJOS}}">
 								</td>                               
 							</tr>
@@ -74,18 +73,19 @@
 								<td scope="row" colspan="3">Cursada Regular</td>
 							</tr>
 							<tr>
-								<td colspan="2"><div>Ponderación del promedio de Parciales o nota de Recuparatorio Global: </div>
+								<td colspan="2"><div>Ponderación del promedio de Parciales o nota de Recuperatorio Global: </div>
 									<input type="number" min="0" max="100" name="porc_parciales_R_{{materia.MATERIA}}" 
 										id="porc_parciales_R_{{materia.MATERIA}}" 
 										onchange="actualiza_porcentaje_regular(this)" 
 										value="{{ponderaciones.PORC_R_PARCIALES}}"
-										{% if not(this.data.es_editable) %} readonly {% endif %}
+										{% if not(this.data.es_editable) %} disabled {% endif %}
 										style="width:85%">
 								</td>
 								<td><div>Ponderación para la nota de Trabajos Prácticos: </div>
 									<input type="number" min="0" max="100" name="porc_trabajos_R_{{materia.MATERIA}}" 
 										id="porc_trabajos_R_{{materia.MATERIA}}" 
-										readonly onchange="actualiza_porcentaje_regular(this)" 
+										onchange="actualiza_porcentaje_regular(this)" 
+										{% if not(this.data.es_editable) %} disabled {% else %} readonly {% endif %}
 										value="{{ponderaciones.PORC_R_TRABAJOS}}">
 								</td>                     
 								<td></td>          
@@ -100,13 +100,14 @@
 										onchange="actualiza_porcentaje_prom_directa(this)" 
 										value="{{ponderaciones.PORC_D_PARCIALES}}"
 										{% if not(this.data.es_editable) or not (materia.PROMO_DIRECTA) %} 
-												readonly {% endif %}
+											disabled {% endif %}
 										style="width:85%">
 								</td>
 								<td><div>Ponderación para la nota de Trabajos Prácticos: </div>
 									<input type="number" min="0" max="100" name="porc_trabajos_D_{{materia.MATERIA}}" 
 										id="porc_trabajos_D_{{materia.MATERIA}}" 
-										readonly onchange="actualiza_porcentaje_prom_directa(this)" 
+										onchange="actualiza_porcentaje_prom_directa(this)" 
+										{% if not(this.data.es_editable) or not (materia.PROMO_DIRECTA) %} disabled {% else %} readonly {% endif %}
 										value="{{ponderaciones.PORC_D_TRABAJOS}}">
 								</td>                     
 								<td></td>          

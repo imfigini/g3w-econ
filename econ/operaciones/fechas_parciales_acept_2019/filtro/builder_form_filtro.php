@@ -113,25 +113,34 @@ class builder_form_filtro extends builder_formulario
         
 	function get_anios_academicos()
 	{
-            $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
-            return guarani_form_elemento::armar_combo_opciones($datos, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
+        $datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
+        //Esta operación sólo sirve para 2019, sólo permito seleccionar dicho año			
+		$datos_2019 = Array();
+		foreach($datos as $dato)
+		{
+			if ($dato['ANIO_ACADEMICO'] == 2019) {
+				$datos_2019[] = $dato;
+				break;
+			}
+		}
+        return guarani_form_elemento::armar_combo_opciones($datos_2019, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	
 	function get_periodos_lectivos()
 	{
-            return array(""=>  kernel::traductor()->trans('filtro.todos'));
+        return array(""=>  kernel::traductor()->trans('filtro.todos'));
 	}
         
-        function get_carreras()
+    function get_carreras()
 	{
-            $datos = catalogo::consultar('evaluaciones_parciales', 'get_carreras');
-            return guarani_form_elemento::armar_combo_opciones($datos, 'CARRERA', 'CARRERA_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Todas --')));
+        $datos = catalogo::consultar('evaluaciones_parciales', 'get_carreras');
+        return guarani_form_elemento::armar_combo_opciones($datos, 'CARRERA', 'CARRERA_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Todas --')));
 	}
         
-        function get_mixs()
+    function get_mixs()
 	{
-            $datos = catalogo::consultar('evaluaciones_parciales', 'get_mixs');
-            return guarani_form_elemento::armar_combo_opciones($datos, 'MIX', 'MIX_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Todos --')));
+        $datos = catalogo::consultar('evaluaciones_parciales', 'get_mixs');
+        return guarani_form_elemento::armar_combo_opciones($datos, 'MIX', 'MIX_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Todos --')));
 	}
         
 }

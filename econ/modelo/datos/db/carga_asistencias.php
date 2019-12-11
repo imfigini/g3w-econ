@@ -105,8 +105,6 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
             $datos = $this->get_inscriptos($parametros);
         }
         
-      //  kernel::log()->add_debug('clase_detalle $datos', $datos);
-        
         $nuevo = array();
         foreach($datos as $id => $dato) 
         {
@@ -176,7 +174,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
     */
    function guardar($parametros) 
    {
-        //kernel::log()->add_debug('guardar iris', $parametros);
+//        kernel::log()->add_debug('guardar iris', $parametros);
 
         if (!$this->tiene_cargadas_asistencias($parametros)) 
         {
@@ -184,7 +182,8 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
             //kernel::db()->consultar($sql, db::FETCH_NUM);
         }
         
-        if ($parametros["cant_inasist"] == "'1'" && $parametros["justific"] <> "'-1'") //Ausencia justificada
+		if ( ($parametros["cant_inasist"] == "'1'" && $parametros["justific"] <> "'-1'") //Ausencia justificada
+			or ($parametros["cant_inasist"] == '1' && $parametros["justific"] <> '-1') )
         {
             $sql1 = "EXECUTE PROCEDURE sp_u_justsaluclas(" .
                                  $parametros["_ua"] . ",".

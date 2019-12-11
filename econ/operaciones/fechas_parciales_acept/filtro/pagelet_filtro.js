@@ -96,8 +96,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                     var comision = comisiones[j];
 					var com = comision.COMISION;
 
-					set_div_mensaje(com, 'promo1', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
-					set_div_mensaje(com, 'promo2', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
+					set_div_mensaje(com, 'parcial1', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
+					set_div_mensaje(com, 'parcial2', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
 					set_div_mensaje(com, 'recup', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
 					set_div_mensaje(com, 'integ', comision.FECHAS_SOLICITADAS, comision.EVAL_ASIGNADAS);
                 }
@@ -208,10 +208,10 @@ function setear_calendario(instancia, datepick, dias_clase, dias_no_validos)
 
     switch (instancia)
     {
-        case 'promo1':
+        case 'parcial1':
             get_fechas_and_set_values(datepick, inicio_periodo[0], fin_periodo[0], dias_clase, dias_no_validos);
             break;
-        case 'promo2':
+        case 'parcial2':
             get_fechas_and_set_values(datepick, inicio_periodo[1], fin_periodo[1], dias_clase, dias_no_validos);
             break;
         case 'recup':
@@ -391,12 +391,12 @@ function calcular_estado(comision, fecha_string)
 
 function grabar_comision(comision)
 {
-	var promo1 = grabar_instancia_evaluacion(comision, 'promo1', 1);
-	var promo2 = grabar_instancia_evaluacion(comision, 'promo2', 2);
-	var recup = grabar_instancia_evaluacion(comision, 'recup', 7);
+	var parcial1 = grabar_instancia_evaluacion(comision, 'parcial1', 22);
+	var parcial2 = grabar_instancia_evaluacion(comision, 'parcial2', 23);
+	var recup = grabar_instancia_evaluacion(comision, 'recup', 24);
 	var integ = grabar_instancia_evaluacion(comision, 'integ', 14);
 
-	var mensaje = armar_mensaje(promo1, promo2, recup, integ);
+	var mensaje = armar_mensaje(parcial1, parcial2, recup, integ);
 	kernel.ui.show_mensaje(mensaje);
 }
 
@@ -494,14 +494,14 @@ function get_hora_clase(dias_clase, diaSemana)
     return dias[0].HS_COMIENZO_CLASE;
 }
 
-function armar_mensaje(promo1, promo2, recup, integ)
+function armar_mensaje(parcial1, parcial2, recup, integ)
 {
 	var mensaje = '';
-	if (promo1)	{
-		mensaje += promo1;
+	if (parcial1)	{
+		mensaje += parcial1;
 	}
-	if (promo2)	{
-		mensaje += promo2;
+	if (parcial2)	{
+		mensaje += parcial2;
 	}
 	if (recup)	{
 		mensaje += recup;

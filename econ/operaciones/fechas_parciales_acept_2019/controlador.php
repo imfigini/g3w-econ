@@ -53,7 +53,7 @@ class controlador extends controlador_g3w2
             $materias[$i]['CICLO'] = catalogo::consultar('cursos', 'get_ciclo_de_materias', array('materia'=>$materias[$i]['MATERIA'])); 
             //F - P - FyP
 
-            $materias[$i]['OBSERVACIONES'] = $this->get_observaciones_materia($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
+			$materias[$i]['OBSERVACIONES'] = $this->get_observaciones_materia($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
             
             $comisiones = $this->get_comisiones_de_materia_con_dias_de_clase($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
             //COMISION, COMISION_NOMBRE, ANIO_ACADEMICO, PERIODO_LECTIVO, ESCALA, TURNO, CARRERA
@@ -152,7 +152,8 @@ class controlador extends controlador_g3w2
                             'periodo' => $periodo,
                             'materia' => $materia
                 );
-                return catalogo::consultar('cursos', 'get_observaciones_materia', $parametros);
+				$obs = catalogo::consultar('fechas_parciales', 'get_evaluaciones_observaciones', $parametros);
+				return $obs['OBSERVACIONES'];
             }
             return null;
         }

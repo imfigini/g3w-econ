@@ -297,12 +297,7 @@ class evaluaciones_parciales
      */
     function get_evaluaciones_aceptadas($parametros)
     {
-        $anio_academico = $parametros['anio_academico'];
-        $periodo = $parametros['periodo'];
-        $carrera = $parametros['carrera'];
-        $anio_cursada = $parametros['anio_cursada'];
-        $mix = $parametros['mix'];
-        
+		//No recupera los TP
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
                                 CASE 
@@ -313,6 +308,10 @@ class evaluaciones_parciales
                                     WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
+									WHEN sga_eval_parc.evaluacion = 22 THEN '1튡arcial'
+									WHEN sga_eval_parc.evaluacion = 23 THEN '2튡arcial'
+									WHEN sga_eval_parc.evaluacion = 24 THEN 'Recup'
+									ELSE sga_eval_parc.descripcion
                                 END as evaluacion, 
                                 sga_eval_parc.evaluacion as eval_id,
                                 sga_cron_eval_parc.fecha_hora::DATE as fecha,
@@ -322,19 +321,20 @@ class evaluaciones_parciales
                     JOIN sga_materias ON (sga_materias.materia = sga_comisiones.materia)
                     JOIN sga_eval_parc ON (sga_eval_parc.evaluacion = sga_cron_eval_parc.evaluacion)
                     JOIN ufce_mixes ON (ufce_mixes.materia = sga_materias.materia)
-                    WHERE sga_comisiones.anio_academico = $anio_academico
-                            AND sga_comisiones.periodo_lectivo = $periodo ";
+                    WHERE sga_comisiones.anio_academico = {$parametros['anio_academico']}
+							AND sga_comisiones.periodo_lectivo = {$parametros['periodo']}
+							AND sga_eval_parc.evaluacion <> 15 ";
         if ($parametros['carrera'] != "''")
         {
-            $sql .= " AND ufce_mixes.carrera = $carrera ";
+            $sql .= " AND ufce_mixes.carrera = {$parametros['carrera']} ";
         }
         if ($parametros['anio_cursada'] != "''")
         {
-            $sql .= " AND ufce_mixes.anio_de_cursada = $anio_cursada ";
+            $sql .= " AND ufce_mixes.anio_de_cursada = {$parametros['anio_cursada']} ";
         }                    
         if ($parametros['mix'] != "''")
         {
-            $sql .= " AND ufce_mixes.mix = $mix ";
+            $sql .= " AND ufce_mixes.mix = {$parametros['mix']} ";
         }
         $sql .= " ORDER BY 1 ";
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
@@ -348,12 +348,6 @@ class evaluaciones_parciales
      */
     function get_evaluaciones_pendientes($parametros)
     {
-        $anio_academico = $parametros['anio_academico'];
-        $periodo = $parametros['periodo'];
-        $carrera = $parametros['carrera'];
-        $anio_cursada = $parametros['anio_cursada'];
-        $mix = $parametros['mix'];
-        
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
                                 CASE 
@@ -364,6 +358,10 @@ class evaluaciones_parciales
                                     WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
+									WHEN sga_eval_parc.evaluacion = 22 THEN '1튡arcial'
+									WHEN sga_eval_parc.evaluacion = 23 THEN '2튡arcial'
+									WHEN sga_eval_parc.evaluacion = 24 THEN 'Recup'
+									ELSE sga_eval_parc.descripcion
                                 END as evaluacion, 
                                 sga_eval_parc.evaluacion as eval_id,
                                 ufce_cron_eval_parc.fecha_hora::DATE as fecha,
@@ -373,20 +371,20 @@ class evaluaciones_parciales
                     JOIN sga_materias ON (sga_materias.materia = sga_comisiones.materia)
                     JOIN sga_eval_parc ON (sga_eval_parc.evaluacion = ufce_cron_eval_parc.evaluacion)
                     JOIN ufce_mixes ON (ufce_mixes.materia = sga_materias.materia)
-                    WHERE sga_comisiones.anio_academico = $anio_academico
-                            AND sga_comisiones.periodo_lectivo = $periodo 
+                    WHERE sga_comisiones.anio_academico = {$parametros['anio_academico']}
+                            AND sga_comisiones.periodo_lectivo = {$parametros['periodo']} 
                             AND ufce_cron_eval_parc.estado = 'P'";
         if ($parametros['carrera'] != "''")
         {
-            $sql .= " AND ufce_mixes.carrera = $carrera ";
+            $sql .= " AND ufce_mixes.carrera = {$parametros['carrera']} ";
         }
         if ($parametros['anio_cursada'] != "''")
         {
-            $sql .= " AND ufce_mixes.anio_de_cursada = $anio_cursada ";
+            $sql .= " AND ufce_mixes.anio_de_cursada = {$parametros['anio_cursada']} ";
         }                    
         if ($parametros['mix'] != "''")
         {
-            $sql .= " AND ufce_mixes.mix = $mix ";
+            $sql .= " AND ufce_mixes.mix = {$parametros['mix']} ";
         }
         $sql .= " ORDER BY 1 ";
         

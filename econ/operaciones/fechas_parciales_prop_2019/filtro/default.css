@@ -1,6 +1,6 @@
 #contenido div.link-js  {
 	cursor: pointer;
-        margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 #contenido h3.titulo-materia {
@@ -23,12 +23,12 @@
 
 #contenido li
 {
-        line-height: 20px;
+	line-height: 20px;
 }
 
 #contenido .alert p
 {
-        margin: 0 0 3px;
+	margin: 0 0 3px;
 }
 
 input[readonly].no_editable 

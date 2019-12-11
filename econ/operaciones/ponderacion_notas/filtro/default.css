@@ -1,8 +1,3 @@
-#contenido div.link-js  {
-	cursor: pointer;
-        margin-bottom: 20px;
-}
-
 #contenido h3.titulo-materia {
 	background-color: #3A87AD;
 	color: white;
@@ -23,8 +18,16 @@
 
 #contenido li
 {
-        line-height: 30px;
+	line-height: 30px;
 }
 
+input[readonly] 
+{
+	background-color:#F5F5F5;
+	caret-color: #F5F5F5;
+}
 
-
+input[disabled] 
+{
+	background-color:#DCDCDC;
+}

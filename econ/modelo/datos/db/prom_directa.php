@@ -15,11 +15,11 @@ class prom_directa
 	{
 		$this->alta_materias_prom_directa($parametros);
 		$sql = "SELECT DISTINCT U.materia, 
-								M.nombre as nombre_materia,
+								M.nombre AS nombre_materia,
 								U.promo_directa
                         FROM ufce_materias_promo_directa U
                         JOIN sga_materias M ON (M.materia = U.materia)
-                    WHERE   U.anio_academico = {$parametros['anio_academico']}
+                    WHERE	U.anio_academico = {$parametros['anio_academico']}
 						AND U.periodo_lectivo = {$parametros['periodo']} 
 				ORDER BY 2";
 		return kernel::db()->consultar($sql, db::FETCH_ASSOC);
@@ -39,7 +39,7 @@ class prom_directa
 								'N'
 						FROM sga_comisiones C
 						JOIN sga_atrib_mat_plan M ON (M.materia = C.materia)
-						JOIN sga_planes PL ON (PL.unidad_academica = M.unidad_academica AND PL.carrera = M.carrera AND PL.plan = M.plan)
+						JOIN sga_planes PL ON (PL.unidad_academica = M.unidad_academica AND PL.carrera = M.carrera AND PL.plan = M.plan and PL.version_actual = M.version)
 					WHERE   PL.estado = 'V'
 					AND C.anio_academico = {$parametros['anio_academico']}
 					AND C.periodo_lectivo = {$parametros['periodo']}
@@ -97,4 +97,35 @@ class prom_directa
 		}
 		return false;
 	}
+
+    /**
+    * parametros: anio_academico, periodo, anio_academico_anterior, periodo_anterior
+    * cache: no
+    * filas: n
+    */
+    function replicar_materias_promo_directa($parametros)
+    {
+        //Resetea los del cuatrimestre actual
+		$this->resetear_prom_directa($parametros);
+        
+        //Recupera los del mismo cuatrimestre del año anterior
+        $sql = "SELECT materia, promo_directa
+                    FROM ufce_materias_promo_directa
+                    WHERE anio_academico = {$parametros['anio_academico_anterior']}
+					AND periodo_lectivo = {$parametros['periodo_anterior']}";
+        $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
+        
+        //Asigna las materias por promo directa del mismo cuatrimestre del año anterior al actual
+        foreach($resultado as $res)
+        {
+            $materia = json_encode($res['MATERIA']);
+            $promo_directa = json_encode($res['PROMO_DIRECTA']);
+            $sql = "UPDATE ufce_materias_promo_directa
+						SET promo_directa = $promo_directa
+                        WHERE anio_academico = {$parametros['anio_academico']}
+						AND periodo_lectivo = {$parametros['periodo']}
+						AND materia = $materia ";
+            kernel::db()->ejecutar($sql);
+        }
+    }	
 }

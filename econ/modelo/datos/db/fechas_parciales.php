@@ -69,7 +69,7 @@ class fechas_parciales
     {
 		//Devuelve la fecha de la evaluación, o la fecha solicitada si es que aún no se creó la instancia
 		$sql = "SELECT 	NVL(C.evaluacion, U.evaluacion), 
-						DECODE(NVL(C.evaluacion, U.evaluacion), 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+						DECODE(NVL(C.evaluacion, U.evaluacion), 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre, 
 						NVL(C.fecha_hora, U.fecha_hora)::DATE AS fecha,
 						to_char(NVL(C.fecha_hora, U.fecha_hora), '%H:%M:%S') AS hora,
 						NVL(U.estado, 'A') AS estado
@@ -91,7 +91,7 @@ class fechas_parciales
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         $sql = "SELECT 	DISTINCT C.evaluacion, 
-						DECODE(C.evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+						DECODE(C.evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre, 
 						NVL(C.fecha_hora, U.fecha_hora)::DATE AS fecha
 				FROM sga_cron_eval_parc C
 				LEFT JOIN ufce_cron_eval_parc U  on (U.comision = C.comision and U.evaluacion = C.evaluacion)
@@ -166,7 +166,7 @@ class fechas_parciales
     function get_fechas_eval_solicitadas($parametros)
     {
         $sql = "SELECT 	DISTINCT evaluacion, 
-						DECODE(evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+						DECODE(evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre, 
 						fecha_hora,
 						estado
 				FROM ufce_cron_eval_parc
@@ -182,7 +182,7 @@ class fechas_parciales
     function get_fechas_eval_asignadas($parametros)
     {
         $sql = "SELECT 	DISTINCT evaluacion, 
-						DECODE(evaluacion, 1, 'PROMO1', 2, 'PROMO2', 7, 'RECUP', 14, 'INTEG', 15, 'TP') AS eval_nombre, 
+						DECODE(evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG', 15, 'TP') AS eval_nombre, 
 						fecha_hora
 				FROM sga_cron_eval_parc
 				WHERE comision = {$parametros['comision']} ";

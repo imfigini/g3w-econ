@@ -81,11 +81,9 @@ class pagelet_filtro extends pagelet {
 		{
 			$datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash);
 			kernel::log()->add_debug('$datos '.__LINE__, $datos);
-			//print_r($datos);
 
 			$dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
 			
-			//print_R($datos);
 			$this->data['datos'] = $datos;
 			$this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
 			
@@ -94,9 +92,6 @@ class pagelet_filtro extends pagelet {
 			$priodo_solicitud_fechas = $this->controlador->get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash);
 			$this->data['priodo_solicitud_fechas'] = $priodo_solicitud_fechas[0];
 			
-//                $link_form_comision = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_comision');
-//                $this->data['form_url_comision'] = $link_form_comision;     
-
 			$link_form_materia = kernel::vinculador()->crear('fechas_parciales_propuesta', 'grabar_materia');
 			$this->data['form_url_materia'] = $link_form_materia;     
 		}

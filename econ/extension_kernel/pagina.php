@@ -20,8 +20,8 @@ class pagina extends \siu\extension_kernel\pagina
                 $menu->set_orden('inscriptos_cursadas', 1);
                 $menu->set_orden('asistencias', 2);
                 $menu->set_orden('notas_parciales', 3);
-                $menu->set_orden('notas_cursada', 4);
-                $menu->set_orden('resumen_cursada', 5);
+				$menu->set_orden('resumen_cursada', 4);
+				$menu->set_orden('notas_cursada', 5);
                 $menu->set_orden('acta_cursadas', 6);
                 $menu->set_orden('acta_promociones', 7);
                 $menu->set_orden('agenda_examenes', 0);

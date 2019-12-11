@@ -54,7 +54,12 @@ class controlador extends controlador_g3w2
         return $this->datos_filtro['anio_academico'];
     }
 
-    function get_mensaje_error()
+    function get_mensaje()
+    {
+        return $this->datos_filtro['mensaje'];
+	}
+	
+	function get_mensaje_error()
     {
         return $this->datos_filtro['mensaje_error'];
     }
@@ -69,7 +74,12 @@ class controlador extends controlador_g3w2
         $this->datos_filtro['anio_academico'] = $anio_academico;
     }
 
-    function set_mensaje_error($mensaje)
+    function set_mensaje($mensaje)
+    {
+        $this->datos_filtro['mensaje'] = $mensaje;
+	}
+	
+	function set_mensaje_error($mensaje)
     {
         $this->datos_filtro['mensaje_error'] = $mensaje;
     }
@@ -117,13 +127,13 @@ class controlador extends controlador_g3w2
 
     function accion__buscar_periodos() 
     {
-            $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
-            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
-            $datos = array();
-            if (!is_null($anio_academico)){
-                    $datos = catalogo::consultar('unidad_academica', 'buscar_periodos_lectivos', array('anio' => $anio_academico));
-            }
-            $this->render_raw_json($datos);
+        $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
+        $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+        $datos = array();
+        if (!is_null($anio_academico)){
+                $datos = catalogo::consultar('unidad_academica', 'buscar_periodos_lectivos', array('anio' => $anio_academico));
+        }
+        $this->render_raw_json($datos);
     }
     
     /**
@@ -178,6 +188,41 @@ class controlador extends controlador_g3w2
         }
         return false;
     }
-    
+
+	/** Replica las materias que son por promocion directa asignadas el mismo cuatrimestre del año anterior */
+	function accion__replicar_promo_directa()
+	{
+		if (kernel::request()->isPost()) 
+		{
+			$parametros = array();
+			$anio_academico_hash = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
+			$periodo_hash = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
+			$parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
+			$parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
+			try
+			{
+				if (isset($parametros['anio_academico']) && isset($parametros['periodo']))
+				{
+					kernel::db()->abrir_transaccion();
+					$parametros['anio_academico_anterior'] = $parametros['anio_academico']-1;
+					$parametros['periodo_anterior'] = $parametros['periodo'];
+					catalogo::consultar('prom_directa', 'replicar_materias_promo_directa', $parametros);
+					kernel::db()->cerrar_transaccion();
+					
+				}
+				$this->set_anio_academico($anio_academico_hash);
+				$this->set_periodo($periodo_hash);
+				$this->set_mensaje('Se replicó la asignación de materias por Promoción Directa del cuatrimestre anterior');
+			} 
+			catch (error_guarani $e)
+			{
+				$msj = $e->getMessage();
+				kernel::db()->abortar_transaccion($msj);
+				$this->set_anio_academico($parametros['anio_academico_hash']);
+				$this->set_periodo($parametros['periodo_hash']);
+				$this->set_mensaje_error($msj);
+			}
+		}
+	}
 }
 ?>

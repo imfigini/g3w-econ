@@ -29,8 +29,8 @@
                     <div class='info pull-right'>
                             <div>{{ alumno.NOMBRE }}</div>
                             <div>{{ alumno.LEGAJO }}</div>
-                            <div>{{ alumno.COMISION_NOMBRE }} ({{ alumno.COMISION }})</div>
-                            <div>{{_self.get_calidad_insc_descripcion(alumno.CALIDAD_INSC)}}</div>
+                            {# <div>{{ alumno.COMISION_NOMBRE }} ({{ alumno.COMISION }})</div>
+                            <div>{{_self.get_calidad_insc_descripcion(alumno.CALIDAD_INSC)}}</div> #}
                     </div>
                 </div>
 
@@ -53,8 +53,8 @@
 
 {% endblock %}
     
-{% macro get_calidad_insc_descripcion(calidad_insc) %}
+{# {% macro get_calidad_insc_descripcion(calidad_insc) %}
 {% if calidad_insc == 'P' %}{{'Promoci&oacute;n'}}{% endif %}
 {% if calidad_insc == 'R' %}{{'Regular'}}{% endif %}
 {% if calidad_insc == 'L' %}{{'Libre'}}{% endif %}
-{% endmacro %}
+{% endmacro %} #}

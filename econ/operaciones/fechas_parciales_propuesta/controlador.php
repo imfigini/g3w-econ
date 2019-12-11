@@ -8,6 +8,7 @@ use kernel\util\validador;
 use siu\errores\error_guarani;
 use kernel\util\mail;
 use econ\guarani;
+use Exception;
 
 class controlador extends controlador_g3w2
 {
@@ -311,7 +312,8 @@ class controlador extends controlador_g3w2
     /** Graba todas las comisiones de la materia */
     function accion__grabar_materia()
     {
-        $datos = $this->get_parametros_grabar_materia();
+		$datos = $this->get_parametros_grabar_materia();
+
         $resultado = '';
         if (kernel::request()->isPost()) 
         {
@@ -327,11 +329,11 @@ class controlador extends controlador_g3w2
 				$dias_clase = $this->modelo()->get_dias_clase(Array('comision'=>$comision));
 			
                 $resultado = '';
-				if (!empty($datos['fecha_promo1'])) {
-					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'promo1');
+				if (!empty($datos['fecha_parcial1'])) {
+					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'parcial1');
 				}
-				if (!empty($datos['fecha_promo2'])) {
-					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'promo2');
+				if (!empty($datos['fecha_parcial2'])) {
+					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'parcial2');
 				}
 				if (!empty($datos['fecha_integ'])) {
 					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'integ');
@@ -355,7 +357,7 @@ class controlador extends controlador_g3w2
             if ($resultado_obs == '1')
             {
 				$this->enviar_mensaje_x_mail_a_DD($param);
-				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la Dirección de Docentes. Materia: ');
+				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la DirecciÃ³n de Docentes. Materia: ');
 			}
 			if (!empty($resultado)) {
 				$resultado .= $datos['materia_nombre'];
@@ -369,12 +371,12 @@ class controlador extends controlador_g3w2
         $parametros = array();
         $parametros['materia'] = $this->validate_param('materia', 'post', validador::TIPO_TEXTO);
 
-		$promo1 = 'datepicker_materia_promo1_'.$parametros['materia'];
-        $promo2 = 'datepicker_materia_promo2_'.$parametros['materia'];
+		$parcial1 = 'datepicker_materia_parcial1_'.$parametros['materia'];
+        $parcial2 = 'datepicker_materia_parcial2_'.$parametros['materia'];
         $integ = 'datepicker_materia_integ_'.$parametros['materia'];
         
-        $parametros['fecha_promo1'] = $this->validate_param($promo1, 'post', validador::TIPO_TEXTO);
-        $parametros['fecha_promo2'] = $this->validate_param($promo2, 'post', validador::TIPO_TEXTO);
+        $parametros['fecha_parcial1'] = $this->validate_param($parcial1, 'post', validador::TIPO_TEXTO);
+        $parametros['fecha_parcial2'] = $this->validate_param($parcial2, 'post', validador::TIPO_TEXTO);
         $parametros['fecha_integ'] = $this->validate_param($integ, 'post', validador::TIPO_TEXTO);
         
         $parametros['anio_academico_hash']  = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
@@ -392,9 +394,9 @@ class controlador extends controlador_g3w2
     private function grabar_instancia($comision, $datos, $dias_clase, $instancia)
     {        
         switch ($instancia) {
-            case 'promo1': 	$inst = 1; $inst_nombre = '1º Parcial'; break;
-            case 'promo2': 	$inst = 2; $inst_nombre = '2º Parcial'; break;
-            case 'recup': 	$inst = 7; $inst_nombre = 'Recuperatorio Global'; break;
+            case 'parcial1': 	$inst = 22; $inst_nombre = utf8_decode('1Âº Parcial'); break;
+            case 'parcial2': 	$inst = 23; $inst_nombre = utf8_decode('2Âº Parcial'); break;
+            case 'recup': 	$inst = 24; $inst_nombre = 'Recuperatorio Global'; break;
             case 'integ': 	$inst = 14; $inst_nombre = 'Integrador'; break;
         }
         try 
@@ -410,25 +412,27 @@ class controlador extends controlador_g3w2
 
 			$resultado = catalogo::consultar('cursos', 'alta_propuesta_evaluacion_parcial', $parametros);
 
-			if ($instancia == 'integ') {  //También hay que guardar el Recuperatoprio Global con igual fecha al Integrador
-				$parametros['evaluacion'] = 7; 
+			$resultado_recup = null;
+			if ($instancia == 'integ') {  //Tambien hay que guardar el Recuperatoprio Global con igual fecha al Integrador
+				$parametros['evaluacion'] = 24; 
 				$resultado_recup = catalogo::consultar('cursos', 'alta_propuesta_evaluacion_parcial', $parametros);
+				if ($resultado_recup) {
+					$inst_nombre .= ' y Recuperatorio Global';
+				}
 			}
 			
-			if ($resultado == 1) {   
-				if ($resultado_recup) {
-					$inst_nombre .= ' y el Recuperatorio Global';
-				}
-				return 'Se han guardado las fechas para el '.$inst_nombre.'. ';
-			}
 			kernel::db()->cerrar_transaccion();
+
+			if ($resultado) {   
+				return 'Se han guardado las fechas para '.$inst_nombre.'. ';
+			}
 		}
 		
-        catch (error_guarani $e)
+        catch (Exception $e)
         {
-            $msj = $e->getMessage();
+			$msj = $e->getMessage();
 			kernel::db()->abortar_transaccion($msj);
-            $this->set_anio_academico($datos['anio_academico_hash']);
+			$this->set_anio_academico($datos['anio_academico_hash']);
             $this->set_periodo($datos['periodo_hash']);
             $this->set_mensaje_error($msj. ' Materia: '.$datos['materia_nombre']);
 		}
@@ -535,28 +539,31 @@ class controlador extends controlador_g3w2
 
     function verificar_fechas_posibles_con_demas_instancias($comision, $instancia, $fecha_hora)
     {
-		$promo1 = 1;
-		$promo2 = 2;
-		$recup = 7;
+		$parcial1 = 22;
+		$parcial2 = 23;
+		$recup = 24;
 		$integ = 14;
 
 		$fecha = rtrim(substr($fecha_hora, 0, 10));
 		$fechas_evaluacion = $this->modelo()->get_fechas_asignadas_o_solicitadas(Array('comision'=>$comision));
 
-        $posible = true;
+		$posible = true;
+		
+		//kernel::log()->add_debug('verificar_fechas_posibles_con_demas_instancias', $fechas_evaluacion);
+		
         foreach ($fechas_evaluacion as $eval)
         {
             switch ($instancia)
             {
-                case 'promo1': 
-					if ($eval['EVALUACION'] == $promo2 || $eval['EVALUACION'] == $recup || $eval['EVALUACION'] == $integ) {
+                case 'parcial1': 
+					if ($eval['EVALUACION'] == $parcial2 || $eval['EVALUACION'] == $recup || $eval['EVALUACION'] == $integ) {
 					 	if ($eval['FECHA'] <= $fecha) {
     	                    $posible = false;
         	            }
 					}
 					break;
-				case 'promo2': 
-                    if ($eval['EVALUACION'] == $promo1 && $eval['FECHA'] >= $fecha) {
+				case 'parcial2': 
+                    if ($eval['EVALUACION'] == $parcial1 && $eval['FECHA'] >= $fecha) {
                         $posible = false;
                     }
                     if ( ($eval['EVALUACION'] == $recup || $eval['EVALUACION'] == $integ) && $eval['FECHA'] <= $fecha ) {
@@ -564,13 +571,13 @@ class controlador extends controlador_g3w2
                     }
                     break;
                 case 'recup': 
-                    if ( ($eval['EVALUACION'] == $promo1 || $eval['EVALUACION'] == $promo2) && $eval['FECHA'] >= $fecha) {
+                    if ( ($eval['EVALUACION'] == $parcial1 || $eval['EVALUACION'] == $parcial2) && $eval['FECHA'] >= $fecha) {
                         $posible = false;
 					}
 					break;
                 case 'integ': 
-					if ( ($eval['EVALUACION'] == $promo1 || $eval['EVALUACION'] == $promo2) && $eval['FECHA'] >= $fecha) {
-							$posible = false;
+					if ( ($eval['EVALUACION'] == $parcial1 || $eval['EVALUACION'] == $parcial2) && $eval['FECHA'] >= $fecha) {
+						$posible = false;
 					}
 					break;
 			}
