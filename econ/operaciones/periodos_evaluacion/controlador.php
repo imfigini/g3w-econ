@@ -168,11 +168,13 @@ class controlador extends controlador_g3w2
 						{
 							//hay que validar los días de clase del período guardado con anteriordad
 							$periodo_old = catalogo::consultar('evaluaciones_parciales', 'get_periodo', $parametros);
-							$param['fecha_inicio'] = $periodo_old['FECHA_INICIO'];
-							$param['fecha_fin'] = $periodo_old['FECHA_FIN'];
-							$param['valido'] = 'S';
-							catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $param);
-							
+							if (isset($periodo_old['FECHA_INICIO']) && isset($periodo_old['FECHA_FIN']))
+							{
+								$param['fecha_inicio'] = $periodo_old['FECHA_INICIO'];
+								$param['fecha_fin'] = $periodo_old['FECHA_FIN'];
+								$param['valido'] = 'S';
+								catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $param);
+							}
 							//hay que ivalidar los días de clase para que no compute la asitencia
 							$parametros['valido'] = 'N';
 							catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $parametros);
