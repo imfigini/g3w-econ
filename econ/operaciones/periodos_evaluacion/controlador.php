@@ -9,7 +9,8 @@ use kernel\util\validador;
 
 class controlador extends controlador_g3w2
 {
-    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'mensaje'=>'');
+	protected $datos_filtro = Array('anio_academico'=>"", 'periodo'=>"");
+	protected $mensaje = "";
     
     function modelo()
     {
@@ -118,7 +119,7 @@ class controlador extends controlador_g3w2
 
     function get_mensaje()
     {
-        return $this->datos_filtro['mensaje'];
+        return $this->mensaje;
     }
     
     function set_periodo($periodo)
@@ -133,7 +134,7 @@ class controlador extends controlador_g3w2
 
     function set_mensaje($mensaje)
     {
-        $this->datos_filtro['mensaje'] = $mensaje;
+        $this->mensaje = $mensaje;
     }
 
     /** Graba los períodos de evaluación definidos */
@@ -149,22 +150,34 @@ class controlador extends controlador_g3w2
                 $parametros = array();
                 $parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
                 $parametros['periodo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
-                //$parametros['periodo_evaluacion'] = $this->validate_param("periodo_evaluacion", 'post', validador::TIPO_TEXTO);
                 
                 $periodos = $this->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
 
                 foreach ($periodos as $periodo)
                 {
                     $parametros['orden'] = $periodo['ORDEN'];
-                    $fecha_inicio = 'fecha_inicio_'.$periodo['ORDEN'];
                     $daterange = 'daterange_'.$periodo['ORDEN'];
                     $intervalo = $this->validate_param("$daterange", 'post', validador::TIPO_TEXTO);
                     $intervalo = explode('-', $intervalo);
                     $parametros['fecha_inicio'] = $intervalo[0];
-                    $parametros['fecha_fin'] = $intervalo[1];
+					$parametros['fecha_fin'] = $intervalo[1];
                     if ($parametros['fecha_inicio'] != '' && $parametros['fecha_fin'] != '')
                     {
-                        catalogo::consultar('evaluaciones_parciales', 'set_periodos_evaluacion', $parametros);
+						//Período de examen con suspensión de clases (orden = 4)
+						if ($parametros['orden'] == 4)
+						{
+							//hay que validar los días de clase del período guardado con anteriordad
+							$periodo_old = catalogo::consultar('evaluaciones_parciales', 'get_periodo', $parametros);
+							$param['fecha_inicio'] = $periodo_old['FECHA_INICIO'];
+							$param['fecha_fin'] = $periodo_old['FECHA_FIN'];
+							$param['valido'] = 'S';
+							catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $param);
+							
+							//hay que ivalidar los días de clase para que no compute la asitencia
+							$parametros['valido'] = 'N';
+							catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $parametros);
+						}
+						catalogo::consultar('evaluaciones_parciales', 'set_periodos_evaluacion', $parametros);
                     }
                 }
                 
@@ -192,15 +205,13 @@ class controlador extends controlador_g3w2
         $parametros['fecha_fin'] = $intervalo[1];
         $parametros['anio_academico'] = $anio_academico;
         $parametros['periodo'] = $periodo;
-//        print_R('<br> Parametros: ');
-//        print_r($parametros);
         if ($parametros['fecha_inicio'] != '' && $parametros['fecha_fin'] != '')
         {
             catalogo::consultar('evaluaciones_parciales', 'set_periodo_solicitud_fecha', $parametros);
         }
     }
     
-    function accion__buscar_periodos() 
+	function accion__buscar_periodos() 
     {
             $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
             $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);

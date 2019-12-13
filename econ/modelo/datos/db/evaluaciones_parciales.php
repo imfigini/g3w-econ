@@ -1,5 +1,7 @@
 <?php
 namespace econ\modelo\datos\db;
+
+use Exception;
 use kernel\kernel;
 use kernel\util\db\db;
 
@@ -16,15 +18,15 @@ class evaluaciones_parciales
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         
-        $sql = "SELECT  ufce_orden_periodo.orden, 
-                        ufce_orden_periodo.descripcion AS orden_nombre,
-                        ufce_eval_parc_periodos.fecha_inicio, 
-                        ufce_eval_parc_periodos.fecha_fin 
-                    FROM ufce_orden_periodo
-                        LEFT JOIN ufce_eval_parc_periodos ON 
-                                    (ufce_eval_parc_periodos.orden = ufce_orden_periodo.orden
-                                        AND ufce_eval_parc_periodos.anio_academico = $anio_academico 
-										AND ufce_eval_parc_periodos.periodo_lectivo = $periodo) 
+        $sql = "SELECT  ufce_periodos_tipo.orden, 
+                        ufce_periodos_tipo.descripcion AS orden_nombre,
+                        ufce_periodos.fecha_inicio, 
+                        ufce_periodos.fecha_fin 
+                    FROM ufce_periodos_tipo
+                        LEFT JOIN ufce_periodos ON 
+                                    (ufce_periodos.orden = ufce_periodos_tipo.orden
+                                        AND ufce_periodos.anio_academico = $anio_academico 
+										AND ufce_periodos.periodo_lectivo = $periodo) 
 				ORDER BY 1 ";
         
         $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
@@ -48,9 +50,9 @@ class evaluaciones_parciales
         
         $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $datos;
-    }
-    
-    /**
+	}
+	
+  	/**
      * parametros: anio_academico, periodo
      * cache: no
      * filas: n
@@ -103,7 +105,7 @@ class evaluaciones_parciales
         $periodo = $parametros['periodo'];
         $orden = $parametros['orden'];
         $sql = "SELECT COUNT(*) AS existe
-                    FROM ufce_eval_parc_periodos
+                    FROM ufce_periodos
                     WHERE anio_academico = $anio_academico 
                         AND periodo_lectivo = $periodo
                         AND orden = $orden";
@@ -146,7 +148,7 @@ class evaluaciones_parciales
         $orden = $parametros['orden'];
         $fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
         $fecha_fin = self::strToMDY($parametros['fecha_fin']);
-        $sql = "UPDATE ufce_eval_parc_periodos
+        $sql = "UPDATE ufce_periodos
                     SET fecha_inicio = $fecha_inicio,
                         fecha_fin = $fecha_fin
                 WHERE anio_academico = $anio_academico
@@ -168,7 +170,7 @@ class evaluaciones_parciales
         $orden = $parametros['orden'];
         $fecha_inicio = $parametros['fecha_inicio'];
         $fecha_fin = $parametros['fecha_fin'];
-        $sql = "INSERT INTO ufce_eval_parc_periodos (anio_academico, periodo_lectivo, orden, fecha_inicio, fecha_fin)
+        $sql = "INSERT INTO ufce_periodos (anio_academico, periodo_lectivo, orden, fecha_inicio, fecha_fin)
                     VALUES ($anio_academico, $periodo, $orden, $fecha_inicio, $fecha_fin)";
         kernel::db()->ejecutar($sql);
     }
@@ -188,8 +190,8 @@ class evaluaciones_parciales
         {
             $this->insert_periodo_solicitud_fecha($parametros);
         }
-    }
-    
+	}
+	
     /**
      * parametros: anio_academico, periodo
      * param_null: periodo
@@ -253,13 +255,22 @@ class evaluaciones_parciales
      * parametros: strFecha
      * cache: no
      * filas: n
-     * El formato de strFecha debe ser: Y-m-d
+     * El formato de strFecha debe ser: d/m/Y Ã³ Y-m-d
      */
     private function strToMDY($strFecha)
     {
-        $fecha = explode("'", $strFecha);
-        $fecha = explode('/', $fecha[1]);
-        return 'MDY('.$fecha[1].','. $fecha[0].','.$fecha[2].')';
+		$fecha = explode("'", $strFecha);
+		
+		if (strpos($fecha[1], '/') != false) {
+			$fecha = explode('/', $fecha[1]);
+			return 'MDY('.$fecha[1].','.$fecha[0].','.$fecha[2].')';
+		}
+		if (strpos($fecha[1], '-') != false) {
+			$fecha = explode('-', $fecha[1]);
+			return 'MDY('.$fecha[1].','.$fecha[2].','.$fecha[0].')';
+		}
+		throw new Exception('Formato de fecha no manejado');
+        
     }
     
     /**
@@ -301,15 +312,15 @@ class evaluaciones_parciales
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
                                 CASE 
-                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1ºPromo'
-                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2ºPromo'
+                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1ÂºPromo'
+                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2ÂºPromo'
                                     WHEN sga_eval_parc.evaluacion = 7 THEN 'R.Unico'
                                     WHEN sga_eval_parc.evaluacion = 14 THEN 'Integ'
                                     WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
-									WHEN sga_eval_parc.evaluacion = 22 THEN '1ºParcial'
-									WHEN sga_eval_parc.evaluacion = 23 THEN '2ºParcial'
+									WHEN sga_eval_parc.evaluacion = 22 THEN '1ÂºParcial'
+									WHEN sga_eval_parc.evaluacion = 23 THEN '2ÂºParcial'
 									WHEN sga_eval_parc.evaluacion = 24 THEN 'Recup'
 									ELSE sga_eval_parc.descripcion
                                 END as evaluacion, 
@@ -351,15 +362,15 @@ class evaluaciones_parciales
         $sql = "SELECT DISTINCT sga_materias.materia, 
                                 sga_materias.nombre as materia_nombre, 
                                 CASE 
-                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1ºPromo'
-                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2ºPromo'
+                                    WHEN sga_eval_parc.evaluacion = 1 THEN '1ÂºPromo'
+                                    WHEN sga_eval_parc.evaluacion = 2 THEN '2ÂºPromo'
                                     WHEN sga_eval_parc.evaluacion = 7 THEN 'R.Unico'
                                     WHEN sga_eval_parc.evaluacion = 14 THEN 'Integ'
                                     WHEN sga_eval_parc.evaluacion = 21 THEN 'Regu'
                                     WHEN sga_eval_parc.evaluacion = 4 THEN 'Recup1'                                    
                                     WHEN sga_eval_parc.evaluacion = 5 THEN 'Recup2'
-									WHEN sga_eval_parc.evaluacion = 22 THEN '1ºParcial'
-									WHEN sga_eval_parc.evaluacion = 23 THEN '2ºParcial'
+									WHEN sga_eval_parc.evaluacion = 22 THEN '1ÂºParcial'
+									WHEN sga_eval_parc.evaluacion = 23 THEN '2ÂºParcial'
 									WHEN sga_eval_parc.evaluacion = 24 THEN 'Recup'
 									ELSE sga_eval_parc.descripcion
                                 END as evaluacion, 
@@ -390,6 +401,39 @@ class evaluaciones_parciales
         
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $result;
-    }
-    
+	}
+	
+	/**
+     * parametros: anio_academico, periodo, orden
+     * cache: no
+     * filas: 1
+     */
+    function get_periodo($parametros)
+    {
+        $sql = "SELECT  ufce_periodos.fecha_inicio, 
+                        ufce_periodos.fecha_fin
+                    FROM ufce_periodos
+				WHERE ufce_periodos.anio_academico = {$parametros['anio_academico']}
+				AND ufce_periodos.periodo_lectivo = {$parametros['periodo']} 
+				AND ufce_periodos.orden = {$parametros['orden']} ";
+        
+        return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+	}
+	
+	/**
+	 * parametros: fecha_inicio, fecha_fin, valido
+	 * cache: no
+	 * filas: n
+	 */
+	function set_validez_clases($parametros)
+	{
+		$fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
+		$fecha_fin = self::strToMDY($parametros['fecha_fin']);
+
+		$sql = " UPDATE sga_calendcursada 
+					SET valido = {$parametros['valido']} 
+				WHERE fecha BETWEEN $fecha_inicio AND $fecha_fin ";
+		kernel::db()->ejecutar($sql);
+	}
+   
 }

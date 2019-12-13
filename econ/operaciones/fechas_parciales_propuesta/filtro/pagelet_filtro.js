@@ -84,8 +84,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             for(var i=0; i<cant; i++)
             {
                 var materia = materias[i];
-				console.log(materia);
-
 				set_values_materias(materia, inicio_periodo, fin_periodo);
 
 				//Carga el detalle de las comisiones de abajo

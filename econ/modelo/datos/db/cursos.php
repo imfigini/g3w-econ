@@ -364,7 +364,7 @@ class cursos
         $sql = "SELECT  orden,
                         fecha_inicio, 
                         fecha_fin
-                    FROM ufce_eval_parc_periodos
+                    FROM ufce_periodos
                 WHERE anio_academico = $anio_academico
                 AND periodo_lectivo = $periodo";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);

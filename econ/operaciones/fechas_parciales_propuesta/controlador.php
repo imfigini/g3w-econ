@@ -428,7 +428,7 @@ class controlador extends controlador_g3w2
 			}
 		}
 		
-        catch (Exception $e)
+        catch (error_guarani $e)
         {
 			$msj = $e->getMessage();
 			kernel::db()->abortar_transaccion($msj);

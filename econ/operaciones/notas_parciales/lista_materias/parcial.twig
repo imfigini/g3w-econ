@@ -8,12 +8,12 @@
 	</div>
 
 	<div class="span4">
-	    <div class='wrapper-carga'>
+	    {# <div class='wrapper-carga'>
 		<div class='progreso-carga' style='width: {{ porcentaje ~ '%' }}'></div>
 	    </div>
-	    {{ porcentaje ~ '% Alumnos asistieron a evaluacion' }}
+	    {{ porcentaje ~ '% Alumnos asistieron a evaluacion' }} #}
 	</div>
-    
+	
 	<div class="span4" style="text-align: right;">
 	    {% if cant_inscriptos > 0 %}
 		<a href='{{ url_listar }}' class="btn btn-mini"><span class="icon-list"></span> {{ "listar"|trans |capitalize}}</a>

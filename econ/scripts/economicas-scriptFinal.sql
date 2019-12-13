@@ -45,7 +45,6 @@ INSERT INTO ufce_orden_periodo VALUES (1, 'Primer Período de Evaluaciones');
 INSERT INTO ufce_orden_periodo VALUES (2, 'Segundo Período de Evaluaciones');
 INSERT INTO ufce_orden_periodo VALUES (3, '1º Llamado Julio/Agosto o Diciembre');
 
-
 --DROP TABLE ufce_eval_parc_periodos;
 CREATE TABLE ufce_eval_parc_periodos (
 	anio_academico INT not null,

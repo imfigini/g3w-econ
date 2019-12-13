@@ -95,6 +95,7 @@ CREATE TABLE dba.ufce_materias_promo_directa
 	PRIMARY KEY (anio_academico, periodo_lectivo, materia)
 );
 
+------------------------------------------------------------------------------------------------------------------
 ----------- Crea instancias de evaluación parcial con denominación acorde a la nueva reglamentación -----------
 INSERT INTO sga_eval_parc
 (evaluacion, descripcion, descripcion_abrev, tipo_evaluac_parc, evaluacion_origen)
@@ -107,3 +108,10 @@ VALUES(23, 'Segundo Parcial', '2do Parcial', 1, NULL);
 INSERT INTO sga_eval_parc
 (evaluacion, descripcion, descripcion_abrev, tipo_evaluac_parc, evaluacion_origen)
 VALUES(24, 'Recuperatorio Global', 'Recup. Global', 2, NULL);
+
+------------------------------------------------------------------------------------------------------------------
+----------- PARA ADMINISTRAR DIFERENTES TIPOS DE PERIODOS --------------------------------------------------------
+RENAME TABLE 'dba'.ufce_eval_parc_periodos to ufce_periodos;
+RENAME TABLE 'dba'.ufce_orden_periodo to ufce_periodos_tipo;
+-- Período de examenes con suspensión de clases para no computar asistencias:
+INSERT INTO ufce_periodos_tipo VALUES (4, 'Período de examen con suspensión de clases');

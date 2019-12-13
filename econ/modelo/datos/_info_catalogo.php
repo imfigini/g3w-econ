@@ -1331,6 +1331,20 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales__get_periodo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'orden',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function evaluaciones_parciales__get_periodo_lectivo()
 	{
 		return array (
@@ -1438,6 +1452,20 @@ class _info_catalogo
   'param_null' => 
   array (
     0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__set_validez_clases()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'fecha_inicio',
+    1 => 'fecha_fin',
+    2 => 'valido',
   ),
   'cache' => 'no',
   'filas' => 'n',
