@@ -1,0 +1,7 @@
+#autocalcular .js-barra-autocalcular { padding-bottom: 10px; }
+#autocalcular #preset_campo { width: 140px; }
+#autocalcular label, input, select { margin-right: 5px; }
+#autocalcular .well { padding: 8px; margin-bottom: 0;}
+#autocalcular .form-inline { margin-bottom: 0; }
+#autocalcular input#notas_cursada_query, #autocalcular label.notas_cursada_query { margin-right: 0; }
+#autocalcular .autoerror {margin: 10px 0 0 2px; color: red;}

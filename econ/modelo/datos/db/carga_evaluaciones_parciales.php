@@ -212,7 +212,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 
 	/**
 	 * parametros: anio_academico, periodo
-	 * cache: si
+	 * cache: no
 	 * filas: 1
 	 */
 	function get_ultima_fecha_fin_turno_examen_regular($parametros)

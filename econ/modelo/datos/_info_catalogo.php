@@ -517,7 +517,7 @@ class _info_catalogo
     0 => 'anio_academico',
     1 => 'periodo',
   ),
-  'cache' => 'si',
+  'cache' => 'no',
   'filas' => '1',
 );
 	}
@@ -1278,6 +1278,18 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales__get_cuatrimestre()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'fecha',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function evaluaciones_parciales__get_dias_no_laborales()
 	{
 		return array (
@@ -1481,7 +1493,7 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
-  'El formato de strFecha debe ser' => 'Y-m-d',
+  'El formato de strFecha debe ser' => 'd/m/Y ó Y-m-d',
 );
 	}
 
@@ -1691,6 +1703,39 @@ class _info_catalogo
   array (
     0 => 'anio',
     1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function insc_cursadas__get_alumnos_calidad_inscripcion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'calidad',
+  ),
+  'param_null' => 
+  array (
+    0 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function insc_cursadas__update_calidad_insc_cursada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'legajo',
+    2 => 'comision',
+    3 => 'calidad',
   ),
   'cache' => 'no',
   'filas' => '1',

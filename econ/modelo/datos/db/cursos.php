@@ -862,7 +862,7 @@ class cursos
 				AND periodo_lectivo = $periodo)
         		AND estado = 'P'";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
-    }
+	}
 
 }
 

@@ -430,10 +430,41 @@ class evaluaciones_parciales
 		$fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
 		$fecha_fin = self::strToMDY($parametros['fecha_fin']);
 
+		
 		$sql = " UPDATE sga_calendcursada 
 					SET valido = {$parametros['valido']} 
 				WHERE fecha BETWEEN $fecha_inicio AND $fecha_fin ";
+
+		$cuatrim = self::get_cuatrimestre(Array('fecha'=>$fecha_inicio));
+
+		//Las clases de 1º año, 1º cuatrimestre no tienen suspensión de clases, con lo cual no deben invalidarse las clases
+		if ($cuatrim['CUATRIM'] == '1' || $cuatrim['CUATRIM'] == "'1'")
+		{
+			$sql .= " AND comision NOT IN
+						(SELECT comision FROM sga_comisiones 
+							WHERE anio_academico = 2019 
+							AND periodo_lectivo LIKE '1%'
+							AND materia IN (
+								SELECT DISTINCT materia FROM sga_atrib_mat_plan MP
+									WHERE plan IN (SELECT plan FROM sga_planes WHERE carrera = MP.carrera AND plan = MP.plan AND version_actual = MP.version AND estado = 'V') 
+									AND anio_de_cursada = 1
+								)	
+						)";
+		}
 		kernel::db()->ejecutar($sql);
+	}
+
+	/**
+	 * parametros: fecha
+	 * cache: no
+	 * filas: 1
+	 */
+	private function get_cuatrimestre($parametros)
+	{
+		$sql = "SELECT substr(periodo_lectivo, 0, 1) AS cuatrim
+					FROM sga_periodos_lect 
+				WHERE {$parametros['fecha']} BETWEEN fecha_inicio AND fecha_fin";
+		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
    
 }

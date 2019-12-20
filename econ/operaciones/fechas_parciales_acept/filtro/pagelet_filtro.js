@@ -436,7 +436,6 @@ function grabar_instancia_evaluacion(comision, instancia, evaluacion)
 		});
 		return resultado;
 	}
-
 }
 
 function get_datos_instancia_evaluacion(comision, instancia, evaluacion)

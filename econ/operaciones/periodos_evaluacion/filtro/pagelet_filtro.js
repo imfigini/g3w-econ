@@ -59,7 +59,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 
     function set_values(objeto_id, fechaInicio, fechaFin, fechaMin, fechaMax, feriados)
     {
-        console.log(feriados);
+        //console.log(feriados);
         $('#'+objeto_id).daterangepicker({
                 opens: 'right',
                 drops: 'up',

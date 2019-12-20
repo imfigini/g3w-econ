@@ -54,8 +54,8 @@ return array(
     'parciales' => 'Carga de notas de evaluaciones parciales',
     
     /* Períodos de evaluación */
-    'tit_periodos_evaluacion' => 'Períodos de evaluación',
-    'periodos_evaluacion' => 'Definición de los períodos de evaluación',
+    'tit_periodos_evaluacion' => 'Períodos cuatrimestrales',
+    'periodos_evaluacion' => 'Configuración de períodos cuatrimestrales',
         
      /* Definción de los Mixes */
     'tit_mixes' => 'Mixs',
@@ -91,5 +91,8 @@ return array(
 	/* Asignación de materias por promoción directa*/
 	'tit_asignacion_mat_prom_dir' => 'Asignación de materias por Promoción Directa',
 	'asignacion_mat_prom_dir' => 'Asignación de materias por Promoción Directa',
-	
+
+	/* Recalcular la calidad de inscripción a las cursadas para los alumnos que lo hicieron regular*/
+	'tit_recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
+	'recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
 );

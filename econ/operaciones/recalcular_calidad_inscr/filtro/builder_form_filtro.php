@@ -1,5 +1,5 @@
 <?php
-namespace econ\operaciones\periodos_evaluacion\filtro;
+namespace econ\operaciones\recalcular_calidad_inscr\filtro;
 
 use kernel\interfaz\componentes\forms\form_elemento_config;
 use kernel\kernel;
@@ -19,14 +19,14 @@ class builder_form_filtro extends builder_formulario
 
 	function get_action() 
 	{
-		return kernel::vinculador()->crear('periodos_evaluacion', 'index');
+		return kernel::vinculador()->crear('recalcular_calidad_inscr', 'index');
 	}
 
 	protected function generar_definicion(guarani_form $form, fabrica_formularios $fabrica) 
 	{
 		$form->add_elemento($fabrica->elemento('anio_academico', array(
 				form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_anio_academico')),
-				form_elemento_config::filtro		=>  validador::TIPO_ALPHANUM,
+				form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
 				form_elemento_config::obligatorio	=> true,
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_anios_academicos(),
@@ -36,15 +36,25 @@ class builder_form_filtro extends builder_formulario
 		)));
 		
 		$form->add_elemento($fabrica->elemento('periodo', array(
-				form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('filtro.filtro_periodos')),
-				form_elemento_config::filtro		=>  validador::TIPO_ALPHANUM,
-				form_elemento_config::obligatorio	=> true,
+				form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_periodos')),
+				form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
+				form_elemento_config::obligatorio	=> false,
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_periodos_lectivos(),
 				form_elemento_config::validar_select => false,
-				form_elemento_config::valor_default  =>   $this->periodo_hash,
 				form_elemento_config::clase_css => 'filtros_cursadas',
 		)));
+
+		$form->add_elemento($fabrica->elemento('calidad', array(
+			form_elemento_config::label			=> ucfirst(kernel::traductor()->trans(utf8_decode('calidad inscripción'))),
+			form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
+			form_elemento_config::obligatorio	=> false,
+			form_elemento_config::elemento		=> array('tipo' => 'select'),
+			form_elemento_config::multi_options => self::get_calidades(),
+			form_elemento_config::validar_select => false,
+			form_elemento_config::clase_css => 'filtros_cursadas',
+		)));
+	
 		$form->add_accion($fabrica->accion_boton_submit('boton_buscar', ucfirst(kernel::traductor()->trans('actas.filtro_buscar'))));
 	}
 
@@ -59,8 +69,9 @@ class builder_form_filtro extends builder_formulario
 				'grupo' => 'filtros',
 				'filas' => array(
 					array(
-						'anio_academico' => array('span' => 6),
-						'periodo' => array('span' => 6),
+						'anio_academico' => array('span' => 4),
+						'periodo' => array('span' => 4),
+						'calidad' => array('span' => 4),
 					),
 				)
 			),
@@ -76,6 +87,11 @@ class builder_form_filtro extends builder_formulario
 	{
 		$this->periodo_hash = $periodo_hash;
 	}
+
+	function set_calidad($calidad)
+	{
+		$this->calidad = $calidad;
+	}
         
 	function get_anios_academicos()
 	{
@@ -84,7 +100,7 @@ class builder_form_filtro extends builder_formulario
 		$datos_2019 = Array();
 		foreach($datos as $dato)
 		{
-			if ($dato['ANIO_ACADEMICO'] >= 2019) {
+			if ($dato['ANIO_ACADEMICO'] >= 2018) {
 				$datos_2019[] = $dato;
 			}
 		}
@@ -93,6 +109,15 @@ class builder_form_filtro extends builder_formulario
 	
 	function get_periodos_lectivos()
 	{
-		return array(""=>  kernel::traductor()->trans('actas.filtro_seleccione'));
+		return array(""=>  kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
+	}
+
+	function get_calidades()
+	{
+		$datos = Array();
+		$datos[] = Array('ID'=>'R', 'CALIDAD'=>'Regular');
+		$datos[] = Array('ID'=>'P', 'CALIDAD'=>utf8_decode('Promoción'));
+		$datos[] = Array('ID'=>'T', 'CALIDAD'=>'Todos');
+		return guarani_form_elemento::armar_combo_opciones($datos, 'ID', 'CALIDAD', false, false, kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
 	}
 }

@@ -71,6 +71,18 @@ return array(
                 'visible' => true,
                 'texto' => 'fechas_parciales_acept'
             )
+		),
+		
+		/* Aceptación fechas de evaluación - 2019
+         */
+        'fechas_parciales_acept_2019' => array(
+            'url' => 'fechas_parciales_acept_2019',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'fechas_parciales_acept_2019'
+            )
         ),
 		
 		/* Definición de materias por promoción directa
@@ -97,27 +109,27 @@ return array(
             )
         ),
 
-		// /* Visualizacion fechas de evaluación (con calendario) - 2019
-        //  */
-        // 'fechas_parciales_calend_2019' => array(
-        //     'url' => 'fechas_parciales_calend_2019',
-        //     'activa' => true,
-        //     'menu' => array(
-        //         'submenu' => 'detalle_cursos',
-        //         'visible' => true,
-        //         'texto' => 'fechas_parciales_calend_2019'
-        //     )
-        // ),
-        
-        /* Aceptación fechas de evaluación - 2019
+		/* Definición de materias por promoción directa
          */
-        'fechas_parciales_acept_2019' => array(
-            'url' => 'fechas_parciales_acept_2019',
+        'asignacion_mat_prom_dir' => array(
+            'url' => 'asignacion_mat_prom_dir',
             'activa' => true,
             'menu' => array(
                 'submenu' => 'detalle_cursos',
                 'visible' => true,
-                'texto' => 'fechas_parciales_acept_2019'
+                'texto' => 'asignacion_mat_prom_dir'
+            )
+		),
+        
+        /* Recalcular la calidad de inscripción a las cursadas para los alumnos que lo hicieron regular
+         */
+        'recalcular_calidad_inscr' => array(
+            'url' => 'recalcular_calidad_inscr',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'recalcular_calidad_inscr'
             )
 		),        
     )

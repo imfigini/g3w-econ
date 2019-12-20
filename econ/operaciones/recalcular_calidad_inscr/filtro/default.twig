@@ -1,0 +1,99 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+    {% set vista_form = this.get_vista_form() %}
+	{{ vista_form.render_encabezado() | raw }}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+			<span class="pull-left">
+				{{"recalcular_calidad_inscr"|trans|capitalize}}
+			</span>
+			<span class="pull-right">
+			{{ vista_form.render_acciones() | raw }}
+			</span>
+		</h2>
+	</div>
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+	
+	{# Mensaje si se guardó con éxito #}
+    {% if (this.data.mensaje != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+    {% endif %} 
+	
+	{#  Mensaje si hubo error al guardar      #}
+    {% if (this.data.mensaje_error != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+        <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
+    {% endif %}
+
+	{% if(this.data.alumnos) %}
+		<div role='alert' class="alert">
+			<p>Se listan los alumnos que tienen la calidad de inscripción seleccionada a cada comisión.
+				Esta operación permite recalcular la condición a la que pueden aspirar (en caso de ser REGULAR) luego de la fecha de finalización del último turno de examen regular del cuatrimestre.</p>
+			<p>Fecha límite considerada: {{this.data.fecha_limite}}</p>
+		</div>
+	
+		<form name="calidad_alumnos" method="post" action="{{this.data.form_url_grabar}}">
+			<input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+			<input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+			<input type="hidden" name="calidad" value="{{this.data.calidad}}">
+			<table class="table table-striped table-bordered table-condensed" summary="Tabla de calidad de alumnos">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Legajo</th>
+						<th>Alumno</th>
+						<th>Carrera</th>
+						<th>Materia</th>
+						<th>Comisión</th>
+						<th>Calidad de inscripción</th>
+						<th>Calidad a asignar</th>
+					</tr> 
+				</thead>
+				<tbody>
+					{% set i = 1 %}
+					{% for alumno in this.data.alumnos %}
+						<tr>
+							<td> {{i}}</td>
+							<td> {{ alumno.LEGAJO }} </td>
+							<td> {{ alumno.ALUMNO }} </td>
+							<td> {{ alumno.CARRERA_NOMBRE }} </td>
+							<td> {{ alumno.MATERIA_NOMBRE }} </td>
+							<td> {{ alumno.COMISION }} </td>
+							<td> {{ alumno.CALIDAD_INSC }} </td>
+							<td> {% if (alumno.CALIDAD_ASIGNAR == 'P')%} 
+									<p class="cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+									<input type="hidden" name="datos[{{alumno.CARRERA}}][{{alumno.LEGAJO}}][{{alumno.COMISION}}]" value="{{ alumno.CALIDAD_ASIGNAR }}">
+								{% else %}
+									{{ alumno.CALIDAD_ASIGNAR }}
+								{% endif %}  </td>
+							{% set i = i+1 %}
+							{# <td>  #}
+								{# <input type='checkbox' id='materias[{{ materia.MATERIA }}][PROMO_DIRECTA]'
+									name='materias[{{ materia.MATERIA }}][PROMO_DIRECTA]'  
+													{{ (materia.PROMO_DIRECTA == 'S') ? 'checked' : '' }}
+								/> #}
+						{# </td> #}
+						</tr>
+					{% endfor %}
+					<tr>
+						<td scope="row" colspan="8">
+							{# <div style="text-align: right">
+								<div class="btn btn-info btn-lg" onclick="grabar_cambio_calidad()" id="boton_grabar_cambio_calidad">
+									Guardar</div>
+							</div> #}
+							<div style="text-align: right">
+								<button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+
+    {% else %}
+        <div role="alert" class="alert">
+            {{"sin_resultados"|trans|capitalize}}
+        </div>
+    {% endif %}
+{% endblock %}

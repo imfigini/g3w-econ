@@ -179,6 +179,7 @@ class controlador extends controlador_g3w2
 							$parametros['valido'] = 'N';
 							catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $parametros);
 						}
+
 						catalogo::consultar('evaluaciones_parciales', 'set_periodos_evaluacion', $parametros);
                     }
                 }
