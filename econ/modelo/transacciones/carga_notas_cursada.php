@@ -8,7 +8,7 @@ use siu\modelo\datos\catalogo;
 class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 {
 
-	function info__get_posible_nota_alumno($comision, $legajo)
+	function info__autocalcular_nota_alumno($comision, $legajo)
 	{
 		$anio_academico = catalogo::consultar('carga_notas_cursada', 'get_anio_comision', Array('comision' => $comision));
 		if ($anio_academico['ANIO_ACADEMICO'] < 2019) {
@@ -301,7 +301,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		if ($notas_eval_alumno[$eval['RECUP']]['NOTA'] >= 4 && $nota >= 4) {
 			return Array('nota'=>$nota, 'resultado'=>'A', 'condicion'=>$cond['A'], 'asistencia'=>$porc_asistencia, 'estado'=>'listo');
 		} else {
-			return Array('nota'=>$nota, 'resultado'=>'R', 'condicion'=>$cond['R'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');
+			return Array('nota'=>$nota, 'resultado'=>'R', 'condicion'=>$cond['R'], 'asistencia'=>$porc_asistencia, 'estado'=>'listo');
 		}
 		return null;
 	}

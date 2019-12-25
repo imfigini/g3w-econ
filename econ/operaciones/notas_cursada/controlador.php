@@ -16,7 +16,7 @@ class controlador extends \siu\operaciones\notas_cursada\controlador
 		$comision = $this->validate_param('comision', 'get', validador::TIPO_ALPHANUM);
 		$legajo = $this->validate_param('legajo', 'get', validador::TIPO_ALPHANUM);
 
-		$resultado = $this->modelo()->info__get_posible_nota_alumno($comision, $legajo);
+		$resultado = $this->modelo()->info__autocalcular_nota_alumno($comision, $legajo);
 
 		kernel::log()->add_debug('accion__autocalcular $resultado', $resultado);
 		if ($resultado) {
