@@ -1,0 +1,9 @@
+.acepta-icon {
+    display: inline-block;
+	background-image: url('../../../img/iconos/icono-promo.png');
+    background-repeat: no-repeat;
+    vertical-align: text-top;
+    width: 14px;
+	height: 14px;
+	background-size: contain;
+}
