@@ -66,7 +66,7 @@ class controlador extends \siu\operaciones\fecha_examen\controlador {
 				$materias[$dato['MATERIA']]['MATERIA'] = $dato['MATERIA'];
 
 				$materias[$dato['MATERIA']]['examenes'][] = array(
-					'MESA' => "{$dato['MATERIA_NOMBRE']} {$dato['TIPO_DE_MESA']} ({$dato['MATERIA']})",
+					'MESA' => "{$dato['MATERIA_NOMBRE']} - {$dato['TIPO_DE_MESA']} ({$dato['MATERIA']})",
 					'FECHA' => $dato['FECHA_EXAMEN'],
 					'TIPO_MESA' => $dato["TIPO_DE_MESA"],
 					'INSCR_INICIO' => $dato['F_INICIO_INSC'],
