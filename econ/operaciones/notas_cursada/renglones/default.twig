@@ -32,12 +32,12 @@
 			    class='{{ (alumno.ERROR) ? 'error-renglon' : '' }} {{(renglon_habilitado) ? '' : 'renglon-deshabilitado'}} {{alumno.RESULTADO}}{% if alumno.PROMOCIONAL == "S" %} promocional{% endif %}' 
 		    >
 
-                    <td headers="nombre">
+                    <td headers="nombre" class="col_nombre">
                         {% set nombre = alumno.APELLIDO ~ ', ' ~ alumno.NOMBRE %}
                         <div class="ficha-alumno clearfix pull-left"
                              data-url-ficha="{{ alumno.URL_FICHA }}">
-                            <img src='{{alumno.URL_IMAGEN}}' width='35' height="35" alt="imagen ficha" title='{{nombre}}' class="pull-left" />
-                            <div class="pull-left">
+							<img src='{{alumno.URL_IMAGEN}}' width='35' height="35" alt="imagen ficha" title='{{nombre}}' class="pull-left" />
+							<div class="pull-left">
                                 <span class="nombre">{{nombre}}
                                     {% if alumno.PROMOCIONAL == "S" %}
                                         <span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="icon-certificate js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span>
@@ -46,8 +46,9 @@
                                         {% endif %}
                                     {% endif %}
 
-                                </span>
-                                <span class="legajo">{{'legajo'|trans|capitalize}}: {{ alumno.LEGAJO }}</span>
+								</span>
+								{# {{'legajo'|trans|capitalize}}:  #}
+								<span class="legajo">{{ alumno.LEGAJO }}</span>
                             </div>
                         </div>
                     </td>
@@ -155,6 +156,6 @@
 		{% endif %}
 		
 		<input type='submit' value='{{"guardar"|trans|capitalize}}' class="btn btn-info btn-small pull-right" />
-		<div onclick="autocalcular()" class="btn btn-info btn-small pull-right" >{{"autocalcular"|trans|capitalize}}</div>
+		{# <div onclick="autocalcular()" class="btn btn-info btn-small pull-right" >{{"autocalcular"|trans|capitalize}}</div> #}
     </div>
 {% endmacro %}

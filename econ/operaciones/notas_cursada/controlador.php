@@ -251,6 +251,13 @@ class controlador extends \siu\operaciones\notas_cursada\controlador
 	 */
 	function accion__autocalcular()
 	{
+		
+		$comision = $this->validate_param('comision', 'get', validador::TIPO_ALPHANUM);
+		$legajo = $this->validate_param('legajo', 'get', validador::TIPO_ALPHANUM);
+
+		kernel::log()->add_debug('accion__autocalcular $comision', $comision);
+		kernel::log()->add_debug('accion__autocalcular $legajo', $legajo);
+		/*
 		$acta = $this->validate_param(0, 'get', validador::TIPO_ALPHANUM);
 		$term = $this->validate_param('term', 'get', validador::TIPO_TEXTO);
 
@@ -277,11 +284,20 @@ class controlador extends \siu\operaciones\notas_cursada\controlador
 		}
 		
 		$this->render_raw_json($data);
-
-		print_r('<br>Get: ');
-		print_r($_GET);
-		print_r('<br>post: ');
-		print_r($_POST);
+*/
+		$resultado = Array('nota'=>7, 'resultado'=>'5', 'condicion'=>'5', 'asistencia'=>80, 'estado'=>'va_integ');
+		if ($legajo == 'FCE-757138' || $legajo == 'FCE-713203') {
+			$resultado = Array('nota'=>5, 'resultado'=>'R', 'condicion'=>'4', 'asistencia'=>60, 'estado'=>'listo');
+		}
+		if ($legajo == 'FCE-766033') {
+			$resultado = Array('nota'=>'', 'resultado'=>'U', 'condicion'=>'2', 'asistencia'=>40, 'estado'=>'abandono');
+		}
+		if ($legajo == 'FCE-731811' || $legajo == 'FCE-682539') {
+			$resultado = Array('nota'=>3, 'resultado'=>'R', 'condicion'=>'3', 'asistencia'=>60, 'estado'=>'va_recup');
+		}
+		
+		kernel::log()->add_debug('accion__autocalcular $resultado', $resultado);
+		$this->render_raw_json($resultado);
 	}
 
 }

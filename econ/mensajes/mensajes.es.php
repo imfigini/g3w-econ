@@ -1,7 +1,8 @@
 <?php
 return array(
     
-    'header.menu.inicio_oficina_docentes' => 'Inicio Dirección de Docentes',
+	'header.menu.inicio_oficina_docentes' => 'Inicio Dirección de Docentes',
+	'header.menu.inicio_oficina_alumnos' => 'Inicio Dirección de Alumnos',
     'header.menu.inicio_coordinador' => 'Coordinador de materia',
     'header.menu.coord_materias' => 'Coordinadores de materias',
     'header.menu.ponderacion_notas' => 'Cursadas',
@@ -10,10 +11,12 @@ return array(
     'header.menu.mixes' => 'Mixs',
     
     /* Perfiles */
-    'perfil.ofd' => 'dirección de docentes',
+	'perfil.ofd' => 'dirección de docentes',
+	'perfil.ofa' => 'dirección de alumnos',
     'perfil.coord' => 'coordinador de materia',
     
-    'OFD' => 'dirección de docentes',
+	'OFD' => 'dirección de docentes',
+	'OFA' => 'dirección de alumnos',
     'COORD' => 'coordinador de materia',
 
     'filtro.filtro_periodos' => "períodos lectivos",
@@ -23,12 +26,17 @@ return array(
 
 	'sin_resultados' => 'No hay información',    
 
-     //Inicio Oficina de Docentes
+    //Inicio Oficina de Docentes
     "inicio_oficina_docentes.titulo" => "Inicio Oficina de Docentes",
     "inicio_oficina_docentes.bienvenido" => "Bienvenido",
     "inicio_oficina_docentes.intro" => "Para comenzar seleccione alguna de las opciones del menú",
 
-    //Inicio Coordinador de Materia
+	//Inicio Oficina de Alumnos
+	"inicio_oficina_alumnos.titulo" => "Inicio Oficina de Alumnos",
+	"inicio_oficina_alumnos.bienvenido" => "Bienvenido",
+	"inicio_oficina_alumnos.intro" => "Para comenzar seleccione alguna de las opciones del menú",
+
+	//Inicio Coordinador de Materia
     "inicio_coordinador.titulo" => "Inicio Coordinador de Materia",
     "inicio_coordinador.bienvenido" => "Bienvenido",
     "inicio_coordinador.intro" => "Para comenzar seleccione alguna de las opciones del menú",
@@ -95,4 +103,10 @@ return array(
 	/* Recalcular la calidad de inscripción a las cursadas para los alumnos que lo hicieron regular*/
 	'tit_recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
 	'recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
+
+	/* Detalle para el cálculo de notas automático */
+	'alumno_con_nota' => "El alumno ya pasó por todas las instancias de evaluación posibles, se puede hacer un cierre parcial de nota.",
+	'alumno_abandono' => "El alumno abandonó (se ausentó a ambos parciales o no cumple con el % de asistencia), se puede hacer un cierre parcial de nota.",
+	'alumno_falta_integ' => "El alumno aún puede rendir el Integrador, no se puede calcular la nota aún.",
+	'alumno_falta_recup' => "El alumno aún puede rendir el Recuperatorio Global, no se puede calcular la nota aún.",
 );

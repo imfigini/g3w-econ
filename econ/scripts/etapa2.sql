@@ -115,3 +115,13 @@ RENAME TABLE 'dba'.ufce_eval_parc_periodos to ufce_periodos;
 RENAME TABLE 'dba'.ufce_orden_periodo to ufce_periodos_tipo;
 -- Período de examenes con suspensión de clases para no computar asistencias:
 INSERT INTO ufce_periodos_tipo VALUES (4, 'Período de examen con suspensión de clases');
+
+------------------------------------------------------------------------------------------------------------------
+----------- PARA AGREGAR PERFIL A LA OFICINA DE ALUMNOS ----------------------------------------------------------
+INSERT INTO acc_tipos_usuarios (tipo_usuario, descripcion) VALUES ('OFA', 'Oficina de Alumnos');
+
+-- Dar permisos en aca_tipos_usuar_ag a los usuarios que se quiera tengan el perfil OFA (OFICINA DE ALUMNOS)
+{
+INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'nro_inscripcion’, 'OFA', 'A');
+--Lucia: INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'OFA', 'A');
+}

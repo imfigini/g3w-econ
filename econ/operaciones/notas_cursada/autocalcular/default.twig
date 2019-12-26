@@ -2,7 +2,7 @@
 {% block contenido %}
 
 <div class="js-barra-autocalcular" style="display: none;">
-	<form id='preset_form' class="form-inline">
+	<form id='precalcular_form' class="form-inline">
         <fieldset>
 			<legend>Autocalcular</legend>
 
@@ -33,15 +33,52 @@
                     {% endif %}
                 {% endfor %}
             </select> #}
-            <label role="menucheckbox" for='preset_solo_vacio' class="checkbox">
-                <input id='preset_solo_vacio' type="checkbox" checked="checked"/>{{ "solo_valores_vacios"|trans|capitalize }}
+            <label role="menucheckbox" for='preset_solo_vacio_autocalcular' class="checkbox">
+                <input id='preset_solo_vacio_autocalcular' type="checkbox" checked="checked"/>{{ "solo_valores_vacios"|trans|capitalize }}
             </label>
 
-            <button type="submit" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button>
+			{# <button id="btn_autocalcular" type="submit" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button> #}
+
+			<button type="submit" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button>
             <input type="reset" value="{{ "deshacer"|trans|capitalize }}" class="btn btn-small" id='preset_undo' disabled="disabled" />
-        </fieldset>
+		</fieldset>
+		<div role='alert' class="alert">
+			<p></p> 
+			<p><strong>Detalle:</strong></p>
+			<p><span style="color:green;">Verde: </span>{{"alumno_con_nota"|trans|capitalize }}</p>
+			<p><span style="color:red;">Rojo: </span>{{"alumno_abandono"|trans|capitalize }}</p>
+			<p><span style="color:blue;">Azul: </span>{{"alumno_falta_integ"|trans|capitalize }}</p>
+			<p><span style="color:yellow;">Amarillo: </span>{{"alumno_falta_recup"|trans|capitalize }}</p>
+		</div>
 	</form>
     <p class="autoerror" id="msj-autoerror">
     </p>
 </div>
+{# 
+<script>
+	
+//	document.getElementById("btn_autocalcular").addEventListener("click", autocalcular);
+
+	function actualizarNota(posicion, legajos, notas)
+	{
+		let legajo = legajos[posicion].innerHTML;
+		
+		// Calculo nota
+		let nota = "5";
+		
+		notas[posicion].value = nota;
+	}
+
+	function autocalcular(event)
+	{
+		event.preventDefault();
+
+		console.log('Inicia autocalcular...');
+		let legajos = $( ".legajo" );
+		let notas = $(".nota");
+
+		actualizarNota(1, legajos, notas);
+	}
+</script>
+ #}
 {% endblock %}

@@ -158,6 +158,12 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 
 	function validar_renglon(row, tipo) {
 		var valido = true;
+
+		// if (!autocalcular) {
+		// 	row.removeClass("listo");
+		// }
+		
+
 		if (! chequeo_porcentaje_valido(row)) {
 			$(id).plugin_renglones('set_error', row.find('.asistencia'), info.mensajes.asistencia_invalida);
 			valido = false;
@@ -200,7 +206,6 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 			//	update_condicion(row);
 			//}
 		}
-
 		return valido;
 	}
 	
@@ -273,6 +278,11 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 		return new Date(fecha_split[2], fecha_split[1]-1, fecha_split[0]);
 	}
 	
+	$('.col_nombre').click(function() {
+		var url = $(this).children().data('url-ficha');
+		kernel.ui.pagelet_modal(url);
+	});
+
 	return {
 		onload: function() {
 			guarani.set_condicion_antes_de_navegar(hay_cambios, info.msj_navegacion);
@@ -317,9 +327,3 @@ kernel.renderer.registrar_pagelet('renglones', function(info) {
 	}
 
 })
-
-function autocalcular()
-{
-	console.log('aaaaautocalcular');
-	console.log(this);
-}

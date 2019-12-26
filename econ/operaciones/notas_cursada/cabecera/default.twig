@@ -19,6 +19,7 @@
 			<th id="actar" scope="row"><strong>{{'acta_regularidad'|trans|capitalize}}:</strong></th>
 			<td headers="actar">{{ this.data.ACTA_REG }}</td>
 			<th id="comision" scope="row"><strong>{{'comision'|trans|capitalize}}:</strong></th>
+			<input hidden id="comision_id" value="{{ this.data.COMISION }}"/>
 			<td headers="comision">({{ this.data.COMISION }}) {{ this.data.COMISION_NOMBRE }}</td>
 		</tr>
 		{% if this.data.ACTA_PRO and this.data.ESTADO != 'B' %}
@@ -43,7 +44,7 @@
 		</tr>
 	</table>
 		
-	<a id='ver_escala' class="btn btn-small"href="#"><span class="icon-eye-open"></span> {{ 'ver_escala_notas'|trans|capitalize }}</a>
+	{# <a id='ver_escala' class="btn btn-small"href="#"><span class="icon-eye-open"></span> {{ 'ver_escala_notas'|trans|capitalize }}</a> #}
 	
 </div>
 

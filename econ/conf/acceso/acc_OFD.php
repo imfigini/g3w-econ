@@ -121,16 +121,5 @@ return array(
             )
 		),
         
-        /* Recalcular la calidad de inscripción a las cursadas para los alumnos que lo hicieron regular
-         */
-        'recalcular_calidad_inscr' => array(
-            'url' => 'recalcular_calidad_inscr',
-            'activa' => true,
-            'menu' => array(
-                'submenu' => 'detalle_cursos',
-                'visible' => true,
-                'texto' => 'recalcular_calidad_inscr'
-            )
-		),        
     )
 );

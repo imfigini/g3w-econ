@@ -27,6 +27,9 @@ class pagelet_autocalcular extends pagelet
 		$this->add_var_js('nota_invalida', kernel::traductor()->trans('nota_invalida'));
 		$this->add_var_js('asistencia_invalida', kernel::traductor()->trans('asistencia_invalida'));
 		
+		$operacion = kernel::ruteador()->get_id_operacion();
+		$this->add_var_js('url_autocalcular', kernel::vinculador()->crear($operacion, 'autocalcular'));
+		
 		// $notas = $this->controlador->get_escala_js();
 		// $this->add_var_js('escala', $notas);
         

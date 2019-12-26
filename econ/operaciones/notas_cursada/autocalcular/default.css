@@ -5,3 +5,32 @@
 #autocalcular .form-inline { margin-bottom: 0; }
 #autocalcular input#notas_cursada_query, #autocalcular label.notas_cursada_query { margin-right: 0; }
 #autocalcular .autoerror {margin: 10px 0 0 2px; color: red;}
+
+.listo
+{
+	background-color:#92a88f;
+	color: white !important;
+}
+
+
+.abandono
+{
+	background-color:#da4f49;
+	color: white !important;
+}
+
+.va-recup
+{
+	background-color:#fffacd;
+}
+
+.va-integ
+{
+	background-color:#cde4ff;
+}
+
+#renglones .listo span.legajo,
+#renglones .abandono span.legajo
+{
+	color: white;
+}

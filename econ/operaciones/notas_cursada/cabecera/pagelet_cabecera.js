@@ -43,7 +43,6 @@ kernel.renderer.registrar_pagelet('cabecera', function(info) {
 				}
 
 				var barra_autocalcu = $('.js-barra-autocalcular');
-				console.log(barra_autocalcu);
 				if (barra_autocalcu.is(':visible')) {
 					barra_autocalcu.slideUp();
 				}
@@ -63,6 +62,11 @@ kernel.renderer.registrar_pagelet('cabecera', function(info) {
 				if (detalle.is(':visible')) {
 					detalle.slideUp();
 				}
+
+				var barra_autocalcu = $('.js-barra-autocalcular');
+				if (barra_autocalcu.is(':visible')) {
+					barra_autocalcu.slideUp();
+				}
 				
 				var barra = $('.js-barra-herramientas');
 				
@@ -80,12 +84,17 @@ kernel.renderer.registrar_pagelet('cabecera', function(info) {
 					detalle.slideUp();
 				}
 				
-				var barra = $('.js-barra-autocalcular');
-				
+				var barra = $('.js-barra-herramientas');
+				//console.log(barra);
 				if (barra.is(':visible')) {
 					barra.slideUp();
+				}
+
+				var barra_autocalcu = $('.js-barra-autocalcular');
+				if (barra_autocalcu.is(':visible')) {
+					barra_autocalcu.slideUp();
 				} else {
-					barra.slideDown();
+					barra_autocalcu.slideDown();
 				}
 			});
         }
