@@ -41,6 +41,7 @@
                                 <span class="nombre">{{nombre}}
                                     {% if alumno.PROMOCIONAL == "S" %}
 										{# <span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="icon-certificate js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span> #}
+										{# Iris: se cambió el icono que identifica a los promocionables #}
 										<span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="acepta-icon js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span>
                                         {% if not this.data.encabezado.PROM_ABIERTA %}
                                             <span class="icon-exclamation-sign js-tooltip" title="{{"acta_promocion_cerrada" |trans|capitalize}}"></span>
