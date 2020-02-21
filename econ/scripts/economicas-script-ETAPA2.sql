@@ -39,7 +39,6 @@ CREATE TABLE dba.ufce_cron_eval_parc_obs_log
 alter table ufce_cron_eval_parc add estado_notific varchar(1) default 'U' not null; 
 ALTER TABLE ufce_cron_eval_parc ADD CONSTRAINT CHECK (estado_notific in ('U', 'A', 'M'));
 ALTER TABLE ufce_cron_eval_parc MODIFY (estado VARCHAR(2) DEFAULT 'P' NOT NULL);
-ALTER TABLE ufce_cron_eval_parc ADD CONSTRAINT FOREIGN KEY (estado) REFERENCES ufce_cron_eval_parc_estados(estado);
 --select * from ufce_cron_eval_parc;
 
 -- DROP TABLE dba.ufce_cron_eval_parc_estados;
@@ -62,8 +61,11 @@ insert into ufce_cron_eval_parc_estados (estado, descripcion)
 	values ('CH', 'Modificada a otro día de cursada y modificado el horario. Tiene instancia de evaluación asociada a otra fecha y otro horario');
 insert into ufce_cron_eval_parc_estados (estado, descripcion)
 	values ('RH', 'Reasiganda a otro día de la semana que no corresponde a la cursada y a otro horario. Tiene instancia de evaluación asociada a otra fecha y otro horario');
+insert into ufce_cron_eval_parc_estados (estado, descripcion)
+	values ('N', 'Nada. No usar. Quedaron 4 comisiones en 2019 con este estado: 7488,7489,7490,7491');
 
 --select * from ufce_cron_eval_parc_estados;
+ALTER TABLE ufce_cron_eval_parc ADD CONSTRAINT FOREIGN KEY (estado) REFERENCES ufce_cron_eval_parc_estados(estado);
 
 ------------------------------------------------------------------------------------------------------------
 ----------- PARA ADMINISTRAR PORCENTAJE EN EL PESO DE LAS NOTAS --------------------------------------------------
