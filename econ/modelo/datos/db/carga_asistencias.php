@@ -178,7 +178,7 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
         if (!$this->tiene_cargadas_asistencias($parametros)) 
         {
             $sql = "execute procedure sp_AsisAluClas({$parametros["clase"]})";
-            //kernel::db()->consultar($sql, db::FETCH_NUM);
+            kernel::db()->consultar($sql, db::FETCH_NUM);
         }
         
 		if ( ($parametros["cant_inasist"] == "'1'" && $parametros["justific"] <> "'-1'") //Ausencia justificada
@@ -220,11 +220,10 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                                  $parametros["clase"] . "," .
                                  0 . ",".
                                  "NULL" .");";   
-        }
+		}
         kernel::db()->consultar_fila($sql2, db::FETCH_NUM);
         return kernel::db()->consultar_fila($sql1, db::FETCH_NUM);
     }	
-    
     
     /**
      * parametros: 

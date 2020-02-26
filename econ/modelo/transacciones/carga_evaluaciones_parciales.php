@@ -4,6 +4,7 @@ namespace econ\modelo\transacciones;
 use kernel\kernel;
 use siu\modelo\datos\catalogo;
 use siu\modelo\entidades\alumno_foto;
+use siu\errores\error_guarani_procesar_renglones;
 
 class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evaluaciones_parciales
 {
@@ -187,4 +188,55 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 		}
 		return true;
 	}
+
+	function evt__procesar_evaluaciones($seleccion, $renglones)
+	{
+		$datos = $this->info__evaluacion_cabecera($seleccion);		
+		$error = new error_guarani_procesar_renglones('Error cargando notas');
+		
+        foreach($renglones as $k=>$renglon) {
+			try {
+				$renglon['CARRERA'] = $renglon['CARRERA'];
+				$renglon['LEGAJO'] = $renglon['LEGAJO'];
+				$renglon['COMISION'] = $datos['COMISION'];
+				$renglon['EVALUACION'] = $datos['EVALUACION'];
+				$renglon['FECHA_HORA'] = $datos['FECHA_HORA'];
+				$renglon['ESCALA_NOTAS'] = $datos['ESCALA_NOTAS'];				
+				
+                kernel::log()->add_debug('evt__procesar_evaluaciones renglon '.$k,$renglon);
+                //kernel::log()->add_debug('evt__procesar_evaluaciones datos ', $datos);
+                $ok = catalogo::consultar('carga_evaluaciones_parciales', 'guardar_renglon', $renglon);
+                if($ok[0]) {
+                    $parametros = array();
+                    $parametros['carrera'] = $renglon['CARRERA'];
+                    $parametros['legajo'] = $renglon['LEGAJO'];
+                    $parametros['comision'] = $renglon['COMISION'];
+					$clase = catalogo::consultar('carga_evaluaciones_parciales', 'get_clase', Array('comision'=>$renglon['COMISION'], 'fecha'=>substr($renglon['FECHA_HORA'], 0, 10)));
+					kernel::log()->add_debug('$clase renglon ', $clase);
+                    if (isset($clase) && isset($clase['CLASE'])) {
+						$parametros['clase'] = $clase['CLASE'];
+						if ($renglon['NOTA'] > 0) {
+							$parametros['cant_inasist'] = 0;
+							$parametros['justific'] = 0;
+						} else {
+							$parametros['cant_inasist'] = 1;
+							$parametros['justific'] = 0;
+						}
+						catalogo::consultar('carga_asistencias', 'guardar', $parametros);
+					}
+                }
+				if($ok[0]!=1) {
+					$error->add_renglon($renglon['RENGLON'], util::mensaje($ok[1]), $renglon);
+					kernel::log()->add_debug("RENG_ERROR", $ok);
+					kernel::log()->add_error(new error_guarani($ok[1]));	
+				}
+			} catch (error_kernel $e) {
+				$error->add_renglon($renglon['RENGLON'], $e->getMessage(), $renglon);
+				kernel::log()->add_error($e);
+			}
+		}
+		if($error->hay_renglones()) {
+			throw $error;
+		}
+    }
 }
