@@ -124,6 +124,5 @@ INSERT INTO acc_tipos_usuarios (tipo_usuario, descripcion) VALUES ('OFA', 'Ofici
 
 -- Dar permisos en aca_tipos_usuar_ag a los usuarios que se quiera tengan el perfil OFA (OFICINA DE ALUMNOS)
 {
-INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'nro_inscripcion’, 'OFA', 'A');
---Lucia: INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'OFA', 'A');
+--INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'nro_inscripcion’, 'OFA', 'A');
 }

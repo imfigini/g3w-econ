@@ -509,7 +509,7 @@ class controlador extends controlador_g3w2
 		$dir_to = $dir_to['PARAMETRO'];
 
 		//Iris: Comentar esta seccion en produccion-------------------------------------
-		$dir_to = 'imfigini@slab.exa.unicen.edu.ar';
+		//$dir_to = 'imfigini@slab.exa.unicen.edu.ar';
 		//$dir_to = 'bosch.marcela@gmail.com';
 		//Iris: Fin comentar esta seccion en produccion---------------------------------
 
