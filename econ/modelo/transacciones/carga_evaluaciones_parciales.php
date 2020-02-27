@@ -189,6 +189,21 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 		return true;
 	}
 
+	function info__evaluacion_cabecera($seleccion)
+	{
+		// Control derechos
+		$parametros = array();
+		$datos_eval = $this->get_evaluacion_enviada($seleccion);
+		$parametros['comision'] = $datos_eval['COMISION'];
+		$parametros['evaluacion'] = $datos_eval['EVALUACION'];
+        $resultado = catalogo::consultar('carga_evaluaciones_parciales', 'evaluacion_cabecera',$parametros);
+        //kernel::log()->add_debug('cabecera: ', $resultado);
+        if ($resultado['EVALUACION'] == '15') {
+            $resultado['FECHA_HORA'] = NULL;
+        }
+        return $resultado;
+	}	
+
 	function evt__procesar_evaluaciones($seleccion, $renglones)
 	{
 		$datos = $this->info__evaluacion_cabecera($seleccion);		
