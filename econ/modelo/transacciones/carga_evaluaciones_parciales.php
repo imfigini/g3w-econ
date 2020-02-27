@@ -204,7 +204,6 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 				$renglon['ESCALA_NOTAS'] = $datos['ESCALA_NOTAS'];				
 				
                 kernel::log()->add_debug('evt__procesar_evaluaciones renglon '.$k,$renglon);
-                //kernel::log()->add_debug('evt__procesar_evaluaciones datos ', $datos);
                 $ok = catalogo::consultar('carga_evaluaciones_parciales', 'guardar_renglon', $renglon);
                 if($ok[0]) {
                     $parametros = array();
@@ -212,8 +211,9 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
                     $parametros['legajo'] = $renglon['LEGAJO'];
                     $parametros['comision'] = $renglon['COMISION'];
 					$clase = catalogo::consultar('carga_evaluaciones_parciales', 'get_clase', Array('comision'=>$renglon['COMISION'], 'fecha'=>substr($renglon['FECHA_HORA'], 0, 10)));
-					kernel::log()->add_debug('$clase renglon ', $clase);
-                    if (isset($clase) && isset($clase['CLASE'])) {
+					//kernel::log()->add_debug('$clase renglon ', $clase);
+					//Si existe la clase y no es TP debe registrar la asistencia
+                    if (isset($clase) && isset($clase['CLASE']) && $datos['EVALUACION'] != 15) {
 						$parametros['clase'] = $clase['CLASE'];
 						if ($renglon['NOTA'] > 0) {
 							$parametros['cant_inasist'] = 0;
