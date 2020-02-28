@@ -41,7 +41,7 @@
                                 <span class="nombre">{{nombre}}
                                     {% if alumno.PROMOCIONAL == "S" %}
 										{# <span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="icon-certificate js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span> #}
-										{# Iris: se cambió el icono que identifica a los promocionables #}
+										{# Iris: se cambiÃ³ el icono que identifica a los promocionables #}
 										<span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="acepta-icon js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span>
                                         {% if not this.data.encabezado.PROM_ABIERTA %}
                                             <span class="icon-exclamation-sign js-tooltip" title="{{"acta_promocion_cerrada" |trans|capitalize}}"></span>
@@ -49,7 +49,7 @@
                                     {% endif %}
 
 								</span>
-								{# Iris: Se quitó la leyena legajo. No incorporarla porque sino no funciona AUTOCALCULAR #}
+								{# Iris: Se quitÃ³ la leyena legajo. No incorporarla porque sino no funciona AUTOCALCULAR #}
 								{# {{'legajo'|trans|capitalize}}:  #}
 								<span class="legajo">{{ alumno.LEGAJO }}</span>
                             </div>
@@ -95,7 +95,7 @@
                                 or alumno.RESULTADO == 'P'
                                 or (this.data.encabezado.PROM_ABIERTA and alumno.PROMOCIONAL == 'S')
                                 %}
-                                {# nunca se muestra 6. Es la opción 'No promocionó' #}
+                                {# nunca se muestra 6. Es la opciÃ³n 'No promocionÃ³' #}
                                 {% set mostrar_opcion = mostrar_opcion and condicion.COND_REGULARIDAD != 6 %}
 
                                 {% if mostrar_opcion %}
@@ -119,9 +119,11 @@
                         >
                             <option value='' data-resultado='vacio'>{{ '-' }}</option>
                             {% for nota in this.data.escala_notas %}
-                                {% set selected = (alumno.NOTA == nota.DESCRIPCION) ? 'SELECTED' : '' %}
-                                <option {{ selected }} value='{{nota.DESCRIPCION}}'>{{nota.DESCRIPCION}}</option>
-                            {% endfor %}
+                              {% if this.esenteranota(nota.DESCRIPCION) %}
+                                 {% set selected = (alumno.NOTA == nota.DESCRIPCION) ? 'SELECTED' : '' %}
+                                 <option {{ selected }} value='{{nota.DESCRIPCION}}'>{{nota.DESCRIPCION}}</option>
+                              {% endif %}
+							{% endfor %}
                         </select>
                     </td>
 
