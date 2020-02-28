@@ -49,5 +49,13 @@ class pagelet_renglones extends \siu\operaciones\notas_cursada\pagelet_renglones
 		$this->add_var_js('msj_navegacion', kernel::traductor()->trans('msj_navegacion'));
     }
 
+
+	function esenteranota($nota)
+	{
+		if (strpos($nota, ',') >0 ){
+			return false;
+		}
+		return true;
+	}
+
 }
-?>
