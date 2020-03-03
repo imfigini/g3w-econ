@@ -126,3 +126,55 @@ INSERT INTO acc_tipos_usuarios (tipo_usuario, descripcion) VALUES ('OFA', 'Ofici
 {
 --INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'nro_inscripcion’, 'OFA', 'A');
 }
+
+------------------------------------------------------------------------------------------------------------------
+----------- Corregir la versión del plan de las carreras de los mix ----------------------------------------------
+update ufce_mixes
+	set version = '2'
+where carrera in ('CA001', 'CA002', 'CA004');
+
+----------CA005 Licenciatura en Gestión Tecnológica-------------------
+---1º Año-------------------------------------------------------------
+---MIX A--------------------------------------------------------------
+--Contabilidad Básica
+--Matemática I 
+--Administración
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0001', 1, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0002', 1, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0003', 1, 'A');
+---MIX B--------------------------------------------------------------
+--Introducción a la Economía 
+--Instituciones de Derecho Público
+--Estadística
+--Historia Económica
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0005', 1, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0006', 1, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0007', 1, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0008', 1, 'B');
+---2º Año-------------------------------------------------------------
+---MIX A--------------------------------------------------------------
+--Matemática II
+--Sistemas de Información Gerencial
+--Filosofía y Lógica
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0009', 2, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0010', 2, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0011', 2, 'A');
+---MIX B--------------------------------------------------------------
+--Análisis Microeconómico
+--Derecho Empresario I
+--Técnicas Cuantitativas
+--Sistemas Administrativos
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0012', 2, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0013', 2, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0014', 2, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0004', 2, 'B');
+---3º Año-------------------------------------------------------------
+---MIX A--------------------------------------------------------------
+--Matemática Financiera
+--Análisis e Interpretación de Estados Contables
+--Análisis y Diseño de Sistemas
+--Innovación y Diseño
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0015', 3, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0019', 3, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4004', 3, 'A');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4006', 3, 'A');

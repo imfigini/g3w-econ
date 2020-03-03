@@ -143,7 +143,7 @@ class controlador extends controlador_g3w2
 		$parametros['anio_academico'] = $this->decodificar_anio_academico($anio_academico_hash);
 		$parametros['periodo_lectivo'] = $this->decodificar_periodo($periodo_hash, $parametros['anio_academico']);
 		
-        $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
+		$materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
         return $materias;
     }
 

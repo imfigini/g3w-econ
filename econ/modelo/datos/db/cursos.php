@@ -24,14 +24,16 @@ class cursos
         if (isset($parametros['legajo']) && $parametros['legajo'] != "''")
         {
 			$legajo = $parametros['legajo'];
-			if (isset($parametros['anio_academico']) && $parametros['anio_academico'] != "''"
-					&& isset($parametros['periodo_lectivo']) && $parametros['periodo_lectivo'] != "''") {
+			if (isset($parametros['anio_academico']) && $parametros['anio_academico'] != "''") {
 				$anio = $parametros['anio_academico'];
-				$periodo = $parametros['periodo_lectivo'];			
 				$sql .= " AND M.materia IN (SELECT materia FROM ufce_coordinadores_materias 
 												WHERE coordinador = $legajo
-												AND anio_academico = $anio
-												AND periodo_lectivo = $periodo) ";
+												AND anio_academico = $anio ";
+				if (isset($parametros['periodo_lectivo']) && $parametros['periodo_lectivo'] != "''") {
+					$periodo = $parametros['periodo_lectivo'];			
+					$sql .= " AND periodo_lectivo = $periodo ";
+				}
+				$sql .= ')';
 			} else {
 				$sql .= " AND M.materia IN (SELECT materia FROM ufce_coordinadores_materias WHERE coordinador = $legajo) ";
 			}
@@ -48,7 +50,7 @@ class cursos
             $sql .= " AND X.anio_de_cursada = $anio
                       AND X.mix = '$mix'  ";
         }
-        $sql .= " ORDER BY 2";
+		$sql .= " ORDER BY 2";
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $result;
     }
