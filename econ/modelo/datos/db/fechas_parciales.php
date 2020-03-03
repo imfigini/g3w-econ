@@ -77,6 +77,7 @@ class fechas_parciales
 					FULL OUTER JOIN ufce_cron_eval_parc U ON (U.comision = C.comision and U.evaluacion = C.evaluacion)
 					WHERE (C.comision = {$parametros['comision']} 
 						OR U.comision = {$parametros['comision']}) ";
+
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
 	}
 	
@@ -90,16 +91,41 @@ class fechas_parciales
         $materia = $parametros['materia'];
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
-        $sql = "SELECT 	DISTINCT C.evaluacion, 
-						DECODE(C.evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre, 
-						NVL(C.fecha_hora, U.fecha_hora)::DATE AS fecha
-				FROM sga_cron_eval_parc C
-				LEFT JOIN ufce_cron_eval_parc U  on (U.comision = C.comision and U.evaluacion = C.evaluacion)
-				WHERE C.comision IN (SELECT comision FROM sga_comisiones 
-											WHERE materia = $materia
-											AND anio_academico = $anio_academico
-											AND periodo_lectivo = $periodo) 
-				ORDER BY 3";
+        // $sql = "SELECT 	DISTINCT C.evaluacion, 
+		// 				DECODE(C.evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre, 
+		// 				NVL(C.fecha_hora, U.fecha_hora)::DATE AS fecha
+		// 		FROM sga_cron_eval_parc C
+		// 		LEFT JOIN ufce_cron_eval_parc U  on (U.comision = C.comision and U.evaluacion = C.evaluacion)
+		// 		WHERE C.comision IN (SELECT comision FROM sga_comisiones 
+		// 									WHERE materia = $materia
+		// 									AND anio_academico = $anio_academico
+		// 									AND periodo_lectivo = $periodo) 
+		// 		ORDER BY 3";
+
+		$sql = "SELECT 	DISTINCT C.evaluacion,
+                		DECODE(C.evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre,
+                		C.fecha_hora :: DATE AS fecha
+					FROM   sga_cron_eval_parc C
+					WHERE   C.comision IN (SELECT comision FROM sga_comisiones
+                      						WHERE  materia = $materia
+                            	 				AND anio_academico = $anio_academico
+                             					AND periodo_lectivo = $periodo)
+				UNION                              
+				SELECT 	DISTINCT U.evaluacion,
+						DECODE(U.evaluacion, 22, 'PARCIAL1', 23, 'PARCIAL2', 24, 'RECUP', 14, 'INTEG') AS eval_nombre,
+                		U.fecha_hora :: DATE AS fecha
+					FROM   ufce_cron_eval_parc U
+					WHERE   U.comision IN (SELECT comision FROM sga_comisiones
+                      						WHERE  materia = $materia
+                            	 				AND anio_academico = $anio_academico
+                             					AND periodo_lectivo = $periodo)
+							AND U.evaluacion NOT IN (SELECT evaluacion FROM sga_cron_eval_parc
+														WHERE comision IN (SELECT comision FROM sga_comisiones
+                      															WHERE  materia = $materia
+                            	 												AND anio_academico = $anio_academico
+                             													AND periodo_lectivo = $periodo)
+													)
+				ORDER  BY 3 ";
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
 	}
 	

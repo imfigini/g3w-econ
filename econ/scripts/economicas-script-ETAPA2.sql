@@ -178,3 +178,15 @@ INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0015', 3, 'A');
 INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0019', 3, 'A');
 INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4004', 3, 'A');
 INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4006', 3, 'A');
+---3º Año-------------------------------------------------------------
+---MIX B--------------------------------------------------------------
+--L4001 - Gestión y Dirección de Talento
+--L4002 Emprendedorismo Tecnológico (bimestral)
+--L0016 Análisis Macroeconoómico
+--L4003 Derecho aplicado a la tecnología ya la información
+--L4005 Gobernanza de tecnología de información
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4001', 3, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4002', 3, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L0016', 3, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4003', 3, 'B');
+INSERT INTO ufce_mixes VALUES ('FCE', 'CA005', '50º', 1, 'L4005', 3, 'B');

@@ -101,9 +101,12 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 		var dias_semana = materia.DIAS;
 		var dias_ocupados = materia.FECHAS_OCUPADAS;
 		var dias_no_validos = materia.FECHAS_NO_VALIDAS;
+		//console.log(dias_ocupados);
+		//console.log(dias_no_validos);
 		
 		var dp_parcial1 = 'datepicker_materia_parcial1_'+m;
-        var posibles_fechas_parcial1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_ocupados, dias_no_validos);
+		var posibles_fechas_parcial1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_ocupados, dias_no_validos);
+		//console.log(posibles_fechas_parcial1);
         set_values(dp_parcial1, inicio_periodo[0], fin_periodo[0], posibles_fechas_parcial1);
 
         var dp_parcial2 = 'datepicker_materia_parcial2_'+m;
@@ -178,7 +181,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             if (contiene(dias_semana, diaSemana))
             {
 				var diaFormateado = dia.toISOString().substring(0, 10);
-                var es_fecha_libre = fecha_disponible(dias_ocupados, dia);
+                var es_fecha_libre = fecha_disponible_mix(dias_ocupados, dia);
 				var es_fecha_valida = fecha_disponible(dias_no_validos, dia);
 
 				if (feriados.includes(diaFormateado) == false && es_fecha_libre && es_fecha_valida)
@@ -190,7 +193,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
     }
     
     //  Verifica que ese mismo día no este ocupado por otra materia del mismo mix, y tampoco el día anterior o posterior consecutivo. 
-    function fecha_disponible(fechas_no_disponibles, fecha)
+    function fecha_disponible_mix(fechas_no_disponibles, fecha)
     {
         var cant = Object.keys(fechas_no_disponibles).length;
         var fecha_formateada = fecha.toISOString().substring(0, 10);
@@ -209,6 +212,20 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 				|| fechas_no_disponibles[i]['FECHA'] == dia_anterior_formateado
 				|| fechas_no_disponibles[i]['FECHA'] == dia_siguiente_formateado )
 			{
+				return false;
+			}
+        };
+        return true;
+	}
+	
+	//  Verifica que ese mismo día no este invalidado
+    function fecha_disponible(fechas_no_disponibles, fecha)
+    {
+        var cant = Object.keys(fechas_no_disponibles).length;
+        var fecha_formateada = fecha.toISOString().substring(0, 10);
+
+		for (var i=0; i<cant; i++) {
+            if ( fechas_no_disponibles[i]['FECHA'] == fecha_formateada ) {
 				return false;
 			}
         };

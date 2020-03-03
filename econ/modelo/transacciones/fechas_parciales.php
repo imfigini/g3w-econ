@@ -64,7 +64,8 @@ class fechas_parciales
 			$parametros['materia'] = $mat['MATERIA'];
             $fechas_mat = catalogo::consultar('fechas_parciales', 'get_fechas_eval_ocupadas', $parametros); 
             $fechas = array_merge($fechas, $fechas_mat);
-        }
+		}
+
         return $fechas;
 	}
 
@@ -83,7 +84,7 @@ class fechas_parciales
 		return catalogo::consultar('fechas_parciales', 'get_datos_comision', Array('comision'=>$comision)); 
 	}
 
-	/* Retorna las fechas indicadas como no válidas para la comisión */
+	/* Retorna las fechas indicadas como no validas para la comision */
     function get_fechas_no_validas_comision($comision)
     {
         $dias_no_validos = catalogo::consultar('cursos', 'get_fechas_no_validas_comision', Array('comision'=>$comision));

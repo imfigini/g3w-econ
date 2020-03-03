@@ -106,9 +106,6 @@ class controlador extends controlador_g3w2
         $plan_ver = catalogo::consultar('mixes', 'get_plan_y_version_actual_de_materia', $datos);
         $datos['plan'] = $plan_ver[0]['PLAN'];
         $datos['version'] = $plan_ver[0]['VERSION'];
-//        print_r('<br>Datos: ');
-//        print_r($datos);
-
         return $datos;
     }
 

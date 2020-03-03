@@ -395,8 +395,8 @@ class controlador extends controlador_g3w2
     private function grabar_instancia($comision, $datos, $dias_clase, $instancia)
     {        
         switch ($instancia) {
-            case 'parcial1': 	$inst = 22; $inst_nombre = utf8_decode('1º Parcial'); break;
-            case 'parcial2': 	$inst = 23; $inst_nombre = utf8_decode('2º Parcial'); break;
+            case 'parcial1': 	$inst = 22; $inst_nombre = utf8_decode('1er Parcial'); break;
+            case 'parcial2': 	$inst = 23; $inst_nombre = utf8_decode('2do Parcial'); break;
             case 'recup': 	$inst = 24; $inst_nombre = 'Recuperatorio Global'; break;
             case 'integ': 	$inst = 14; $inst_nombre = 'Integrador'; break;
         }

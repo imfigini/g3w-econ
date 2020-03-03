@@ -80,7 +80,6 @@ class pagelet_filtro extends pagelet {
 		if (!empty($anio_academico_hash) && !empty($periodo_hash)) // and $this->get_anio_seleccionado() >= 2020)
 		{
 			$datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash);
-			kernel::log()->add_debug('$datos '.__LINE__, $datos);
 
 			$dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
 			
