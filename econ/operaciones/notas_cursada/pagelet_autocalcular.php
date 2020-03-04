@@ -7,7 +7,7 @@ use siu\guarani;
 
 class pagelet_autocalcular extends pagelet
 {
-    function get_nombre()
+	function get_nombre()
     {
         return 'autocalcular';
     }
@@ -27,7 +27,7 @@ class pagelet_autocalcular extends pagelet
 		$this->add_var_js('nota_invalida', kernel::traductor()->trans('nota_invalida'));
 		$this->add_var_js('asistencia_invalida', kernel::traductor()->trans('asistencia_invalida'));
 		
-		//Iris: Se agregó para autocalcular nota
+		//Iris: Se agrego para autocalcular nota
 		$operacion = kernel::ruteador()->get_id_operacion();
 		$this->add_var_js('url_autocalcular', kernel::vinculador()->crear($operacion, 'autocalcular'));
 		

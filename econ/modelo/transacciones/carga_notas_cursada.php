@@ -51,6 +51,12 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			return null;
 		}
 
+		$ponderaciones = self::get_ponderaciones_materia($comision);
+		kernel::log()->add_debug('ponderaciones', $ponderaciones);
+		if (empty($ponderaciones['P']) || empty($ponderaciones['R']) ) {
+			return Array('estado'=>'falta_ponderacion');
+		}
+
 		$notas_eval_alumno = self::get_notas_eval_alumno($comision, $legajo);
 		//kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
 
@@ -66,8 +72,8 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			return Array('nota'=>null, 'resultado'=>'U', 'condicion'=>$cond['U'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');
 		}
 
-		$ponderaciones = self::get_ponderaciones_materia($comision);
-		kernel::log()->add_debug('ponderaciones', $ponderaciones);
+		// $ponderaciones = self::get_ponderaciones_materia($comision);
+		// kernel::log()->add_debug('ponderaciones', $ponderaciones);
 		
 		$tiene_correlativas_cumplidas = self::tiene_correlativas_cumplidas($comision, $legajo);
 		kernel::log()->add_debug('tiene_correlativas_cumplidas', $tiene_correlativas_cumplidas);

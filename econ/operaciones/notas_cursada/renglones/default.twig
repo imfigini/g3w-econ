@@ -2,6 +2,7 @@
 {% block contenido %}
 
 {% if this.hay_renglones %}
+
     <form class='form-renglones' action='{{ this.data.url_guardar }}' method='post'>
         <fieldset>
         <legend><h4>Completar</h4></legend>
@@ -49,7 +50,7 @@
                                     {% endif %}
 
 								</span>
-								{# Iris: Se quitó la leyena legajo. No incorporarla porque sino no funciona AUTOCALCULAR #}
+								{# Iris: Se quito la leyena legajo. No incorporarla porque sino no funciona AUTOCALCULAR #}
 								{# {{'legajo'|trans|capitalize}}:  #}
 								<span class="legajo">{{ alumno.LEGAJO }}</span>
                             </div>
@@ -161,6 +162,5 @@
 		{% endif %}
 		
 		<input type='submit' value='{{"guardar"|trans|capitalize}}' class="btn btn-info btn-small pull-right" />
-		{# <div onclick="autocalcular()" class="btn btn-info btn-small pull-right" >{{"autocalcular"|trans|capitalize}}</div> #}
     </div>
 {% endmacro %}

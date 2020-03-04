@@ -73,6 +73,9 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
 											renglon.addClass("falta-tp"); 
 											texto = decodeURIComponent(escape('Falta la nota de los TP para poder calcular la nota de cursada'));
 											break;
+						case 'falta_ponderacion': var msg = 'No se pueden autocalcular las notas debido a que no están definidas las ponderaciones para nota final de cierre de cursada. Por favor informe a la Dirección de Docentes.';
+											kernel.ui.show_mensaje(msg, {tipo: 'alert-error'});
+											break;
 						default : 	texto = decodeURIComponent(escape('No se pudo calcular la nota.'));
 					}
 					renglon.prop('title', texto);
@@ -85,7 +88,7 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
 	function setear_datos(data, posicion, notas, asistencias, fechas, condiciones)
 	{
 		var hoy = new Date();
-		var fecha = hoy.getDate() + "/" + (hoy.getMonth() +1) + "/" + hoy.getFullYear();
+		var fecha = format_fecha(hoy);
 		if (!fecha_valida(fecha)) {
 			msj_error_mostrar(info.fecha_invalida);
 		}
@@ -108,6 +111,16 @@ kernel.renderer.registrar_pagelet('autocalcular', function(info) {
 		fechas[posicion].value = '';
 		var condiciones = $("table .condicion");
 		condiciones[posicion].value = '';
+	}
+
+	function format_fecha(fecha) 
+	{
+		var d = fecha.getDate();
+		var m = fecha.getMonth()+1;
+		var yyyy = fecha.getFullYear();
+		var dd = (d < 10 ? '0':'' ) + d;
+		var mm = (m < 10 ? '0':'' ) + m;
+		return dd + "/" + mm + "/" + yyyy;
 	}
 	
 	function fecha_valida(fecha)

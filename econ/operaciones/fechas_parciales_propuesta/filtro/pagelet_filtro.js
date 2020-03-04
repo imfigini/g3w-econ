@@ -87,8 +87,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 				set_values_materias(materia, inicio_periodo, fin_periodo);
 
 				//Carga el detalle de las comisiones de abajo
-				if (materia.COMISIONES)
-                {
+				if (materia.COMISIONES) {
                     set_values_comisiones(materia);
                 }
             }
@@ -101,12 +100,9 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 		var dias_semana = materia.DIAS;
 		var dias_ocupados = materia.FECHAS_OCUPADAS;
 		var dias_no_validos = materia.FECHAS_NO_VALIDAS;
-		//console.log(dias_ocupados);
-		//console.log(dias_no_validos);
 		
 		var dp_parcial1 = 'datepicker_materia_parcial1_'+m;
 		var posibles_fechas_parcial1 = get_posibles_fechas(dias_semana, inicio_periodo[0], fin_periodo[0], dias_ocupados, dias_no_validos);
-		//console.log(posibles_fechas_parcial1);
         set_values(dp_parcial1, inicio_periodo[0], fin_periodo[0], posibles_fechas_parcial1);
 
         var dp_parcial2 = 'datepicker_materia_parcial2_'+m;
@@ -288,19 +284,19 @@ function verifica_fechas(componente, parcial1, parcial2, integ)
   
     if (!fechas_en_orden(parcial1, parcial2))
     {
-        alert ('La fecha para el 1º Parcial debe ser anterior a la del 2º Parcial');
+        alert ('La fecha para el 1er Parcial debe ser anterior a la del 2º Parcial');
         componente.value = null;
     }
 
 	if (!fechas_en_orden(parcial2, integ))
     {
-        alert ('La fecha para el 2º Parcial debe ser anterior a la del Integrador / Recuperatorio Global');
+        alert ('La fecha para el 2do Parcial debe ser anterior a la del Integrador / Recuperatorio Global');
         componente.value = null;
 	}
 	
 	if (!fechas_en_orden(parcial1, integ))
     {
-        alert ('La fecha para el 1º Parcial debe ser anterior a la del Integrador / Recuperatorio Global');
+        alert ('La fecha para el 1er Parcial debe ser anterior a la del Integrador / Recuperatorio Global');
         componente.value = null;
     }
 }

@@ -205,7 +205,7 @@ class controlador extends \siu\operaciones\resumen_cursada\controlador
 				if ($parcial['RESULTADO']) {
 					$renglon[$key_eval] .= ' ('.trim($parcial['RESULTADO']).')';
 					if (!$pdf) {
-						$renglon[$key_eval] .= utf8_encode($renglon[$key_eval]);
+						$renglon[$key_eval] = utf8_encode($renglon[$key_eval]);
 					}					 
 				}
 			}

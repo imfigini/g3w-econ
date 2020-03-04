@@ -327,9 +327,9 @@ class controlador extends controlador_g3w2
 			return null;
 		}
 
-		if (empty($parametros['porc_parciales']) || empty($parametros['porc_integrador'])) {
-			throw new error_guarani('Falta cargar algna ponderación para la materia '.$parametros['materia']);
-		}
+		// if (empty($parametros['porc_parciales']) || empty($parametros['porc_integrador'])) {
+		// 	throw new error_guarani('Falta cargar alguna ponderación para la materia '.$parametros['materia']);
+		// }
 
         return $parametros;        
     }

@@ -130,17 +130,17 @@ function tiene_todos_los_valores(porc)
 	PP = parseInt ( $("#"+'porc_parciales_P_'+indice).val() );
 	IP = parseInt ( $("#"+'porc_integrador_P_'+indice).val() );
 	PR = parseInt ( $("#"+'porc_parciales_R_'+indice).val() );
-	if (!PP)
+	if (! (PP >= 0 && PP <= 100) )
 	{
 		alert("Debe asignar al menos un valor para la ponderación de Parciales.");
 		return false;
 	}
-	if (!IP)
+	if (! (IP >= 0 && IP <= 100) )
 	{
 		alert("Debe asignar al menos un valor para la ponderación de Integrador.");
 		return false;
 	}
-	if (!PR)
+	if (! (PR >= 0 && PR <= 100) )
 	{
 		alert("Debe asignar al menos un valor para la ponderación de Parciales (sin instancia de integrador).");
 		return false;
