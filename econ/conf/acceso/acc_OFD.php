@@ -3,7 +3,8 @@ return array(
     'id' => 'OFD',
     'parametros' => array(
         'index' => 'inicio_oficina_docentes'
-    ),
+	),
+	
     'operaciones' => array(
 
         'acceso' => array('activa' => true),
@@ -48,41 +49,77 @@ return array(
             )
         ),
         
-        /* Visualizacion fechas de evaluación (con calendario)
+		/* Visualizacion fechas de evaluación (con calendario)
          */
-        'fechas_parciales_calendario' => array(
-            'url' => 'fechas_parciales_calendario',
+        'fechas_parciales_calend' => array(
+            'url' => 'fechas_parciales_calend',
             'activa' => true,
             'menu' => array(
                 'submenu' => 'detalle_cursos',
                 'visible' => true,
-                'texto' => 'fechas_parciales_calendario'
+                'texto' => 'fechas_parciales_calend'
             )
         ),
         
         /* Aceptación fechas de evaluación
          */
-        'fechas_parciales_aceptacion' => array(
-            'url' => 'fechas_parciales_aceptacion',
+        'fechas_parciales_acept' => array(
+            'url' => 'fechas_parciales_acept',
             'activa' => true,
             'menu' => array(
                 'submenu' => 'detalle_cursos',
                 'visible' => true,
-                'texto' => 'fechas_parciales_aceptacion'
+                'texto' => 'fechas_parciales_acept'
+            )
+		),
+		
+		/* Aceptación fechas de evaluación - 2019
+         */
+        'fechas_parciales_acept_2019' => array(
+            'url' => 'fechas_parciales_acept_2019',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'fechas_parciales_acept_2019'
             )
         ),
-        
+		
+		/* Definición de materias por promoción directa
+         */
+        'asignacion_mat_prom_dir' => array(
+            'url' => 'asignacion_mat_prom_dir',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'asignacion_mat_prom_dir'
+            )
+		),
+		
         /* Listado de Cursadas con sus %
          */
-        'detalle_cursos' => array(
-            'url' => 'detalle_cursos',
+        'ponder_notas_detalle' => array(
+            'url' => 'ponder_notas_detalle',
             'activa' => true,
             'menu' => array(
                 'submenu' => 'detalle_cursos',
                 'visible' => true,
-                'texto' => 'detalle_cursos'
+                'texto' => 'ponder_notas_detalle'
             )
         ),
+
+		/* Definición de materias por promoción directa
+         */
+        'asignacion_mat_prom_dir' => array(
+            'url' => 'asignacion_mat_prom_dir',
+            'activa' => true,
+            'menu' => array(
+                'submenu' => 'detalle_cursos',
+                'visible' => true,
+                'texto' => 'asignacion_mat_prom_dir'
+            )
+		),
         
     )
 );

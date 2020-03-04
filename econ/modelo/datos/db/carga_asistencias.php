@@ -105,8 +105,6 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
             $datos = $this->get_inscriptos($parametros);
         }
         
-      //  kernel::log()->add_debug('clase_detalle $datos', $datos);
-        
         $nuevo = array();
         foreach($datos as $id => $dato) 
         {
@@ -177,14 +175,14 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
    function guardar($parametros) 
    {
         //kernel::log()->add_debug('guardar iris', $parametros);
-
         if (!$this->tiene_cargadas_asistencias($parametros)) 
         {
             $sql = "execute procedure sp_AsisAluClas({$parametros["clase"]})";
-            //kernel::db()->consultar($sql, db::FETCH_NUM);
+            kernel::db()->consultar($sql, db::FETCH_NUM);
         }
         
-        if ($parametros["cant_inasist"] == "'1'" && $parametros["justific"] <> "'-1'") //Ausencia justificada
+		if ( ($parametros["cant_inasist"] == "'1'" && $parametros["justific"] <> "'-1'") //Ausencia justificada
+			or ($parametros["cant_inasist"] == '1' && $parametros["justific"] <> '-1') )
         {
             $sql1 = "EXECUTE PROCEDURE sp_u_justsaluclas(" .
                                  $parametros["_ua"] . ",".
@@ -222,11 +220,10 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                                  $parametros["clase"] . "," .
                                  0 . ",".
                                  "NULL" .");";   
-        }
+		}
         kernel::db()->consultar_fila($sql2, db::FETCH_NUM);
         return kernel::db()->consultar_fila($sql1, db::FETCH_NUM);
     }	
-    
     
     /**
      * parametros: 
@@ -390,10 +387,10 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
                         CASE when sga_asignaciones.dia_semana = 1 then 'Domingo'
                             WHEN sga_asignaciones.dia_semana = 2 THEN 'Lunes'
                             WHEN sga_asignaciones.dia_semana = 3 THEN 'Martes'
-                            WHEN sga_asignaciones.dia_semana = 4 THEN 'MiÃ©rcoles'
+                            WHEN sga_asignaciones.dia_semana = 4 THEN 'Miércoles'
                             WHEN sga_asignaciones.dia_semana = 5 THEN 'Jueves'
                             WHEN sga_asignaciones.dia_semana = 6 THEN 'Viernes'
-                            WHEN sga_asignaciones.dia_semana = 7 THEN 'SÃ¡bado'
+                            WHEN sga_asignaciones.dia_semana = 7 THEN 'Sábado'
                         END AS dia_nombre,
                         to_char(sga_asignaciones.hs_comienzo_clase,'%H:%M') as hs_comienzo_clase,
                         to_char(sga_asignaciones.hs_finaliz_clase ,'%H:%M') as hs_finaliz_clase
@@ -636,6 +633,33 @@ class carga_asistencias extends \siu\modelo\datos\db\carga_asistencias
         $comision = $parametros['comision'];
         $sql = "EXECUTE PROCEDURE sp_asignac_com($comision)";
         return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
-    }
-
+	}
+	
+    // /**
+    // * parametros: comision
+    // * cache: no
+    // * filas: n
+    // */
+	// function get_evaluaciones_posterior_fin_clases($parametros)
+	// {
+	// 	$sql = "SELECT 	DISTINCT fecha_hora::DATE AS fecha,
+	// 					CASE WHEN day(fecha_hora::DATE) = 1 then 'Dom'
+	// 						WHEN day(fecha_hora::DATE) = 2 THEN 'Lun'
+	// 						WHEN day(fecha_hora::DATE) = 3 THEN 'Mar'
+	// 						WHEN day(fecha_hora::DATE) = 4 THEN 'Mie'
+	// 						WHEN day(fecha_hora::DATE) = 5 THEN 'Jue'
+	// 						WHEN day(fecha_hora::DATE) = 6 THEN 'Vie'
+	// 						WHEN day(fecha_hora::DATE) = 7 THEN 'Sab'
+	// 					END AS dia_nombre
+	// 				FROM sga_cron_eval_parc
+	// 			WHERE comision = {$parametros['comision']}
+	// 				AND fecha_hora > (SELECT DISTINCT fecha_asign_hasta
+	// 									FROM sga_asign_clases C
+	// 									JOIN sga_asignaciones A ON (C.asignacion = A.asignacion)
+	// 									WHERE comision = {$parametros['comision']}
+	// 								)
+	// 				AND evaluacion <> 15"; //Verifica que no sea TP
+	// 	return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+	// }
 }
+?>

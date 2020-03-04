@@ -68,7 +68,7 @@ class pagelet_planilla extends pagelet
         $this->data['url']['generar_pdf'] = $link;
         $this->add_var_js('comisiones', $this->controlador->comisiones);           
         $this->add_var_js('modo', $this->pantalla);           
-    }
+    } 
 
   }      
 ?>

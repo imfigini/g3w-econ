@@ -1,0 +1,35 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+
+<div class="js-barra-autocalcular" style="display: none;">
+	
+	{#  Mensaje si no hay ponderaciones de nota asignadas      #}
+	{% if (this.data.mensaje_error != '') %}
+		<script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+		<div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
+	{% endif %}
+
+	<form id='precalcular_form' class="form-inline">
+        <fieldset>
+			<legend>Autocalcular</legend>
+            <label role="menucheckbox" for='preset_solo_vacio_autocalcular' class="checkbox">
+                <input id='preset_solo_vacio_autocalcular' type="checkbox" checked="checked"/>{{ "solo_valores_vacios"|trans|capitalize }}
+            </label>
+			<button id="btn_autocalcular" class="btn btn-small"><span class="icon-edit"></span> {{ "autocalcular"|trans|capitalize }}</button>
+            {# <input type="reset" value="{{ "deshacer"|trans|capitalize }}" class="btn btn-small" id='preset_undo' disabled="disabled" /> #}
+		</fieldset>
+		<div role='alert' class="alert">
+			<p></p> 
+			<p><strong>Detalle:</strong></p>
+			<p><span class="listo">Verde: </span> {{"alumno_con_nota"|trans|capitalize }}</p>
+			<p><span class="abandono">Rojo: </span>{{"alumno_abandono"|trans|capitalize }}</p>
+			<p><span class="va-integ">Celeste: </span>{{"alumno_falta_integ"|trans|capitalize }}</p>
+			<p><span class="va-recup">Amarillo: </span>{{"alumno_falta_recup"|trans|capitalize }}</p>
+			<p><span class="falta-tp">Gris: </span>{{"alumno_falta_tp"|trans|capitalize }}</p>
+		</div>
+	</form>
+    <p class="autoerror" id="msj-autoerror">
+    </p>
+</div>
+
+{% endblock %}

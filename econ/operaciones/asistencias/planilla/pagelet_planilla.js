@@ -17,7 +17,7 @@ kernel.renderer.registrar_pagelet('planilla', function(info) {
                                                        + '&cantidad='+$('#formulario_filtro-cantidad').val() + '&fecha='+$('#formulario_filtro-fecha').val();
                         console.log(link);
                         window.open(link);
-			return false;
+						return false;
                     });
                     
                     $('#boton_buscar').on('click', function(){ 
@@ -30,7 +30,7 @@ kernel.renderer.registrar_pagelet('planilla', function(info) {
                             data: $filtro.serialize(),
                             type: 'POST',
                             success: function(paquete) {
-				$(id).html(paquete.cont);
+								$(id).html(paquete.cont);
                                 $('#formulario_filtro-fecha').datepicker("setDate", fecha_seleccionada);
 			    }
                         });

@@ -2,56 +2,57 @@
 {% block contenido %}
 
 {% if this.hay_renglones %}
+
     <form class='form-renglones' action='{{ this.data.url_guardar }}' method='post'>
         <fieldset>
         <legend><h4>Completar</h4></legend>
-	{{ _self.barra_acciones(this, 'arriba') }}
-	<table class="tabla-renglones table table-bordered table-condensed" summary="Alumnos para carga de notas">
-	    <thead>
-			<th id="nombre" scope="col">{{ 'nombre_alumno'|trans|capitalize }}</th>
-			<th id="fecha" scope="col">{{ 'fecha'|trans|capitalize }}</th>
-			<th id="asist" scope="col">{{ 'asistencia'|trans|capitalize }} (%)</th>
+    {{ _self.barra_acciones(this, 'arriba') }}
+    <table class="tabla-renglones table table-bordered table-condensed" summary="Alumnos para carga de notas">
+        <thead>
+            <th id="nombre" scope="col">{{ 'nombre_alumno'|trans|capitalize }}</th>
+            <th id="fecha" scope="col">{{ 'fecha'|trans|capitalize }}</th>
+            <th id="asist" scope="col">{{ 'asistencia'|trans|capitalize }} (%)</th>
             <th id="condicion" scope="col">{{ 'condicion'|trans|capitalize }}</th>
-			<th id="nota" scope="col">{{ 'nota'|trans|capitalize }}</th>
-			<th id="resultado" scope="col">{{ 'resultado'|trans|capitalize }}</th>
-	    </thead>
+            <th id="nota" scope="col">{{ 'nota'|trans|capitalize }}</th>
+            <th id="resultado" scope="col">{{ 'resultado'|trans|capitalize }}</th>
+        </thead>
 
-	    <tbody>
-		{% for alumno in this.data.renglones %}
-			{# {% set renglon_habilitado =  not ((not this.data.encabezado.PROM_ABIERTA and alumno.RESULTADO == 'P') or (alumno.TIENE_NOTA=='S' and this.data.cierre_parcial))%}#}
-			{% set renglon_habilitado =  not ((not this.data.encabezado.PROM_ABIERTA and alumno.RESULTADO == 'P'))%}
-			{% if alumno.TIENE_NOTA=='S' and this.data.cierre_parcial and not this.data.cierre_parcial_modifica_notas %}
-				{% set renglon_habilitado = false %}
-			{% endif %}	
-			{% if this.data.cierre_parcial and this.data.cierre_parcial_modifica_notas %}
-				{% set renglon_habilitado = true %}
-			{% endif %}
+        <tbody>
+        {% for alumno in this.data.renglones %}
+            {# {% set renglon_habilitado =  not ((not this.data.encabezado.PROM_ABIERTA and alumno.RESULTADO == 'P') or (alumno.TIENE_NOTA=='S' and this.data.cierre_parcial))%}#}
+            {% set renglon_habilitado =  not ((not this.data.encabezado.PROM_ABIERTA and alumno.RESULTADO == 'P'))%}
+            {% if alumno.TIENE_NOTA=='S' and this.data.cierre_parcial and not this.data.cierre_parcial_modifica_notas %}
+                {% set renglon_habilitado = false %}
+            {% endif %} 
+            {% if this.data.cierre_parcial and this.data.cierre_parcial_modifica_notas %}
+                {% set renglon_habilitado = true %}
+            {% endif %}
 
-				<tr id='renglon_{{ alumno.RENGLON }}' data-renglon="{{ alumno.RENGLON }}" 
-				title='{{(alumno.ERROR) ? alumno.ERROR : ''}}'
-			    class='{{ (alumno.ERROR) ? 'error-renglon' : '' }} {{(renglon_habilitado) ? '' : 'renglon-deshabilitado'}} {{alumno.RESULTADO}}{% if alumno.PROMOCIONAL == "S" %} promocional{% endif %}' 
-		    >
+                <tr id='renglon_{{ alumno.RENGLON }}' data-renglon="{{ alumno.RENGLON }}" 
+                title='{{(alumno.ERROR) ? alumno.ERROR : ''}}'
+                class='{{ (alumno.ERROR) ? 'error-renglon' : '' }} {{(renglon_habilitado) ? '' : 'renglon-deshabilitado'}} {{alumno.RESULTADO}}{% if alumno.PROMOCIONAL == "S" %} promocional{% endif %}' 
+            >
 
                     <td headers="nombre" class="col_nombre">
                         {% set nombre = alumno.APELLIDO ~ ', ' ~ alumno.NOMBRE %}
                         <div class="ficha-alumno clearfix pull-left"
                              data-url-ficha="{{ alumno.URL_FICHA }}">
-							<img src='{{alumno.URL_IMAGEN}}' width='35' height="35" alt="imagen ficha" title='{{nombre}}' class="pull-left" />
-							<div class="pull-left">
+                            <img src='{{alumno.URL_IMAGEN}}' width='35' height="35" alt="imagen ficha" title='{{nombre}}' class="pull-left" />
+                            <div class="pull-left">
                                 <span class="nombre">{{nombre}}
                                     {% if alumno.PROMOCIONAL == "S" %}
-										{# <span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="icon-certificate js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span> #}
-										{# Iris: se cambió el icono que identifica a los promocionables #}
-										<span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="acepta-icon js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span>
+                                        {# <span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="icon-certificate js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span> #}
+                                        {# Iris: se cambió el icono que identifica a los promocionables #}
+                                        <span class="acchide">{{"promocionable" |trans|capitalize}}</span><span class="acepta-icon js-tooltip" title="{{"promocionable" |trans|capitalize}}"></span>
                                         {% if not this.data.encabezado.PROM_ABIERTA %}
                                             <span class="icon-exclamation-sign js-tooltip" title="{{"acta_promocion_cerrada" |trans|capitalize}}"></span>
                                         {% endif %}
                                     {% endif %}
 
-								</span>
-								{# Iris: Se quitó la leyena legajo. No incorporarla porque sino no funciona AUTOCALCULAR #}
-								{# {{'legajo'|trans|capitalize}}:  #}
-								<span class="legajo">{{ alumno.LEGAJO }}</span>
+                                </span>
+                                {# Iris: Se quito la leyena legajo. No incorporarla porque sino no funciona AUTOCALCULAR #}
+                                {# {{'legajo'|trans|capitalize}}:  #}
+                                <span class="legajo">{{ alumno.LEGAJO }}</span>
                             </div>
                         </div>
                     </td>
@@ -123,20 +124,20 @@
                                  {% set selected = (alumno.NOTA == nota.DESCRIPCION) ? 'SELECTED' : '' %}
                                  <option {{ selected }} value='{{nota.DESCRIPCION}}'>{{nota.DESCRIPCION}}</option>
                               {% endif %}
-							{% endfor %}
+                            {% endfor %}
                         </select>
                     </td>
 
                     <td headers="resultado" class="centrar alinear col-resultado">
                         {% set resultado_texto = "resultado.examen." ~ alumno.RESULTADO %}
-			<div class='resultado'>{{ resultado_texto | trans | capitalize }}</div>
+            <div class='resultado'>{{ resultado_texto | trans | capitalize }}</div>
                     </td>
 
-		    </tr>
-		{% endfor %}
-	    </tbody>
-	</table>
-		{{ _self.barra_acciones(this) }}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        {{ _self.barra_acciones(this) }}
         </fieldset>
     </form>
 {% else %}
@@ -144,23 +145,22 @@
 {% endif %}
 
 {% endblock %}
-	
+    
 
 {% macro barra_acciones(pagelet, posicion) %}
     {% import "kernel/macro_pager.twig" as pager %}
-	<div class="form-actions clearfix">
-		<div class="pagination pagination-small pull-left">
-			{{ pager.render_paginator(pagelet.get_paginas, pagelet.get_pagina_actual, 'folio') }}
-		</div>
-			
-		{% if posicion == 'arriba' %}
-			<div class="form-inline pull-left form-busqueda">
-				<label class="control-label notas_cursada_query" for='notas_cursada_query'>{{"label_busqueda_alumnos"|trans|capitalize}}
-				<input type='text' id='notas_cursada_query' name='query' value='' class="input-small" />
-			</div>
-		{% endif %}
-		
-		<input type='submit' value='{{"guardar"|trans|capitalize}}' class="btn btn-info btn-small pull-right" />
-		{# <div onclick="autocalcular()" class="btn btn-info btn-small pull-right" >{{"autocalcular"|trans|capitalize}}</div> #}
+    <div class="form-actions clearfix">
+        <div class="pagination pagination-small pull-left">
+            {{ pager.render_paginator(pagelet.get_paginas, pagelet.get_pagina_actual, 'folio') }}
+        </div>
+            
+        {% if posicion == 'arriba' %}
+            <div class="form-inline pull-left form-busqueda">
+                <label class="control-label notas_cursada_query" for='notas_cursada_query'>{{"label_busqueda_alumnos"|trans|capitalize}}
+                <input type='text' id='notas_cursada_query' name='query' value='' class="input-small" />
+            </div>
+        {% endif %}
+        
+        <input type='submit' value='{{"guardar"|trans|capitalize}}' class="btn btn-info btn-small pull-right" />
     </div>
 {% endmacro %}

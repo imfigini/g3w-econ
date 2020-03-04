@@ -10,7 +10,7 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
 {
 
     //---------------------------------------------
-    //	LISTA CLASES
+    //	LISTA CLASES 
     //---------------------------------------------
 
     function get_materias_y_dias_clases()
@@ -91,16 +91,13 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
     function generar_asistencias($comisiones_id, $fecha, $hs_comienzo_clase)
     {
         $comisiones = explode ('-', $comisiones_id);
-        //kernel::log()->add_debug('generar_asistencias $comisiones: '.__FILE__.' - '.__LINE__, $comisiones);
         foreach($comisiones as $comision)
         {
             $clase = catalogo::consultar('carga_asistencias', 'get_clase_comision', array('comision'=>$comision, 'fecha'=>$fecha, 'hs_comienzo_clase'=>$hs_comienzo_clase));
             //kernel::log()->add_debug('generar_asistencias $clase: '.__FILE__.' - '.__LINE__, $clase);
             $tiene = catalogo::consultar('carga_asistencias', 'tiene_cargadas_asistencias', array('clase'=>$clase['CLASE']));
             //kernel::log()->add_debug('generar_asistencias $tiene: '.__FILE__.' - '.__LINE__, $tiene);
-            if (! $tiene) 
-            {
-               // kernel::log()->add_debug('Entra a generar asistencias $tiene: '.__FILE__.' - '.__LINE__, $tiene);
+            if (! $tiene) {
                 catalogo::consultar('carga_asistencias', 'recuperar_generar_asistencias', array('clase'=>$clase['CLASE']));
             }
         }
@@ -109,7 +106,7 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
     function grabar($comisiones_id, $fecha, $hs_comienzo_clase, $alumnos)
     {
         $error = new error_guarani_procesar_renglones('Error cargando notas');
-        $hay_renglones_actualizados = false;
+        //$hay_renglones_actualizados = false;
         
         $this->generar_asistencias($comisiones_id, $fecha, $hs_comienzo_clase);
         $clases = $this->info__clase_detalle($comisiones_id, $fecha, $hs_comienzo_clase, 0);
@@ -138,7 +135,6 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
             catch (error_kernel $e)
             {
                 $error->add_renglon($parametros['legajo'], $e->getMessage(), $parametros);
-                //kernel::log()->add_error($e);
             }
         }
         if($error->hay_renglones()) {
@@ -244,41 +240,51 @@ class carga_asistencias extends \siu\modelo\transacciones\carga_asistencias
             $r['PERIODO_LECTIVO'] = $datos_comision[0]['PERIODO_LECTIVO'];
             $r['TURNO'] = $datos_comision[0]['TURNO'];
 
+
+			
             $i=0;
             $t=0;
             $hoy = time("d/m/y");
-            //kernel::log()->add_debug('hoy', $hoy);
             foreach ($datos_comision as $dc)
             {
                 $fecha = date("d/m/y", strtotime($dc['FECHA']));
                 $r['FECHAS'][$dc['FECHA']] = $dc['DIA_NOMBRE'].' '.$fecha;
                 
                 if (strtotime($dc['FECHA']) <= $hoy) {
-                    // kernel::log()->add_debug('fecha', $fecha);
-                    // kernel::log()->add_debug('strtotime', strtotime($dc['FECHA']));
                     $i++;
                 }
                 $t++;
             }
-            $r['CANT_CLASES'] = $i; // count($r['FECHAS']);
-            $r['TOTAL_CLASES'] = $t;
+			
+			// //Si hay instancias de evaluacion posteriores a la fecha de finalización de clases, se deben contabilizar
+			// $eval_posterior = catalogo::consultar('carga_asistencias', 'get_evaluaciones_posterior_fin_clases', array('comision'=>$comision));
 
-            //kernel::log()->add_debug('get_resumen $resumen', $resumen);
+			// foreach ($eval_posterior as $eval) 
+			// {
+			// 	$fecha = date("d/m/y", strtotime($eval['FECHA']));
+			// 	$r['FECHAS'][$eval['FECHA']] = $eval['DIA_NOMBRE'].' '.$fecha;
+				
+			// 	if (strtotime($eval['FECHA']) <= $hoy) {
+			// 		$i++;
+			// 	}
+			// 	$t++;
+			// }
+
+            $r['CANT_CLASES'] = $i; // count($r['FECHAS']);
+			$r['TOTAL_CLASES'] = $t;
 
             $alumnos = catalogo::consultar('carga_asistencias', 'get_alumnos_inscriptos_comision', array('comision'=>$comision));
-            //kernel::log()->add_debug('get_resumen $alumnos', $alumnos);
 
             foreach($alumnos AS $alumno)
             {
                 $parametros['legajo'] = $alumno['LEGAJO'];
                 $parametros['comision'] = $comision;
                 $inasistencias = catalogo::consultar('carga_asistencias', 'get_inasistencias_alumno', $parametros);
-                //kernel::log()->add_debug('get_resumen $inasistencias', $inasistencias);
                 $r['ALUMNOS'][$alumno['LEGAJO']] = $this->set_asistencias($inasistencias, $alumno, $r['CANT_CLASES']);
             }
             $datos_resumen = $this->merge_datos_resumen($datos_resumen, $r);
         }
-        kernel::log()->add_debug('get_resumen $datos_resumen', $datos_resumen);
+        //kernel::log()->add_debug('get_resumen $datos_resumen', $datos_resumen);
         return $datos_resumen;
 
     }

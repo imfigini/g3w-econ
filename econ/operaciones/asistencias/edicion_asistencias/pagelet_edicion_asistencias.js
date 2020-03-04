@@ -11,7 +11,8 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 			});
 			
 			$(id).find('.form-renglones').submit(function() {
-				var $form = $(this);
+                var $form = $(this);
+                console.log($form.attr('action'));
 				kernel.ajax.call($form.attr('action'), {
 					type: 'POST',
 					data: $form.serializeArray(),
@@ -22,7 +23,7 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 				return false;
 			});
         
-                        actualiza_vista();
+            actualiza_vista();
         }
     }
     
@@ -132,7 +133,7 @@ kernel.renderer.registrar_pagelet('edicion_asistencias', function(info) {
 
         alumno['CANT_INASIST'] = "1.00";
         alumno['MOTIVO_JUSTIFIC'] = (valor_justif != -1) ? valor_justif : null;
-        console.log(alumno);
+       // console.log(alumno);
 
         $('#alumnos').val(JSON.stringify(alumnos));
         actualizar_cuadro(id, alumno);

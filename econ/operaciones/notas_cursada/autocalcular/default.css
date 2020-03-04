@@ -1,0 +1,49 @@
+#autocalcular .js-barra-autocalcular { padding-bottom: 10px; }
+#autocalcular #preset_campo { width: 140px; }
+#autocalcular label, input, select { margin-right: 5px; }
+#autocalcular .well { padding: 8px; margin-bottom: 0;}
+#autocalcular .form-inline { margin-bottom: 0; }
+#autocalcular input#notas_cursada_query, #autocalcular label.notas_cursada_query { margin-right: 0; }
+#autocalcular .autoerror {margin: 10px 0 0 2px; color: red;}
+
+.listo
+{
+	background-color:#92a88f;
+	color: white !important;
+}
+
+.cuadrado-listo {
+	/* width: 50px; 
+	height: 50px;  */
+	/*border: 1px solid #555;*/
+	background: #92a88f;
+}
+
+.abandono
+{
+	background-color:#F08080;
+	color: white !important;
+}
+
+.va-recup
+{
+	background-color:#fffacd;
+}
+
+.va-integ
+{
+	background-color:#cde4ff;
+}
+
+.falta-tp
+{
+	background-color:#D3D3D3;
+}
+
+#renglones .listo span.legajo,
+#renglones .abandono span.legajo
+{
+	color: white;
+}
+
+

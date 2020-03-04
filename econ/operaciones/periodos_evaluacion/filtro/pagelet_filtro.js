@@ -27,7 +27,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         
                     if (info.anio_academico_hash !== ""){
                         setear_solicitud_fechas();
-                        setear_calendarios();
+						setear_calendarios();
                     }     
                 }
                 
@@ -59,7 +59,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 
     function set_values(objeto_id, fechaInicio, fechaFin, fechaMin, fechaMax, feriados)
     {
-        console.log(feriados);
+        //console.log(feriados);
         $('#'+objeto_id).daterangepicker({
                 opens: 'right',
                 drops: 'up',
@@ -107,21 +107,15 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 startDate: new Date(fechaInicio),
                 endDate: new Date(fechaFin),
                 isInvalidDate: function (momento) {
-                            var dia = momento.toDate();
-                            var diaSemana = dia.getDay();
-//                            var diaFormateado = dia.toISOString().substring(0, 10);
-                            var formattedDate = moment(dia).format('YYYY-MM-DD');                            
-//                    console.log(dia);
-//                    console.log(formattedDate);
-//                    console.log(diaSemana);
-//                    console.log(diaFormateado);
+				var dia = momento.toDate();
+				var diaSemana = dia.getDay();
+				var formattedDate = moment(dia).format('YYYY-MM-DD');                            
+				var bloquear =  (diaSemana == 0) ||
+							(diaSemana == 6) ||
+							(feriados.includes(formattedDate));
 
-                            var bloquear =  (diaSemana == 0) ||
-                                        (diaSemana == 6) ||
-                                        (feriados.includes(formattedDate));
-
-                            return bloquear;
-                        }
+				return bloquear;
+			}
         });
     }
 
@@ -130,8 +124,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         var i;
         var fecha_inicio;
         var fecha_fin;
-        var feriados = armar_cadena_de_feriados();
-        for (i = 1; i <= 3; i++) 
+		var feriados = armar_cadena_de_feriados();
+		// var cant_periodos = $('#cant_periodos').val();
+		// console.log(cant_periodos);
+        for (i = 1; i <= 4; i++) 
         {
             fecha_inicio = new Date();
             fecha_fin = new Date();
@@ -192,9 +188,4 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         }
     }
 
-
 });
-
-
-    
-  

@@ -17,7 +17,7 @@
                 <div id="detalle_{{dato.CARRERA}}" class="detalle" aria-live="assertive" >
                     <form name="carrera_seleccionada" id="{{dato.CARRERA}}" method="post" action="{{this.data.form_url}}" >
                         <input type="hidden" name="carrera" value="{{dato.CARRERA}}">
-                                                <input type="hidden" name="datos" value="{{dato}}">
+						<input type="hidden" name="datos" value="{{dato}}">
                         <table class="table table-striped table-condensed" tabindex="0" summary="Tabla de mixes">
                             <tbody> 
                                {% for anio in dato.ANIOS %}
@@ -50,7 +50,7 @@
         
     {% else %}
             <div class="alert">
-                    {{"mixes.sin_resultados"|trans|capitalize}}
+                    {{"sin_resultados"|trans|capitalize}}
             </div>
     {% endif %}
 {% endblock %}

@@ -25,5 +25,19 @@ class unidad_academica_econ
             return $nuevo;
     }
 
+    /**
+     * parametros: anio_academico, periodo
+     * cache: no
+     * filas: 1
+     */
+    function get_limites_periodo($parametros)
+    {
+        $sql = "SELECT fecha_inicio, fecha_fin
+                        FROM sga_periodos_lect
+                        WHERE anio_academico = {$parametros['anio_academico']}
+                        AND periodo_lectivo = {$parametros['periodo']}";
+        return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+    }
+
 }
 ?>

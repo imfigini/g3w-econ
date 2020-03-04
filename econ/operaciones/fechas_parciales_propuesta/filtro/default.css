@@ -31,20 +31,26 @@
         margin: 0 0 3px;
 }
 
-input[readonly].no_editable 
+input[readonly].editable_materia
 {
     background-color: white;
     cursor: default;
 }
 
-input[readonly].no_editable_comision
+input[readonly].no_editable_confirmada
 {
-    background-color: whitesmoke;
+    background-color: #afd8af;
     cursor: not-allowed;
 }
 
-input[readonly] 
+input[readonly].no_editable_pendiente
+{
+    background-color: whitesmoke;
+	cursor: not-allowed;
+}
+
+/* input[readonly] 
 {
     background-color: #afd8af;
     cursor: default;
-}
+} */

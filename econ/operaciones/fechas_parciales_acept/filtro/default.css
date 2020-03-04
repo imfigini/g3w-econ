@@ -1,0 +1,57 @@
+#contenido div.link-js  {
+	cursor: pointer;
+        margin-bottom: 20px;
+}
+
+#contenido h3.titulo-materia {
+	background-color: #3A87AD;
+	color: white;
+	padding: 0 10px;
+	margin-bottom: 10px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#contenido h4.comision {
+	background-color: #dedcdc;
+	margin: 0px;
+        margin-bottom: 10px;
+        padding: 10px 5px 10px 5px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.descripcion_comision{
+    padding:0px 5px;
+}
+
+.confirmacion_fechas_parciales .table-condensed th, .confirmacion_fechas_parciales .table-condensed td {
+    padding: 5px 5px;
+    VERTICAL-ALIGN: middle;
+}
+.confirmacion_fechas_parciales select, .confirmacion_fechas_parciales textarea, .confirmacion_fechas_parciales input[type="text"], 
+.confirmacion_fechas_parciales input[type="password"], .confirmacion_fechas_parciales input[type="datetime"], .confirmacion_fechas_parciales input[type="datetime-local"], 
+.confirmacion_fechas_parciales input[type="date"], .confirmacion_fechas_parciales input[type="month"], .confirmacion_fechas_parciales input[type="time"], 
+.confirmacion_fechas_parciales input[type="week"], .confirmacion_fechas_parciales input[type="number"], .confirmacion_fechas_parciales input[type="email"], 
+.confirmacion_fechas_parciales input[type="url"], .confirmacion_fechas_parciales input[type="search"], .confirmacion_fechas_parciales input[type="tel"], 
+.confirmacion_fechas_parciales input[type="color"], .confirmacion_fechas_parciales .uneditable-input
+{margin-bottom:0px;}
+
+#contenido .confirmacion_fechas_parciales table {    
+        margin-top: 5px;
+        margin-bottom: 0px;
+}
+#contenido .confirmacion_fechas_parciales form {
+        background: #8080801a;
+        border: 1px solid #80808029;
+}
+
+#contenido .resaltar_verde {
+	color: green;
+}
+
+#contenido .resaltar_azul {
+	color: blue;
+}

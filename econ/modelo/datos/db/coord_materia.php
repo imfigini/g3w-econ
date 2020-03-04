@@ -203,8 +203,6 @@ class coord_materia
         
         $resultado = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         
-//        kernel::log()->add_info($resultado, '');
-        
         if (count($resultado)>0 && isset($resultado[0]))
         {
             return true;

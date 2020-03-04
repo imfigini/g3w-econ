@@ -5,14 +5,11 @@ namespace econ\operaciones\asistencias;
 use siu\guarani;
 use kernel\util\validador;
 use kernel\kernel;
-use siu\modelo\datos\catalogo;
 use siu\operaciones\_comun\operaciones\reporte\generador_pdf;
-use siu\operaciones\_comun\operaciones\reporte\generador_excel;
 use econ\operaciones\asistencias\pagelet_planilla;
 
 class controlador extends \siu\operaciones\asistencias\controlador
 {
-
     /*Variables para filtros*/
     public $comisiones;
     public $fecha;
@@ -29,7 +26,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
     protected $pdf_fuente_titulo = 10;
     protected $pdf_fuente_subtitulo = 12;
     public $datos_consulta;        
-//    public $filtros_consulta;        
 
     function get_clase_vista()
     {
@@ -53,8 +49,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	
     function accion__index()
     {
-//        kernel::log()->add_debug('accion__index GET: ', $_GET);
-//        kernel::log()->add_debug('accion__index POST: ', $_POST);
     }
 	
     function accion__mostrar_clases()
@@ -79,10 +73,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
         else 
         {
             $alumnos = $_POST['alumnos'];
-//            kernel::log()->add_debug('accion__editar POST: '.__FILE__.' - '.__LINE__, $_POST);
-//            kernel::log()->add_debug('accion__editar GET: '.__FILE__.' - '.__LINE__, $_GET);
-            //kernel::log()->add_debug('accion__editar $alumnos: '.__FILE__.' - '.__LINE__, $alumnos);
-            
             foreach ($alumnos as $key => $alumno) {
                 $alumnos[$key]['CANT_INASIST'] = ($alumno['PRESENTE'] == 'on') ? 0 : 1;
             }
@@ -93,8 +83,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	
     function accion__planilla()
     {
-        //kernel::log()->add_debug('accion__planilla: GET', $_GET);
-        //kernel::log()->add_debug('accion__planilla: filtros', $this->filtros_consulta);
         $this->comisiones = $this->validate_param('comisiones', 'get', validador::TIPO_ALPHANUM);
         $this->filtros_consulta = $this->get_filtros();
         if (isset($this->filtros_consulta)){
@@ -106,8 +94,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
 	
     function accion__resumen()
     {
-//        kernel::log()->add_debug('accion__resumen GET: ', $_GET);
-//        kernel::log()->add_debug('accion__resumen POST: ', $_POST);
         $this->comisiones = $this->validate_param('comisiones', 'get', validador::TIPO_ALPHANUM);
 //        kernel::log()->add_debug('accion__resumen $comisiones: ', $this->comisiones);
         $pagelet = $this->vista()->pagelet('resumen');
@@ -248,26 +234,26 @@ class controlador extends \siu\operaciones\asistencias\controlador
     public function get_encabezado()
     {
         if (!empty($this->datos_consulta)){
-                $materia = current($this->datos_consulta);
-                $encabezado = array();
-                $encabezado['COMISION'] = $materia['COMISION'];
-                $encabezado['FECHA'] = $materia['FECHA'];
-                $encabezado['CARRERA_COM'] = $materia['CARRERA_COM'];
-                $encabezado['CARRERA_NOMBRE'] = $materia['CARRERA_NOMBRE'];
-                $encabezado['MATERIA'] = $materia['MATERIA'];
-                $encabezado['MATERIA_NOMBRE'] = $materia['MATERIA_NOMBRE'];
-                $encabezado['COMISION_NOMBRE'] = $materia['COMISION_NOMBRE'];
-                $encabezado['PERIODO_LECTIVO'] = $materia['PERIODO_LECTIVO'];
-                $encabezado['TURNO'] = $materia['TURNO'];
-                $encabezado['ANIO_ACADEMICO'] = $materia['ANIO_ACADEMICO'];
-                $encabezado['DOCENTES'] = $materia['DOCENTES'];
-                $encabezado['AULA'] = $materia['AULA'];
-                $encabezado['FECHA1'] = $materia['FECHAS'][1];
-                $encabezado['FECHA2'] = $materia['FECHAS'][2];
-                $encabezado['FECHA3'] = $materia['FECHAS'][3];
-                $encabezado['FECHA4'] = $materia['FECHAS'][4];
-                $encabezado['FECHA5'] = $materia['FECHAS'][5];
-                return $encabezado;
+			$materia = current($this->datos_consulta);
+			$encabezado = array();
+			$encabezado['COMISION'] = $materia['COMISION'];
+			$encabezado['FECHA'] = $materia['FECHA'];
+			$encabezado['CARRERA_COM'] = $materia['CARRERA_COM'];
+			$encabezado['CARRERA_NOMBRE'] = $materia['CARRERA_NOMBRE'];
+			$encabezado['MATERIA'] = $materia['MATERIA'];
+			$encabezado['MATERIA_NOMBRE'] = $materia['MATERIA_NOMBRE'];
+			$encabezado['COMISION_NOMBRE'] = $materia['COMISION_NOMBRE'];
+			$encabezado['PERIODO_LECTIVO'] = $materia['PERIODO_LECTIVO'];
+			$encabezado['TURNO'] = $materia['TURNO'];
+			$encabezado['ANIO_ACADEMICO'] = $materia['ANIO_ACADEMICO'];
+			$encabezado['DOCENTES'] = $materia['DOCENTES'];
+			$encabezado['AULA'] = $materia['AULA'];
+			$encabezado['FECHA1'] = $materia['FECHAS'][1];
+			$encabezado['FECHA2'] = $materia['FECHAS'][2];
+			$encabezado['FECHA3'] = $materia['FECHAS'][3];
+			$encabezado['FECHA4'] = $materia['FECHAS'][4];
+			$encabezado['FECHA5'] = $materia['FECHAS'][5];
+			return $encabezado;
         }
         return false;
     }
@@ -415,11 +401,8 @@ class controlador extends \siu\operaciones\asistencias\controlador
         
         $titulos = $this->titulos_tabla($data['FECHAS']);
         $datos = $this->datos_tabla($data['ALUMNOS']);
-        //print_r($datos);
+
         $excel->agregar_tabla($datos, $titulos, '');
-        
-       
-        
         $excel->generar();
     }   
 
@@ -445,8 +428,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
             $titulo[$i] = $fecha;
             $i++;
         }
-//        print_r($titulo);
-//        print_r('<br>');
         return $titulo;
     }
     
@@ -473,7 +454,6 @@ class controlador extends \siu\operaciones\asistencias\controlador
                 $k++;
             }
             $datos[] = $data;
-//            print_r($data); die;
         }
         return $datos;
     }

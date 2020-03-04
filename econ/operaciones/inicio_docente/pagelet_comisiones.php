@@ -25,7 +25,9 @@ class pagelet_comisiones extends \siu\operaciones\inicio_docente\pagelet_comisio
 		foreach ($data as $key => $fila) {
 			$timestamp[$key] = $fila['TS'];
 		}		
-		array_multisort($timestamp, SORT_DESC, $data);
+		
+		//Cambiado el orden en que se muestran las clases y los cursos, desde hoy en adelante. 
+		array_multisort($timestamp, SORT_ASC, $data);
 		$this->data['items'] = $data;
 	
 		$this->add_var_js('ver_mas', kernel::traductor()->trans('ver_mas'));

@@ -12,7 +12,8 @@ class vista extends vista_g3w2
 		$pl = kernel::localizador()->instanciar($clase, 'contenido');
 		$this->add_pagelet($pl);
 
-                kernel::pagina()->set_etiqueta('titulo', kernel::traductor()->trans("tit_fechas_parciales_propuesta"));
+		kernel::pagina()->set_etiqueta('titulo', kernel::traductor()->trans("tit_fechas_parciales_propuesta"));
+			
 	}
 }
 ?>

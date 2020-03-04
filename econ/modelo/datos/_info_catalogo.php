@@ -393,6 +393,20 @@ class _info_catalogo
 );
 	}
 
+	static function carga_evaluaciones_parciales__asistio_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+    2 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_evaluaciones_parciales__baja_evaluacion_parcial()
 	{
 		return array (
@@ -444,6 +458,18 @@ class _info_catalogo
 );
 	}
 
+	static function carga_evaluaciones_parciales__get_cant_clases_al_dia_de_hoy()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'si',
+  'filas' => '1',
+);
+	}
+
 	static function carga_evaluaciones_parciales__get_ciclo_materia()
 	{
 		return array (
@@ -453,6 +479,86 @@ class _info_catalogo
   ),
   'cache' => 'memoria',
   'filas' => 'n',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'fecha',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_nota_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+    2 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_nota_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+    2 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_notas_eval_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_porc_asistencia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__get_ultima_fecha_fin_turno_examen_regular()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 
@@ -544,6 +650,366 @@ class _info_catalogo
 	{
 		return array (
   'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_evaluaciones_parciales__tiene_asistencia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'legajo',
+    1 => 'comision',
+    2 => 'porc_asist',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__tiene_correlativas_cumplidas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'anio_academico',
+    2 => 'periodo',
+    3 => 'legajo',
+    4 => 'carrera',
+    5 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_evaluaciones_parciales__ya_paso_evaluacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__acta_cabecera()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__acta_folio()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+    2 => 'folio',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__acta_regular_estado()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__actualizar_acta()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__busqueda_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'term',
+  ),
+  'no_quote' => 'term',
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__condiciones_regularidad()
+	{
+		return array (
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__get_anio_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_carrera_incripto()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_datos_de_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_datos_ficha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__get_datos_parciales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__guardar_renglon()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'comision',
+    4 => 'folio',
+    5 => 'renglon',
+    6 => 'fecha',
+    7 => 'condicion',
+    8 => 'nota',
+    9 => 'asistencia',
+    10 => 'promocional',
+    11 => 'fecha_inicio',
+    12 => 'legajo_docente',
+  ),
+  'param_null' => 
+  array (
+    0 => 'fecha',
+    1 => 'condicion',
+    2 => 'nota',
+    3 => 'asistencia',
+  ),
+  'param_tipo' => 
+  array (
+    0 => 'str/20',
+    1 => 'str/20',
+    2 => 'str/20',
+    3 => 'int',
+    4 => 'int',
+    5 => 'int',
+    6 => 'str/15',
+    7 => 'int',
+    8 => 'str/10',
+    9 => 'int',
+    10 => 'int',
+    11 => 'str/15',
+    12 => 'int',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_notas_cursada__lista_actas_abiertas_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'cache_expiracion' => '300',
+  'filas' => 'n',
+);
+	}
+
+	static function carga_notas_cursada__porcentaje_carga_notas_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__get_datos_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__get_parciales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'visible_al_alumno',
+  ),
+  'param_null' => 
+  array (
+    0 => 'visible_al_alumno',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__get_parciales_alumnos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'visible_al_alumno',
+  ),
+  'param_null' => 
+  array (
+    0 => 'visible_al_alumno',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__get_parciales_alumnos_econ()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__get_resultados_acta_cursada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__get_resultados_acta_promocion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function comisiones__lista_comisiones_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'anio_academico',
+    3 => 'periodo',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
   'filas' => 'n',
 );
 	}
@@ -689,9 +1155,7 @@ class _info_catalogo
   array (
     0 => 'comision',
     1 => 'evaluacion',
-    2 => 'escala_notas',
-    3 => 'fecha_hora',
-    4 => 'estado',
+    2 => 'fecha_hora',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -705,11 +1169,35 @@ class _info_catalogo
   array (
     0 => 'comision',
     1 => 'evaluacion',
-    2 => 'escala_notas',
-    3 => 'fecha_hora',
+    2 => 'fecha_hora',
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function cursos__baja_evaluacion_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function cursos__existe_evaluacion_parcial()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
 );
 	}
 
@@ -773,6 +1261,33 @@ class _info_catalogo
 );
 	}
 
+	static function cursos__get_estado_comision_fecha()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+    2 => 'fecha',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function cursos__get_evaluacion_asignada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function cursos__get_evaluaciones_de_materia()
 	{
 		return array (
@@ -800,17 +1315,16 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_evaluaciones_observaciones()
+	static function cursos__get_fecha_solicitada()
 	{
 		return array (
   'parametros' => 
   array (
-    0 => 'materia',
-    1 => 'anio_academico',
-    2 => 'periodo',
+    0 => 'comision',
+    1 => 'evaluacion',
   ),
   'cache' => 'no',
-  'filas' => 'n',
+  'filas' => '1',
 );
 	}
 
@@ -828,7 +1342,7 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_fechas_no_validas()
+	static function cursos__get_fechas_no_validas_comision()
 	{
 		return array (
   'parametros' => 
@@ -946,20 +1460,6 @@ class _info_catalogo
 );
 	}
 
-	static function cursos__get_observaciones_materia()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'anio_academico',
-    1 => 'periodo',
-    2 => 'materia',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
 	static function cursos__get_periodos_evaluacion()
 	{
 		return array (
@@ -969,18 +1469,6 @@ class _info_catalogo
     1 => 'periodo',
   ),
   'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
-	static function cursos__get_porcentajes_instancias()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
-  ),
-  'cache' => 'memoria',
   'filas' => 'n',
 );
 	}
@@ -1010,36 +1498,6 @@ class _info_catalogo
     3 => 'observaciones',
   ),
   'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
-	static function cursos__set_porcentajes_instancias()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
-    1 => 'porc_parciales',
-    2 => 'porc_integrador',
-    3 => 'porc_trabajos',
-  ),
-  'cache' => 'memoria',
-  'filas' => 'n',
-);
-	}
-
-	static function cursos__update_porcentajes_instancias()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'comision',
-    1 => 'porc_parciales',
-    2 => 'porc_integrador',
-    3 => 'porc_trabajos',
-  ),
-  'cache' => 'memoria',
   'filas' => 'n',
 );
 	}
@@ -1084,6 +1542,18 @@ class _info_catalogo
 		return array (
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_cuatrimestre()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'fecha',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 
@@ -1137,6 +1607,20 @@ class _info_catalogo
 		return array (
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales__get_periodo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'orden',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 
@@ -1253,6 +1737,20 @@ class _info_catalogo
 );
 	}
 
+	static function evaluaciones_parciales__set_validez_clases()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'fecha_inicio',
+    1 => 'fecha_fin',
+    2 => 'valido',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function evaluaciones_parciales__strToMDY()
 	{
 		return array (
@@ -1262,7 +1760,7 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
-  'El formato de strFecha debe ser' => 'Y-m-d',
+  'El formato de strFecha debe ser' => 'd/m/Y รณ Y-m-d',
 );
 	}
 
@@ -1302,6 +1800,212 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales_calendario__get_fechas_propuestas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function evaluaciones_parciales_calendario__get_hora_comienzo_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function evaluaciones_parciales_calendario__tiene_notas_cargadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+    1 => 'evaluacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function fechas_parciales__get_comisiones_de_materia_con_dias_de_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'param_null' => 
+  array (
+    0 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_datos_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function fechas_parciales__get_dias_clase()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_evaluaciones_observaciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function fechas_parciales__get_fechas_asignadas_o_solicitadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_eval_asignadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_eval_ocupadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+    1 => 'anio_academico',
+    2 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_eval_solicitadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__get_fechas_no_validas_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function fechas_parciales__hoy_dentro_de_periodo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function insc_cursadas__get_alumnos_calidad_inscripcion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'calidad',
+  ),
+  'param_null' => 
+  array (
+    0 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function insc_cursadas__update_calidad_insc_cursada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'carrera',
+    1 => 'legajo',
+    2 => 'comision',
+    3 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 
@@ -1418,6 +2122,174 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => '1',
+);
+	}
+
+	static function parametros__get_parametro()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'operacion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__eliminar_ponderacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__get_ponderaciones_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__set_ponderaciones_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+    4 => 'porc_parciales',
+    5 => 'porc_integrador',
+    6 => 'porc_trabajos',
+  ),
+  'param_null' => 
+  array (
+    0 => 'porc_integrador',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function ponderacion_notas__update_ponderaciones_notas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+    3 => 'calidad',
+    4 => 'porc_parciales',
+    5 => 'porc_integrador',
+    6 => 'porc_trabajos',
+  ),
+  'param_null' => 
+  array (
+    0 => 'porc_integrador',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function prom_directa__alta_materias_prom_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__get_datos_materias_promo_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__is_promo_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function prom_directa__replicar_materias_promo_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'anio_academico_anterior',
+    3 => 'periodo_anterior',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__resetear_prom_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function prom_directa__set_prom_directa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
 );
 	}
 
@@ -1588,6 +2460,19 @@ class _info_catalogo
 		return array (
   'cache' => 'memoria',
   'filas' => 'n',
+);
+	}
+
+	static function unidad_academica_econ__get_limites_periodo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

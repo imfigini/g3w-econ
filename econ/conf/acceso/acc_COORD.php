@@ -3,7 +3,8 @@ return array(
     'id' => 'COORD',
     'parametros' => array(
         'index' => 'inicio_coordinador'
-    ),
+	),
+	
     'operaciones' => array(
 
         'acceso' => array('activa' => true),
@@ -11,35 +12,46 @@ return array(
         'mensajes' => array('activa' => true),
         'configuracion' => array('activa' => true),
 
-            'fechas_parciales_propuesta' => array(
-                  'activa' => true,
-                  'url' => 'fechas_parciales_propuesta',
-                  'menu' => array(
-                      'submenu' => 'parciales',
-                      'visible' => true,
-                      'texto' => 'fechas_parciales_propuesta'
-                  )
-            ),
-        
-//            'definicion_cursos' => array(
-//                  'activa' => true,
-//                  'url' => 'definicion_cursos',
-//                  'menu' => array(
-//                      'submenu' => 'parciales',
-//                      'visible' => true,
-//                      'texto' => 'definicion_cursos'
-//                  )
-//            ),
-            
-//            'notas_parciales' => array(
-//                  'activa' => true,
-//                  'url' => 'parciales',
-//                  'menu' => array(
-//                      'submenu' => 'parciales',
-//                      'visible' => true,
-//                      'texto' => 'parciales'
-//                  )
-//            ),
+			'ponderacion_notas' => array(
+				'activa' => true,
+				'url' => 'ponderacion_notas',
+				'menu' => array(
+					'submenu' => 'parciales',
+					'visible' => true,
+					'texto' => 'ponderacion_notas'
+				)
+			),
+	
+		  'fechas_parciales_propuesta' => array(
+				'activa' => true,
+				'url' => 'fechas_parciales_propuesta',
+				'menu' => array(
+					'submenu' => 'parciales',
+					'visible' => true,
+					'texto' => 'fechas_parciales_propuesta'
+				)
+		  	),
+
+			'fechas_parciales_prop_2019' => array(
+				'activa' => true,
+				'url' => 'fechas_parciales_prop_2019',
+				'menu' => array(
+					'submenu' => 'parciales',
+					'visible' => true,
+					'texto' => 'fechas_parciales_prop_2019'
+				)
+			),
+		  
+           
+        //    'notas_parciales' => array(
+        //          'activa' => true,
+        //          'url' => 'parciales',
+        //          'menu' => array(
+        //              'submenu' => 'parciales',
+        //              'visible' => true,
+        //              'texto' => 'parciales'
+        //          )
+        //    ),
 
         ),
 );

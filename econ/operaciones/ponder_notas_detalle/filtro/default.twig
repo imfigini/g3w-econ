@@ -1,0 +1,70 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+   
+    {% set vista_form = this.get_vista_form() %}
+	{{ vista_form.render_encabezado() | raw }}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+			<span class="pull-left">
+				{{"ponder_notas_detalle"|trans|capitalize}}
+			</span>
+			<span class="pull-right">
+			{{ vista_form.render_acciones() | raw }}
+			</span>
+		</h2>
+	</div>
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+    
+    {% if(this.data.datos) %}
+        {% for materia in this.data.datos %}
+			{% set ponderaciones = materia.PONDERACIONES 	%}
+		    <div> <h3 class="titulo-materia"> {{ materia.MATERIA_NOMBRE }} ({{ materia.MATERIA }}) </h3></div>
+			<table style="width:100%">
+				<tr>
+					<th>{{"Cursada por Promoción"|trans|capitalize}}</th>
+					<th>{{"Cursada Regular"|trans|capitalize}}</th>
+					<th>{{"Cursada por Promoción Directa"|trans|capitalize}}</th>
+				</tr>
+				<tr>
+					<td>
+						<ul>
+						<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_P_PARCIALES) }}  </li>
+						<li>Porcentaje en Integrador: {{ _self.set_ponderacion(ponderaciones.PORC_P_INTEGRADOR) }}  </li>
+						<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_P_TRABAJOS) }} </li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+						<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_R_PARCIALES) }}  </li>
+						<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_R_TRABAJOS) }} </li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+						{% if (materia.PROMO_DIRECTA) %}
+							<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_D_PARCIALES) }}  </li>
+							<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_D_TRABAJOS) }} </li>
+						{% else %}
+							<li>No corresponde
+						{% endif %}
+						</ul>
+					</td>
+				</tr>
+			</table>
+        {% endfor %}
+    {% else %}
+        <div role="alert" class="alert">
+            {{"sin_resultados"|trans|capitalize}}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% macro set_ponderacion(ponder) %}
+	{% if ponder %}
+        {{ponder}} %
+    {% else %}
+        <span class="advertencia"> {{'Sin definir'}} </span>
+    {% endif %}
+{% endmacro %}

@@ -57,9 +57,9 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['PORCENTAJE_CARGA'] = $materia['PORCENTAJE_CARGA'];
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['CANT_INSCRIPTOS'] = $materia['CANT_INSCRIPTOS'];
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['URL_LISTAR'] = 
-				kernel::vinculador()->crear('notas_parciales', 'listar', $evaluacion_id);
+			kernel::vinculador()->crear('notas_parciales', 'listar', $evaluacion_id);
             $rs[$mat]['COMISIONES'][$com]['EVALUACIONES'][$eva]['URL_EDITAR'] = 
-				kernel::vinculador()->crear('notas_parciales', 'editar', $evaluacion_id);
+			kernel::vinculador()->crear('notas_parciales', 'editar', $evaluacion_id);
         }
 
         $cant_tipos_eval = count($this->controlador->modelo()->info__tipo_evaluacion());
@@ -71,7 +71,6 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
                         $rs[$materia['MATERIA']]['COMISIONES'][$orden]['COMPLETA'] = count($rs[$materia['MATERIA']]['COMISIONES'][$orden]['EVALUACIONES']) >= $cant_tipos_eval;
             }
         }
-//print_r($rs);
         return $rs;
     }
     
@@ -79,31 +78,29 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
     {
 		$this->data = array();
                 
-//                kernel::log()->add_debug('Entro al prepare'.__FILE__, $this->data);
-                switch ($this->estado) {
+        switch ($this->estado) {
 			case 'crear_parcial':
-				$this->set_template('parcial');
-				break;
+					$this->set_template('parcial');
+					break;
 			default:
-                                $this->data = $this->get_lista_materias();
-                                //print_r($this->data);
-                            
-                                //Iris: Recueper el legajo del docente que está conectado para ver si es coordinador o no y de acuerdo a eso mostrar o no la creación de parciales
-                                $this->data['docente'] = kernel::persona()->get_legajo_docente();
-                                        
-                                $this->add_var_js('url_crear_evaluacion', kernel::vinculador()->crear('notas_parciales', 'crear_evaluacion'));
-				$this->add_var_js('url_borrar_evaluacion', kernel::vinculador()->crear('notas_parciales', 'borrar_evaluacion'));
-				$this->add_var_js('titulo_crear_parcial', kernel::traductor()->trans('crear_evaluacion_parcial'));
-                                $this->add_var_js('boton_crear_parcial', kernel::traductor()->trans('crear_parcial'));
-				// Se manda el template en una variable js para que dp se reuse para las
-				// diferentes materias
-				$this->add_var_js('html_popup', 
-					kernel::load_template('lista_materias/popup.twig')->render(array(
-						'tipo_eval' => $this->controlador->modelo()->info__tipo_evaluacion(),
-						'escalas' => $this->controlador->modelo()->info__lista_escala_notas()
-					))
-				);
-
+					$this->data = $this->get_lista_materias();
+				
+					//Iris: Recueper el legajo del docente que está conectado para ver si es coordinador o no y de acuerdo a eso mostrar o no la creación de parciales
+					$this->data['docente'] = kernel::persona()->get_legajo_docente();
+							
+					$this->add_var_js('url_crear_evaluacion', kernel::vinculador()->crear('notas_parciales', 'crear_evaluacion'));
+					$this->add_var_js('url_borrar_evaluacion', kernel::vinculador()->crear('notas_parciales', 'borrar_evaluacion'));
+					$this->add_var_js('titulo_crear_parcial', kernel::traductor()->trans('crear_evaluacion_parcial'));
+					$this->add_var_js('boton_crear_parcial', kernel::traductor()->trans('crear_parcial'));
+					
+					// Se manda el template en una variable js para que dp se reuse para las
+					// diferentes materias
+					$this->add_var_js('html_popup', 
+						kernel::load_template('lista_materias/popup.twig')->render(array(
+								'tipo_eval' => $this->controlador->modelo()->info__tipo_evaluacion(),
+								'escalas' => $this->controlador->modelo()->info__lista_escala_notas()
+							))
+					);
 		}
     }
     
