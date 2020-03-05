@@ -43,10 +43,6 @@ if (! isset($this->reply_to)) {
 }
 ```
 
-## Script a correr en la base 
-
-~/pers/econ/scripts/economicas-script-ETAPA2.sql
-
 ## Actualizar código 
 
 Descargar de la rama “produccion” de git el nuevo contenido.
@@ -58,6 +54,12 @@ Compilar recursos:
 Regenerar el catálogo: 
 - cd /var/guarani3w/bin 
 - ./guarani generar_catalogo FCE
+
+## Script a correr en la base 
+
+~/pers/econ/scripts/economicas-script-ETAPA2.sql
+
+dbaccess siu_guarani economicas-script-ETAPA2.sql
 
 ## Crear cuenta de mail
 
