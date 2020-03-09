@@ -29,9 +29,13 @@
 				<tr>
 					<td>
 						<ul>
-						<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_P_PARCIALES) }}  </li>
-						<li>Porcentaje en Integrador: {{ _self.set_ponderacion(ponderaciones.PORC_P_INTEGRADOR) }}  </li>
-						<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_P_TRABAJOS) }} </li>
+						{% if (materia.PROMO) %}
+							<li>Porcentaje en Parciales: {{ _self.set_ponderacion(ponderaciones.PORC_P_PARCIALES) }}  </li>
+							<li>Porcentaje en Integrador: {{ _self.set_ponderacion(ponderaciones.PORC_P_INTEGRADOR) }}  </li>
+							<li>Porcentaje en Trabajos: {{ _self.set_ponderacion(ponderaciones.PORC_P_TRABAJOS) }} </li>
+						{% else %}
+							<li>No corresponde
+						{% endif %}
 						</ul>
 					</td>
 					<td>

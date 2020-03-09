@@ -83,7 +83,7 @@ class controlador extends controlador_g3w2
         return null;
 	}
 
-	function ctrl_no_tiene_ponderacion_prom_directa($anio_academico_hash, $periodo_hash, $materia)
+	function is_promo($anio_academico_hash, $periodo_hash, $materia)
 	{
 		$periodo = null;
         $anio_academico = null;
@@ -101,7 +101,7 @@ class controlador extends controlador_g3w2
                                 'periodo' => $periodo,
                                 'materia' => $materia
 							);
-					return $this->modelo()->ctrl_no_tiene_ponderacion_prom_directa($parametros);
+					return $this->modelo()->info__is_promo($parametros);
 				}
             }
         }
