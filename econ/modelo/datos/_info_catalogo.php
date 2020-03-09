@@ -1400,12 +1400,16 @@ class _info_catalogo
     0 => 'legajo',
     1 => 'carrera',
     2 => 'mix',
+    3 => 'anio_academico',
+    4 => 'periodo_lectivo',
   ),
   'param_null' => 
   array (
     0 => 'legajo',
     1 => 'carrera',
     2 => 'mix',
+    3 => 'anio_academico',
+    4 => 'periodo_lectivo',
   ),
   'cache' => 'no',
   'filas' => 'n',
@@ -2234,6 +2238,20 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => 'n',
+);
+	}
+
+	static function prom_directa__is_promo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

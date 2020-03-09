@@ -82,10 +82,16 @@ class pagelet_filtro extends pagelet {
 			$cant = count($materias);
 			for ($i=0; $i<$cant; $i++)
 			{
+				$materias[$i]['PROMO'] = $this->controlador->is_promo($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
+				if (!$materias[$i]['PROMO'])
+				{
+					$this->controlador->ctrl_no_tiene_ponderacion_prom($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA'], 'P');
+				}
+
 				$materias[$i]['PROMO_DIRECTA'] = $this->controlador->is_promo_directa($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
 				if (!$materias[$i]['PROMO_DIRECTA'])
 				{
-					$this->controlador->ctrl_no_tiene_ponderacion_prom_directa($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
+					$this->controlador->ctrl_no_tiene_ponderacion_prom($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA'], 'D');
 				}
 				$materias[$i]['PONDERACIONES'] = $this->controlador->get_ponderaciones_notas($anio_academico_hash, $periodo_hash, $materias[$i]['MATERIA']);
 			}

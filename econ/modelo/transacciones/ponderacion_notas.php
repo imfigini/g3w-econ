@@ -43,9 +43,9 @@ class ponderacion_notas
 	}
 	
 	/* Parametros: anio_academico, periodo, materia */
-	function ctrl_no_tiene_ponderacion_prom_directa($parametros)
+	function info__is_promo($parametros)
     {
-		$parametros['calidad'] = 'D';
-		catalogo::consultar('ponderacion_notas', 'eliminar_ponderacion', $parametros);
+		return catalogo::consultar('prom_directa', 'is_promo', $parametros);
 	}
+
 }

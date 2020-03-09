@@ -98,7 +98,27 @@ class prom_directa
 		return false;
 	}
 
-    /**
+	/**
+    * parametros: anio_academico, periodo, materia
+    * cache: no
+    * filas: 1
+	*/
+	function is_promo($parametros)
+	{
+		$sql = "SELECT COUNT(*) as existe
+                        FROM sga_comisiones
+                    WHERE   anio_academico = {$parametros['anio_academico']}
+						AND periodo_lectivo = {$parametros['periodo']}
+						AND materia = {$parametros['materia']} 
+						AND escala_notas = 4 ";
+		$existe = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		if ($existe['EXISTE'] > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
     * parametros: anio_academico, periodo, anio_academico_anterior, periodo_anterior
     * cache: no
     * filas: n

@@ -125,21 +125,27 @@ function validar_datos(porc)
 
 function tiene_todos_los_valores(porc)
 {
-	x = porc.id.split('_');
-	indice = x[2];
-	PP = parseInt ( $("#"+'porc_parciales_P_'+indice).val() );
-	IP = parseInt ( $("#"+'porc_integrador_P_'+indice).val() );
-	PR = parseInt ( $("#"+'porc_parciales_R_'+indice).val() );
-	if (! (PP >= 0 && PP <= 100) )
+	var x = porc.id.split('_');
+	var indice = x[2];
+	var prom = $("#"+'is_promo_'+indice).val();
+	if (prom)
 	{
-		alert("Debe asignar al menos un valor para la ponderación de Parciales.");
-		return false;
+		var PP = parseInt ( $("#"+'porc_parciales_P_'+indice).val() );
+		var IP = parseInt ( $("#"+'porc_integrador_P_'+indice).val() );
+		
+		if (! (PP >= 0 && PP <= 100) )
+		{
+			alert("Debe asignar al menos un valor para la ponderación de Parciales.");
+			return false;
+		}
+		if (! (IP >= 0 && IP <= 100) )
+		{
+			alert("Debe asignar al menos un valor para la ponderación de Integrador.");
+			return false;
+		}
 	}
-	if (! (IP >= 0 && IP <= 100) )
-	{
-		alert("Debe asignar al menos un valor para la ponderación de Integrador.");
-		return false;
-	}
+
+	var PR = parseInt ( $("#"+'porc_parciales_R_'+indice).val() );
 	if (! (PR >= 0 && PR <= 100) )
 	{
 		alert("Debe asignar al menos un valor para la ponderación de Parciales (sin instancia de integrador).");

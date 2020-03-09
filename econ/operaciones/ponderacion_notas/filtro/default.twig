@@ -42,6 +42,7 @@
 						<input type="hidden" name="materia" value="{{materia.MATERIA}}">
 						<input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
 						<input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
+						<input type="hidden" name="is_promo_{{materia.MATERIA}}" value="{{materia.PROMO}}">
 						<table class="table table-striped table-condensed" tabindex="0">
 							<tr>
 								<td scope="row" colspan="3">Cursada por Promoción</td>
@@ -52,20 +53,20 @@
 										id="porc_parciales_P_{{materia.MATERIA}}" 
 										onchange="actualiza_porcentaje_con_integrador(this)" 
 										value="{{ponderaciones.PORC_P_PARCIALES}}"
-										{% if not(this.data.es_editable) %} disabled {% endif %}>
+										{% if not(this.data.es_editable) or not (materia.PROMO) %} disabled {% endif %}>
 								</td>
 								<td><div>Ponderación para la nota de Integrador: </div>
 									<input type="number" min="0" max="100" name="porc_integrador_P_{{materia.MATERIA}}" 
 										id="porc_integrador_P_{{materia.MATERIA}}" 
 										onchange="actualiza_porcentaje_con_integrador(this)" 
 										value="{{ponderaciones.PORC_P_INTEGRADOR}}" 
-										{% if not(this.data.es_editable) %} disabled {% endif %}>
+										{% if not(this.data.es_editable) or not (materia.PROMO) %} disabled {% endif %}>
 								</td>  
 								<td><div>Ponderación para la nota de Trabajos Prácticos: </div>
 									<input type="number" min="0" max="100" name="porc_trabajos_P_{{materia.MATERIA}}" 
 										id="porc_trabajos_P_{{materia.MATERIA}}" 
 										onchange="actualiza_porcentaje_con_integrador(this)" 
-										{% if not(this.data.es_editable) %} disabled {% else %} readonly {% endif %}
+										{% if not(this.data.es_editable) or not (materia.PROMO) %} disabled {% else %} readonly {% endif %}
 										value="{{ponderaciones.PORC_P_TRABAJOS}}">
 								</td>                               
 							</tr>

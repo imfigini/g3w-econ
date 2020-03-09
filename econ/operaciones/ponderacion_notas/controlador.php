@@ -197,6 +197,31 @@ class controlador extends controlador_g3w2
         return null;
 	}
 
+	function is_promo($anio_academico_hash, $periodo_hash, $materia)
+	{
+		$periodo = null;
+        $anio_academico = null;
+
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+	                $parametros = array(
+                                'anio_academico' => $anio_academico,
+                                'periodo' => $periodo,
+                                'materia' => $materia
+							);
+					return $this->modelo()->info__is_promo($parametros);
+				}
+            }
+        }
+        return null;
+	}
+
 	function accion__grabar_materia()
     {
         if (kernel::request()->isPost()) 
@@ -208,16 +233,24 @@ class controlador extends controlador_g3w2
 				$tiene_tp = false;
 				$parametros = $this->get_parametros_grabar_ponderaciones();
 
-				$parametros_con_integrador = $this->get_parametros_grabar_con_integrador($parametros);
-				if (isset($parametros_con_integrador)) 
+				if (!$this->modelo()->info__is_promo($parametros))
 				{
-					$result = catalogo::consultar('ponderacion_notas', 'set_ponderaciones_notas', $parametros_con_integrador);
-					$tiene_tp = ($parametros_con_integrador['porc_trabajos'] > 0);
+					$parametros['calidad'] = 'P';
+					catalogo::consultar('ponderacion_notas', 'eliminar_ponderacion', $parametros);
+				} 
+				else 
+				{
+					$parametros_con_integrador = $this->get_parametros_grabar_con_integrador($parametros);
+					if (isset($parametros_con_integrador)) 
+					{
+						$result = catalogo::consultar('ponderacion_notas', 'set_ponderaciones_notas', $parametros_con_integrador);
+						$tiene_tp = ($parametros_con_integrador['porc_trabajos'] > 0);
 
-					if ($result) {
-						$mensaje .= 'Se actualizó correctamente los % de notas (Cursada por Promoción). ';
-					} else {
-						$mensaje_error .= 'ERROR en la asignación de ponderaciones para Cursada por Promoción. ';
+						if ($result) {
+							$mensaje .= 'Se actualizó correctamente los % de notas (Cursada por Promoción). ';
+						} else {
+							$mensaje_error .= 'ERROR en la asignación de ponderaciones para Cursada por Promoción. ';
+						}
 					}
 				}
 
@@ -236,7 +269,8 @@ class controlador extends controlador_g3w2
 				
 				if (!$this->modelo()->info__is_promo_directa($parametros))
 				{
-					$this->modelo()->ctrl_no_tiene_ponderacion_prom_directa($parametros);
+					$parametros['calidad'] = 'D';
+					catalogo::consultar('ponderacion_notas', 'eliminar_ponderacion', $parametros);
 				}
 				else
 				{
@@ -274,7 +308,7 @@ class controlador extends controlador_g3w2
 		$this->set_periodo($parametros['periodo_hash']);
 	}
 	
-	function ctrl_no_tiene_ponderacion_prom_directa($anio_academico_hash, $periodo_hash, $materia)
+	function ctrl_no_tiene_ponderacion_prom($anio_academico_hash, $periodo_hash, $materia, $tipo_promo)
 	{
 		$periodo = null;
         $anio_academico = null;
@@ -290,9 +324,10 @@ class controlador extends controlador_g3w2
 	                $parametros = array(
                                 'anio_academico' => $anio_academico,
                                 'periodo' => $periodo,
-                                'materia' => $materia
+								'materia' => $materia,
+								'calidad' => $tipo_promo
 							);
-					return $this->modelo()->ctrl_no_tiene_ponderacion_prom_directa($parametros);
+					return catalogo::consultar('ponderacion_notas', 'eliminar_ponderacion', $parametros);
 				}
             }
         }
@@ -326,11 +361,6 @@ class controlador extends controlador_g3w2
 		if (empty($parametros['porc_parciales']) && empty($parametros['porc_integrador']) && empty($parametros['porc_trabajos'])) {
 			return null;
 		}
-
-		// if (empty($parametros['porc_parciales']) || empty($parametros['porc_integrador'])) {
-		// 	throw new error_guarani('Falta cargar alguna ponderación para la materia '.$parametros['materia']);
-		// }
-
         return $parametros;        
     }
 
