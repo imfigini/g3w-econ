@@ -85,10 +85,13 @@
 										<td>Recuperatorio Global: <strong>{{comision.FECHAS_SOLICITADAS.RECUP.FECHA_HORA}}</strong></td>
 										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'recup', comision.FECHAS_SOLICITADAS.RECUP.FECHA_HORA)}}
 									</tr>
+									{# El integrador lo muestra sólo si es promocionable la comisión #}
+									{% if comision.ESCALA_NOTAS == 4 %} 
 									<tr>    
-										<td>Integrador: <strong>{{comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA}}</strong></td>
-										{{ _self.set_input(this.data.es_editable, comision.COMISION, 'integ', comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA)}}
-									</tr>
+											<td>Integrador: <strong>{{comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA}}</strong></td>
+											{{ _self.set_input(this.data.es_editable, comision.COMISION, 'integ', comision.FECHAS_SOLICITADAS.INTEG.FECHA_HORA)}}
+										</tr>
+									{% endif %}
 									{% if (comision.EVAL_ASIGNADAS.TP) %}
 										<tr>    
 											<td colspan="3">Trabajos Prácticos: <b><i>Instancia creada</i></b></td>

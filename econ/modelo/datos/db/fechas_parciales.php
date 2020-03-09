@@ -25,7 +25,8 @@ class fechas_parciales
          $sql = "SELECT sga_comisiones.comision, 
                         sga_comisiones.nombre AS comision_nombre, 
                         sga_comisiones.turno,
-                        sga_comisiones.carrera
+                        sga_comisiones.carrera,
+						sga_comisiones.escala_notas
 				FROM    sga_comisiones
                 WHERE sga_comisiones.estado = 'A'
                         AND sga_comisiones.anio_academico = $anio_academico
