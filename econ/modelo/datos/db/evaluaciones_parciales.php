@@ -442,7 +442,7 @@ class evaluaciones_parciales
 		{
 			$sql .= " AND comision NOT IN
 						(SELECT comision FROM sga_comisiones 
-							WHERE anio_academico = 2019 
+							WHERE anio_academico = YEAR(fecha_inicio)
 							AND periodo_lectivo LIKE '1%'
 							AND materia IN (
 								SELECT DISTINCT materia FROM sga_atrib_mat_plan MP

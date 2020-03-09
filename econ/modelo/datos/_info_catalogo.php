@@ -2129,6 +2129,18 @@ class _info_catalogo
 );
 	}
 
+	static function mixes__pertenece_mix_cincuentenario()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function parametros__get_parametro()
 	{
 		return array (

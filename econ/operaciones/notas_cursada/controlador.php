@@ -5,6 +5,7 @@ namespace econ\operaciones\notas_cursada;
 use kernel\kernel;
 use kernel\util\validador;
 use siu\errores\error_guarani;
+use siu\modelo\datos\catalogo;
 
 class controlador extends \siu\operaciones\notas_cursada\controlador
 {
@@ -25,6 +26,11 @@ class controlador extends \siu\operaciones\notas_cursada\controlador
 		} else {
 			$this->render_raw_json(Array());
 		}
+	}
+
+	function pertenece_mix_cincuentenario($materia)
+	{
+		return catalogo::consultar('mixes', 'pertenece_mix_cincuentenario', Array('materia'=>$materia));
 	}
 
 }

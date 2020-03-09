@@ -173,5 +173,18 @@ class mixes
         
         $sql = "INSERT INTO ufce_mixes (unidad_academica, carrera, plan, version, materia, anio_de_cursada, mix) VALUES ('FCE', $carrera, $plan, $version, $materia, $anio, $mix) ";
         return kernel::db()->ejecutar($sql);
-    }    
+	}    
+	
+    /**
+     * parametros: materia
+     * cache: no
+     * filas: 1
+     */
+	function pertenece_mix_cincuentenario($parametros)
+	{
+		$sql = "SELECT COUNT(*)>0 AS pertenece FROM ufce_mixes
+					WHERE materia = {$parametros['materia']}";
+		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+		return $resultado['PERTENECE'];
+	}
 }
