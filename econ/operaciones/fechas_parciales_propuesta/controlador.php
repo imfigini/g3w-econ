@@ -326,18 +326,19 @@ class controlador extends controlador_g3w2
 			
             foreach ($comisiones as $comision)
             {
-                $comision = $comision['COMISION'];
-				$dias_clase = $this->modelo()->get_dias_clase(Array('comision'=>$comision));
+				$comision_id = $comision['COMISION'];
+				$escala = $comision['ESCALA_NOTAS'];
+				$dias_clase = $this->modelo()->get_dias_clase(Array('comision'=>$comision_id));
 			
                 $resultado = '';
 				if (!empty($datos['fecha_parcial1'])) {
-					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'parcial1');
+					$resultado .= $this->grabar_instancia($comision_id, $datos, $dias_clase, 'parcial1');
 				}
 				if (!empty($datos['fecha_parcial2'])) {
-					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'parcial2');
+					$resultado .= $this->grabar_instancia($comision_id, $datos, $dias_clase, 'parcial2');
 				}
 				if (!empty($datos['fecha_integ'])) {
-					$resultado .= $this->grabar_instancia($comision, $datos, $dias_clase, 'integ');
+					$resultado .= $this->grabar_instancia($comision_id, $datos, $dias_clase, 'integ', $escala);
 				}
             }
 
@@ -358,7 +359,7 @@ class controlador extends controlador_g3w2
             if ($resultado_obs == '1')
             {
 				$this->enviar_mensaje_x_mail_a_DD($param);
-				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la Dirección de Docentes. Materia: ');
+				$resultado .= utf8_decode('Se han guardado las observaciones y se han enviado a la Direccion de Docentes. Materia: ');
 			}
 			if (!empty($resultado)) {
 				$resultado .= $datos['materia_nombre'];
@@ -392,7 +393,7 @@ class controlador extends controlador_g3w2
         return $parametros;        
     }
 
-    private function grabar_instancia($comision, $datos, $dias_clase, $instancia)
+    private function grabar_instancia($comision, $datos, $dias_clase, $instancia, $escala=null)
     {        
         switch ($instancia) {
             case 'parcial1': 	$inst = 22; $inst_nombre = utf8_decode('1er Parcial'); break;
@@ -411,7 +412,10 @@ class controlador extends controlador_g3w2
             $this->verificar_si_fecha_posible($comision, $parametros['fecha_hora']);
 			$this->verificar_fechas_posibles_con_demas_instancias($comision, $instancia, $parametros['fecha_hora']);            
 
-			$resultado = catalogo::consultar('cursos', 'alta_propuesta_evaluacion_parcial', $parametros);
+			//Solo si la comision es promocionable, guardo la solicitud de fecha para el integrador
+			if ($instancia != 'integ' || (isset($escala) && $escala == 4) ) {
+				$resultado = catalogo::consultar('cursos', 'alta_propuesta_evaluacion_parcial', $parametros);
+			}
 
 			$resultado_recup = null;
 			if ($instancia == 'integ') {  //Tambien hay que guardar el Recuperatoprio Global con igual fecha al Integrador
@@ -585,7 +589,7 @@ class controlador extends controlador_g3w2
         }
 		if (!$posible)
 		{
-            $msj = "Verifique la cronologaa de las fechas. Instancia posterior de evaluacian debe tener fecha posterior, y viceversa.";
+            $msj = "Verifique la cronologia de las fechas. Instancia posterior de evaluacion debe tener fecha posterior, y viceversa.";
             throw new error_guarani($msj);
         }
         return true;

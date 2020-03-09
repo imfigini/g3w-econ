@@ -105,7 +105,6 @@ class pagelet_filtro extends pagelet {
                 $datos = $this->controlador->get_materias_y_comisiones_cincuentenario($anio_academico_hash, $periodo_hash, $carrera, $mix);
                 $dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
 				
-                print_R($datos);
                 $this->data['datos'] = $datos;
                 $this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
 	

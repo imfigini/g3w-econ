@@ -1,4 +1,5 @@
 <?php
+
 namespace econ\operaciones\fechas_parciales_propuesta;
 
 use kernel\interfaz\pagelet;
@@ -84,7 +85,6 @@ class pagelet_filtro extends pagelet {
 			$dias_no_laborales = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
 			
 			$this->data['datos'] = $datos;
-			//print_r($datos);
 			$this->data['datos_json'] = json_encode($datos, JSON_FORCE_OBJECT | JSON_PARTIAL_OUTPUT_ON_ERROR );
 			
 			$this->data['periodos_evaluacion'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);

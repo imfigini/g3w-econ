@@ -31,12 +31,12 @@
 
             {#  Mensaje si se guardo con exito      #}
             {% if (this.data.mensaje != '') %} 
-                <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+				<script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
             {% endif %}
 
             {#  Mensaje si hubo error al guardar      #}
             {% if (this.data.mensaje_error != '') %}
-                <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+				<script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
                 <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
             {% endif %}
 
@@ -141,10 +141,13 @@
 													</td>
 													<td><div>Recuperatorio Global:</div>
 														<input	type="text" id="recup_{{comision.COMISION}}" readonly class="no_editable_pendiente"/>
-													</td>                               
-													<td><div>Integrador:</div>
-														<input	type="text" id="integ_{{comision.COMISION}}" readonly class="no_editable_pendiente"/>
-													</td>                               
+													</td>    
+													{# Solo si la comision es promocionable tiene integrador     #}
+													{% if comision.ESCALA_NOTAS == 4 %}                       
+														<td><div>Integrador:</div>
+															<input	type="text" id="integ_{{comision.COMISION}}" readonly class="no_editable_pendiente"/>
+														</td>                               
+													{% endif %}
 												</tr>
                                             </table>
                                     </form>
