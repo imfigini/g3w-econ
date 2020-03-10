@@ -46,6 +46,10 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 
 		$nuevo = array();
 		//kernel::log()->add_debug('evaluacion_detalle', $datos);
+		if (count($datos) > 0) {
+			$materia_in_mix = catalogo::consultar('mixes', 'pertenece_mix_cincuentenario', Array('materia' => $datos[0][1]));
+		}
+
 		$id = 0;
 		foreach($datos as $dato) {
 
@@ -57,9 +61,11 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 							'comision' => $dato[5],
 							'evaluacion' => $dato[9],
 							'materia' => $dato[1] );
-			$puede_rendir = $this->puede_rendir_instancia($param);
-			if (!$puede_rendir) {
-				continue;
+			if ($materia_in_mix) {							
+				$puede_rendir = $this->puede_rendir_instancia($param);
+				if (!$puede_rendir) {
+					continue;
+				}
 			}
 			$nuevo[$id]['CALIDAD'] = $dato[12];
 			$nuevo[$id]['ESTADO'] = $dato[13];
@@ -98,7 +104,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 		if ($parametros['anio_academico'] < 2019) {
 			return true;
 		}
-		//Las instancias de evaluación parcial 1 y 2 las pueden rendir todos. Las notas de TP se cargan para todos tambi?n
+		//Las instancias de evaluacion parcial 1 y 2 las pueden rendir todos. Las notas de TP se cargan para todos tambi?n
 		if ($parametros['evaluacion'] == 22 || $parametros['evaluacion'] == 23 || $parametros['evaluacion'] == 15) {
 			return true;
 		}

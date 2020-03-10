@@ -246,6 +246,9 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 		$clases = $this->get_cant_clases_al_dia_de_hoy($parametros);
 		$cant_clases = $clases['CANT_CLASES'];
 
+		if ($cant_clases == 0) {
+			return 0;
+		}
 		/*
 		//Si hay instancias de evaluacion posteriores a la fecha de finalización de clases, se deben contabilizar
 		$comision = str_replace("'","",$parametros['comision']);
