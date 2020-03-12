@@ -336,12 +336,12 @@ function set_div_mensaje_aceptado(comision, inst_nombre, estado, fecha_asignada)
 						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'C': 		mensaje.text('Asignada en día de cursada: '+fecha_asignada)
+		case 'C': 		mensaje.text('Asignada en d\u00EDa de cursada: '+fecha_asignada)
 						mensaje.removeClass('resaltar_azul');
 						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'R': 		mensaje.text('Asignada en otro día: '+fecha_asignada)
+		case 'R': 		mensaje.text('Asignada en otro d\u00EDa: '+fecha_asignada)
 						mensaje.removeClass('resaltar_verde');
 						mensaje.addClass('resaltar_azul');
 						div.show();
@@ -351,12 +351,12 @@ function set_div_mensaje_aceptado(comision, inst_nombre, estado, fecha_asignada)
 						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'CH': 		mensaje.text('Asignada en día de cursada y otro horario: '+fecha_asignada)
+		case 'CH': 		mensaje.text('Asignada en d\u00EDa de cursada y otro horario: '+fecha_asignada)
 						mensaje.removeClass('resaltar_azul');
 						mensaje.addClass('resaltar_verde');
 						div.show();
 						break;
-		case 'RH': 		mensaje.text('Asignada en otro día y otro horario: '+fecha_asignada)
+		case 'RH': 		mensaje.text('Asignada en otro d\u00EDa y otro horario: '+fecha_asignada)
 						mensaje.removeClass('resaltar_verde');
 						mensaje.addClass('resaltar_azul');
 						div.show();
