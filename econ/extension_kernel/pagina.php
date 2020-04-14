@@ -29,6 +29,12 @@ class pagina extends \siu\extension_kernel\pagina
                 $menu->set_orden('notas_examen', 2);
                 $menu->set_orden('acta_examenes', 3);
                 break;
+            case 'anonimo':
+                $menu->set_orden('acceso', 0);
+                $menu->set_orden('fecha_examen', 1);
+                $menu->set_orden('fecha_parcial', 2);
+                $menu->set_orden('validador_certificados', 3);
+                break;
         }
         $menu->reordenar();
         return $menu;

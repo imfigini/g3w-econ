@@ -1,0 +1,51 @@
+{% macro parcial(datos) %}
+	{% for materia in datos %}
+
+        {% set materia_index = 'materia'~loop.index %}
+
+		<div class="corte">
+			<div class="encabezado_cuadro">
+				<div class="row-fluid">
+					<div class="span12">
+						<strong>{{'fecha_parcial.cuadro.materia'|trans|capitalize}}: </strong>({{materia.MATERIA}}) {{materia.MATERIA_NOMBRE}}
+					</div>
+				</div>
+			</div>
+
+			<table class='table table-condensed table-hover table-striped'>
+				<thead>
+					<tr>
+						<th class="span3">{{'fecha_parcial.cuadro.comision'|trans|capitalize}}</th>
+						{# <th class="span3">{{'fecha_parcial.cuadro.eval_parcial'|trans|capitalize}}</th>
+						<th class="span2">{{'fecha_parcial.cuadro.fecha_parcial'|trans|capitalize}}</th>
+						<th class="span2">{{'fecha_parcial.cuadro.hora_parcial'|trans|capitalize}}</th>
+						<th class="span2">{{'fecha_parcial.cuadro.aula'|trans|capitalize}}</th>
+						<th class="span2">{{'fecha_parcial.cuadro.edificio'|trans|capitalize}}</th> #}
+
+					</tr>
+				</thead>
+				<tbody>
+					{% for comision in materia.comisiones %}
+
+                        {% set comision_index = 'comision'~loop.index %}
+
+						<tr>
+							<td>{{comision.COMISION_NOMBRE}}</td>
+							{# <td>{{parcial.EVAL_PARCIAL}}</td>
+							<td>{{parcial.FECHA_PARCIAL}}</td>
+							<td>{{parcial.HORA_PARCIAL}}</td>
+							<td>{{parcial.EDIFICIO}}</td>
+							<td>{{parcial.AULA}}</td> #}
+							<td>
+								<a href="#" class="btn btn-info btn-mini ver_mas_info" data-id="{{comision_index~materia_index}}" data-estado="v">{{'ver'|trans|capitalize}}</a>
+							</td>
+						</tr>
+						<tr class="mas_info" id="{{comision_index~materia_index}}">
+                            {% include 'filtro/info_extra.twig' with comision %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endfor %}
+{% endmacro %}

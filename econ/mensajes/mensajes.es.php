@@ -1,8 +1,8 @@
 <?php
 return array(
     
-	'header.menu.inicio_oficina_docentes' => 'Inicio Dirección de Docentes',
-	'header.menu.inicio_oficina_alumnos' => 'Inicio Dirección de Alumnos',
+	'header.menu.inicio_oficina_docentes' => 'Inicio dirección de Docentes',
+	'header.menu.inicio_oficina_alumnos' => 'Inicio dirección de Alumnos',
     'header.menu.inicio_coordinador' => 'Coordinador de materia',
     'header.menu.coord_materias' => 'Coordinadores de materias',
     'header.menu.ponderacion_notas' => 'Cursadas',
@@ -52,8 +52,8 @@ return array(
     'asignacion_coord_materias.filtro_seleccione' => '-- Todos --',
     
     /* Ponderación de notas en las instancias de evaluación */
-    'tit_ponderacion_notas' => 'Definición de nota final para cierre de cursada',
-    'ponderacion_notas' => 'Definición de nota final para cierre de cursada',
+    'tit_ponderacion_notas' => 'definición de nota final para cierre de cursada',
+    'ponderacion_notas' => 'definición de nota final para cierre de cursada',
     
     /* Detalle de los cursos con sus %*/
     'tit_ponder_notas_detalle' => 'Listado de Materias',
@@ -61,14 +61,14 @@ return array(
     
     'parciales' => 'Carga de notas de evaluaciones parciales',
     
-    /* Períodos de evaluación */
-    'tit_periodos_evaluacion' => 'Períodos cuatrimestrales',
+    /* períodos de evaluación */
+    'tit_periodos_evaluacion' => 'períodos cuatrimestrales',
     'periodos_evaluacion' => 'Configuración de períodos cuatrimestrales',
         
      /* Definción de los Mixes */
     'tit_mixes' => 'Mixs',
     'mixes' => 'Mixs',
-    'definicion_mixes' => 'Definición de Mixs',
+    'definicion_mixes' => 'definición de Mixs',
     'mixes.carrera' => 'Carrera',
     'mixes_modificacion' => 'Modificación de Mix',
     
@@ -80,11 +80,11 @@ return array(
     'tit_fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
     'fechas_parciales_propuesta' => 'Solicitud de fechas para evaluaciones parciales, integrador y recuperatorio',
 	
-	/* Aceptación de fechas para parciales y recuperatorios (sólo 2019)*/
+	/* Aceptaci?n de fechas para parciales y recuperatorios (sólo 2019)*/
 	'tit_fechas_parciales_acept_2019' => 'Revisión de fechas para parciales, integrador y recuperatorios (sólo 2019)',
 	'fechas_parciales_acept_2019' => 'Gestión por listado para fechas de evaluaciones (sólo 2019)',
 
-	/* Aceptación de fechas para parciales y recuperatorios */
+	/* Aceptaci?n de fechas para parciales y recuperatorios */
     'tit_fechas_parciales_acept' => 'Revisión de fechas para parciales, integrador y recuperatorios',
     'fechas_parciales_acept' => 'Gestión por listado para fechas de evaluaciones',
 
@@ -96,7 +96,7 @@ return array(
 	'tit_fechas_parciales_calend' => 'Revisión de fechas para parciales, integrador y recuperatorios',
 	'fechas_parciales_calend' => 'Gestión por calendario para fechas de evaluaciones',
 	
-	/* Asignación de materias por promoción directa*/
+	/* Asignación de materias por Promoción directa*/
 	'tit_asignacion_mat_prom_dir' => 'Asignación de materias por Promoción Directa',
 	'asignacion_mat_prom_dir' => 'Asignación de materias por Promoción Directa',
 
@@ -104,10 +104,43 @@ return array(
 	'tit_recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
 	'recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
 
-	/* Detalle para el cálculo de notas automático */
+	/* Detalle para el c?lculo de notas autom?tico */
 	'alumno_con_nota' => "El alumno ya pasó por todas las instancias de evaluación posibles, se puede hacer un cierre parcial de nota.",
 	'alumno_abandono' => "El alumno abandonó (se ausentó a ambos parciales o no cumple con el % de asistencia), se puede hacer un cierre parcial de nota.",
 	'alumno_falta_integ' => "El alumno aún puede rendir el Integrador, no se puede calcular la nota aún.",
 	'alumno_falta_recup' => "El alumno aún puede rendir el Recuperatorio Global, no se puede calcular la nota aún.",
-	'alumno_falta_tp' => "El alumno no tiene nota cargada para los TP y es necesaria, no se le puede calcular la nota aún.",
+    'alumno_falta_tp' => "El alumno no tiene nota cargada para los TP y es necesaria, no se le puede calcular la nota aún.",
+    
+    /* Fechas de parciales */
+	'header.menu.fecha_parcial' => "Fechas de parciales",
+	'tit_fecha_parcial' => "Fechas de parciales",
+	'fecha_parcial.filtro_buscar' => "buscar",
+	
+	'fecha_parcial.filtro_seleccione' => "-- Seleccione --",
+	'fecha_parcial.filtro_todas' => "-- Todas --",
+	'fecha_parcial.filtro_todos' => "-- Todos --",
+	'fecha_parcial.filtro_carrera' => "carrera",
+	'fecha_parcial.filtro_plan' => "plan",
+	'fecha_parcial.filtro_anio_cursada' => "año de cursada",
+	'fecha_parcial.filtro_materia' => "materia",
+
+	'fecha_parcial.cuadro.anio_academico' => "año académico",
+	'fecha_parcial.cuadro.materia' => "materia",
+	
+    'fecha_parcial.cuadro.comision' => "comisión",
+    'fecha_parcial.cuadro.ver' => "ver",
+	'fecha_parcial.no_hay_datos' => "no hay datos",
+
+    'fecha_parcial.eval_parcial' => "evaluación parcial",
+    'fecha_parcial.fecha_parcial' => "fecha",
+    'fecha_parcial.hora_inicio' => "Hora de inicio",
+    'fecha_parcial.aula' => "Aula",
+    'fecha_parcial.edificio' => "Edificio",
+    'fecha_parcial.observaciones' => "Observaciones",
+	'fecha_parcial.sin_informacion' => "-",
+
+    'fecha_parcial.info_usuario' => 'Se listan todos los parciales futuros del presente cuatrimestre, se debe verificar en cartelera virtual las posibles modificaciones de aula.',
+
+    'no_disponible' => "No disponible",
+    'fecha_parcial' => "Fecha de Parcial",
 );

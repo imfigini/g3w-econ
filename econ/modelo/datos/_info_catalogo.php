@@ -2506,6 +2506,106 @@ class _info_catalogo
 );
 	}
 
+	static function usuario_anonimo__comisiones_de_materia_usuario_anonimo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'materia',
+    3 => 'mix',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function usuario_anonimo__fechas_parciales_usuario_anonimo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'anio_cursada',
+    4 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function usuario_anonimo__horarios_cursadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'anio_academico',
+    2 => 'periodo_lectivo',
+    3 => 'carrera',
+    4 => 'materia',
+    5 => 'turno',
+    6 => 'sede',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function usuario_anonimo__lista_materias_carrera()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'materia',
+    2 => 'carrera',
+    3 => 'plan',
+  ),
+  'no_quote' => 'materia',
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function usuario_anonimo__lista_materias_carrera_x_anio()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'materia',
+    2 => 'carrera',
+    3 => 'plan',
+    4 => 'anio_cursada',
+  ),
+  'no_quote' => 'materia',
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function usuario_anonimo__mesas_examen_usuario_anonimo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'materia',
+    4 => 'fecha_desde',
+    5 => 'fecha_hasta',
+    6 => 'tipo_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 }
 
 ?>
