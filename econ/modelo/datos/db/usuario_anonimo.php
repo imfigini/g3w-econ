@@ -131,7 +131,8 @@ class usuario_anonimo extends \siu\modelo\datos\db\usuario_anonimo
                     AND sga_atrib_mat_plan.version = sga_planes.version_actual
                     AND sga_planes.estado IN ('A', 'V')
                     AND sga_atrib_mat_plan.materia = sga_comisiones.materia
-                    AND sga_cron_eval_parc.fecha_hora >= TODAY-1
+                    AND sga_cron_eval_parc.fecha_hora >= TODAY
+                    AND sga_eval_parc.evaluacion <> 15
                     $filtro_carrera
                     $filtro_plan
                     $filtro_anio_cursada
