@@ -19,14 +19,11 @@ class controlador extends controlador_g3w2
 	function accion__index()
 	{
         $form = $this->get_form();
-//		$mostrar_seleccione_turno = true;
 
         if (!empty($_GET['formulario_filtro'])) 
         {
 			$this->recuperar_filtro();
             $filtros = $form->get_datos();
-            // print_r('<br>Filtros: '); 
-            // print_r($filtros);     
 
             $carrera = "";
 			if($filtros['carrera'] != "") $carrera = $this->decodificar_carrera($filtros['carrera']);
@@ -57,24 +54,22 @@ class controlador extends controlador_g3w2
             );
 
             $datos = catalogo::consultar('usuario_anonimo', 'fechas_parciales_usuario_anonimo', $parametros);
-
             // print_r('<br>');
             // print_r($datos);
+
             //Hago corte de control por materia
             $cant = count($datos);
             $i = 0;
             while ($i < $cant)
             {
                 $dato = $datos[$i];
-                // print_r('<br>');
-                // print_r('<br>$dato: ');
-                // print_r($dato);
                 $materias[$dato['MATERIA']]['MATERIA_NOMBRE'] = $dato['NOMBRE_MATERIA'];
                 $materias[$dato['MATERIA']]['MATERIA'] = $dato['MATERIA'];
 
                 $materias[$dato['MATERIA']]['comisiones'][$dato['COMISION']]['COMISION'] = $dato['COMISION'];
                 $materias[$dato['MATERIA']]['comisiones'][$dato['COMISION']]['COMISION_NOMBRE'] = $dato['COMISION_NOMBRE'].' ('.$dato['COMISION'].')';
 
+                //Hago corte de control por comisión
                 $j = $i;
                 $parciales = array();
                 while ($j < $cant) 

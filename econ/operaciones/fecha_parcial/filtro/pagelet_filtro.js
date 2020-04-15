@@ -49,17 +49,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 
                 }
             });   
-            // $("#formulario_filtro-carrera").on("change", function()
-            // {
-            //     if($(this).val() != ""){
-            //         limpiar_materia();
-            //         $('#formulario_filtro-materia_descr').focus();
-            //     }
-            //     else if(($("#formulario_filtro-materia").val() == "") && ($("#formulario_filtro-materia_descr").val() == "")){
-            //         $('#formulario_filtro-materia_descr').focus();
-            //     }
 
-            // });
             $("#formulario_filtro-plan").on("change", function(){
 
                 if($(this).val() != ""){
@@ -95,7 +85,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                     });
                 },
                 appendTo: id,
-                // minLength: 2,
+                minLength: 2,
                 select: materia_seleccionada,
                 focus: materia_foco,
                 change: function( event, ui ) {
@@ -116,13 +106,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 limpiar_materia();
                 $('#formulario_filtro-materia_descr').focus();
             });
-
-            // $filtro.find('input.date').datepicker( "destroy" );
-            // $filtro.find('input.date').datepicker({
-            //     changeMonth: true,
-            //     changeYear: true,
-            //     firstDay: 0
-            // });
 
             $("#formulario_filtro").on("submit", function(event){
                 event.preventDefault();
@@ -191,8 +174,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             });
 
         }
-
-
     }
 
     function filtar(){

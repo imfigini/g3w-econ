@@ -67,7 +67,7 @@ class usuario_anonimo extends \siu\modelo\datos\db\usuario_anonimo
                 ORDER BY sga_atrib_mat_plan.nombre_materia
             ";
 
-        kernel::log()->add_debug('iris', $sql);
+        //kernel::log()->add_debug('iris lista_materias', $sql);
         $datos = kernel::db()->consultar($sql);
 
         $nuevo = array();
@@ -139,8 +139,7 @@ class usuario_anonimo extends \siu\modelo\datos\db\usuario_anonimo
                 
                 ORDER BY 2,4,5 ";
 
-        kernel::log()->add_debug('iris_buscar_parciales', $sql);
-        // print_r($sql);
+        //kernel::log()->add_debug('iris_buscar_parciales', $sql);
         $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
 
         $result = array();
@@ -164,39 +163,6 @@ class usuario_anonimo extends \siu\modelo\datos\db\usuario_anonimo
             $result[] = $dato;            
         }
         return $result;
-    }
-
-    /**
-     * parametros: _ua, carrera, materia, mix
-     * cache: no
-     * filas: n
-     */
-    function comisiones_de_materia_usuario_anonimo($parametros)
-    {
-        $sql = "SELECT 	M.materia,
-                        M.nombre AS materia_nombre,
-                        C.comision,
-                        C.nombre AS comision_nombre, 
-                        AL.nombre_aula, 
-                        ED.nombre AS edificio,
-                        CASE    WHEN A.dia_semana = 1 then 'Domingo'
-                                WHEN A.dia_semana = 2 THEN 'Lunes'
-                                WHEN A.dia_semana = 3 THEN 'Martes'
-                                WHEN A.dia_semana = 4 THEN 'Miercoles'
-                                WHEN A.dia_semana = 5 THEN 'Jueves'
-                                WHEN A.dia_semana = 6 THEN 'Viernes'
-                                WHEN A.dia_semana = 7 THEN 'Sabado'
-                        END AS dia_nombre
-                    FROM sga_comisiones C
-                    JOIN sga_periodos_lect L ON (L.anio_academico = C.anio_academico AND L.periodo_lectivo = C.periodo_lectivo AND TODAY BETWEEN L.fecha_inicio AND L.fecha_fin)
-                    JOIN sga_materias M ON (M.materia = C.materia)
-                    JOIN sga_asign_clases AC ON (AC.comision = C.comision)
-                    LEFT JOIN sga_asignaciones A ON (A.asignacion = AC.asignacion)
-                    LEFT JOIN sga_edificios ED ON (ED.edificio = A.edificio)
-                    LEFT JOIN sga_aulas AL ON (AL.aula = A.aula AND AL.edificio = ED.edificio)
-                    ORDER BY M.nombre, C.nombre, A.dia_semana";
-        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        return $datos;
     }
 
 } 
