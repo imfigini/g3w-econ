@@ -2506,21 +2506,6 @@ class _info_catalogo
 );
 	}
 
-	static function usuario_anonimo__comisiones_de_materia_usuario_anonimo()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-    1 => 'carrera',
-    2 => 'materia',
-    3 => 'mix',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
 	static function usuario_anonimo__fechas_parciales_usuario_anonimo()
 	{
 		return array (
