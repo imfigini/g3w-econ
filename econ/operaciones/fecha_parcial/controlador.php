@@ -181,15 +181,22 @@ class controlador extends controlador_g3w2
         if($carrera_hash != "") $carrera = $this->decodificar_carrera($carrera_hash);
         $datos = array();
         $datos['cod'] = 1;
-        $datos['planes'] = catalogo::consultar('plan_estudios', 'planes', array('carrera' => $carrera));
+        $planes_todos = catalogo::consultar('plan_estudios', 'planes', array('carrera' => $carrera));
+        //Iris: Se decartan planes 1992 y 2002 por pedido de Chelo
+        $planes_activos = Array();
+        foreach($planes_todos as $plan) {
+            if ($plan['PLAN'] != '1992' && $plan['PLAN'] != '2002') {
+                $planes_activos[] = $plan;
+            }
+        }
+        $datos['planes'] = $planes_activos;
         $this->render_raw_json($datos);
-
     }
 
     function accion__buscar_materias() {
         $term = $this->validate_param('term', 'get', validador::TIPO_TEXTO);
         $term = utf8_decode($term);
-        kernel::log()->add_debug('term: ', $term);
+        //kernel::log()->add_debug('term: ', $term);
         
         $carrera_hash = $this->validate_param('carrera', 'get', validador::TIPO_ALPHANUM, array('default' => ''));
         $carrera = "";
