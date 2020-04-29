@@ -838,6 +838,18 @@ class _info_catalogo
 );
 	}
 
+	static function carga_notas_cursada__get_escala_nota()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_notas_cursada__guardar_renglon()
 	{
 		return array (

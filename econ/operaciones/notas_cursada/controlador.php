@@ -14,7 +14,6 @@ class controlador extends \siu\operaciones\notas_cursada\controlador
 	 */
 	function accion__autocalcular()
 	{
-		
 		$comision = $this->validate_param('comision', 'get', validador::TIPO_ALPHANUM);
 		$legajo = $this->validate_param('legajo', 'get', validador::TIPO_ALPHANUM);
 		

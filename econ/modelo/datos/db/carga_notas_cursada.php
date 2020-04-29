@@ -25,6 +25,19 @@ class carga_notas_cursada extends \siu\modelo\datos\db\carga_notas_cursada
 	 * cache: no
 	 * filas: 1
 	 */
+	function get_escala_nota($parametros)
+	{
+		$sql = "SELECT escala_notas 
+					FROM sga_comisiones
+				WHERE comision = {$parametros['comision']}";
+		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+	}
+
+	/**
+	 * parametros: comision
+	 * cache: no
+	 * filas: 1
+	 */
 	function get_datos_de_comision($parametros)
 	{
 		$sql = "SELECT materia, anio_academico, periodo_lectivo
