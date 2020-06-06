@@ -18,9 +18,9 @@ class pagelet_lista_materias extends \siu\operaciones\notas_parciales\pagelet_li
             $rs[$mat]['MATERIA'] = $mat;
             $rs[$mat]['NOMBRE'] = $materia['MATERIA_NOMBRE'];
         
-            //Iris: Se recupera el coordinador y si la materia pertenece a algún plan del 50º para determinar si puede crear o no parciales
+            //Iris: Se recupera el coordinador y si la materia pertenece a algún mix del plan del 50º para determinar si puede crear o no parciales
             $rs[$mat]['COORDINADOR'] = $materia['COORDINADOR'];
-            $rs[$mat]['IN_PLAN_VIEJO'] = $materia['IN_PLAN_VIEJO'];
+            $rs[$mat]['IN_MIX'] = $materia['IN_MIX'];
             
             $rs[$mat]['ESCALA_NOTAS'] = $materia['ESCALA_NOTAS'];
             

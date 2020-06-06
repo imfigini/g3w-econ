@@ -25,7 +25,7 @@
 						<strong>Turno:</strong> {{comision.TURNO}} - 
 						<strong>Inscriptos:</strong> {{ comision.CANT_INSCRIPTOS }} 
 						{# Iris: Sólo puede crear parcial si la materia pertenece a un plan anterior al vigente (50º) #}
-						{{ _self.boton_crear(not comision.COMPLETA and materia.IN_PLAN_VIEJO) }}
+						{{ _self.boton_crear(not comision.COMPLETA and not materia.IN_MIX) }}
 					</div>			
 					<ul class='parciales-comision unstyled' orden='{{orden}}'>
 					{% if comision.EVALUACIONES %}
@@ -36,7 +36,7 @@
 									'nombre': evaluacion.NOMBRE, 
 									'tipo': evaluacion.EVALUACION,
 									'porcentaje': evaluacion.PORCENTAJE_CARGA,
-									'in_plan_viejo': materia.IN_PLAN_VIEJO,
+									'in_mix': materia.IN_MIX,
 									'cant_inscriptos': evaluacion.CANT_INSCRIPTOS,
 									'url_listar': evaluacion.URL_LISTAR,
 									'url_editar': evaluacion.URL_EDITAR,
@@ -47,7 +47,7 @@
 									'nombre': evaluacion.NOMBRE, 
 									'tipo': evaluacion.EVALUACION,
 									'porcentaje': evaluacion.PORCENTAJE_CARGA,
-									'in_plan_viejo': materia.IN_PLAN_VIEJO,
+									'in_mix': materia.IN_MIX,
 									'cant_inscriptos': evaluacion.CANT_INSCRIPTOS,
 									'url_listar': evaluacion.URL_LISTAR,
 									'url_editar': evaluacion.URL_EDITAR,
