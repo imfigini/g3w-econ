@@ -26,6 +26,7 @@ class insc_cursadas
 				WHERE I.comision = C.comision 
 					and C.anio_academico = {$parametros['anio_academico']}
 					and C.periodo_lectivo = {$parametros['periodo']}
+					and C.escala_notas IN (4)
 					and I.plan IN
 							(SELECT plan FROM sga_planes
 							WHERE carrera = I.carrera

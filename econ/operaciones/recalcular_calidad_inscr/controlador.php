@@ -59,18 +59,30 @@ class controlador extends controlador_g3w2
 								'periodo' => $periodo,
 								'calidad' => $calidad
     	                );
-					$datos = catalogo::consultar('insc_cursadas', 'get_alumnos_calidad_inscripcion', $parametros);
-					$cant = count($datos);
-					for ($i=0; $i<$cant; $i++)
-					{
-						if ($datos[$i]['CALIDAD_INSC'] == 'R') {
-							$parametros['legajo'] = $datos[$i]['LEGAJO'];
-							$parametros['carrera'] = $datos[$i]['CARRERA'];
-							$parametros['materia'] = $datos[$i]['MATERIA'];
-							$correlativ_cumpl = catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
-							($correlativ_cumpl) ? $datos[$i]['CALIDAD_ASIGNAR'] = 'P' : $datos[$i]['CALIDAD_ASIGNAR'] = 'R';
-						}
-					}
+                    $datos = catalogo::consultar('insc_cursadas', 'get_alumnos_calidad_inscripcion', $parametros);
+                    $fecha = catalogo::consultar('carga_evaluaciones_parciales', 'get_ultima_fecha_fin_turno_examen_regular', $parametros);
+                  
+                    if (isset($fecha['FECHA']))
+                    {
+                        $hoy = date("Y-m-d");
+                        $fin_turno = date("Y-m-d", strtotime($fecha['FECHA']));
+                        
+                        if ($hoy > $fin_turno)
+                        {
+                            $cant = count($datos);
+                            for ($i=0; $i<$cant; $i++)
+                            {
+                                if ($datos[$i]['CALIDAD_INSC'] == 'R') {
+                                    $parametros['legajo'] = $datos[$i]['LEGAJO'];
+                                    $parametros['carrera'] = $datos[$i]['CARRERA'];
+                                    $parametros['materia'] = $datos[$i]['MATERIA'];
+                                    $correlativ_cumpl = catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
+                                    kernel::log()->add_debug('$correlativ_cumpl', $correlativ_cumpl);
+                                    ($correlativ_cumpl) ? $datos[$i]['CALIDAD_ASIGNAR'] = 'P' : $datos[$i]['CALIDAD_ASIGNAR'] = 'R';
+                                }
+                            }
+                        }
+                    }
 					return $datos;
  				}
             }
@@ -132,7 +144,7 @@ class controlador extends controlador_g3w2
 	{
 		if (kernel::request()->isPost()) 
 		{
-			$datos = $this->validate_param('datos', 'post', validador::TIPO_TEXTO); 
+            $datos = $this->validate_param('datos', 'post', validador::TIPO_TEXTO); 
 			foreach ($datos AS $carrera=>$dato)
 			{
 				$parametros['carrera'] = $carrera;
@@ -141,9 +153,15 @@ class controlador extends controlador_g3w2
 					$parametros['legajo'] = $legajo;
 					foreach($com AS $comision=>$calidad)
 					{
-						$parametros['comision'] = $comision;
-						$parametros['calidad'] = $calidad;
-						catalogo::consultar('insc_cursadas', 'update_calidad_insc_cursada', $parametros);
+                        foreach($calidad AS $calidad_insc=>$calidad_asignar)
+                        {
+                            if ($calidad_insc != $calidad_asignar)
+                            {
+                                $parametros['comision'] = $comision;
+                                $parametros['calidad'] = $calidad_asignar;
+                            	catalogo::consultar('insc_cursadas', 'update_calidad_insc_cursada', $parametros);
+                            }
+                        }
 					}
 				}
 			}
@@ -156,45 +174,6 @@ class controlador extends controlador_g3w2
 		}
 	}
 
-//         if (kernel::request()->isPost()) 
-//         {
-// //TODO
-// 			// $parametros = $this->get_parametros_grabar();
-// 			// try 
-// 			// {
-// 			// 	kernel::db()->abrir_transaccion(); 
-// 			// 	$materias = $parametros['materias'];
-// 			// 	catalogo::consultar('prom_directa', 'resetear_prom_directa', $parametros);
-// 			// 	foreach($materias as $materia=>$prom_dir)
-// 			// 	{
-// 			// 		$parametros['materia'] = $materia;
-// 			// 		catalogo::consultar('prom_directa', 'set_prom_directa', $parametros);
-// 			// 	}
-// 			// 	kernel::db()->cerrar_transaccion();
-// 			// }
-// 	        // catch (error_guarani $e)
-//         	// {
-// 			// 	kernel::db()->abortar_transaccion($e->getMessage());
-//             // 	$this->set_mensaje_error($e->getMessage());
-// 			// }
-// 			// $this->set_anio_academico($parametros['anio_academico_hash']);
-// 			// $this->set_periodo($parametros['periodo_hash']);
-//         }        
-//     }
-    
-    // function get_parametros_grabar()
-    // {
-    //     $parametros = array();
-        
-    //     $parametros['materias'] = $this->validate_param('materias', 'post', validador::TIPO_TEXTO);      
-    //     $parametros['anio_academico_hash'] = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
-    //     $parametros['periodo_hash'] = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO);  
-	// 	$parametros['anio_academico'] = $this->decodificar_anio_academico($parametros['anio_academico_hash']);
-	// 	$parametros['periodo'] = $this->decodificar_periodo($parametros['periodo_hash'], $parametros['anio_academico']);
-	
-	// 	kernel::log()->add_debug('get_parametros_grabar', $parametros);
-    //     return $parametros;        
-    // }
 
     function accion__buscar_periodos() 
     {
@@ -202,7 +181,7 @@ class controlador extends controlador_g3w2
         $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
         $datos = array();
         if (!is_null($anio_academico)){
-                $datos = catalogo::consultar('unidad_academica', 'buscar_periodos_lectivos', array('anio' => $anio_academico));
+            $datos = catalogo::consultar('unidad_academica', 'buscar_periodos_lectivos', array('anio' => $anio_academico));
         }
         $this->render_raw_json($datos);
     }

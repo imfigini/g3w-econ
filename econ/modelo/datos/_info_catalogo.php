@@ -698,6 +698,53 @@ class _info_catalogo
 );
 	}
 
+	static function carga_foto_dni__get_foto_dni()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_foto_dni__get_path_attachment()
+	{
+		return array (
+);
+	}
+
+	static function carga_foto_dni__insert_foto_dni()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'upload',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function carga_foto_dni__set_foto_dni()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'upload',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function carga_notas_cursada__acta_cabecera()
 	{
 		return array (

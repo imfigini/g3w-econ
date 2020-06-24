@@ -3,6 +3,11 @@ INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'OFA', 'A');
 INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'OFD', 'A');
 INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'COORD', 'A');
 
+--Extras:
+INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'GER', 'A');
+INSERT INTO aca_tipos_usuar_ag VALUES ('FCE', 'FCE-427', 'ADM', 'A');
+
+
 --Para que sea coordinador de un materia
 update ufce_coordinadores_materias 
 	set coordinador = '10002'

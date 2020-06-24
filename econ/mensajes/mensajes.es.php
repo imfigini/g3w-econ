@@ -1,4 +1,5 @@
 <?php
+
 return array(
     
 	'header.menu.inicio_oficina_docentes' => 'Inicio dirección de Docentes',
@@ -9,15 +10,16 @@ return array(
     'header.menu.detalle_cursos' => 'Cursadas',
     'header.menu.parciales' => 'Parciales',
     'header.menu.mixes' => 'Mixs',
+    'header.menu.carga_foto_dni' => 'Cargar foto del DNI',
     
     /* Perfiles */
 	'perfil.ofd' => 'dirección de docentes',
 	'perfil.ofa' => 'dirección de alumnos',
     'perfil.coord' => 'coordinador de materia',
     
-	'OFD' => 'dirección de docentes',
-	'OFA' => 'dirección de alumnos',
-    'COORD' => 'coordinador de materia',
+	'OFD' => 'Dirección de Docentes',
+	'OFA' => 'Dirección de Alumnos',
+    'COORD' => 'Coordinador de Materia',
 
     'filtro.filtro_periodos' => "períodos lectivos",
     'filtro.carreras' => "carreras",
@@ -52,8 +54,8 @@ return array(
     'asignacion_coord_materias.filtro_seleccione' => '-- Todos --',
     
     /* Ponderación de notas en las instancias de evaluación */
-    'tit_ponderacion_notas' => 'definición de nota final para cierre de cursada',
-    'ponderacion_notas' => 'definición de nota final para cierre de cursada',
+    'tit_ponderacion_notas' => 'Definición de nota final para cierre de cursada',
+    'ponderacion_notas' => 'Definición de nota final para cierre de cursada',
     
     /* Detalle de los cursos con sus %*/
     'tit_ponder_notas_detalle' => 'Listado de Materias',
@@ -143,4 +145,6 @@ return array(
 
     'no_disponible' => "No disponible",
     'fecha_parcial' => "Fecha de Parcial",
+
+    'tit_carga_foto_dni' => 'Foto del DNI',
 );

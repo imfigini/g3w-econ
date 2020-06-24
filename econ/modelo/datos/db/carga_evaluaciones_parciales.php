@@ -15,8 +15,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
      */
     function listado_evaluaciones_parciales_econ($parametros)
     {
-        //Iris: En la consulta se agregó al coordinador
-        //Iris: En la consulta se agregó si pertenece o no la materia a algún plan del 50º
+        //Iris: En la consulta se agregï¿½ al coordinador
+        //Iris: En la consulta se agregï¿½ si pertenece o no la materia a algï¿½n plan del 50ï¿½
 		$sql = "SELECT
 			sga_comisiones.materia,
 			sga_materias.nombre as materia_nombre,
@@ -33,7 +33,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 			sga_comisiones.anio_academico,
 			sga_comisiones.periodo_lectivo,
 			sga_comisiones.catedra,
-			DECODE(sga_comisiones.turno,'T', 'Tarde', 'N', 'Noche', 'M', 'Mañana', 'No informa') as turno,
+			DECODE(sga_comisiones.turno,'T', 'Tarde', 'N', 'Noche', 'M', 'Maï¿½ana', 'No informa') as turno,
 			sga_sedes.sede,
 			sga_sedes.nombre as sede_nombre,
 			(SELECT COUNT(*)  FROM sga_insc_cursadas WHERE comision = sga_comisiones.comision AND estado in ('A','P','E')) as cant_inscriptos,
@@ -205,6 +205,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 														{$parametros['materia']},
 														'$fecha_formateada') ";
 		$datos = kernel::db()->consultar_fila($sql, db::FETCH_NUM);
+		kernel::log()->add_debbug('$datos', $datos);
 		if ($datos[0] == 1) {
 			return true;
 		}
@@ -250,7 +251,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 			return 0;
 		}
 		/*
-		//Si hay instancias de evaluacion posteriores a la fecha de finalización de clases, se deben contabilizar
+		//Si hay instancias de evaluacion posteriores a la fecha de finalizaciï¿½n de clases, se deben contabilizar
 		$comision = str_replace("'","",$parametros['comision']);
 		$eval_posterior = catalogo::consultar('carga_asistencias', 'get_evaluaciones_posterior_fin_clases', Array('comision'=>$comision));
 		if (isset($eval_posterior)) {
@@ -270,7 +271,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	 */
     function tiene_asistencia($parametros)
     {
-		/* Dado un alumno, una comisión y un porcentaje mínimo de asitencia requerido
+		/* Dado un alumno, una comisiï¿½n y un porcentaje mï¿½nimo de asitencia requerido
 			retorna si el alumno cumple o no con dicho porcentaje 
 			0 <= porc_asist <= 100
 			*/
@@ -288,7 +289,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	 */
     function get_cant_clases_al_dia_de_hoy($parametros)
     {
-		/* Retorna la cantidad de clases validas que ya han pasado hasta el día de la fecha incluido */
+		/* Retorna la cantidad de clases validas que ya han pasado hasta el dï¿½a de la fecha incluido */
 		$sql = "SELECT COUNT(*) AS cant_clases 
 					FROM sga_calendcursada 
 					WHERE comision = {$parametros['comision']}

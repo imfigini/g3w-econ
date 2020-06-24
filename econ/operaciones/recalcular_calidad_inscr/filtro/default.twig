@@ -15,7 +15,7 @@
 	{{ vista_form.render_cuerpo() | raw }}
 	{{ vista_form.render_cierre() | raw }}
 	
-	{# Mensaje si se guardó con éxito #}
+	{# Mensaje si se guardo con exito #}
     {% if (this.data.mensaje != '') %}
         <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
     {% endif %} 
@@ -28,9 +28,10 @@
 
 	{% if(this.data.alumnos) %}
 		<div role='alert' class="alert">
-			<p>Se listan los alumnos que tienen la calidad de inscripción seleccionada a cada comisión.
-				Esta operación permite recalcular la condición a la que pueden aspirar (en caso de ser REGULAR) luego de la fecha de finalización del último turno de examen regular del cuatrimestre.</p>
-			<p>Fecha límite considerada: {{this.data.fecha_limite}}</p>
+			<p>Se listan los alumnos que tienen la calidad de inscripción seleccionada a cada comisión cuya escala de notas sea regulares y promocionales (4).
+				Esta operación permite recalcular la condición a la que pueden aspirar (en caso de ser REGULAR) luego de la fecha de finalización del último turno de examen regular del cuatrimestre.
+				Sólo aplica a alumnos inscriptos en los planes vigentes. </p>
+			<p>Fecha límite considerada: {% if (this.data.fecha_limite) %} {{this.data.fecha_limite}} {% else %} <em>No se recuperó ninguna fecha de finalización de turno de examen regular. No se puede calcular la nueva calidad del alumno </em> {% endif %} </p>
 		</div>
 	
 		<form name="calidad_alumnos" method="post" action="{{this.data.form_url_grabar}}">
@@ -63,7 +64,7 @@
 							<td> {{ alumno.CALIDAD_INSC }} </td>
 							<td> {% if (alumno.CALIDAD_ASIGNAR == 'P')%} 
 									<p class="cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
-									<input type="hidden" name="datos[{{alumno.CARRERA}}][{{alumno.LEGAJO}}][{{alumno.COMISION}}]" value="{{ alumno.CALIDAD_ASIGNAR }}">
+									<input type="hidden" name="datos[{{alumno.CARRERA}}][{{alumno.LEGAJO}}][{{alumno.COMISION}}][{{alumno.CALIDAD_INSC}}]" value="{{ alumno.CALIDAD_ASIGNAR }}">
 								{% else %}
 									{{ alumno.CALIDAD_ASIGNAR }}
 								{% endif %}  </td>
@@ -78,12 +79,10 @@
 					{% endfor %}
 					<tr>
 						<td scope="row" colspan="8">
-							{# <div style="text-align: right">
-								<div class="btn btn-info btn-lg" onclick="grabar_cambio_calidad()" id="boton_grabar_cambio_calidad">
-									Guardar</div>
-							</div> #}
 							<div style="text-align: right">
-								<button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>
+								{# {% if (this.data.fecha_limite) %}  #}
+									<button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>
+								{# {% endif %} #}
 							</div>
 						</td>
 					</tr>

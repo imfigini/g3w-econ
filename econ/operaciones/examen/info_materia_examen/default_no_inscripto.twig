@@ -1,0 +1,49 @@
+{#
+	Entrada:  mesa, materia, url_alta, param_insc_examen_seleccion_auto_tipo_insc, csrf, terminos_y_condiciones
+#}
+
+<form class="form_inscribir" 
+		id_item="{{ mesa.MESA_EXAMEN }}" 
+		name="{{ mesa.MESA_EXAMEN }}" 
+		data-mesa="{{ mesa.__ID__ }}" {# se agrega para encontrarlo mas facil con jquery #}
+		action='{{ url_alta }}' 
+		method='POST'>
+	<div tabindex="0">
+		<p class="fecha"><strong>{{ mesa.FECHA_PRESTAMO_AULA }} {{ mesa.HORA_PRESTAMO_AULA }}</strong></p>
+
+		<div class="clearfix">
+			<ul class="llamado_mesa_info_no_inscripto unstyled" tabindex="0" role="article">
+				<li><span>{{ 'turno'|trans|capitalize }}:</span> {{ mesa.TURNO_EXAMEN}} {{ mesa.HORARIO }}</li>
+				<li><span>{{ 'tipo_inscripcion'|trans|capitalize }}:</span>
+				{{ mesa.TIPO_INSCRIPCION_DESC }}
+				</li>
+				<li><span>{{ 'sede'|trans|capitalize }}:</span> {{ mesa.SEDE_NOMBRE }}</li>
+				<li><span>{{ 'mesa'|trans|capitalize }}:</span> {{ mesa.MESA_EXAMEN }}</li>
+				<li><span>{{ 'llamado'|capitalize }}:</span> {{ mesa.LLAMADO }}</li>
+				<li class="catedra"><span>{{ 'catedra'|trans|capitalize }}:</span> {{ mesa.CATEDRA ? mesa.CATEDRA | raw : '-' }}</li>
+				<li class="docente"><span>{{ 'docentes'|trans|capitalize	}}:</span> {{ mesa.DOCENTES ? mesa.DOCENTES | raw : '-' }}</li>
+			</ul>
+
+			{% include 'info_materia_examen/default_terminos.twig' with {
+					'terminos_y_condiciones':	terminos_y_condiciones,
+					'mesa_examen':	mesa.MESA_EXAMEN
+			} only %}
+
+			<div class="acciones" id="inscribirse_{{ mesa.MESA_EXAMEN }}" style="display:none">
+				<input type="hidden" name="mesa" value="{{ mesa.__ID__ }}" />
+				<input type="hidden" name="materia" value="{{ materia }}" />
+				<input type="hidden" name="tipo_insc" value="R" />
+				{% import "kernel/macro_csrf.twig" as input_csrf %}
+				{{ input_csrf.mostrar(csrf) }}
+				{% if param_insc_examen_seleccion_auto_tipo_insc == 'N' and mesa.INSCRIBIR_COMO == 'A' %}
+					<em>{{'inscribirse_como'|trans}}</em>
+					<input type='submit' value='{{ 'regular'|trans|capitalize }}' class="js-regular btn btn-small" /><em>{{'o'|trans}}</em>
+					<input type='submit' value='{{ 'libre'|trans|capitalize }}' class="js-libre btn btn-small" />
+				{% else %}
+					<input type='submit' value='{{ 'inscribirse'|trans|capitalize }}' class="btn btn-small" />
+				{% endif %}
+			</div>
+
+		</div>
+	</div>
+</form>

@@ -1,0 +1,38 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}	
+   
+    <div class="titulo_operacion">
+        <h2 class="clearfix">
+            <span class="pull-left">{{"tit_carga_foto_dni"|trans}}</span>
+        </h2>
+    </div>   
+
+    {#  Mensaje si se guardo con exito      #}
+    {% if (this.data.mensaje != '') %} 
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje}}')</script>
+    {% endif %}
+
+    {#  Mensaje si hubo error al guardar      #}
+    {% if (this.data.mensaje_error != '') %}
+        <script>kernel.ui.show_mensaje('{{this.data.mensaje_error}}', {tipo: 'alert-error'})</script>
+        {# <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div> #}
+    {% endif %}
+
+    <div class="pagelet" style="display: inline-flex; border: ridge;">
+        <img src={{ this.data.foto_contenido }}>
+    </div>
+
+    <div class="clearfix">
+        <h3>Seleccioar foto del DNI a anexar (formatos aceptados: "jpeg","jpg","png")</h3>
+        <form method="post" action="{{this.data.form_url}}" id="js-form-enviar" class="form-horizontal" enctype="multipart/form-data">
+            <input type="file" style="width:500px" id="image" name="image" accept="image/*" required="true"> 
+            <button type="submit" 
+                    name="guardar" 
+                    class="btn btn-info js-btn-solicitar pull-right"
+                    data-toggle="tooltip" 
+                    data-placement="bottom" 
+                    data-original-title="Guardar">
+                Guardar</button>  
+        </form>
+    </div>
+{% endblock %}

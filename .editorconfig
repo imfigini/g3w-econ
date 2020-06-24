@@ -9,3 +9,10 @@ insert_final_newline = true
 charset = utf-8
 indent_style = tab
 indent_size = 4
+
+[**/*.twig]
+charset = latin1
+#charset = iso-8859-1
+
+[**/mensajes.es.php]
+charset = latin1
