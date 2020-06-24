@@ -21,7 +21,7 @@ Verificar que el directorio exista, sino crearlo. Y darle los permisos necesario
 
 
 ### config.php
-Ver en el config.php de guarani, dónde se quieren guardar las fotos de los DNI.
+Ver en el config.php de guarani, dónde se quieren guardar efectivamente las fotos de los DNI.
 
 Sugerencia: 
 ```
