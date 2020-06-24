@@ -34,7 +34,9 @@ Verifcar que exista el directorio, y dar los permisos necesarios de escrituta al
 ~/pers/econ/scripts/Etapa3
 
 dbaccess siu_guarani econ_script_00_agrega_control.sql
+
 dbaccess siu_guarani econ_script_01_crea_procedure.sql
+
 dbaccess siu_guarani econ_script_02_extras.sql
 
 ## Actualizar código 
