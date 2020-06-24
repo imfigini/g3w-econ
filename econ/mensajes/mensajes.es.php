@@ -147,4 +147,5 @@ return array(
     'fecha_parcial' => "Fecha de Parcial",
 
     'tit_carga_foto_dni' => 'Foto del DNI',
+    'ficha_alumno.foto_dni' => 'Foto del DNI',
 );

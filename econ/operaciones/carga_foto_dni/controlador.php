@@ -176,13 +176,9 @@ class controlador extends controlador_g3w2
         $nombre_archivo = $nombreArchivo['nombre_archivo'];
         $nombre = explode("/", $nombre_folder);
         $size = count($nombre);
-        
-        $nombre = $nombre[$size -1] . "/" . $nombre[$size];
-        
+        $nombre = $nombre[$size-1];
         return $nombre.'/'.$nombre_archivo;
     }
-
-       
  
     function set_mensaje_error($mensaje)
     {
