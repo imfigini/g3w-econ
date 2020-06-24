@@ -23,6 +23,7 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
         $term = utf8_decode($term);
 		$parametros = array('term' => $term);
 		
+		//Si el perfil dónde se está consultando la ficha del alumno es DOCENTE, sólo puede cosultar los alumnos que estén en una mesa de examen
 		$perfil = kernel::persona()->perfil()->get_id();
 		if ($perfil == 'DOC')
         {
