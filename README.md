@@ -6,7 +6,7 @@
 
 ## Asignar un directorio temporal para la subida de archivos
 
-Si no está seteado "upload_tmp_dir" en el php.ini, hay que hacerlo para que ande la carga de archivos (fotos de los DNI).
+1) Si no está seteado "upload_tmp_dir" en el php.ini, hay que hacerlo para que ande la carga de archivos (fotos de los DNI).
 - php -i | grep upload_tmp_dir
 
 Identificar el php.ini cargado:
@@ -19,7 +19,7 @@ upload_tmp_dir = /var/tmp/adjuntos_guarani
 Verificar que el directorio exista, sino crearlo. Y darle los permisos necesarios para que el apache pueda subir cosas. 
 
 
-Ver en el config.php de guarani, dónde se quieren guardar las fotos de los DNI.
+2) Ver en el config.php de guarani, dónde se quieren guardar las fotos de los DNI.
 
 Sugerencia: 
 ```
