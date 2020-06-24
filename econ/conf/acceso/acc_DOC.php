@@ -25,5 +25,15 @@ return array(
             )
         ),
 
+        /*************************************
+         * SIN SUBMENU
+         */
+        'ficha_alumno' => array(
+            'activa' => true,
+            'menu' => array(
+                'visible' => true
+            )
+        ),
+
     )
 );

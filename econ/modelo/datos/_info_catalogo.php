@@ -3,6 +3,867 @@ namespace econ\modelo\datos;
 
 class _info_catalogo
 {
+	static function alumno__actividades_extracurriculares()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__actuacion_provisoria()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__actuacion_provisoria_cursada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__antecedentes_academicos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__antecedentes_docentes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__antecedentes_laborales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__aulas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__buscar_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'term',
+  ),
+  'cache' => 'no',
+  'no_quote' => 'term',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__buscar_alumno_de_docente()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'term',
+    2 => 'legajo_doc',
+  ),
+  'cache' => 'no',
+  'no_quote' => 'term',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__cambios_calidad()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__carreras()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__certificados_solicitados()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__comision_inscripto()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__creditos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'anio',
+    3 => 'periodo_lectivo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__datos_personales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__es_reingresante_carrera()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'periodo_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__estado_titulo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__excepciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__ficha_alumno_historia_academica()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__ficha_alumno_regularidades()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_actividad_academica()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_correlativas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'version',
+    4 => 'materia',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_datos_parciales()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'comision',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_datos_ultima_cursada_materia()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'materia',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function alumno__get_detalle_aprobada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'acta',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_detalle_cursada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'acta',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_detalle_en_curso()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'comision',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_detalle_equiv()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'equivalencia',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_detalle_plan_estudios()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'version',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_detalle_promo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'acta',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_materias_genericas_alumno()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'plan',
+    4 => 'version',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_nota_descripcion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'escala_notas',
+    1 => 'nota',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_optativas_generica()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'version',
+    4 => 'materia',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_promedios_por_titulo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'carrera',
+    3 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_ranking_por_titulo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'carrera',
+    3 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__get_resultado_generica()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'titulo',
+    4 => 'materia',
+  ),
+  'cache' => 'memoria',
+  'filas' => '1',
+);
+	}
+
+	static function alumno__get_titulo_grado()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+  ),
+  'cache' => 'memoria',
+  'filas' => '1',
+);
+	}
+
+	static function alumno__get_titulos_carrera()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__historia_academica()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__historia_academica_no_valida()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__homologaciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__inscripciones_cursadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'estado',
+    3 => 'alcance',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__inscripciones_cursadas_rechazadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'alcance',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__inscripciones_examen_rechazadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'alcance',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__inscripciones_examenes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'estado',
+    3 => 'alcance',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__perdidas_regularidad()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__periodos_lectivos()
+	{
+		return array (
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__porcentaje_aprobacion()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__prom_alumnos_ranking_web()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'titulo',
+    3 => 'carrera',
+    4 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__promedio_general()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'titulo',
+    3 => 'carrera',
+    4 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__promedio_sin_aplazos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'titulo',
+    3 => 'carrera',
+    4 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__promedios()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__prorrogas_regularidad()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__regularidades()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__rep_inscripciones_cursadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__rep_inscripciones_examenes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__requisitos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__sanciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__temas_dictados()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'legajo',
+    3 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__tesis()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__titulos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__tramite_titulos()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function carga_asistencias__clase_detalle()
 	{
 		return array (
@@ -714,20 +1575,6 @@ class _info_catalogo
 	static function carga_foto_dni__get_path_attachment()
 	{
 		return array (
-);
-	}
-
-	static function carga_foto_dni__insert_foto_dni()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-    1 => 'nro_inscripcion',
-    2 => 'upload',
-  ),
-  'cache' => 'no',
-  'filas' => '1',
 );
 	}
 
