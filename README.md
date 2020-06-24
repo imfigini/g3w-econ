@@ -11,11 +11,17 @@ Si no está seteado "upload_tmp_dir" en el php.ini, hay que hacerlo para que and
 
 Identificar el php.ini cargado:
 - php -i | grep 'php.ini'
+
 Modificar la línea donde se especifica upload_tmp_dir:
 ```
 upload_tmp_dir = /var/tmp/adjuntos_guarani
 ```
 Verificar que el directorio exista, sino crearlo. Y darle los permisos necesarios para que el apache pueda subir cosas. 
+
+Ver en el config.php de guarani, dónde se quieren guardar las fotos de los DNI.
+Sugerencia: 
+'dir_attachment' => '/var/guarani3w/files',
+Verifcar que exista el directorio, y dar los permisos necesarios de escrituta al usuario apache. 
 
 ## Script a correr en la base 
 

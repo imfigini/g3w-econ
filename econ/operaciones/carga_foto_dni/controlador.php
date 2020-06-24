@@ -36,9 +36,13 @@ class controlador extends controlador_g3w2
 
         $filename = $path.'/'.$archivo['ARCHIVO'];
         $contenido = file_get_contents($filename);
+        if (empty($contenido))
+        {
+            $filename = $path.'/no_imagen.png';
+            $contenido = file_get_contents($filename);
+        }
         $type = pathinfo($filename, PATHINFO_EXTENSION); 
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($contenido);
-
         return $base64;
     }
 
@@ -150,7 +154,6 @@ class controlador extends controlador_g3w2
         }
         // Se mueven los archivos subidos al servidor del directorio temporal PHP al recientemente creado
         // move_uploaded_file($file_tmp, $path_attach.'/'.$file_name);
-
         imagepng($save, $path_attach.'/'.$saveName);
         imagedestroy($img);
         imagedestroy($save);
