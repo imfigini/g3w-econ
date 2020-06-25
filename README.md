@@ -29,9 +29,24 @@ Sugerencia:
 ```
 Verifcar que exista el directorio, y dar los permisos necesarios de escrituta al usuario apache. 
 
+
+### Configurar backup de los archivos subidos
+
+Ver de configurar algún backup externo de las fotos de los DNI subdidos. 
+A modo sugerecia, puede ser con algo de este estilo, con un archivo dentro de /etc/cron.daily:
+
+Si se configuró 'dir_attachment' => '/var/guarani3w/files':
+```
+#!/bin/bash
+set -u
+DST_USR=
+DST_HOST=
+DST_DIR=
+rsync -rtucz --delete /var/guarani3w/files/FCE/ $DST_USR@$DST_HOST:$DST_DIR
+```
 ## Scripts a correr en la base 
 
-~/pers/econ/scripts/Etapa3
+~/pers/econ/scripts/etapa3
 
 - dbaccess siu_guarani econ_script_00_agrega_control.sql
 - dbaccess siu_guarani econ_script_01_crea_procedure.sql

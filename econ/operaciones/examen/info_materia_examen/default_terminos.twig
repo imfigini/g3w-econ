@@ -1,19 +1,19 @@
 {#
-	Entrada:  terminos_y_condiciones, mesa_examen
+	Entrada:  terminos_y_condiciones, mesa_id
 #}
 {% block contenido %}
 	<table class='table table-condensed table-hover table-striped'>
 	<td>{{ "Antes de solicitar la inscripción al examen, debe leer y aceptar los presentes términos y condiciones de evaluación" }}
 			<div style="margin-top: 15px;" align="right">
-				<button type="button" id='btn_terminos_{{ mesa_examen }}' class="btn btn-info btn-lg" data-toggle="collapse" data-target="#contenido_terminos_{{ mesa_examen }}">
+				<button type="button" id='btn_terminos_{{ mesa_id }}' class="btn btn-info btn-lg" data-toggle="collapse" data-target="#contenido_terminos_{{ mesa_id }}">
 					Términos y Condiciones de la Facultad</button>
-					<div id="contenido_terminos_{{ mesa_examen }}" class="collapse" style="margin-top: 15px;">
+					<div id="contenido_terminos_{{ mesa_id }}" class="collapse" style="margin-top: 15px;">
 					<div align="justify" >
 						{% autoescape false %}
 						{{ terminos_y_condiciones }}
 						{% endautoescape %}
 						<p style="float: right; font-weight: bold;"> Acepto los términos y condiciones 
-							<input type='checkbox' class='check-js' id='check_terminos_{{ mesa_examen }}' name='{{ mesa_examen }}' value='off'> 
+							<input type='checkbox' class='check-js' id='check_terminos_{{ mesa_id }}' name='{{ mesa_id }}' value='off'> 
 						</p>
 					</div>
 					</div> 

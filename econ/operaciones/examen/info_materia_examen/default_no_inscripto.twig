@@ -26,10 +26,10 @@
 
 			{% include 'info_materia_examen/default_terminos.twig' with {
 					'terminos_y_condiciones':	terminos_y_condiciones,
-					'mesa_examen':	mesa.MESA_EXAMEN
+					'mesa_id':	mesa.__ID__
 			} only %}
 
-			<div class="acciones" id="inscribirse_{{ mesa.MESA_EXAMEN }}" style="display:none">
+			<div class="acciones" id="inscribirse_{{ mesa.__ID__ }}" style="display:none">
 				<input type="hidden" name="mesa" value="{{ mesa.__ID__ }}" />
 				<input type="hidden" name="materia" value="{{ materia }}" />
 				<input type="hidden" name="tipo_insc" value="R" />

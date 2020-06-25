@@ -1,4 +1,4 @@
-EXECUTE PROCEDURE dba.sui_mensajes ( 800572, 8, "Para inscribirte te debe faltar solo 1 materia o estar cursando una correlativa", 
+EXECUTE PROCEDURE dba.sui_mensajes ( 800572, 3, "Para inscribirte te debe faltar solo 1 materia o estar cursando una correlativa", 
 "Para inscribirte te debe faltar solo 1 materia o estar cursando una correlativa", 1, 1 );
 
 INSERT INTO par_implem_control (stored_procedure, parametros) VALUES ('ctr_econ_corr', 's,s,s,s');
