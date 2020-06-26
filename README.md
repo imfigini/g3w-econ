@@ -33,7 +33,7 @@ Verifcar que exista el directorio, y dar los permisos necesarios de escrituta al
 ### Configurar backup de los archivos subidos
 
 Ver de configurar algún backup externo de las fotos de los DNI subdidos. 
-A modo sugerecia, puede ser con algo de este estilo, con un archivo dentro de /etc/cron.daily:
+A modo sugerencia, puede ser con algo de este estilo, con un archivo dentro de /etc/cron.daily:
 
 Si se configuró 'dir_attachment' => '/var/guarani3w/files':
 ```
@@ -48,9 +48,11 @@ rsync -rtucz --delete /var/guarani3w/files/FCE/ $DST_USR@$DST_HOST:$DST_DIR
 
 ~/pers/econ/scripts/etapa3
 
-- dbaccess siu_guarani econ_script_00_agrega_control.sql
-- dbaccess siu_guarani econ_script_01_crea_procedure.sql
-- dbaccess siu_guarani econ_script_02_extras.sql
+- dbaccess siu_guarani 800572 script_00_agrega_control.sql
+- dbaccess siu_guarani 800572 script_01_crea_procedure.sql
+- dbaccess siu_guarani 800573 script_00_agrega_control.sql
+- dbaccess siu_guarani 800573 script_01_crea_procedure.sql
+- dbaccess siu_guarani econ-script-ETAPA3.sql
 
 ## Actualizar código 
 

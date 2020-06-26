@@ -26,3 +26,8 @@ UPDATE aca_usuarios_ag SET clave = '81dc9bdb52d04dc20036dbd8313ed055',
 			intentos_fallidos = 0,
 			bloqueado = 'N'
 WHERE unidad_academica IS NOT NULL;
+
+
+--Para etapa3 poder hacer pruebas
+UPDATE sga_llamados_mesa SET habilitado ='S' WHERE anio_academico = 2020;
+UPDATE sga_exep_insc_llam SET fecha_inicio = CURRENT WHERE anio_academico = 2020;

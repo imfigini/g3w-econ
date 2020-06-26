@@ -9,3 +9,8 @@ CREATE TABLE 'dba'.ufce_fotos_dni (
 	FOREIGN KEY (unidad_academica, nro_inscripcion) REFERENCES sga_personas(unidad_academica, nro_inscripcion)
 );
 
+--Para activar los controles en "Inscripció a examen"
+UPDATE par_cont_x_oper 
+SET es_valido = 'S'
+WHERE operacion = 'exa00006'
+AND control IN (800572, 800573);

@@ -34,6 +34,13 @@ return array(
                 'visible' => true
             )
         ),
-
+        //'actas' se necesita para que la 'ficha_alummo' ande. No sacarla por más que no esté visible. 
+        'actas' => array(
+            'activa' => true,
+            'menu' => array(
+                'visible' => false
+            )
+        ),
+        
     )
 );

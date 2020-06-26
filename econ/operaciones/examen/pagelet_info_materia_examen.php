@@ -13,6 +13,8 @@ class pagelet_info_materia_examen extends \siu\operaciones\examen\pagelet_info_m
 
         $this->data['llamados'] = $this->modelo()->info__lista_mesas($materia);
         
+        // print_R('<br>Llamados: ' );
+        // print_R($this->data['llamados'] );
         foreach ($this->data['llamados'] as $key => $mesa) {
             if ($mesa['INSCRIBIR_COMO'] == 'T') {
                 unset($this->data['llamados'][$key]);

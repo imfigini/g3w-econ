@@ -56,7 +56,7 @@ class alumno extends \siu\modelo\datos\db\alumno
 					AND (	a.legajo IN (SELECT I.legajo FROM sga_insc_examen I
 										JOIN sga_mesas_examen M ON (I.unidad_academica = M.unidad_academica AND I.materia = M.materia AND I.anio_academico = M.anio_academico AND I.turno_examen = M.turno_examen AND I.mesa_examen = M.mesa_examen)
 										JOIN sga_docentes_llama D ON (D.unidad_academica = I.unidad_academica AND D.materia = I.materia AND D.anio_academico = I.anio_academico AND D.turno_examen = I.turno_examen AND D.mesa_examen = I.mesa_examen AND D.llamado = I.llamado )
-										JOIN sga_turnos_examen T ON (T.anio_academico = M.anio_academico AND T.turno_examen = M.turno_examen AND TODAY BETWEEN fecha_inicio AND fecha_fin)
+										JOIN sga_turnos_examen T ON (T.anio_academico = M.anio_academico AND T.turno_examen = M.turno_examen AND TODAY BETWEEN TODAY AND fecha_fin)
 											WHERE D.legajo = {$parametros['legajo_doc']}
 										)
 							OR a.legajo IN (SELECT DA.legajo FROM sga_detalle_acta DA

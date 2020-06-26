@@ -156,7 +156,7 @@ class usuario_anonimo extends \siu\modelo\datos\db\usuario_anonimo
                     JOIN sga_aulas AL ON (AL.aula = A.aula AND AL.edificio = ED.edificio)
                     WHERE AC.comision = $comision
                         AND A.dia_semana = WEEKDAY('$fecha_parcial')+1";
-			kernel::log()->add_debug('iris_buscar_aulas', $sql);
+			//kernel::log()->add_debug('iris_buscar_aulas', $sql);
 			$edif_aula = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
             if (!empty($edif_aula)) {
                 $dato['EDIFICIO'] = $edif_aula['EDIFICIO'];
