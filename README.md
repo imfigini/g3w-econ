@@ -48,10 +48,10 @@ rsync -rtucz --delete /var/guarani3w/files/FCE/ $DST_USR@$DST_HOST:$DST_DIR
 
 ~/pers/econ/scripts/etapa3
 
-- dbaccess siu_guarani 800572 script_00_agrega_control.sql
-- dbaccess siu_guarani 800572 script_01_crea_procedure.sql
-- dbaccess siu_guarani 800573 script_00_agrega_control.sql
-- dbaccess siu_guarani 800573 script_01_crea_procedure.sql
+- dbaccess siu_guarani 800572/script_00_agrega_control.sql
+- dbaccess siu_guarani 800572/script_01_crea_procedure.sql
+- dbaccess siu_guarani 800573/script_00_agrega_control.sql
+- dbaccess siu_guarani 800573/script_01_crea_procedure.sql
 - dbaccess siu_guarani econ-script-ETAPA3.sql
 
 ## Actualizar código 
