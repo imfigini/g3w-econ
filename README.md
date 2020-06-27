@@ -1,6 +1,6 @@
 # Tercera etapa de implementación
 
-> Tiempo requerido: 1-2 hs 
+> Tiempo requerido: 30-45 min
 
 > Requerimientos: acceso a la base de datos y acceso al servidor donde esté corriendo la web de producción.
 
