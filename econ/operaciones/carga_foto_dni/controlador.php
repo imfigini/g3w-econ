@@ -139,7 +139,7 @@ class controlador extends controlador_g3w2
         $save = imagecreatetruecolor($x2, $y2);
         imagecopyresized($save, $img, 0, 0, 0, 0, $x2, $y2, $x, $y);
 
-        $saveName = 'fotocopia_DNI.png';
+        $saveName = $this->get_nombre_archivo_subido('fotocopia_DNI.png');
 
         $path = $this->get_path_documentacion();
         $path_attach = $path.$sub_dir; ///'.uniqid()';
@@ -156,18 +156,10 @@ class controlador extends controlador_g3w2
         return $sub_dir.'/'.$saveName;
     }
 
-    /**
-     * Se queda con las ultimas dos partes del nombre, el resto es fijo
-     * @param type $nombreArchivo
-     */
-    static function buildNombreArchivo($nombreArchivo)
-    {
-        $nombre_folder = $nombreArchivo['nombre_folder'];
-        $nombre_archivo = $nombreArchivo['nombre_archivo'];
-        $nombre = explode("/", $nombre_folder);
-        $size = count($nombre);
-        $nombre = $nombre[$size-1];
-        return $nombre.'/'.$nombre_archivo;
+    protected function get_nombre_archivo_subido($nombre_original)     
+    {         
+        $current_time = urlEncode(date("Y-m-d_H.i.s"));         
+        return "{$current_time}_{$nombre_original}";     
     }
  
     function set_mensaje_error($mensaje)
