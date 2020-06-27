@@ -19,31 +19,20 @@ upload_tmp_dir = /var/tmp/adjuntos_guarani
 ```
 Verificar que el directorio exista, sino crearlo. Y darle los permisos necesarios para que el apache pueda subir cosas. 
 
-
-### config.php
-Ver en el config.php de guarani, dónde se quieren guardar efectivamente las fotos de los DNI.
-
-Sugerencia: 
+### Directorio donde su guardan las imagenes
+Por el momento es un directorio fijo:
 ```
-'dir_attachment' => '/var/guarani3w/files',
+const DIR_FOTOS ="/var/www/documentacion_preinscripcion/";
 ```
-Verifcar que exista el directorio, y dar los permisos necesarios de escrituta al usuario apache. 
+Dentro de dicho directorio, se guardan las fotos de los DNI dentro de subdirectrios identificados por el nro de DNI de cada alumno.
+
+Esta carpeta se comparte con la documentación subida desde el módulo de preinscripción. 
+
+Copiar la imagen "no_imagen.png" en la raiz de DIR_FOTOS.
+
+- cp /var/guarani3w/src/pers/econ/www/img/no_imagen.png /var/www/documentacion_preinscripcion/
 
 
-### Configurar backup de los archivos subidos
-
-Ver de configurar algún backup externo de las fotos de los DNI subdidos. 
-A modo sugerencia, puede ser con algo de este estilo, con un archivo dentro de /etc/cron.daily:
-
-Si se configuró 'dir_attachment' => '/var/guarani3w/files':
-```
-#!/bin/bash
-set -u
-DST_USR=
-DST_HOST=
-DST_DIR=
-rsync -rtucz --delete /var/guarani3w/files/FCE/ $DST_USR@$DST_HOST:$DST_DIR
-```
 ## Scripts a correr en la base 
 
 ~/pers/econ/scripts/etapa3

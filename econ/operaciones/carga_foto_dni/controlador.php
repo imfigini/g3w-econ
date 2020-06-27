@@ -11,6 +11,8 @@ class controlador extends controlador_g3w2
 {
     protected $mensajes = array('mensaje'=>'', 'mensaje_error'=>'');
     
+    const DIR_FOTOS ="/var/www/documentacion_preinscripcion/";
+
     function modelo()
     {
     }
@@ -19,10 +21,16 @@ class controlador extends controlador_g3w2
     {
     }
 
-    protected function get_path_attachment()
+    public function get_path_documentacion()
     {
-        return kernel::proyecto()->get_dir_attachment();
-    }     
+        $path = self::DIR_FOTOS;
+
+        // $pathFromConfig = kernel::proyecto()->get('path_documentacion');
+        // if(!empty($pathFromConfig))
+        //     $path = $pathFromConfig;
+
+        return $path;
+    }
 
     function get_foto_dni_cargada()
     {
@@ -30,14 +38,14 @@ class controlador extends controlador_g3w2
         
         $parametros['unidad_academica']  = guarani::ua()->get_id();
         $parametros['nro_inscripcion']   = kernel::persona()->get_nro_inscripcion();
+        $parametros['nro_documento']   = kernel::persona()->get_nro_documento();
 
         $archivo = catalogo::consultar('carga_foto_dni', 'get_foto_dni', $parametros);
-        $path = $this->get_path_attachment();
+        $path = $this->get_path_documentacion();
 
-        $filename = $path.'/'.$archivo['ARCHIVO'];
+        $filename = $path.$archivo['ARCHIVO'];
         $contenido = file_get_contents($filename);
-        if (empty($contenido))
-        {
+        if (empty($contenido)) {
             $filename = $path.'/no_imagen.png';
             $contenido = file_get_contents($filename);
         }
@@ -55,9 +63,8 @@ class controlador extends controlador_g3w2
         if (kernel::request()->isPost()) {
             try
             {
-                $parametros = $this->get_parametros_grabar();
-                $nombreArchivo = $this->subir_archivo();
-                $parametros['upload'] = self::buildNombreArchivo($nombreArchivo);
+                $parametros['nro_inscripcion']   = kernel::persona()->get_nro_inscripcion();
+                $parametros['upload'] = $this->subir_archivo();
                 $resultado = catalogo::consultar('carga_foto_dni', 'set_foto_dni', $parametros);
                 if ($resultado != 1) {
                     throw new error_guarani('Error al grabar en la base de datos.');
@@ -70,19 +77,6 @@ class controlador extends controlador_g3w2
                 $this->set_mensaje_error($msj);
             }
         }  
-    }
-
-    function get_parametros_grabar()
-    {
-        $parametros = array();
-        
-        $parametros['unidad_academica']  = guarani::ua()->get_id();
-        $parametros['nro_inscripcion']   = kernel::persona()->get_nro_inscripcion();
-
-        $nombreArchivo = $_FILES['image']['name'];
-        $parametros['upload'] = $nombreArchivo;
-
-        return $parametros;        
     }
 
     /**
@@ -141,13 +135,14 @@ class controlador extends controlador_g3w2
         $y2 = 300;
         $x2 = $x*$y2/$y;
 
-        $nro_inscripcion = kernel::persona()->get_nro_inscripcion();
+        $sub_dir = kernel::persona()->get_nro_documento();
         $save = imagecreatetruecolor($x2, $y2);
         imagecopyresized($save, $img, 0, 0, 0, 0, $x2, $y2, $x, $y);
 
-        $saveName = $nro_inscripcion.'.png';
+        $saveName = 'fotocopia_DNI.png';
 
-        $path_attach = $this->get_path_attachment().'/fotos_dni'; ///'.uniqid()';
+        $path = $this->get_path_documentacion();
+        $path_attach = $path.$sub_dir; ///'.uniqid()';
         if (!file_exists($path_attach)) {
             //Se crea una carpeta unica para el archivo a subir
             mkdir($path_attach, 0777, true);
@@ -158,12 +153,7 @@ class controlador extends controlador_g3w2
         imagedestroy($img);
         imagedestroy($save);
 
-        $archivo = array(
-            'nombre_folder' => $path_attach,
-            'nombre_archivo' => $saveName
-        );
-        unset($saveName);
-        return $archivo;
+        return $sub_dir.'/'.$saveName;
     }
 
     /**
