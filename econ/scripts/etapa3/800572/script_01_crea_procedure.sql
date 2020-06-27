@@ -206,8 +206,9 @@ BEGIN
 END;
 END PROCEDURE;
 
+{
 /**
 * Pruebas:
 EXECUTE PROCEDURE "dba".ctr_econ_corr ('FCE', 'CA001', 'FCE-160015', 'M0112');
 EXECUTE PROCEDURE "dba".ctr_econ_corr ('FCE', 'CA001', 'FCE-34215', 'M0112');
-
+}
