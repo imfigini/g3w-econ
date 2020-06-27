@@ -12,14 +12,14 @@ INSERT INTO par_cont_x_punto (punto_de_control, control) VALUES (8, 800573);
 
 Execute Procedure sp_ConfCont_Cont (8, 800573);
 
-/*
+{
  DELETE FROM sga_conf_controles WHERE control = "800573";	
  DELETE FROM par_cont_x_oper WHERE control = "800573";
  DELETE FROM par_cont_x_evento WHERE control = "800573";
  DELETE FROM par_cont_x_punto WHERE control = "800573";
  DELETE FROM par_controles WHERE control = "800573";
  DELETE FROM par_implem_control WHERE stored_procedure = "ctr_econ_dni_foto";
-*/
+}
 	
 	
 

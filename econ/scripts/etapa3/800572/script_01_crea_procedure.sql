@@ -20,6 +20,7 @@ RETURNING smallint, varchar(255);
 	DEFINE vcplan LIKE sga_planes.plan;
 	DEFINE vcversion LIKE sga_versiones_plan.version;
 	DEFINE vc_materia LIKE sga_materias.materia;
+	DEFINE vc_tiene_orient LIKE sga_titulos_plan.tiene_orient;
 	
 -- ON EXCEPTION SET sql_err, isam_err, error_info
 -- 	LET iStatus = -1 ;
@@ -36,6 +37,7 @@ BEGIN
 	LET vc_materia = NULL;
 	LET i_faltantes = NULL;
 	LET vc_faltantes = '';
+	LET vc_tiene_orient = 'N';
 	
 	-- Si la carrera es Auxiliar debe salir
 	-- recupero el (plan, version) actual de la carrera
@@ -76,49 +78,103 @@ BEGIN
 		RETURN iStatus, vcMsg;
 	END IF;
 
-	-- Ahora debo ver si es que solo debe una materia:
-SELECT 
-		sga_atrib_mat_plan.materia
-	FROM 
-		sga_materias_ciclo, 
-		sga_ciclos_orient,
-		sga_ciclos_plan,
-		sga_atrib_mat_plan,
-		sga_orient_alumno	
-	WHERE
-		sga_ciclos_orient.carrera = sga_ciclos_plan.carrera AND
-		sga_ciclos_orient.plan = sga_ciclos_plan.plan AND
-		sga_ciclos_orient.version = sga_ciclos_plan.version AND
-		sga_ciclos_orient.ciclo = sga_ciclos_plan.ciclo AND
+	-- Verifico si el plan tiene orientacion:
+	SELECT tiene_orient
+	INTO vc_tiene_orient 
+	FROM sga_titulos_plan
+	WHERE 
+		unidad_academica =  pUnidadAcademica AND
+		carrera = pCarrera AND
+		plan = vcPlan;
 
-		sga_materias_ciclo.ciclo = sga_ciclos_plan.ciclo AND
+	-- El plan tiene orientacion. Debo verificar si ya la eligio y que materias le faltan
+	IF vc_tiene_orient = 'S' THEN
+	BEGIN
+		-- Verifico si tienen orientacion, si no la tiene, es porque le falta mucho aun
+		IF NOT EXISTS (
+			SELECT *
+			FROM sga_orient_alumno
+			WHERE
+				unidad_academica =  pUnidadAcademica AND
+				carrera = pCarrera AND
+				plan = vcPlan AND
+				legajo = pLegajo
+		) THEN
+			RETURN -1, vcMsg || ',' || ' Debe faltarse solo una materia.' ;
 
-		sga_ciclos_plan.carrera = sga_atrib_mat_plan.carrera AND
-		sga_ciclos_plan.plan = sga_atrib_mat_plan.plan AND
-		sga_ciclos_plan.version = sga_atrib_mat_plan.version AND
+		END IF;
 
-		sga_atrib_mat_plan.materia = sga_materias_ciclo.materia AND 
-		sga_atrib_mat_plan.unidad_academica = pUnidadAcademica AND
-		sga_atrib_mat_plan.carrera = pCarrera AND
-		sga_atrib_mat_plan.plan = vcPlan AND
-		sga_atrib_mat_plan.version = vcVersion AND 
-		sga_atrib_mat_plan.obligatoria = 'S' AND
-		sga_atrib_mat_plan.materia NOT IN (
-		SELECT vw_hist_academica.materia
-		FROM vw_hist_academica
-			WHERE 
-				vw_hist_academica.unidad_academica = pUnidadAcademica AND
-				vw_hist_academica.legajo = pLegajo AND
-				vw_hist_academica.carrera = pCarrera AND
-				vw_hist_academica.resultado = 'A'
-		) AND
-		sga_atrib_mat_plan.nombre_materia NOT LIKE 'Trabajo Final' AND
-		sga_orient_alumno.legajo = pLegajo AND
-		
-		(sga_ciclos_orient.orientacion = '0' 
-		OR sga_ciclos_orient.orientacion = sga_orient_alumno.orientacion)-- Plan basico o especializacion
-	INTO TEMP tmp_faltantes
-	WITH NO LOG;
+		-- Ahora debo ver si es que solo debe una materia:
+		SELECT 
+			sga_atrib_mat_plan.materia
+		FROM 
+			sga_materias_ciclo, 
+			sga_ciclos_orient,
+			sga_ciclos_plan,
+			sga_atrib_mat_plan,
+			sga_orient_alumno	
+		WHERE
+			sga_ciclos_orient.carrera = sga_ciclos_plan.carrera AND
+			sga_ciclos_orient.plan = sga_ciclos_plan.plan AND
+			sga_ciclos_orient.version = sga_ciclos_plan.version AND
+			sga_ciclos_orient.ciclo = sga_ciclos_plan.ciclo AND
+
+			sga_materias_ciclo.ciclo = sga_ciclos_plan.ciclo AND
+
+			sga_ciclos_plan.carrera = sga_atrib_mat_plan.carrera AND
+			sga_ciclos_plan.plan = sga_atrib_mat_plan.plan AND
+			sga_ciclos_plan.version = sga_atrib_mat_plan.version AND
+
+			sga_atrib_mat_plan.materia = sga_materias_ciclo.materia AND 
+			sga_atrib_mat_plan.unidad_academica = pUnidadAcademica AND
+			sga_atrib_mat_plan.carrera = pCarrera AND
+			sga_atrib_mat_plan.plan = vcPlan AND
+			sga_atrib_mat_plan.version = vcVersion AND 
+			sga_atrib_mat_plan.obligatoria = 'S' AND
+			sga_atrib_mat_plan.materia NOT IN (
+			SELECT vw_hist_academica.materia
+			FROM vw_hist_academica
+				WHERE 
+					vw_hist_academica.unidad_academica = pUnidadAcademica AND
+					vw_hist_academica.legajo = pLegajo AND
+					vw_hist_academica.carrera = pCarrera AND
+					vw_hist_academica.resultado = 'A'
+			) AND
+			sga_atrib_mat_plan.nombre_materia NOT LIKE 'Trabajo Final' AND
+			sga_orient_alumno.legajo = pLegajo AND
+			
+			(sga_ciclos_orient.orientacion = '0' 
+			OR sga_ciclos_orient.orientacion = sga_orient_alumno.orientacion)-- Plan basico o especializacion
+		INTO TEMP tmp_faltantes
+		WITH NO LOG;
+	END
+	ELSE -- Esta rama es la que tiene orientacion:
+	BEGIN
+		SELECT 
+			sga_atrib_mat_plan.materia
+		FROM 
+			sga_atrib_mat_plan	
+		WHERE
+			sga_atrib_mat_plan.unidad_academica = pUnidadAcademica AND
+			sga_atrib_mat_plan.carrera = pCarrera AND
+			sga_atrib_mat_plan.plan = vcPlan AND
+			sga_atrib_mat_plan.version = vcVersion AND 
+			sga_atrib_mat_plan.obligatoria = 'S' AND
+			sga_atrib_mat_plan.materia NOT IN (
+			SELECT vw_hist_academica.materia
+			FROM vw_hist_academica
+				WHERE 
+					vw_hist_academica.unidad_academica = pUnidadAcademica AND
+					vw_hist_academica.legajo = pLegajo AND
+					vw_hist_academica.carrera = pCarrera AND
+					vw_hist_academica.resultado = 'A'
+			) AND
+			sga_atrib_mat_plan.nombre_materia NOT LIKE 'Trabajo Final'
+		INTO TEMP tmp_faltantes
+		WITH NO LOG;
+
+	END
+	END IF;
 
 	SELECT COUNT(*) 
 	INTO i_faltantes
@@ -142,7 +198,7 @@ SELECT
 
 	DROP TABLE tmp_faltantes;
 	IF vc_materia <> pMateria THEN
-		RETURN iStatus, vcMsg;
+		RETURN -1, vcMsg || ',' || ' Solo podes rendir la materia: (' || vc_materia || ')';
 	END IF;	
 	
 

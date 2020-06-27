@@ -10,6 +10,11 @@ CREATE TABLE 'dba'.ufce_fotos_dni (
 );
 
 --Para activar los controles en "Inscripció a examen"
+UPDATE sga_conf_controles  
+SET activo = 'S'
+WHERE control IN ('800572', '800573')
+AND operacion = 'exa00006';
+
 UPDATE par_cont_x_oper 
 SET es_valido = 'S'
 WHERE operacion = 'exa00006'
