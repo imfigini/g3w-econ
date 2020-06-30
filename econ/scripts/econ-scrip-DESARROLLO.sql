@@ -32,3 +32,4 @@ WHERE unidad_academica IS NOT NULL;
 UPDATE sga_llamados_mesa SET habilitado ='S' WHERE anio_academico = 2020;
 UPDATE sga_exep_insc_llam SET fecha_inicio = CURRENT WHERE anio_academico = 2020;
 UPDATE par_cont_x_oper SET actua_como = 'A' WHERE operacion = 'exa00006' AND control IN (800573);
+UPDATE sga_turnos_examen SET fecha_inicio = TODAY-1 WHERE anio_academico = 2020;
