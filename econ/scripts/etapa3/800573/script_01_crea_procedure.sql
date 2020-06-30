@@ -53,5 +53,4 @@ END PROCEDURE;
 * Pruebas:
 EXECUTE PROCEDURE "dba".ctr_econ_dni_foto ('FCE', 'CA002',	'FCE-737945', 'M0112');
 EXECUTE PROCEDURE "dba".ctr_econ_dni_foto ('FCE', 'CA001', 'FCE-34215', 'M0112');
-
 }

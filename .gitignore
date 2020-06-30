@@ -2,3 +2,4 @@
 *.tgz
 econ/modelo/datos/_info_catalogo.php
 comun/
+*.log

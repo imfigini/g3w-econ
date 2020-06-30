@@ -3,7 +3,7 @@
 -- PROCEDUERE ctr_cursada_NM4
 -- 
 -- ********************************************************************************
--- DROP PROCEDURE "dba".ctr_econ_corr;
+DROP PROCEDURE "dba".ctr_econ_corr;
 CREATE PROCEDURE "dba".ctr_econ_corr (
 		pUnidadAcademica 	LIKE sga_alumnos.unidad_academica,
 		pCarrera	 		LIKE sga_alumnos.carrera,
@@ -184,7 +184,7 @@ BEGIN
 			INTO vc_materia
 			FROM tmp_faltantes
 
-			LET vc_faltantes = vc_faltantes || ' ' || vc_materia;
+			LET vc_faltantes = vc_faltantes::varchar(100) || ' ' || vc_materia;
 	END FOREACH;
 
 	IF i_faltantes > 1 THEN
