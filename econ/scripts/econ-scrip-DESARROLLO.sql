@@ -28,8 +28,10 @@ UPDATE aca_usuarios_ag SET clave = '81dc9bdb52d04dc20036dbd8313ed055',
 WHERE unidad_academica IS NOT NULL;
 
 
+{
 --Para etapa3 poder hacer pruebas
 UPDATE sga_llamados_mesa SET habilitado ='S' WHERE anio_academico = 2020;
 UPDATE sga_exep_insc_llam SET fecha_inicio = CURRENT WHERE anio_academico = 2020;
 UPDATE par_cont_x_oper SET actua_como = 'A' WHERE operacion = 'exa00006' AND control IN (800573);
 UPDATE sga_turnos_examen SET fecha_inicio = TODAY-1 WHERE anio_academico = 2020;
+}

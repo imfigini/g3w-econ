@@ -37,11 +37,11 @@ Copiar la imagen "no_imagen.png" en la raiz de DIR_FOTOS.
 
 ~/pers/econ/scripts/etapa3
 
-- dbaccess siu_guarani 800572/script_00_agrega_control.sql | tee -a log-script_800572_00.log
-- dbaccess siu_guarani 800572/script_01_crea_procedure.sql | tee -a log-script_800572_01.log
-- dbaccess siu_guarani 800573/script_00_agrega_control.sql | tee -a log-script_800573_00.log
-- dbaccess siu_guarani 800573/script_01_crea_procedure.sql | tee -a log-script_800573_01.log
-- dbaccess siu_guarani econ-script-ETAPA3.sql | tee -a log-script_ETAPA3.log
+- dbaccess siu_guarani 800572/script_00_agrega_control.sql
+- dbaccess siu_guarani 800572/script_01_crea_procedure.sql
+- dbaccess siu_guarani 800573/script_00_agrega_control.sql
+- dbaccess siu_guarani 800573/script_01_crea_procedure.sql
+- dbaccess siu_guarani econ-script-ETAPA3.sql
 
 
 ## Actualizar código 
