@@ -16,7 +16,11 @@
 	{% if this.data.es_perfil_docente and not(this.data.datos_alumno)%}
 		<div role="alert" class="alert">
 			<p>{{"ficha_alumno.aviso_al_docente"|trans|capitalize}}</p>
-			<p>Turno de examen: {{this.data.inicio_turno}} a {{this.data.fin_turno}}.</p>
+			{% if (this.data.inicio_turno) %}
+				Turno de examen: {{this.data.inicio_turno}} a {{this.data.fin_turno}}.
+			{% else %}
+				{{"ficha_alumno.no_hay_turno"|trans|capitalize}}
+			{% endif %}
 		</div>
 	{% endif %}
 {% endblock %}
