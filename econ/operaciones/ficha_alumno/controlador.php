@@ -62,10 +62,10 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 	function get_fechas_turno_examen_actual()
 	{
 		$turno_examen = catalogo::consultar('examenes', 'get_fechas_turno_examen_actual', null);
-		$date = date_create($turno_examen['FECHA_INICIO']);
-		$turno_examen['FECHA_INICIO'] = date_format($date, 'd/m/Y');
-		$date = date_create($turno_examen['FECHA_FIN']);
-		$turno_examen['FECHA_FIN'] = date_format($date, 'd/m/Y');
+		$date1 = date_create($turno_examen['FECHA_INICIO']);
+		$turno_examen['FECHA_INICIO'] = date_format($date1, 'd/m/Y');
+		$date2 = date_create($turno_examen['FECHA_FIN']);
+		$turno_examen['FECHA_FIN'] = date_format($date2, 'd/m/Y');
 		return $turno_examen;
 	}
 }

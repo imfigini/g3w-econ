@@ -18,7 +18,7 @@ class examenes
     {
         $sql = "SELECT fecha_inicio, fecha_fin 
                 FROM sga_turnos_examen
-                WHERE TODAY BETWEEN fecha_inicio AND fecha_fin";
+                WHERE TODAY < fecha_fin";
 
         return kernel::db()->consultar_fila($sql);
     }   
