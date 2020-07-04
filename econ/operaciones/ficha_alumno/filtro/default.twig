@@ -1,0 +1,22 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+	<div class="titulo_operacion">
+		<h2 class="clearfix">
+		    {{"ficha_alumno"|trans|capitalize}}{% if (this.data.datos_alumno) %}: {{" "~this.data.datos_alumno}}{% endif %}
+		</h2>
+	</div>
+	{# Obtenemos una vista del builder #}
+	{% set vista_form = this.get_builder_form().get_vista() %}
+	{{ vista_form.render_encabezado() | raw }}
+	{{ vista_form.render_cuerpo() | raw }}
+	{{ vista_form.render_acciones() | raw }}
+	{{ vista_form.render_cierre() | raw }}
+
+
+	{% if this.data.es_perfil_docente and not(this.data.datos_alumno)%}
+		<div role="alert" class="alert">
+			<p>{{"ficha_alumno.aviso_al_docente"|trans|capitalize}}</p>
+			<p>Turno de examen: {{this.data.inicio_turno}} a {{this.data.fin_turno}}.</p>
+		</div>
+	{% endif %}
+{% endblock %}

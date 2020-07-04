@@ -148,4 +148,6 @@ return array(
 
     'tit_carga_foto_dni' => 'Foto del DNI',
     'ficha_alumno.foto_dni' => 'Foto del DNI',
+
+    'ficha_alumno.aviso_al_docente' => 'Sólo estrán disponibles para consultar las fichas de los alumnos inscriptos a las mesas asignadas a usted durante el período que dure el turno de examen.',
 );

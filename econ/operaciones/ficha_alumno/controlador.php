@@ -8,6 +8,16 @@ use siu\modelo\datos\catalogo;
 
 class controlador extends \siu\operaciones\ficha_alumno\controlador
 {
+
+	public function is_perfil_docente()
+	{
+		$perfil = kernel::persona()->perfil()->get_id();
+		if ($perfil == 'DOC') {
+			return true;
+		}
+		return false;		
+	}
+
 	/**
 	 * Autocompletado de alumno 
 	 */
@@ -24,8 +34,7 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 		$parametros = array('term' => $term);
 		
 		//Si el perfil dónde se está consultando la ficha del alumno es DOCENTE, sólo puede cosultar los alumnos que estén en una mesa de examen
-		$perfil = kernel::persona()->perfil()->get_id();
-		if ($perfil == 'DOC')
+		if ($this->is_perfil_docente())
         {
             $parametros['legajo_doc'] = kernel::persona()->get_legajo_docente();
 			$raw_data = catalogo::consultar('alumno', 'buscar_alumno_de_docente', $parametros);
@@ -46,7 +55,18 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 				'label' => $alumno[1]
 			);
 		}
+
 		$this->render_raw_json($data);
+	}
+
+	function get_fechas_turno_examen_actual()
+	{
+		$turno_examen = catalogo::consultar('examenes', 'get_fechas_turno_examen_actual', null);
+		$date = date_create($turno_examen['FECHA_INICIO']);
+		$turno_examen['FECHA_INICIO'] = date_format($date, 'd/m/Y');
+		$date = date_create($turno_examen['FECHA_FIN']);
+		$turno_examen['FECHA_FIN'] = date_format($date, 'd/m/Y');
+		return $turno_examen;
 	}
 }
 ?>

@@ -2753,6 +2753,18 @@ class _info_catalogo
 );
 	}
 
+	static function examenes__get_fechas_turno_examen_actual()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function fechas_parciales__get_comisiones_de_materia_con_dias_de_clase()
 	{
 		return array (
