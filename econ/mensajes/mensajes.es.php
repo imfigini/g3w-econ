@@ -105,6 +105,7 @@ return array(
 	/* Recalcular la calidad de inscripción a las cursadas para los alumnos que lo hicieron regular*/
 	'tit_recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
 	'recalcular_calidad_inscr' => 'Recalcular calidad de inscripción de alumnos a cursadas',
+    'recalcular_calidad_inscr.filtro_seleccione' => '-- Seleccione --',
 
 	/* Detalle para el c?lculo de notas autom?tico */
 	'alumno_con_nota' => "El alumno ya pasó por todas las instancias de evaluación posibles, se puede hacer un cierre parcial de nota.",

@@ -73,6 +73,7 @@ class pagelet_filtro extends pagelet {
 		$this->data['datos'] = $this->controlador->get_periodos_evaluacion($anio_academico_hash, $periodo_hash);
 		//$this->data['cant_periodos'] = count($this->data['datos']);
 		$this->data['periodo_solicitud_fechas'] = $this->controlador->get_periodo_solicitud_fechas($anio_academico_hash, $periodo_hash);
+		$this->data['fecha_ctr_correlat'] = $this->controlador->get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash);
 		$this->data['lectivo'] = $this->controlador->get_periodo_lectivo($anio_academico_hash, $periodo_hash);
 		$this->data['feriados'] = $this->controlador->get_dias_no_laborales($anio_academico_hash, $periodo_hash);
 		$this->data['cant_feriados'] = count($this->data['feriados']);

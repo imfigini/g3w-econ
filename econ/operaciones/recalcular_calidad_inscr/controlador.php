@@ -9,7 +9,7 @@ use kernel\util\validador;
 
 class controlador extends controlador_g3w2
 {
-    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'calidad'=> "", 'mensaje'=>"", 'mensaje_error'=>"");
+    protected $datos_filtro = array('anio_academico'=>"", 'periodo'=>"", 'calidad'=> "", 'materia'=> "", 'mensaje'=>"", 'mensaje_error'=>"");
     
     function modelo()
     {
@@ -105,6 +105,11 @@ class controlador extends controlador_g3w2
         return $this->datos_filtro['anio_academico'];
     }
 
+    function get_materia()
+    {
+        return $this->datos_filtro['materia'];
+    }
+
     function get_mensaje()
     {
         return $this->datos_filtro['mensaje'];
@@ -124,7 +129,12 @@ class controlador extends controlador_g3w2
     {
         $this->datos_filtro['anio_academico'] = $anio_academico;
 	}
-	
+    
+    function set_materia($materia)
+    {
+        $this->datos_filtro['materia'] = $materia;
+    }
+
 	function set_calidad($calidad)
     {
         $this->datos_filtro['calidad'] = $calidad;
@@ -186,6 +196,24 @@ class controlador extends controlador_g3w2
         $this->render_raw_json($datos);
     }
     
+
+    function accion__buscar_materias() 
+    {
+        $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
+        $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+        $periodo_hash = $this->validate_param('periodo', 'get', validador::TIPO_TEXTO);
+        $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+
+        $datos = array();
+        if (!is_null($anio_academico) && !is_null($periodo))
+        {
+            $parametros['anio_academico'] = $anio_academico;
+            $parametros['periodo_lectivo'] = $periodo;
+            $datos = catalogo::consultar('mixes', 'get_materias_cincuentenario_con_comision', $parametros);
+        }
+        $this->render_raw_json($datos);
+    }
+
     /**
     * @return guarani_form
     */

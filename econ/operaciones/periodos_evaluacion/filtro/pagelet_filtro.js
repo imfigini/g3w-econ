@@ -27,7 +27,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         
                     if (info.anio_academico_hash !== ""){
                         setear_solicitud_fechas();
-						setear_calendarios();
+                        setear_calendarios();
+                        setear_fecha_ctr_correlat();
                     }     
                 }
                 
@@ -187,5 +188,43 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             set_values('daterange_solicitud_fechas', fecha_inicio, fecha_fin, $('#lectivo_inicio').val(), $('#lectivo_fin').val(), feriados);
         }
     }
+
+    function setear_fecha_ctr_correlat()
+    {
+        var feriados = armar_cadena_de_feriados();
+
+        var fecha_inicio = new Date();
+        var fecha_fin = new Date();
+        if ($('#lectivo_inicio').length && $('#lectivo_fin').length)
+        {
+            fecha_inicio = new Date ($('#lectivo_inicio').val().replace(/-/g, '\/'));
+            fecha_fin = new Date ($('#lectivo_fin').val().replace(/-/g, '\/'));
+        }
+
+        var fecha_establecida = new Date ($('#fecha_ctr_correlat').val().replace(/-/g, '\/'));
+        console.log(fecha_establecida);
+
+        $('#datepicker_ctr_correlat').datepicker({
+                
+            dateFormat: 'dd/mm/yy',  
+            regional: 'es',
+            minDate: fecha_inicio,
+            maxDate: fecha_fin,
+            firstDay: 0,
+            setDate: fecha_establecida,
+
+            beforeShowDay: function (date) {
+                if (date.getDay() == 0) {
+                    return false;
+                }
+                var dia = date.toISOString().substring(0, 10);
+                if (feriados.includes(dia)) {
+                    return false;
+                }
+                return dia;
+            }
+        }).datepicker("setDate", fecha_establecida);
+    }
+
 
 });

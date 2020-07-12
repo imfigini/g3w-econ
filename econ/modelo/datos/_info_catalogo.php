@@ -2661,19 +2661,6 @@ class _info_catalogo
 );
 	}
 
-	static function evaluaciones_parciales__strToMDY()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'strFecha',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-  'El formato de strFecha debe ser' => 'd/m/Y รณ Y-m-d',
-);
-	}
-
 	static function evaluaciones_parciales__update_periodo_solicitud_fecha()
 	{
 		return array (
@@ -2898,6 +2885,46 @@ class _info_catalogo
 );
 	}
 
+	static function generales__get_fecha_ctr_correlativas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function generales__set_fecha_ctr_correlativas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo',
+    2 => 'fecha_ctr_correlat',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function generales__strToMDY()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'strFecha',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+  'El formato de strFecha debe ser' => 'd/m/Y o Y-m-d',
+);
+	}
+
 	static function insc_cursadas__get_alumnos_calidad_inscripcion()
 	{
 		return array (
@@ -2990,6 +3017,19 @@ class _info_catalogo
 	static function mixes__get_carreras_grado()
 	{
 		return array (
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function mixes__get_materias_cincuentenario_con_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo_lectivo',
+  ),
   'cache' => 'no',
   'filas' => 'n',
 );

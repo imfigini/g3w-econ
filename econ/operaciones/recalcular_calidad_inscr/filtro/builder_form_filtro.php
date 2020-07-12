@@ -26,35 +26,45 @@ class builder_form_filtro extends builder_formulario
 	{
 		$form->add_elemento($fabrica->elemento('anio_academico', array(
 				form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_anio_academico')),
-				form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
+				form_elemento_config::filtro		=>  validador::TIPO_ALPHANUM,
 				form_elemento_config::obligatorio	=> true,
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_anios_academicos(),
 				form_elemento_config::validar_select => false,
 				form_elemento_config::valor_default  =>   $this->anio_academico_hash,
-				form_elemento_config::clase_css => 'filtros_comunes',
+				form_elemento_config::clase_css		 => 'filtros_comunes',
 		)));
 		
 		$form->add_elemento($fabrica->elemento('periodo', array(
 				form_elemento_config::label			=> ucfirst(kernel::traductor()->trans('actas.filtro_periodos')),
-				form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
+				form_elemento_config::filtro		=>  validador::TIPO_ALPHANUM,
 				form_elemento_config::obligatorio	=> false,
 				form_elemento_config::elemento		=> array('tipo' => 'select'),
 				form_elemento_config::multi_options => self::get_periodos_lectivos(),
 				form_elemento_config::validar_select => false,
-				form_elemento_config::clase_css => 'filtros_cursadas',
+				form_elemento_config::clase_css 	=> 'filtros_comunes',
 		)));
 
 		$form->add_elemento($fabrica->elemento('calidad', array(
 			form_elemento_config::label			=> ucfirst(kernel::traductor()->trans(utf8_decode('calidad inscripción'))),
-			form_elemento_config::filtro			=>  validador::TIPO_ALPHANUM,
+			form_elemento_config::filtro		=>  validador::TIPO_ALPHANUM,
 			form_elemento_config::obligatorio	=> false,
 			form_elemento_config::elemento		=> array('tipo' => 'select'),
 			form_elemento_config::multi_options => self::get_calidades(),
 			form_elemento_config::validar_select => false,
-			form_elemento_config::clase_css => 'filtros_cursadas',
+			form_elemento_config::clase_css 	=> 'filtros_comunes',
 		)));
 	
+		$form->add_elemento($fabrica->elemento('materia', array(
+			form_elemento_config::label			=> ucfirst(kernel::traductor()->trans(utf8_decode('materia'))),
+			form_elemento_config::filtro		=>  validador::TIPO_ALPHANUM,
+			form_elemento_config::obligatorio	=> false,
+			form_elemento_config::elemento		=> array('tipo' => 'select'),
+			form_elemento_config::multi_options => self::get_materias_cincuentenario(),
+			form_elemento_config::validar_select => false,
+			form_elemento_config::clase_css 	=> 'filtros_comunes',
+		)));
+
 		$form->add_accion($fabrica->accion_boton_submit('boton_buscar', ucfirst(kernel::traductor()->trans('actas.filtro_buscar'))));
 	}
 
@@ -69,9 +79,12 @@ class builder_form_filtro extends builder_formulario
 				'grupo' => 'filtros',
 				'filas' => array(
 					array(
-						'anio_academico' => array('span' => 4),
-						'periodo' => array('span' => 4),
-						'calidad' => array('span' => 4),
+						'anio_academico' => array('span' => 6),
+						'periodo' => array('span' => 6),
+					),
+					array(
+						'calidad' => array('span' => 6),
+						'materia' => array('span' => 6),
 					),
 				)
 			),
@@ -88,12 +101,17 @@ class builder_form_filtro extends builder_formulario
 		$this->periodo_hash = $periodo_hash;
 	}
 
+	function set_materia($materia)
+	{
+		$this->materia = $materia;
+	}
+
 	function set_calidad($calidad)
 	{
 		$this->calidad = $calidad;
 	}
         
-	function get_anios_academicos()
+	static function get_anios_academicos()
 	{
 		$datos = catalogo::consultar('unidad_academica_econ', 'anios_academicos');
 		//Esta operación sólo sirve a partir del año 2019, restirnjo los años anteriores
@@ -107,17 +125,32 @@ class builder_form_filtro extends builder_formulario
 		return guarani_form_elemento::armar_combo_opciones($datos_2019, '_ID_', 'ANIO_ACADEMICO', false, false, ucfirst(kernel::traductor()->trans('actas.filtro_seleccione')));
 	}
 	
-	function get_periodos_lectivos()
+	static function get_periodos_lectivos()
 	{
 		return array(""=>  kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
 	}
 
-	function get_calidades()
+	static function get_calidades()
 	{
 		$datos = Array();
 		$datos[] = Array('ID'=>'R', 'CALIDAD'=>'Regular');
 		$datos[] = Array('ID'=>'P', 'CALIDAD'=>utf8_decode('Promoción'));
 		$datos[] = Array('ID'=>'T', 'CALIDAD'=>'Todos');
 		return guarani_form_elemento::armar_combo_opciones($datos, 'ID', 'CALIDAD', false, false, kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
+	}
+
+	static function get_materias_cincuentenario()
+    {
+
+		return array(""=>  kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
+		/*
+        $parametros['legajo'] = null;
+        $parametros['carrera'] = null;
+		$parametros['mix'] = null;
+		$parametros['anio_academico'] = null;
+        $parametros['periodo_lectivo'] = null;
+        $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
+		return guarani_form_elemento::armar_combo_opciones($materias, 'MATERIA', 'MATERIA_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Seleccione --')));
+		*/
 	}
 }

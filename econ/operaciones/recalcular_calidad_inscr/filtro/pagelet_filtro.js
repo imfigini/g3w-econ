@@ -16,7 +16,11 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             $('#formulario_filtro-anio_academico').change(function(){
 				buscarPeriodos($(this).val());
 			});
-            
+			
+			$('#formulario_filtro-periodo').change(function(){
+				buscarMaterias($('#formulario_filtro-anio_academico').val(), $(this).val());
+			});
+
             if (info.anio_academico_hash !== ""){
                 $("#formulario_filtro-anio_academico option[value="+ info.anio_academico_hash +"]").attr("selected",true);
                 $('#formulario_filtro-anio_academico').val(info.anio_academico_hash);
@@ -44,10 +48,37 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 					$('<option></option>').val('').html('-- Seleccione --')
 				);
 				$.each(data, function(key, value) {
+					
 					if (value['ID'] === info.periodo_hash){
 						$elem_periodos.append($('<option selected="selected"></option>').val(value['ID']).html(value['DESC']));
 					} else {
 						$elem_periodos.append($('<option></option>').val(value['ID']).html(value['DESC']));
+					}
+				});
+			}
+		});
+		
+	}
+
+
+	function buscarMaterias(anio_academico, periodo){
+		$.ajax({
+			url: info.url_buscar_materias,
+			dataType: 'json',
+			data: {anio_academico: anio_academico, periodo: periodo},
+			type: 'get',
+			success: function(data) {
+				var $elem_materias = $('#formulario_filtro-materia');
+				$elem_materias.children().remove();
+				$elem_materias.append(
+					$('<option></option>').val('').html('-- Seleccione --')
+				);
+				$.each(data, function(key, value) {
+					var $nombre_materia = value['MATERIA_NOMBRE'] + ' (' + value['MATERIA'] + ')';
+					if (value['MATERIA'] === info.materia){
+						$elem_materias.append($('<option selected="selected"></option>').val(value['MATERIA']).html($nombre_materia));
+					} else {
+						$elem_materias.append($('<option></option>').val(value['MATERIA']).html($nombre_materia));
 					}
 				});
 			}

@@ -61,7 +61,19 @@
                     <input type="text" id="daterange_{{periodo.ORDEN}}" name="daterange_{{periodo.ORDEN}}" class="daterange" value="" />
                 </div>
 			{% endfor %}
-			
+            
+            <div>
+                <h4 class="periodo">Fecha que se aplica en el control si los alumos cumplen con las correlativas aprobadas para cambiar la calidad de inscripicón a la cursada: 
+                {% if (this.data.fecha_ctr_correlat) %}
+                    {{this.data.fecha_ctr_correlat.FECHA|date("d/m/Y")}} 
+                    <input type="hidden" name="fecha_ctr_correlat" id="fecha_ctr_correlat" value="{{this.data.fecha_ctr_correlat.FECHA}}">
+                {% else %}
+                    <i style="color: red">Sin definir</i>
+                {% endif %}
+                </h4>
+                <input type="text" id="datepicker_ctr_correlat" name="datepicker_ctr_correlat" class="datepicker" value="" />
+            </div>
+
             <div style="text-align: right">
                 <button class="btn btn-info btn-lg" type="submit" id="boton_guardar" style="align-self:center;font-size:12px;">Guardar</button>
             </div>

@@ -48,8 +48,7 @@ class evaluaciones_parciales
                         WHERE anio_academico = $anio_academico 
                         AND periodo_lectivo = $periodo ";
         
-        $datos = kernel::db()->consultar($sql, db::FETCH_ASSOC);
-        return $datos;
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
 	}
 	
   	/**
@@ -146,8 +145,8 @@ class evaluaciones_parciales
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         $orden = $parametros['orden'];
-        $fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
-        $fecha_fin = self::strToMDY($parametros['fecha_fin']);
+        $fecha_inicio = generales::strToMDY($parametros['fecha_inicio']);
+        $fecha_fin = generales::strToMDY($parametros['fecha_fin']);
         $sql = "UPDATE ufce_periodos
                     SET fecha_inicio = $fecha_inicio,
                         fecha_fin = $fecha_fin
@@ -224,8 +223,8 @@ class evaluaciones_parciales
     {
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
-        $fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
-        $fecha_fin = self::strToMDY($parametros['fecha_fin']);
+        $fecha_inicio = generales::strToMDY($parametros['fecha_inicio']);
+        $fecha_fin = generales::strToMDY($parametros['fecha_fin']);
         $sql = "UPDATE ufce_priodo_solic_fecha_parc
                     SET fecha_inicio = $fecha_inicio,
                         fecha_fin = $fecha_fin
@@ -249,28 +248,6 @@ class evaluaciones_parciales
         $sql = "INSERT INTO ufce_priodo_solic_fecha_parc (anio_academico, periodo_lectivo, fecha_inicio, fecha_fin)
                     VALUES ($anio_academico, $periodo, $fecha_inicio, $fecha_fin)";
         kernel::db()->ejecutar($sql);
-    }
-    
-    /**
-     * parametros: strFecha
-     * cache: no
-     * filas: n
-     * El formato de strFecha debe ser: d/m/Y รณ Y-m-d
-     */
-    private function strToMDY($strFecha)
-    {
-		$fecha = explode("'", $strFecha);
-		
-		if (strpos($fecha[1], '/') != false) {
-			$fecha = explode('/', $fecha[1]);
-			return 'MDY('.$fecha[1].','.$fecha[0].','.$fecha[2].')';
-		}
-		if (strpos($fecha[1], '-') != false) {
-			$fecha = explode('-', $fecha[1]);
-			return 'MDY('.$fecha[1].','.$fecha[2].','.$fecha[0].')';
-		}
-		throw new Exception('Formato de fecha no manejado');
-        
     }
     
     /**
@@ -427,22 +404,21 @@ class evaluaciones_parciales
 	 */
 	function set_validez_clases($parametros)
 	{
-		$fecha_inicio = self::strToMDY($parametros['fecha_inicio']);
-		$fecha_fin = self::strToMDY($parametros['fecha_fin']);
+		$fecha_inicio = generales::strToMDY($parametros['fecha_inicio']);
+		$fecha_fin = generales::strToMDY($parametros['fecha_fin']);
 
-		
 		$sql = " UPDATE sga_calendcursada 
 					SET valido = {$parametros['valido']} 
 				WHERE fecha BETWEEN $fecha_inicio AND $fecha_fin ";
 
-		$cuatrim = self::get_cuatrimestre(Array('fecha'=>$fecha_inicio));
+		$cuatrim = $this->get_cuatrimestre(Array('fecha'=>$fecha_inicio));
 
 		//Las clases de 1er anio, 1er cuatrimestre no tienen suspension de clases, con lo cual no deben invalidarse las clases
 		if ($cuatrim['CUATRIM'] == '1' || $cuatrim['CUATRIM'] == "'1'")
 		{
 			$sql .= " AND comision NOT IN
 						(SELECT comision FROM sga_comisiones 
-							WHERE anio_academico = YEAR(fecha_inicio)
+							WHERE anio_academico = YEAR($fecha_inicio)
 							AND periodo_lectivo LIKE '1%'
 							AND materia IN (
 								SELECT DISTINCT materia FROM sga_atrib_mat_plan MP
@@ -450,7 +426,8 @@ class evaluaciones_parciales
 									AND anio_de_cursada = 1
 								)	
 						)";
-		}
+        }
+        
 		kernel::db()->ejecutar($sql);
 	}
 

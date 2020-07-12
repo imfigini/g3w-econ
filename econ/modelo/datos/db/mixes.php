@@ -186,5 +186,29 @@ class mixes
 					WHERE materia = {$parametros['materia']}";
 		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 		return $resultado['PERTENECE'];
-	}
+    }
+    
+    /**
+     * parametros: anio_academico, periodo_lectivo
+     * cache: no
+     * filas: n
+     */
+    function get_materias_cincuentenario_con_comision($parametros)
+    {
+        $sql = "SELECT DISTINCT M.materia, M.nombre AS materia_nombre
+                    FROM ufce_mixes X
+                    JOIN sga_materias M ON (X.materia = M.materia) ";
+
+        if (isset($parametros['anio_academico']) && $parametros['anio_academico'] != "''") 
+        {
+				$sql .= " WHERE X.materia IN (SELECT materia FROM sga_comisiones
+                                                WHERE anio_academico = {$parametros['anio_academico']}
+                                                AND periodo_lectivo = {$parametros['periodo_lectivo']} 
+                                            ) ";
+        }
+        $sql .= " ORDER BY 2";
+        kernel::log()->add_debug('sql: ', $sql);
+        return kernel::db()->consultar($sql, db::FETCH_ASSOC);
+    }
+
 }

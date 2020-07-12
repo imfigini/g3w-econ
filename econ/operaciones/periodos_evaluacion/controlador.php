@@ -68,6 +68,32 @@ class controlador extends controlador_g3w2
         }
         return null;
     }
+
+    /**
+     *  Recupera la fecha en que se puede controlar si los alumnos tienen todas las correlativas cumplidas
+     *  para cambiarles la calidad de inscripcion a una cursada
+    */
+    function get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash)
+    {
+        if (!empty($anio_academico_hash))
+        {
+            $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);
+            if (!empty($anio_academico))
+            {
+                if (!empty($periodo_hash))
+                {
+                    $periodo = $this->decodificar_periodo($periodo_hash, $anio_academico);
+                    $parametros = array(
+                                    'anio_academico' => $anio_academico,
+                                    'periodo' => $periodo
+                        );
+                    return catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
+                    //return $fecha['FECHA'];
+                }
+            }
+        }
+        return null;
+    }
     
     function get_periodo_lectivo($anio_academico_hash, $periodo_hash)
     {
@@ -137,7 +163,7 @@ class controlador extends controlador_g3w2
         $this->mensaje = $mensaje;
     }
 
-    /** Graba los períodos de evaluación definidos */
+    /** Graba los periodos de evaluacion definidos */
     function accion__grabar_periodo_evaluacion()
     {
         $anio_academico_hash = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO);
@@ -163,19 +189,20 @@ class controlador extends controlador_g3w2
 					$parametros['fecha_fin'] = $intervalo[1];
                     if ($parametros['fecha_inicio'] != '' && $parametros['fecha_fin'] != '')
                     {
-						//Período de examen con suspensión de clases (orden = 4)
+						//Periodo de examen con suspension de clases (orden = 4)
 						if ($parametros['orden'] == 4)
 						{
-							//hay que validar los días de clase del período guardado con anteriordad
+							//hay que validar los dias de clase del periodo guardado con anteriordad
 							$periodo_old = catalogo::consultar('evaluaciones_parciales', 'get_periodo', $parametros);
 							if (isset($periodo_old['FECHA_INICIO']) && isset($periodo_old['FECHA_FIN']))
 							{
 								$param['fecha_inicio'] = $periodo_old['FECHA_INICIO'];
 								$param['fecha_fin'] = $periodo_old['FECHA_FIN'];
-								$param['valido'] = 'S';
+                                $param['valido'] = 'S';
+                                kernel::log()->add_debug('set_validez_clases: ', $param);
 								catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $param);
 							}
-							//hay que ivalidar los días de clase para que no compute la asitencia
+							//hay que ivalidar los dias de clase para que no compute la asitencia
 							$parametros['valido'] = 'N';
 							catalogo::consultar('evaluaciones_parciales', 'set_validez_clases', $parametros);
 						}
@@ -185,7 +212,8 @@ class controlador extends controlador_g3w2
                 }
                 
                 $this->grabar_periodo_solicitud_fechas($parametros['anio_academico'], $parametros['periodo']);
-                $mensaje = 'Se actualizaron correctamente los períodos de evaluación correspondientes al '.$parametros['periodo'].' del año '.$parametros['anio_academico'].'.';
+                $this->grabar_fecha_ctr_correlat($parametros['anio_academico'], $parametros['periodo']);
+                $mensaje = 'Se actualizaron correctamente los perí­odos de evaluación correspondientes al '.$parametros['periodo'].' del año '.$parametros['anio_academico'].'.';
                 $this->set_anio_academico($anio_academico_hash);
                 $this->set_periodo($periodo_hash);
                 $this->set_mensaje($mensaje);
@@ -214,7 +242,17 @@ class controlador extends controlador_g3w2
         }
     }
     
-	function accion__buscar_periodos() 
+    function grabar_fecha_ctr_correlat($anio_academico, $periodo)
+    {
+        $parametros['fecha_ctr_correlat'] = $this->validate_param("datepicker_ctr_correlat", 'post', validador::TIPO_TEXTO);
+        $parametros['anio_academico'] = $anio_academico;
+        $parametros['periodo'] = $periodo;
+        {
+            catalogo::consultar('generales', 'set_fecha_ctr_correlativas', $parametros);
+        }
+    }
+
+    function accion__buscar_periodos() 
     {
             $anio_academico_hash = $this->validate_param('anio_academico', 'get', validador::TIPO_TEXTO);
             $anio_academico = $this->decodificar_anio_academico($anio_academico_hash);

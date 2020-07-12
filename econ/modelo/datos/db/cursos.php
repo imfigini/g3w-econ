@@ -50,7 +50,8 @@ class cursos
             $sql .= " AND X.anio_de_cursada = $anio
                       AND X.mix = '$mix'  ";
         }
-		$sql .= " ORDER BY 2";
+        $sql .= " ORDER BY 2";
+        kernel::log()->add_debug('sql: ', $sql);
         $result = kernel::db()->consultar($sql, db::FETCH_ASSOC);
         return $result;
     }
@@ -97,14 +98,14 @@ class cursos
         $promociones = '4,6,9,10';
         //$regulares = '3,4,5,7,8,10';
         //
-        //Sólo retorna las comisiones que son promocionables
+        //Sï¿½lo retorna las comisiones que son promocionables
         $sql = "SELECT  C.comision, 
                         C.nombre AS comision_nombre, 
                         C.anio_academico, 
                         C.periodo_lectivo,
                         C.escala_notas, 
                         C.carrera, 
-                        DECODE(C.turno,'T', 'Tarde', 'N', 'Noche', 'M', 'Mañana', 'No informa') as turno,
+                        DECODE(C.turno,'T', 'Tarde', 'N', 'Noche', 'M', 'Maï¿½ana', 'No informa') as turno,
                         EN.nombre AS escala_notas_nombre,
                         UC.porc_parciales,
                         UC.porc_integrador,
@@ -197,15 +198,15 @@ class cursos
     function get_comisiones_de_materia_con_dias_de_clase($parametros)
     {
         /*  3	Reales Regular
-            4	Reales Promoció
+            4	Reales Promociï¿½
             6	Promocion Oblig
 		*/
         $anio_academico = $parametros['anio_academico'];
         $periodo = $parametros['periodo'];
         $materia = $parametros['materia'];
-        //Retorna todas las comisiones de la materia detallando si es regular, promoción o ambas
-        //Sólo retorna las comisiones que tienen días de cursada asignados
-        //DECODE(C.turno,'T', 'Tarde', 'N', 'Noche', 'M', 'Mañana', 'No informa') as turno, 
+        //Retorna todas las comisiones de la materia detallando si es regular, promociï¿½n o ambas
+        //Sï¿½lo retorna las comisiones que tienen dï¿½as de cursada asignados
+        //DECODE(C.turno,'T', 'Tarde', 'N', 'Noche', 'M', 'Maï¿½ana', 'No informa') as turno, 
          $sql = "SELECT  C.comision, 
                         C.nombre AS comision_nombre, 
                         C.anio_academico, 
@@ -251,10 +252,10 @@ class cursos
                                     when sga_asignaciones.dia_semana = 1 then 'Domingo'
                                     when sga_asignaciones.dia_semana = 2 then 'Lunes'
                                     when sga_asignaciones.dia_semana = 3 then 'Martes'
-                                    when sga_asignaciones.dia_semana = 4 then 'Miércoles'
+                                    when sga_asignaciones.dia_semana = 4 then 'Miï¿½rcoles'
                                     when sga_asignaciones.dia_semana = 5 then 'Jueves'
                                     when sga_asignaciones.dia_semana = 6 then 'Viernes'
-                                    when sga_asignaciones.dia_semana = 7 then 'Sábado'
+                                    when sga_asignaciones.dia_semana = 7 then 'Sï¿½bado'
                                 END AS dia_nombre
                     FROM    sga_comisiones, 
                             sga_calendcursada,
@@ -438,15 +439,15 @@ class cursos
 		
 		if (!empty($eval))
         {
-			if ($eval['ESTADO'] != 'P') {//Si el estado es distinto de 'P' es que la instancia de evaluación ya ha sido creada
+			if ($eval['ESTADO'] != 'P') {//Si el estado es distinto de 'P' es que la instancia de evaluaciï¿½n ya ha sido creada
 				switch ($evaluacion)
 				{
-					case "'22'": $inst = '1º Parcial'; break;
-					case "'23'": $inst = '2º Parcial'; break;
+					case "'22'": $inst = '1ï¿½ Parcial'; break;
+					case "'23'": $inst = '2ï¿½ Parcial'; break;
 					case "'24'": $inst = 'Recuperatorio Global'; break;
 					case "'14'": $inst = 'Integrador'; break;
 				}
-				throw new error_guarani("No se puede modificar la fecha propuesta dado que ya ha sido creada la instancia de evaluación $inst para la comisión $comision. ");
+				throw new error_guarani("No se puede modificar la fecha propuesta dado que ya ha sido creada la instancia de evaluaciï¿½n $inst para la comisiï¿½n $comision. ");
 			}
 			else
 			{
@@ -530,7 +531,7 @@ class cursos
     function get_estado_comision_fecha($parametros)
     {
 		//Si la fecha corresponde con la solicitada por el coordinador, devuelve 'A'
-		//Sino, si la fecha corresponde a un día de cursada de la comisión devuelve 'C'
+		//Sino, si la fecha corresponde a un dï¿½a de cursada de la comisiï¿½n devuelve 'C'
 		//En todo otro caso devuelve 'R'
 		//Si el horario NO corresponde al de la cursada: agrega una H al final ('AH' / 'CH' / 'RH')
 
@@ -680,7 +681,7 @@ class cursos
 		//kernel::log()->add_debug('alta_evaluacion_parcial', $parametros); 
 		$comision = $parametros['comision'];
         $evaluacion = $parametros['evaluacion'];
-		$escala = 3;	//Las instancias de evaluación parcial siempre deben tener escala: 3 (Reales Regular)
+		$escala = 3;	//Las instancias de evaluaciï¿½n parcial siempre deben tener escala: 3 (Reales Regular)
 	    $fecha_hora = $parametros['fecha_hora'];
 
 		$estado_notif = 'U';
@@ -710,7 +711,7 @@ class cursos
                     WHERE comision = $comision 
                     AND evaluacion = $evaluacion";
             kernel::db()->ejecutar($sql);
-			$result['mensaje'] = "Se dio de alta correctamente la evaluación $eval_descrip para la comisión $comision. ";
+			$result['mensaje'] = "Se dio de alta correctamente la evaluaciï¿½n $eval_descrip para la comisiï¿½n $comision. ";
         }
         else
         {
