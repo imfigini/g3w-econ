@@ -22,7 +22,7 @@ class controlador extends controlador_g3w2
         }
 	}
 	
-	function get_ultima_fecha_fin_turno_examen_regular($anio_academico_hash, $periodo_hash=null)
+	function get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash=null)
     {
 		if (!empty($anio_academico_hash))
         {
@@ -36,7 +36,7 @@ class controlador extends controlador_g3w2
                                 'anio_academico' => $anio_academico,
                                 'periodo' => $periodo
     	                );
-					$fecha_limite = catalogo::consultar('carga_evaluaciones_parciales', 'get_ultima_fecha_fin_turno_examen_regular', $parametros);
+					$fecha_limite = catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
 					return $fecha_limite['FECHA'];
  				}
             }
@@ -44,7 +44,7 @@ class controlador extends controlador_g3w2
         return false;
 	}
     
-    function get_alumnos_calidad($anio_academico_hash, $periodo_hash, $calidad)
+    function get_alumnos_calidad($anio_academico_hash, $periodo_hash, $calidad, $materia)
     {
         if (!empty($anio_academico_hash))
         {
@@ -57,10 +57,15 @@ class controlador extends controlador_g3w2
 	                $parametros = array(
                                 'anio_academico' => $anio_academico,
 								'periodo' => $periodo,
-								'calidad' => $calidad
-    	                );
+                                'calidad' => $calidad,
+                                'materia' => null
+                        );
+                    if (!empty($materia)) {
+                        $parametros['materia'] = $materia;
+                    }
+                    kernel::log()->add_debug('$parametros: ', $parametros);
                     $datos = catalogo::consultar('insc_cursadas', 'get_alumnos_calidad_inscripcion', $parametros);
-                    $fecha = catalogo::consultar('carga_evaluaciones_parciales', 'get_ultima_fecha_fin_turno_examen_regular', $parametros);
+                    $fecha = $this->get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash);
                   
                     if (isset($fecha['FECHA']))
                     {
@@ -177,13 +182,14 @@ class controlador extends controlador_g3w2
 			}
 			$anio_academico_hash = $this->validate_param('anio_academico_hash', 'post', validador::TIPO_TEXTO); 
 			$periodo_hash = $this->validate_param('periodo_hash', 'post', validador::TIPO_TEXTO); 
-			$calidad = $this->validate_param('calidad', 'post', validador::TIPO_TEXTO); 
+            $calidad = $this->validate_param('calidad', 'post', validador::TIPO_TEXTO); 
+            $materia = $this->validate_param('materia', 'post', validador::TIPO_TEXTO); 
 			$this->set_anio_academico($anio_academico_hash);
 			$this->set_periodo($periodo_hash);
-			$this->set_calidad($calidad);
+            $this->set_calidad($calidad);
+            $this->set_materia($materia);
 		}
 	}
-
 
     function accion__buscar_periodos() 
     {

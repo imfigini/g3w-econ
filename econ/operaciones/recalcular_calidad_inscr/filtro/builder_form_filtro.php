@@ -135,7 +135,7 @@ class builder_form_filtro extends builder_formulario
 		$datos = Array();
 		$datos[] = Array('ID'=>'R', 'CALIDAD'=>'Regular');
 		$datos[] = Array('ID'=>'P', 'CALIDAD'=>utf8_decode('Promoción'));
-		$datos[] = Array('ID'=>'T', 'CALIDAD'=>'Todos');
+		//$datos[] = Array('ID'=>'T', 'CALIDAD'=>'Todos');
 		return guarani_form_elemento::armar_combo_opciones($datos, 'ID', 'CALIDAD', false, false, kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
 	}
 

@@ -221,9 +221,11 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 				$renglon['LEGAJO'] = $renglon['LEGAJO'];
 				$renglon['COMISION'] = $datos['COMISION'];
 				$renglon['EVALUACION'] = $datos['EVALUACION'];
-				$renglon['FECHA_HORA'] = $datos['FECHA_HORA'];
-				$renglon['ESCALA_NOTAS'] = $datos['ESCALA_NOTAS'];				
-				
+				if ($datos['EVALUACION'] != 15) {		//Sólo si no es TP 
+					$renglon['FECHA_HORA'] = $datos['FECHA_HORA'];
+				}
+				$renglon['ESCALA_NOTAS'] = $datos['ESCALA_NOTAS'];	
+								
                 kernel::log()->add_debug('evt__procesar_evaluaciones renglon '.$k,$renglon);
                 $ok = catalogo::consultar('carga_evaluaciones_parciales', 'guardar_renglon', $renglon);
                 if($ok[0]) {

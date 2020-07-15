@@ -26,14 +26,17 @@
         <div role='alert' class="alert alert-error">{{this.data.mensaje_error}}</div>
     {% endif %}
 
+	<div role='alert' class="alert">
+		<p>Se listan los alumnos que tienen la calidad de inscripción seleccionada a cada comisión cuya escala de notas sea regulares y promocionales (4).
+			Esta operación permite recalcular la condición a la que pueden aspirar (en caso de ser REGULAR) luego de la fecha de finalización del último turno de examen regular del cuatrimestre.
+			Sólo aplica a alumnos de los planes vigentes inscriptos a comisiones de materias que pertenecen a algún mix. </p>
+	</div>
+
 	{% if(this.data.alumnos) %}
+		
 		<div role='alert' class="alert">
-			<p>Se listan los alumnos que tienen la calidad de inscripción seleccionada a cada comisión cuya escala de notas sea regulares y promocionales (4).
-				Esta operación permite recalcular la condición a la que pueden aspirar (en caso de ser REGULAR) luego de la fecha de finalización del último turno de examen regular del cuatrimestre.
-				Sólo aplica a alumnos inscriptos en los planes vigentes. </p>
-			<p>Fecha límite considerada: {% if (this.data.fecha_limite) %} {{this.data.fecha_limite}} {% else %} <em>No se recuperó ninguna fecha de finalización de turno de examen regular. No se puede calcular la nueva calidad del alumno </em> {% endif %} </p>
+			<p>Fecha límite considerada: {% if (this.data.fecha_limite) %} {{this.data.fecha_limite|date("d/m/Y") }} {% else %} <em>No se recuperó ninguna fecha de finalización de turno de examen regular. No se puede calcular la nueva calidad del alumno </em> {% endif %} </p>
 		</div>
-	
 		<form name="calidad_alumnos" method="post" action="{{this.data.form_url_grabar}}">
 			<input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
 			<input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">

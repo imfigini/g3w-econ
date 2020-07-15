@@ -57,9 +57,9 @@ class pagelet_filtro extends pagelet {
 		return $this->controlador->get_mensaje_error();
 	}
 
-	function get_ultima_fecha_fin_turno_examen_regular($anio_academico_hash, $periodo_hash)
+	function get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash)
     {
-		return $this->controlador->get_ultima_fecha_fin_turno_examen_regular($anio_academico_hash, $periodo_hash);
+		return $this->controlador->get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash);
 	}
 
 	public function prepare()
@@ -71,7 +71,7 @@ class pagelet_filtro extends pagelet {
 		$periodo_hash = $this->get_periodo();
 		$anio_academico_hash = $this->get_anio_academico();
 		$materia = $this->get_materia();
-		$fecha_limite = $this->get_ultima_fecha_fin_turno_examen_regular($anio_academico_hash, $periodo_hash);
+		$fecha_limite = $this->get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash);
 		$calidad = $this->get_calidad();
 		$form = $this->get_form_builder();
 		$form->set_anio_academico($anio_academico_hash);
@@ -88,7 +88,7 @@ class pagelet_filtro extends pagelet {
 		$this->data['anio_academico_hash'] = $anio_academico_hash;
 		$this->data['fecha_limite'] = $fecha_limite;
 		$this->data['materia'] = $materia;
-		$this->data['alumnos'] = $this->controlador->get_alumnos_calidad($anio_academico_hash, $periodo_hash, $calidad);
+		$this->data['alumnos'] = $this->controlador->get_alumnos_calidad($anio_academico_hash, $periodo_hash, $calidad, $materia);
 		//kernel::log()->add_debug('get_materias_promo_directa', $this->data['materias']);
 
 		$this->data['form_url_grabar'] = kernel::vinculador()->crear('recalcular_calidad_inscr', 'grabar');

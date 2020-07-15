@@ -2933,10 +2933,11 @@ class _info_catalogo
     0 => 'anio_academico',
     1 => 'periodo',
     2 => 'calidad',
+    3 => 'materia',
   ),
   'param_null' => 
   array (
-    0 => 'calidad',
+    0 => 'materia',
   ),
   'cache' => 'no',
   'filas' => 'n',

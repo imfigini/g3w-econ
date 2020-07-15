@@ -31,7 +31,12 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
                 $('#formulario_filtro-calidad').val(info.calidad);
 			}
 
-            buscarPeriodos($('#formulario_filtro-anio_academico').val());
+			if (info.materia !== ""){
+                $("#formulario_filtro-materia option[value="+ info.materia +"]").attr("selected",true);
+                $('#formulario_filtro-materia').val(info.materia);
+			}
+			buscarPeriodos($('#formulario_filtro-anio_academico').val());
+			buscarMaterias(info.anio_academico_hash, info.periodo_hash);
          }
     };
     
@@ -59,7 +64,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 		});
 		
 	}
-
 
 	function buscarMaterias(anio_academico, periodo){
 		$.ajax({

@@ -7,8 +7,8 @@ use kernel\util\db\db;
 class insc_cursadas
 {
 	/**
-	* parametros: anio_academico, periodo, calidad
-	* param_null: calidad
+	* parametros: anio_academico, periodo, calidad, materia
+	* param_null: materia
     * cache: no
     * filas: n
     */
@@ -43,6 +43,10 @@ class insc_cursadas
 					
 		if (isset($parametros['calidad']) && ($parametros['calidad'] == "'P'" || $parametros['calidad'] == "'R'")) {
 			$sql .= " AND calidad_insc = {$parametros['calidad']} ";
+		}
+		
+		if (isset($parametros['materia'])) {
+			$sql .= " AND C.materia = {$parametros['materia']} ";
 		}
 		$sql .=  " ORDER BY 6,2";
 		
