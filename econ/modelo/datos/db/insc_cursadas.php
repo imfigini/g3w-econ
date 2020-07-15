@@ -45,7 +45,7 @@ class insc_cursadas
 			$sql .= " AND calidad_insc = {$parametros['calidad']} ";
 		}
 		
-		if (isset($parametros['materia'])) {
+		if (isset($parametros['materia']) && $parametros['materia'] != "''") {
 			$sql .= " AND C.materia = {$parametros['materia']} ";
 		}
 		$sql .=  " ORDER BY 6,2";

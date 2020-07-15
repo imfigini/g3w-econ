@@ -63,17 +63,19 @@ class controlador extends controlador_g3w2
                     if (!empty($materia)) {
                         $parametros['materia'] = $materia;
                     }
-                    kernel::log()->add_debug('$parametros: ', $parametros);
+                    //kernel::log()->add_debug('$parametros: ', $parametros);
                     $datos = catalogo::consultar('insc_cursadas', 'get_alumnos_calidad_inscripcion', $parametros);
                     $fecha = $this->get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash);
                   
-                    if (isset($fecha['FECHA']))
+                    //kernel::log()->add_debug('fecha_ctr_correlativas: ', $fecha);
+                    if (isset($fecha))
                     {
                         $hoy = date("Y-m-d");
-                        $fin_turno = date("Y-m-d", strtotime($fecha['FECHA']));
+                        $fin_turno = date("Y-m-d", strtotime($fecha));
                         
                         if ($hoy > $fin_turno)
                         {
+                            $resultado = array();
                             $cant = count($datos);
                             for ($i=0; $i<$cant; $i++)
                             {
@@ -83,7 +85,15 @@ class controlador extends controlador_g3w2
                                     $parametros['materia'] = $datos[$i]['MATERIA'];
                                     $correlativ_cumpl = catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
                                     kernel::log()->add_debug('$correlativ_cumpl', $correlativ_cumpl);
-                                    ($correlativ_cumpl) ? $datos[$i]['CALIDAD_ASIGNAR'] = 'P' : $datos[$i]['CALIDAD_ASIGNAR'] = 'R';
+                                    if ($correlativ_cumpl[0] == 1) {
+                                        $datos[$i]['CALIDAD_ASIGNAR'] = 'P';
+                                        $datos[$i]['OBSERV'] = 'Ok';
+                                    }
+                                    else {
+                                        $datos[$i]['CALIDAD_ASIGNAR'] = 'R';
+                                        $datos[$i]['OBSERV'] = substr($correlativ_cumpl[1], strpos($correlativ_cumpl[1], ',')+1);
+                                    }
+                                    $resultado[] = $datos[$i];
                                 }
                             }
                         }

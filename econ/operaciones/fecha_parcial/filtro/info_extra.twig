@@ -6,10 +6,14 @@
             <th >{{''|trans|capitalize}}</th>
             <th class="span3">{{'fecha_parcial.eval_parcial'|trans|capitalize}}</th>
             <th class="span4">{{'fecha_parcial.fecha_parcial'|trans|capitalize}}</th>
+            <th >{{''|trans|capitalize}}</th>
+            <th >{{''|trans|capitalize}}</th>
+            <th >{{''|trans|capitalize}}</th>
             {# IRIS: Descomentar este línea el prox. cuatrimestre #}
             {# <th class="span3">{{'fecha_parcial.hora_inicio'|trans|capitalize}}</th> #}
-            <th class="span4">{{'fecha_parcial.edificio'|trans|capitalize}}</th>
-            <th class="span4">{{'fecha_parcial.aula'|trans|capitalize}}</th>
+            {# IRIS: Descomentar este línea el prox. cuatrimestre #}
+            {# <th class="span4">{{'fecha_parcial.edificio'|trans|capitalize}}</th> #}
+            {# <th class="span4">{{'fecha_parcial.aula'|trans|capitalize}}</th> #}
         </tr>
         </thead>
         <tbody>
@@ -18,10 +22,14 @@
                 <td>{{ '' }}</td>
                 <td>{{ this.mostrar(parcial.EVAL_PARCIAL)}}</td>
                 <td>{{ this.mostrar(parcial.FECHA_PARCIAL)}}</td>
+                <td>{{ '' }}</td>
+                <td>{{ '' }}</td>
+                <td>{{ '' }}</td>
                 {# IRIS: Descomentar este línea el prox. cuatrimestre #}
                 {# <td>{{ this.mostrar(parcial.HORA_INICIO)}}</td> #}
-                <td>{{ this.mostrar(parcial.EDIFICIO) }}</td>
-                <td>{{ this.mostrar(parcial.AULA) }}</td>
+                {# IRIS: Descomentar este línea el prox. cuatrimestre #}
+                {# <td>{{ this.mostrar(parcial.EDIFICIO) }}</td> #}
+                {# <td>{{ this.mostrar(parcial.AULA) }}</td> #}
             </tr>
             {% endfor %}
         </tbody>

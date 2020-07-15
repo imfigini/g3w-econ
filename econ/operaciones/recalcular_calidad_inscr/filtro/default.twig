@@ -52,6 +52,8 @@
 						<th>Comisión</th>
 						<th>Calidad de inscripción</th>
 						<th>Calidad a asignar</th>
+						<th>Observaciones</th>
+						<th></th>
 					</tr> 
 				</thead>
 				<tbody>
@@ -71,17 +73,17 @@
 								{% else %}
 									{{ alumno.CALIDAD_ASIGNAR }}
 								{% endif %}  </td>
-							{% set i = i+1 %}
-							{# <td>  #}
-								{# <input type='checkbox' id='materias[{{ materia.MATERIA }}][PROMO_DIRECTA]'
-									name='materias[{{ materia.MATERIA }}][PROMO_DIRECTA]'  
-													{{ (materia.PROMO_DIRECTA == 'S') ? 'checked' : '' }}
-								/> #}
-						{# </td> #}
+							<td> {{alumno.OBSERV}} </td>
+							<td> 
+								<input type='checkbox' id='checkbox_{{ alumno.COMISION }}_{{ alumno.LEGAJO }}'
+										{{ (alumno.CALIDAD_ASIGNAR == 'P') ? 'checked' : 'disabled' }}
+								/>
+							</td>
 						</tr>
+						{% set i = i+1 %}
 					{% endfor %}
 					<tr>
-						<td scope="row" colspan="8">
+						<td scope="row" colspan="10">
 							<div style="text-align: right">
 								{# {% if (this.data.fecha_limite) %}  #}
 									<button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>

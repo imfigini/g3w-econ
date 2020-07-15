@@ -204,12 +204,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 														{$parametros['legajo']}, 
 														{$parametros['materia']},
 														'$fecha_formateada') ";
-		$datos = kernel::db()->consultar_fila($sql, db::FETCH_NUM);
-		//kernel::log()->add_debug('$datos', $datos);
-		if ($datos[0] == 1) {
-			return true;
-		}
-		return false;
+		return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
 	}
 
 	/**

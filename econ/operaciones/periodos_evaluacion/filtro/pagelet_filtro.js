@@ -201,8 +201,13 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             fecha_fin = new Date ($('#lectivo_fin').val().replace(/-/g, '\/'));
         }
 
-        var fecha_establecida = new Date ($('#fecha_ctr_correlat').val().replace(/-/g, '\/'));
-        console.log(fecha_establecida);
+        if ($('#fecha_ctr_correlat').val()) {
+            var fecha_establecida = new Date ($('#fecha_ctr_correlat').val().replace(/-/g, '\/'));
+            console.log(fecha_establecida);
+        }
+        else {
+            var fecha_establecida = null;
+        }
 
         $('#datepicker_ctr_correlat').datepicker({
                 
