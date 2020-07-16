@@ -46,7 +46,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		$paso_parcial2 = catalogo::consultar('carga_evaluaciones_parciales', 'ya_paso_evaluacion', 
 									Array('comision' => $comision,	'evaluacion' => $eval['PARC_2']));
 
-		//Si todavi­a no paso la fecha del 2º parcial no se puede calcular nada
+		//Si todaviï¿½a no paso la fecha del 2ï¿½ parcial no se puede calcular nada
 		if (!$paso_parcial2) {
 			return null;
 		}
@@ -54,7 +54,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		$escala_nota = catalogo::consultar('carga_notas_cursada', 'get_escala_nota', Array('comision' => $comision));
 		/*
 			3	Reales Regular
-			4	Reales Promoció
+			4	Reales Promociï¿½
 		*/
 		if ($escala_nota['ESCALA_NOTAS'] == 3) {
 			return self::autocalcular_nota_alumno_regu($comision, $legajo);
@@ -93,10 +93,8 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 
 		$tiene_correlativas_cumplidas = self::tiene_correlativas_cumplidas($comision, $legajo);
 		//kernel::log()->add_debug('tiene_correlativas_cumplidas', $tiene_correlativas_cumplidas);
-		// print_r('tiene_correlativas_cumplidas ');
-		// print_r($tiene_correlativas_cumplidas);
 
-		if ($tiene_correlativas_cumplidas) 
+		if ($tiene_correlativas_cumplidas[0] == 1) 
 		{
 			$nota = self::calcular_nota_A($legajo, $notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
 			if (isset($nota)) {

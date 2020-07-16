@@ -203,7 +203,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 
         if ($('#fecha_ctr_correlat').val()) {
             var fecha_establecida = new Date ($('#fecha_ctr_correlat').val().replace(/-/g, '\/'));
-            console.log(fecha_establecida);
         }
         else {
             var fecha_establecida = null;

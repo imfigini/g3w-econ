@@ -145,7 +145,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 	function puede_rendir_integrador($parametros)
 	{
 		$tiene_correlativas_cumplidas = catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
-		if (!$tiene_correlativas_cumplidas) {
+		if (!($tiene_correlativas_cumplidas[0] == 1)) {
 			return false;
 		}
 		$nota_parcial1 = catalogo::consultar('carga_evaluaciones_parciales', 'get_nota_parcial', Array('legajo' => $parametros['legajo'], 
