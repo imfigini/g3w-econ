@@ -67,6 +67,7 @@ class pagelet_filtro extends pagelet {
 		$operacion = kernel::ruteador()->get_id_operacion();
 		$this->add_var_js('url_buscar_periodos', kernel::vinculador()->crear($operacion, 'buscar_periodos'));
 		$this->add_var_js('url_buscar_materias', kernel::vinculador()->crear($operacion, 'buscar_materias'));
+		$this->add_var_js('url_grabar', kernel::vinculador()->crear($operacion, 'grabar'));
 
 		$periodo_hash = $this->get_periodo();
 		$anio_academico_hash = $this->get_anio_academico();
@@ -89,9 +90,6 @@ class pagelet_filtro extends pagelet {
 		$this->data['fecha_limite'] = $fecha_limite;
 		$this->data['materia'] = $materia;
 		$this->data['alumnos'] = $this->controlador->get_alumnos_calidad($anio_academico_hash, $periodo_hash, $calidad, $materia);
-		//kernel::log()->add_debug('get_materias_promo_directa', $this->data['materias']);
-
-		$this->data['form_url_grabar'] = kernel::vinculador()->crear('recalcular_calidad_inscr', 'grabar');
 	}
 }
 

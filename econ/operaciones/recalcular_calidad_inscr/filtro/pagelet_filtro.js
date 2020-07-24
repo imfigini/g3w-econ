@@ -1,6 +1,6 @@
 kernel.renderer.registrar_pagelet('filtro', function (info) {
 	var id = '#' + info.id;
-	
+
 	return {
         onload: function () {
 			$('#boton_buscar').on('click', function () {
@@ -37,9 +37,57 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 			}
 			buscarPeriodos($('#formulario_filtro-anio_academico').val());
 			buscarMaterias(info.anio_academico_hash, info.periodo_hash);
-         }
-    };
-    
+		 
+		 
+			if (info.anio_academico_hash !== "" && info.periodo_hash !== ""){
+				document.getElementById("btn_guardar").addEventListener("click", function(e) {
+					//e.preventDefault();
+					var anio_academico_hash = $('#anio_academico_hash').val();
+					var periodo_hash = $('#periodo_hash').val();
+					var checkboxs = $('[id*="checkbox_"]');
+					var cant = checkboxs.length;
+					var mensaje = '';
+					for (var i=0; i<cant; i++)
+					{
+						var seleccionado = checkboxs[i].checked;
+						if (seleccionado) {
+							var id = checkboxs[i].id;
+							var elems = id.split('_');
+							var legajo = elems[1];
+							var carrera = elems[2];
+							var materia = elems[3];
+							var comision = elems[4];
+							var calidad_asignar = elems[5];
+							$.ajax({
+								async: false,
+								url: info.url_grabar,
+								dataType: 'json',
+								data: {	anio_academico: anio_academico_hash, periodo: periodo_hash,
+										legajo: legajo, carrera: carrera, materia: materia, comision: comision, calidad_asignar: calidad_asignar},
+								type: 'get',
+								success: function(data) {
+									console.log(legajo);
+									console.log(data.cont['resultado']);
+									console.log(data.cont['mensaje']);
+									kernel.ui.show_mensaje(data.cont['mensaje']+': '+legajo, {tipo: 'alert-info'});
+									mensaje += '* '+data.cont['mensaje']+'\n\n';
+								},
+								error: function(response) {
+									console.log('Fallo');
+									console.log(response);
+									kernel.ui.show_mensaje(response.msj, {tipo: 'alert-error'});
+								},
+							});
+						}
+					}
+					alert(mensaje);
+					location.reload();
+				});
+			}
+		}
+	};
+	
+
 	function buscarPeriodos(anio_academico){
 		$.ajax({
 			url: info.url_buscar_periodos,
@@ -78,7 +126,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 					$('<option></option>').val('').html('-- Seleccione --')
 				);
 				$.each(data, function(key, value) {
-					var $nombre_materia = value['MATERIA_NOMBRE'] + ' (' + value['MATERIA'] + ')';
+					var $nombre_materia = value['NOMBRE_MATERIA'] + ' (' + value['MATERIA'] + ')';
 					if (value['MATERIA'] === info.materia){
 						$elem_materias.append($('<option selected="selected"></option>').val(value['MATERIA']).html($nombre_materia));
 					} else {
@@ -90,43 +138,3 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 	}
 });
 
-// function grabar_cambio_calidad()
-// {
-// 	var alumnos = $('[name*="alumno_"]');
-// 	console.log(alumnos);
-// // 	var datos = get_datos_instancia_evaluacion(comision, instancia, evaluacion);
-
-// // 	if (datos)
-// // 	{
-// // //		console.log(datos);
-// // 		var formulario = $('#comision_seleccionada_'+comision);
-// // 		var resultado = '';
-// // 		kernel.ajax.call(formulario.attr('action'), {
-// // 				async: false,
-// // 				type: "post",
-// // 				dataType: 'json',
-// // 				data: datos,
-// // 				success: function(data) { 
-// // 					$('#aceptar_'+instancia+'_'+comision).val('P');
-// // 					$('#div_date_'+instancia+'_'+comision).hide();
-// // 					$('#div_time_'+instancia+'_'+comision).hide();
-
-// // 					if (data.cont[0].success == -1) {
-// // 							alert(data.cont[0].mensaje);
-// // 					} else {
-// // 						var estado_new = data.cont[0].estado;
-// // 						var fecha_hora_asign = data.cont[0].fecha_hora;
-// // 						set_div_mensaje_aceptado(comision, instancia, estado_new, fecha_hora_asign);
-// // 						resultado = data.cont[0].mensaje;
-// // 					}
-// // 				}, 
-// // 				error: function(response) {
-// // 					console.log('Falló');
-// // 					console.log(response);
-// // 					kernel.ui.show_mensaje(response.msj, {tipo: 'alert-error'});
-// // 				}
-// // 		});
-// // 		return resultado;
-// //	}
-
-// }

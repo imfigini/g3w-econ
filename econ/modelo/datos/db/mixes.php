@@ -207,7 +207,7 @@ class mixes
                                             ) ";
         }
         $sql .= " ORDER BY 2";
-        kernel::log()->add_debug('sql: ', $sql);
+        //kernel::log()->add_debug('sql: ', $sql);
         return kernel::db()->consultar($sql, db::FETCH_ASSOC);
     }
 

@@ -2925,6 +2925,51 @@ class _info_catalogo
 );
 	}
 
+	static function insc_cursadas__estado_acta_promo()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function insc_cursadas__existe_en_cursada_pdte()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'anio_academico',
+    2 => 'periodo',
+    3 => 'materia',
+    4 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function insc_cursadas__existe_en_det_acta()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'anio_academico',
+    2 => 'periodo',
+    3 => 'materia',
+    4 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function insc_cursadas__get_alumnos_calidad_inscripcion()
 	{
 		return array (
@@ -2944,6 +2989,19 @@ class _info_catalogo
 );
 	}
 
+	static function insc_cursadas__get_materias_promo_con_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo_lectivo',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
 	static function insc_cursadas__update_calidad_insc_cursada()
 	{
 		return array (
@@ -2952,7 +3010,7 @@ class _info_catalogo
     0 => 'carrera',
     1 => 'legajo',
     2 => 'comision',
-    3 => 'calidad',
+    3 => 'calidad_asignar',
   ),
   'cache' => 'no',
   'filas' => '1',

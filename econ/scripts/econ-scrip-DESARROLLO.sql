@@ -27,6 +27,11 @@ UPDATE aca_usuarios_ag SET clave = '81dc9bdb52d04dc20036dbd8313ed055',
 			bloqueado = 'N'
 WHERE unidad_academica IS NOT NULL;
 
+--Sino da error al actualizar calidad inscripción a cursada de alumno
+--por SP: sp_param_sistema
+INSERT INTO sga_datos_usuarios (usuario, unidad_academica, sede)
+	VALUES ('informix', 'FCE', '00000');
+
 
 {
 --Para etapa3 poder hacer pruebas

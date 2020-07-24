@@ -70,7 +70,7 @@ return array(
      /* Definción de los Mixes */
     'tit_mixes' => 'Mixs',
     'mixes' => 'Mixs',
-    'definicion_mixes' => 'definición de Mixs',
+    'definicion_mixes' => 'Definición de Mixs',
     'mixes.carrera' => 'Carrera',
     'mixes_modificacion' => 'Modificación de Mix',
     

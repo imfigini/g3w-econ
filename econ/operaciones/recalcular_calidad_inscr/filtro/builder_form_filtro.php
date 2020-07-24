@@ -135,22 +135,11 @@ class builder_form_filtro extends builder_formulario
 		$datos = Array();
 		$datos[] = Array('ID'=>'R', 'CALIDAD'=>'Regular');
 		$datos[] = Array('ID'=>'P', 'CALIDAD'=>utf8_decode('Promoción'));
-		//$datos[] = Array('ID'=>'T', 'CALIDAD'=>'Todos');
 		return guarani_form_elemento::armar_combo_opciones($datos, 'ID', 'CALIDAD', false, false, kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
 	}
 
 	static function get_materias_cincuentenario()
     {
-
 		return array(""=>  kernel::traductor()->trans('recalcular_calidad_inscr.filtro_seleccione'));
-		/*
-        $parametros['legajo'] = null;
-        $parametros['carrera'] = null;
-		$parametros['mix'] = null;
-		$parametros['anio_academico'] = null;
-        $parametros['periodo_lectivo'] = null;
-        $materias = catalogo::consultar('cursos', 'get_materias_cincuentenario', $parametros);
-		return guarani_form_elemento::armar_combo_opciones($materias, 'MATERIA', 'MATERIA_NOMBRE', true, false, ucfirst(kernel::traductor()->trans('-- Seleccione --')));
-		*/
 	}
 }

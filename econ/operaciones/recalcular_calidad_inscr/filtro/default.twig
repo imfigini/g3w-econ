@@ -27,20 +27,23 @@
     {% endif %}
 
 	<div role='alert' class="alert">
-		<p>Se listan los alumnos que tienen la calidad de inscripción seleccionada a cada comisión cuya escala de notas sea regulares y promocionales (4).
-			Esta operación permite recalcular la condición a la que pueden aspirar (en caso de ser REGULAR) luego de la fecha de finalización del último turno de examen regular del cuatrimestre.
-			Sólo aplica a alumnos de los planes vigentes inscriptos a comisiones de materias que pertenecen a algún mix. </p>
+		<p>Sólo aplica a alumnos inscriptos a comisiones cuya escala de notas sea regulares y promocionales (4), pertenecientes a materias de planes vigentes. 
+			Esta operación permite recalcular la condición a la que pueden aspirar en la cursada, luego de la fecha límite a verificar si han cumplido con las correlativas aprobadas.
+		</p>
 	</div>
 
 	{% if(this.data.alumnos) %}
 		
 		<div role='alert' class="alert">
-			<p>Fecha límite considerada: {% if (this.data.fecha_limite) %} {{this.data.fecha_limite|date("d/m/Y") }} {% else %} <em>No se recuperó ninguna fecha de finalización de turno de examen regular. No se puede calcular la nueva calidad del alumno </em> {% endif %} </p>
+			<p>Fecha límite considerada: {% if (this.data.fecha_limite) %} {{this.data.fecha_limite|date("d/m/Y") }} {% else %} <em>No se recuperó ninguna fecha límite para control de correlativas cumplidas. Comuníquese con las Dirección de Docentes. </em> {% endif %} </p>
+			<p><span class="puede_cambiar">Verde: </span> Se puede modificar sin problemas la calidad de inscirpción.</p>
+			<p><span class="puede_cambiar_con_advertencia">Amarillo: </span> AVISO! La modificación implica cambiar la calidad de inscripción de un alumno que tiene nota cargada en acta abierta. </p>
+			<p><span class="no_puede_cambiar">Rojo: </span> No puede modificar la calidad de inscirpción del alumno dado que el acta PROMO de la comisión está cerrada. </p>
 		</div>
-		<form name="calidad_alumnos" method="post" action="{{this.data.form_url_grabar}}">
-			<input type="hidden" name="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
-			<input type="hidden" name="periodo_hash" value="{{this.data.periodo_hash}}">
-			<input type="hidden" name="calidad" value="{{this.data.calidad}}">
+		<form name="calidad_alumnos" /> 
+		<!-- method="post" action="{{this.data.form_url_grabar}}"> -->
+			<input type="hidden" id="anio_academico_hash" value="{{this.data.anio_academico_hash}}">
+			<input type="hidden" id="periodo_hash" value="{{this.data.periodo_hash}}">
 			<table class="table table-striped table-bordered table-condensed" summary="Tabla de calidad de alumnos">
 				<thead>
 					<tr>
@@ -65,19 +68,43 @@
 							<td> {{ alumno.ALUMNO }} </td>
 							<td> {{ alumno.CARRERA_NOMBRE }} </td>
 							<td> {{ alumno.MATERIA_NOMBRE }} </td>
-							<td> {{ alumno.COMISION }} </td>
+							<td> {{ alumno.COMISION_NOMBRE }} </td>
 							<td> {{ alumno.CALIDAD_INSC }} </td>
-							<td> {% if (alumno.CALIDAD_ASIGNAR == 'P')%} 
-									<p class="cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
-									<input type="hidden" name="datos[{{alumno.CARRERA}}][{{alumno.LEGAJO}}][{{alumno.COMISION}}][{{alumno.CALIDAD_INSC}}]" value="{{ alumno.CALIDAD_ASIGNAR }}">
-								{% else %}
-									{{ alumno.CALIDAD_ASIGNAR }}
-								{% endif %}  </td>
+							<td> {% if alumno.CALIDAD_INSC == 'R' %}  {# Si la calidad buscada es R #}
+									{% if (alumno.CALIDAD_ASIGNAR == 'P')%} 
+										{% if ( alumno.MODIFICABLE == 1) %} 
+											<p class="puede_cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+										{% else %}
+											{% if ( alumno.MODIFICABLE == 2) %} 
+												<p class="puede_cambiar_con_advertencia"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+											{% else %}
+												<p class="no_puede_cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+											{% endif %}	
+										{% endif %}
+									{% else %}
+										{{ alumno.CALIDAD_ASIGNAR }}
+									{% endif %}  
+								{% else %}	{# Si la calidad buscada es P #}
+									{% if (alumno.CALIDAD_ASIGNAR == 'R')%} 
+										{% if ( alumno.MODIFICABLE == 1) %} 
+											<p class="puede_cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+										{% else %}
+											{% if ( alumno.MODIFICABLE == 2) %} 
+												<p class="puede_cambiar_con_advertencia"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+											{% else %}
+												<p class="no_puede_cambiar"> {{ alumno.CALIDAD_ASIGNAR }} </p>
+											{% endif %}	
+										{% endif %}
+									{% else %}
+										{{ alumno.CALIDAD_ASIGNAR }}
+									{% endif %}  
+								{% endif %}
+								
+								</td>
 							<td> {{alumno.OBSERV}} </td>
 							<td> 
-								<input type='checkbox' id='checkbox_{{ alumno.COMISION }}_{{ alumno.LEGAJO }}'
-										{{ (alumno.CALIDAD_ASIGNAR == 'P') ? 'checked' : 'disabled' }}
-								/>
+								<input type='checkbox' id='checkbox_{{ alumno.LEGAJO }}_{{ alumno.CARRERA }}_{{ alumno.MATERIA }}_{{ alumno.COMISION }}_{{ alumno.CALIDAD_ASIGNAR }}'
+										{{ (alumno.MODIFICABLE) ? 'checked' : 'disabled' }} />
 							</td>
 						</tr>
 						{% set i = i+1 %}
@@ -85,9 +112,9 @@
 					<tr>
 						<td scope="row" colspan="10">
 							<div style="text-align: right">
-								{# {% if (this.data.fecha_limite) %}  #}
-									<button class="btn btn-info btn-lg" type="submit" id="boton_guardar">Guardar</button>
-								{# {% endif %} #}
+								{% if (this.data.fecha_limite) %} 
+									<button class="btn btn-info btn-lg" id="btn_guardar">Guardar</button> 
+								{% endif %}
 							</div>
 						</td>
 					</tr>

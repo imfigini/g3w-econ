@@ -1,3 +1,11 @@
-#contenido p.cambiar {
+#contenido .puede_cambiar {
 	background-color: #8dff33;
+}
+
+#contenido .no_puede_cambiar {
+	background-color: #f86c62;
+}
+
+#contenido .puede_cambiar_con_advertencia {
+	background-color: #ffee04;
 }

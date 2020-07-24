@@ -63,7 +63,7 @@
 			{% endfor %}
             
             <div>
-                <h4 class="periodo">Fecha que se aplica en el control si los alumos cumplen con las correlativas aprobadas para cambiar la calidad de inscripicón a la cursada: 
+                <h4 class="periodo">Fecha que se aplica en el control si los alumnos cumplen con las correlativas aprobadas para cambiar la calidad de inscripción a la cursada: 
                 {% if (this.data.fecha_ctr_correlat) %}
                     {{this.data.fecha_ctr_correlat.FECHA|date("d/m/Y")}} 
                     <input type="hidden" name="fecha_ctr_correlat" id="fecha_ctr_correlat" value="{{this.data.fecha_ctr_correlat.FECHA}}">
