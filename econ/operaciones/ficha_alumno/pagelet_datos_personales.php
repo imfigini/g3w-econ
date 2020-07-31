@@ -39,13 +39,21 @@ class pagelet_datos_personales extends \siu\operaciones\ficha_alumno\pagelet_dat
 	
 	public function prepare()
 	{
-		parent::prepare();
-		$parametros = array('nro_inscripcion' => $this->controlador->get_nro_inscripcion());
-		$datos = catalogo::consultar('alumno', 'datos_personales', $parametros);
+        parent::prepare();
+		$parametros['nro_inscripcion'] = $this->controlador->get_nro_inscripcion();
+        $datos = catalogo::consultar('alumno', 'datos_personales', $parametros);
+        kernel::log()->add_debug('iris prepare', $datos);
 		if (!empty($datos)){
 			$datos = $datos[0];
-			$datos['foto_dni'] = $this->get_foto_dni_cargada($parametros['nro_inscripcion']);
-		}
+            $datos['foto_dni'] = $this->get_foto_dni_cargada($parametros['nro_inscripcion']);
+
+            $this->data['periodo_integrador'] = $this->controlador->get_periodo_integrador_actual($parametros['nro_inscripcion']);
+            kernel::log()->add_debug('iris periodo_integrador', $this->data);
+            if (isset($this->data['periodo_integrador']['FECHA_INICIO'])) {
+                $acepto = catalogo::consultar('terminos_condiciones', 'get_acepto_term_y_cond', $parametros);
+                (isset($acepto['FECHA'])) ? $datos['acepto_term_y_cond'] = true :  $datos['acepto_term_y_cond'] = false;
+            }
+        }
 		$this->data['datos'] = $datos;
 	}
 }

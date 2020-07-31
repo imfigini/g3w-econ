@@ -29,6 +29,10 @@ class pagelet_filtro extends \siu\operaciones\ficha_alumno\pagelet_filtro
 			$fechas_turno_examen_actual = $this->controlador->get_fechas_turno_examen_actual();
 			$this->data['inicio_turno'] = $fechas_turno_examen_actual['FECHA_INICIO'];
 			$this->data['fin_turno'] = $fechas_turno_examen_actual['FECHA_FIN'];
+
+			$periodo_integrador_actual = $this->controlador->get_periodo_integrador_actual();
+			$this->data['inicio_integrador'] = $periodo_integrador_actual['FECHA_INICIO'];
+			$this->data['fin_integrador'] = $periodo_integrador_actual['FECHA_FIN'];
 		}
 
 	}

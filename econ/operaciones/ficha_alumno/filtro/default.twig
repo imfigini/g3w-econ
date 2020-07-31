@@ -17,9 +17,14 @@
 		<div role="alert" class="alert">
 			<p>{{"ficha_alumno.aviso_al_docente"|trans|capitalize}}</p>
 			{% if (this.data.inicio_turno) %}
-				Turno de examen: {{this.data.inicio_turno}} a {{this.data.fin_turno}}.
+				<p>Turno de examen: {{this.data.inicio_turno}} a {{this.data.fin_turno}}.</p>
 			{% else %}
-				{{"ficha_alumno.no_hay_turno"|trans|capitalize}}
+				<p>{{"ficha_alumno.no_hay_turno"|trans|capitalize}}</p>
+			{% endif %}
+			{% if (this.data.fin_integrador) %}
+				<p>Período integrador hasta: {{this.data.fin_integrador}}.</p>
+			{% else %}
+				<p>{{"ficha_alumno.no_hay_integrador"|trans|capitalize}}</p>
 			{% endif %}
 		</div>
 	{% endif %}

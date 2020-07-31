@@ -65,6 +65,21 @@ class generales
 		}
 		throw new Exception('Formato de fecha no manejado');
         
-    }
+	}
+
+
+	 /**
+    * parametros: _ua
+    * cache: no
+    * filas: 1
+    */
+    function get_fechas_turno_examen_actual($parametros)
+    {
+        $sql = "SELECT fecha_inicio, fecha_fin 
+                FROM sga_turnos_examen
+                WHERE TODAY < fecha_fin";
+        return kernel::db()->consultar_fila($sql);
+    }   
+
 
 }

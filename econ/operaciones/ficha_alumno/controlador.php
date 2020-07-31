@@ -33,11 +33,25 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
         $term = utf8_decode($term);
 		$parametros = array('term' => $term);
 		
-		//Si el perfil dónde se está consultando la ficha del alumno es DOCENTE, sólo puede cosultar los alumnos que estén en una mesa de examen
+		/* Si el perfil dónde se está consultando la ficha del alumno es DOCENTE, sólo puede cosultar:
+			- los alumnos que estén en una de sus mesa de examen durante el turno del mismo
+			- los alumnos iscriptos a su comisión, duarante el período del integrador
+		*/
 		if ($this->is_perfil_docente())
         {
-            $parametros['legajo_doc'] = kernel::persona()->get_legajo_docente();
-			$raw_data = catalogo::consultar('alumno', 'buscar_alumno_de_docente', $parametros);
+			$parametros['legajo_doc'] = kernel::persona()->get_legajo_docente();
+			$raw_data_1 = $raw_data_2 = array();
+			
+			$turno_examen_actual = $this->get_fechas_turno_examen_actual();
+			if (isset($turno_examen_actual['FECHA_INICIO']) && isset($turno_examen_actual['FECHA_FIN'])) {
+				$raw_data_1 = catalogo::consultar('alumno', 'buscar_alumno_de_docente_en_examen', $parametros);
+			}
+
+			$periodo_integrador_actual = $this->get_periodo_integrador_actual();
+			if (isset($periodo_integrador_actual['FECHA_INICIO']) && isset($periodo_integrador_actual['FECHA_FIN'])) {
+				$raw_data_2 = catalogo::consultar('alumno', 'buscar_alumno_de_docente_en_comision', $parametros);
+			}
+			$raw_data = array_merge($raw_data_1, $raw_data_2);
 		}
 		else
 		{
@@ -61,7 +75,7 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 
 	function get_fechas_turno_examen_actual()
 	{
-		$turno_examen = catalogo::consultar('examenes', 'get_fechas_turno_examen_actual', null);
+		$turno_examen = catalogo::consultar('generales', 'get_fechas_turno_examen_actual', null);
 		if (isset($turno_examen['FECHA_INICIO'])) {
 			$date1 = date_create($turno_examen['FECHA_INICIO']);
 			$turno_examen['FECHA_INICIO'] = date_format($date1, 'd/m/Y');
@@ -75,5 +89,25 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 		}
 		return $turno_examen;
 	}
+
+	function get_periodo_integrador_actual()
+	{
+		$periodo_integrador_actual = catalogo::consultar('terminos_condiciones', 'periodo_integrador', null);
+		kernel::log()->add_debug('iris $periodo_integrador_actual', $periodo_integrador_actual);
+		if (isset($periodo_integrador_actual['FECHA_PRIMERA']) && isset($periodo_integrador_actual['FECHA_ULTIMA'])) {
+			$date1 = date_create($periodo_integrador_actual['FECHA_PRIMERA']);
+			$periodo_integrador_actual['FECHA_INICIO'] = date_format($date1, 'd/m/Y');
+			$date2 = date_create($periodo_integrador_actual['FECHA_ULTIMA']);
+			$periodo_integrador_actual['FECHA_FIN'] = date_format($date2, 'd/m/Y');
+		}
+		else
+		{
+			$periodo_integrador_actual['FECHA_INICIO'] = null;
+			$periodo_integrador_actual['FECHA_FIN'] = null;
+		}
+		return $periodo_integrador_actual;
+	}
+
+
 }
 ?>

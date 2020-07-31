@@ -1,8 +1,18 @@
 {% extends "kernel/pagelet.twig" %}
 {% import "macro_ficha_alumno.twig" as ficha_alumno %}
 {% block contenido %}
-    {{ ficha_alumno.render_menu(this.data.menu_reportes, this.data.categoria_actual, this.data.reporte_actual) }}
+	{{ ficha_alumno.render_menu(this.data.menu_reportes, this.data.categoria_actual, this.data.reporte_actual) }}
+
+
 	<div id="reporte_contenido">
+		{% if this.data.periodo_integrador.FECHA_INICIO %}
+			{% if this.data.datos.acepto_term_y_cond %}
+				<strong style="color:green; font-style:italic">El alummo aceptó los términos y condiciones establecidos en la Resolución de Decanato 050/2020 para la modalidad de evaluación virtual</strong>
+			{% else %}
+				<strong style="color:red; font-style:italic">El alummo NO aceptó los términos y condiciones establecidos en la Resolución de Decanato 050/2020 para la modalidad de evaluación virtual</strong>
+			{% endif %}
+		{% endif %}
+		
 		<h3>{{ 'ficha_alumno.rep_datos_personales' | trans }}</h3>
 
 		{% if (this.data.datos) %}

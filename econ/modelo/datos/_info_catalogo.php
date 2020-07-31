@@ -108,7 +108,22 @@ class _info_catalogo
 );
 	}
 
-	static function alumno__buscar_alumno_de_docente()
+	static function alumno__buscar_alumno_de_docente_en_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'term',
+    2 => 'legajo_doc',
+  ),
+  'cache' => 'no',
+  'no_quote' => 'term',
+  'filas' => 'n',
+);
+	}
+
+	static function alumno__buscar_alumno_de_docente_en_examen()
 	{
 		return array (
   'parametros' => 
@@ -2740,18 +2755,6 @@ class _info_catalogo
 );
 	}
 
-	static function examenes__get_fechas_turno_examen_actual()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-  ),
-  'cache' => 'no',
-  'filas' => '1',
-);
-	}
-
 	static function fechas_parciales__get_comisiones_de_materia_con_dias_de_clase()
 	{
 		return array (
@@ -2898,6 +2901,18 @@ class _info_catalogo
 );
 	}
 
+	static function generales__get_fechas_turno_examen_actual()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
 	static function generales__set_fecha_ctr_correlativas()
 	{
 		return array (
@@ -2951,22 +2966,6 @@ class _info_catalogo
   ),
   'cache' => 'no',
   'filas' => '1',
-);
-	}
-
-	static function insc_cursadas__existe_en_det_acta()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-    1 => 'anio_academico',
-    2 => 'periodo',
-    3 => 'materia',
-    4 => 'legajo',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
 );
 	}
 
@@ -3499,6 +3498,53 @@ class _info_catalogo
     2 => 'script_corrido',
   ),
   'cache' => 'memoria',
+);
+	}
+
+	static function terminos_condiciones__acepto_terminos_y_condiciones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function terminos_condiciones__get_acepto_term_y_cond()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function terminos_condiciones__grabar_acept_term_cond()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'legajo',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function terminos_condiciones__periodo_integrador()
+	{
+		return array (
+  'cache' => 'no',
+  'filas' => '1',
 );
 	}
 

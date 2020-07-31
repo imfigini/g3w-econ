@@ -47,6 +47,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 					var checkboxs = $('[id*="checkbox_"]');
 					var cant = checkboxs.length;
 					var mensaje = '';
+					kernel.ui.show_mensaje('Grabando. Aguarde... ');
 					for (var i=0; i<cant; i++)
 					{
 						var seleccionado = checkboxs[i].checked;
@@ -69,7 +70,6 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 									console.log(legajo);
 									console.log(data.cont['resultado']);
 									console.log(data.cont['mensaje']);
-									kernel.ui.show_mensaje(data.cont['mensaje']+': '+legajo, {tipo: 'alert-info'});
 									mensaje += '* '+data.cont['mensaje']+'\n\n';
 								},
 								error: function(response) {

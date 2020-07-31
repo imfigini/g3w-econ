@@ -14,7 +14,7 @@ class alumno extends \siu\modelo\datos\db\alumno
 	 * no_quote: term
 	 * filas: n
 	 */
-	function buscar_alumno_de_docente($parametros)
+	function buscar_alumno_de_docente_en_examen($parametros)
 	{
         $termino = strtolower($parametros['term']);
         $delimitadores = array(",", ";");
@@ -81,4 +81,77 @@ class alumno extends \siu\modelo\datos\db\alumno
 		}
 		return $nuevo;
 	}
+
+	/**
+	 * parametros: _ua, term, legajo_doc
+	 * cache: no
+	 * no_quote: term
+	 * filas: n
+	 */
+	function buscar_alumno_de_docente_en_comision($parametros)
+	{
+        $termino = strtolower($parametros['term']);
+        $delimitadores = array(",", ";");
+        $termino = trim(str_replace($delimitadores, " ", $termino));
+        $terminos = explode(" ", $termino);
+        $no_vacio = function($string) {
+            return $string != "";
+        };
+        $terminos = array_filter($terminos, $no_vacio);//quito los terminos vacios "".
+        $terminos = array_unique($terminos);//quito los terminos repetidos.
+
+        $like = "";
+        if(count($terminos) > 0){
+            $i = 0;
+            $like .= " AND (";
+            foreach($terminos as $term){
+
+                if($i != 0){
+                    $like .= " AND ";
+                }
+
+                $like .= "LOWER(p.apellido || ' ' || p.nombres || ' ' || a.legajo || ' ' || p.nro_documento) LIKE ".kernel::db()->quote_like($term, '%', '%');
+                $i++;
+            }
+            $like .= ")";
+        }
+
+		//Iris: Se controla que sólo recupere alumnos inscriptos a las comisiones donde el docente forma parte
+		//Se toma 60 días antes al actual, para que tome el cuatrimetrse deseado, ya que los integradores se desfasaron del mismo por la pandemia
+        $sql = "
+				SELECT
+					DISTINCT p.nro_inscripcion as nro_inscripcion,
+					'(' || td.desc_abreviada || ': ' || p.nro_documento || ') ' || p.apellido || ', ' || p.nombres || ' (' || a.legajo || ')' as descripcion,
+					p.apellido || ', ' || p.nombres as descripcion_persona
+				FROM
+					sga_alumnos as a
+					JOIN sga_personas as p ON (p.unidad_academica = a.unidad_academica AND p.nro_inscripcion = a.nro_inscripcion)
+					JOIN mdp_tipo_documento td ON (p.tipo_documento = td.tipo_documento)
+				WHERE a.unidad_academica  = {$parametros['_ua']}
+					AND 	a.legajo IN (SELECT I.legajo 
+											FROM sga_insc_cursadas I, sga_comisiones C, sga_periodos_lect P, sga_docentes_com D
+											WHERE TODAY-60 BETWEEN P.fecha_inicio AND P.fecha_fin
+												AND C.anio_academico = P.anio_academico 
+												AND C.periodo_lectivo = P.periodo_lectivo
+												AND I.comision = C.comision
+												AND I.unidad_academica = C.unidad_academica
+												AND D.comision = I.comision
+												AND D.legajo = {$parametros['legajo_doc']}
+										)
+				{$like} 
+				ORDER BY 2";
+		$datos = kernel::db()->consultar($sql, db::FETCH_NUM);
+		
+		$nuevo = array();
+		if (!empty($datos)){
+			foreach($datos as $key => $value) {
+				$nuevo[$key][catalogo::id] = catalogo::generar_id($value[0]);
+				$nuevo[$key][0] = $value[0];
+				$nuevo[$key][1] = $value[1];
+				$nuevo[$key][2] = $value[2];
+			}
+		}
+		return $nuevo;
+	}
+
 }

@@ -1,0 +1,35 @@
+{% extends "kernel/pagelet.twig" %}
+{% block contenido %}
+
+    {% if (this.data.is_periodo_integrador) %}
+
+        <table class='table table-condensed table-hover table-striped'>
+            <input type="hidden" id="acepto_term_cond" value="{{this.data.acept_term_cond}}">                                
+
+            <td id="ya_acepto" >
+                <strong style="color:green; font-style:italic">Ud ya aceptó los términos y condiciones para poder acceder a rendir las instancias de evaluación de Integradores (en caso de corresponder)</strong>
+            </td>
+
+            <td id="terminos"><b>En el caso que ud. esté en condiciones de acceder a la instancia de evaluación de algún Integrador, deberá leer y aceptar previamente los presentes términos y condiciones de evaluación</b>
+                <div style="margin-top: 15px;" align="right">
+                    <button type="button" id='btn_terminos' class="btn btn-info btn-lg" data-toggle="collapse" data-target="#contenido_terminos">
+                        Términos y Condiciones de la Facultad</button>
+                    <div id="contenido_terminos" class="collapse" style="margin-top: 15px;">
+                        <div align="justify" >
+                            {% autoescape false %}
+                            {{ this.data.term_y_cond }}
+                            {% endautoescape %}
+                            <p style="float: right; font-weight: bold;"> Acepto los Términos y Condiciones 
+                                <input type='checkbox' class='check-js' id='check_terminos'  value='off'> 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            
+        </table>
+        
+
+    {% endif %}
+
+{% endblock %}
