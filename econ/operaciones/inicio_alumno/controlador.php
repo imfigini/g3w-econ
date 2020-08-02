@@ -69,10 +69,14 @@ class controlador extends \siu\operaciones\inicio_alumno\controlador
 	{
 		$periodo_integrador = catalogo::consultar('terminos_condiciones', 'periodo_integrador', null);
 		$fecha_inicial = strtotime ( '-5 day' , strtotime ( $periodo_integrador['FECHA_PRIMERA'] ) ) ;
-		$fecha_inicial = date ( 'Y-m-j' , $fecha_inicial);
-		$hoy = date('Y-m-j');
+		$fecha_inicial = date ( 'Y-m-d' , $fecha_inicial);
 
-		if ($fecha_inicial <= $hoy && $hoy <= $periodo_integrador['FECHA_ULTIMA'])	{
+		$fecha_final = strtotime ( $periodo_integrador['FECHA_ULTIMA'] );
+		$fecha_final = date ( 'Y-m-d' , $fecha_final);
+
+		$hoy = date('Y-m-d');
+
+		if ($fecha_inicial <= $hoy && $hoy <= $fecha_final)	{
 			return true;
 		}
 		return false;

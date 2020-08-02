@@ -15,7 +15,7 @@ class pagelet_lista_term_cond extends pagelet
     function prepare()
     {
         $this->data['is_periodo_integrador'] = $this->controlador->is_periodo_integrador();
-
+        
         if ($this->data['is_periodo_integrador']) 
         {
             $this->data['acept_term_cond'] = $this->controlador->acepto_terminos_y_condiciones();
