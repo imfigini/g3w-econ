@@ -1,5 +1,5 @@
 # Etapa de implementación 3.2
-Icluye funcionalidad para que los alumnos deban aceptar los "Términos y Condiciones" para poder rendir Integrador. Y habilita a los dcoenets a ver la ficha académica de los mismos. 
+Icluye funcionalidad para que los alumnos deban aceptar los "Términos y Condiciones" para poder rendir Integrador. Y habilita a los docentes a ver la ficha académica de alumnos inscrptos a su comisión. 
 
 > Tiempo requerido: 5 min
 
