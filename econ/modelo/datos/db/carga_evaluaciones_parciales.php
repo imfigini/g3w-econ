@@ -191,38 +191,40 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	}
 
 	/**
-	 * parametros: _ua, anio_academico, periodo, legajo, carrera, materia
+	 * parametros: _ua, legajo, carrera, materia, fecha
 	 * cache: no
 	 * filas: 1
 	 */
 	function tiene_correlativas_cumplidas($parametros)
 	{
-		$fecha = $this->get_ultima_fecha_fin_turno_examen_regular($parametros);
-		$fecha_formateada = date("d-m-Y", strtotime($fecha['FECHA']));
+		//$this->get_ultima_fecha_fin_turno_examen_regular($parametros);
+		// $fecha = catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
+		// $fecha_formateada = date("d-m-Y", strtotime($fecha['FECHA']));
 		$sql = " EXECUTE PROCEDURE ctr_corre_iex_fech(	{$parametros['_ua']}, 
 														{$parametros['carrera']}, 
 														{$parametros['legajo']}, 
 														{$parametros['materia']},
-														'$fecha_formateada') ";
+														{$parametros['fecha']}) ";
+														//'$fecha_formateada') ";
 		return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
 	}
 
-	/**
-	 * parametros: anio_academico, periodo
-	 * cache: no
-	 * filas: 1
-	 */
-	function get_ultima_fecha_fin_turno_examen_regular($parametros)
-	{
-		$sql = "SELECT MAX(T.fecha_fin) AS fecha
-					FROM sga_turnos_examen T, sga_periodos_lect P
-					WHERE 	P.anio_academico = {$parametros['anio_academico']}
-							AND P.periodo_lectivo = {$parametros['periodo']}
-							AND P.anio_academico = T.anio_academico
-							AND tipo_de_turno = 'N'
-							AND T.fecha_fin BETWEEN P.fecha_inicio AND P.fecha_fin ";
-		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-	}
+	// /**
+	//  * parametros: anio_academico, periodo
+	//  * cache: no
+	//  * filas: 1
+	//  */
+	// function get_ultima_fecha_fin_turno_examen_regular($parametros)
+	// {
+	// 	$sql = "SELECT MAX(T.fecha_fin) AS fecha
+	// 				FROM sga_turnos_examen T, sga_periodos_lect P
+	// 				WHERE 	P.anio_academico = {$parametros['anio_academico']}
+	// 						AND P.periodo_lectivo = {$parametros['periodo']}
+	// 						AND P.anio_academico = T.anio_academico
+	// 						AND tipo_de_turno = 'N'
+	// 						AND T.fecha_fin BETWEEN P.fecha_inicio AND P.fecha_fin ";
+	// 	return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
+	// }
 
 	
 	/**

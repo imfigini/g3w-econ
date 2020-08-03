@@ -144,6 +144,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 
 	function puede_rendir_integrador($parametros)
 	{
+		$fecha = catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
+		$parametros['fecha'] = date("d-m-Y", strtotime($fecha['FECHA']));
 		$tiene_correlativas_cumplidas = catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
 		if (!($tiene_correlativas_cumplidas[0] == 1)) {
 			return false;

@@ -1425,19 +1425,6 @@ class _info_catalogo
 );
 	}
 
-	static function carga_evaluaciones_parciales__get_ultima_fecha_fin_turno_examen_regular()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => 'anio_academico',
-    1 => 'periodo',
-  ),
-  'cache' => 'no',
-  'filas' => '1',
-);
-	}
-
 	static function carga_evaluaciones_parciales__guardar_renglon()
 	{
 		return array (
@@ -1550,11 +1537,10 @@ class _info_catalogo
   'parametros' => 
   array (
     0 => '_ua',
-    1 => 'anio_academico',
-    2 => 'periodo',
-    3 => 'legajo',
-    4 => 'carrera',
-    5 => 'materia',
+    1 => 'legajo',
+    2 => 'carrera',
+    3 => 'materia',
+    4 => 'fecha',
   ),
   'cache' => 'no',
   'filas' => '1',
