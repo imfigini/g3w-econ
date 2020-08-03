@@ -242,19 +242,19 @@ class controlador extends controlador_g3w2
                                 switch($resultado['MODIFICABLE']) {
                                     case 1: 
                                         catalogo::consultar('insc_cursadas', 'update_calidad_insc_cursada', $parametros);                      
-                                        $msj = utf8_decode('Ok. Se cambió la calidad de inscripción a PROMO para el alumno: '.$alumno['LEGAJO']);
+                                        $msj = utf8_decode('Ok. Se cambió la calidad a P para: '.$alumno['LEGAJO']);
                                         break;
                                     case 2: 
                                         catalogo::consultar('insc_cursadas', 'update_calidad_insc_cursada', $parametros);                      
-                                        $msj = utf8_decode('Se cambió la calidad de inscripción a PROMO para el alumno: '.$alumno['LEGAJO'].'. Notificar al docete del cambio. ');
+                                        $msj = utf8_decode('Se cambió la calidad a P para: '.$alumno['LEGAJO'].'. Notificar al docente. ');
                                         $msj .= $resultado['OBSERV'];
                                         break;
                                     case 0: 
-                                        $msj = utf8_decode('No se pudo cambiar la calidad de inscripción para el alumno: '.$alumno['LEGAJO']);
+                                        $msj = utf8_decode('NO se pudo cambiar la calidad de inscripción para: '.$alumno['LEGAJO']);
                                         $msj .= $resultado['OBSERV'];
                                         break;
                                     default: 
-                                        $mensaje = utf8_decode('Error al grabar para el alumno: '.$alumno['LEGAJO']);
+                                        $msj = utf8_decode('Error al grabar para: '.$alumno['LEGAJO']);
                                 }
                                 $mensaje = array('resultado'=>$resultado['MODIFICABLE'], 'mensaje'=>$msj);
                                 $this->render_ajax($mensaje);
@@ -267,19 +267,19 @@ class controlador extends controlador_g3w2
                                 switch($resultado['MODIFICABLE']) {
                                     case 1: 
                                         catalogo::consultar('insc_cursadas', 'update_calidad_insc_cursada', $parametros);                      
-                                        $msj = utf8_decode('Ok. Se cambió la calidad de inscripción a REGULAR para el alumno: '.$alumno['LEGAJO']);
+                                        $msj = utf8_decode('Ok. Se cambió la calidad a R para: '.$alumno['LEGAJO']);
                                         break;
                                     case 2: 
                                         catalogo::consultar('insc_cursadas', 'update_calidad_insc_cursada', $parametros);                      
-                                        $msj = utf8_decode('Se cambió la calidad de inscripción a REGULAR para el alumno: '.$alumno['LEGAJO'].'. Notificar al docete del cambio. ');
+                                        $msj = utf8_decode('Se cambió la calidad a R para: '.$alumno['LEGAJO'].'. Notificar al docente. ');
                                         $msj .= $resultado['OBSERV'];
                                         break;
                                     case 0: 
-                                        $msj = utf8_decode('No se pudo cambiar la calidad de inscripción para el alumno: '.$alumno['LEGAJO']);
+                                        $msj = utf8_decode('No se pudo cambiar la calidad de inscripción para: '.$alumno['LEGAJO']);
                                         $msj .= $resultado['OBSERV'];
                                         break;
                                     default: 
-                                        $mensaje = utf8_decode('Error al grabar para el alumno: '.$alumno['LEGAJO']);
+                                        $msj = utf8_decode('Error al grabar para: '.$alumno['LEGAJO']);
                                 }
                                 $mensaje = array('resultado'=>$resultado['MODIFICABLE'], 'mensaje'=>$msj);
                                 $this->render_ajax($mensaje);

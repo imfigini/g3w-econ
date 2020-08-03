@@ -76,6 +76,9 @@ class controlador extends \siu\operaciones\inicio_alumno\controlador
 
 		$hoy = date('Y-m-d');
 
+		// kernel::log()->add_debug('fecha_inicial', $fecha_inicial);
+		// kernel::log()->add_debug('fecha_final', $fecha_final);
+		// kernel::log()->add_debug('hoy', $hoy);
 		if ($fecha_inicial <= $hoy && $hoy <= $fecha_final)	{
 			return true;
 		}

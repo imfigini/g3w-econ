@@ -68,9 +68,10 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 								type: 'get',
 								success: function(data) {
 									console.log(legajo);
+									console.log(data);
 									console.log(data.cont['resultado']);
 									console.log(data.cont['mensaje']);
-									mensaje += '* '+data.cont['mensaje']+'\n\n';
+									mensaje += '* '+data.cont['mensaje']+'\n';
 								},
 								error: function(response) {
 									console.log('Fallo');
@@ -80,8 +81,9 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 							});
 						}
 					}
+					console.log(mensaje);
 					alert(mensaje);
-					location.reload();
+					//location.reload();
 				});
 			}
 		}

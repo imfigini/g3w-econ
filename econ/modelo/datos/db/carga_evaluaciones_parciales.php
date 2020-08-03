@@ -197,38 +197,17 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	 */
 	function tiene_correlativas_cumplidas($parametros)
 	{
-		// $parametros['FECHA'] TIENE QUE SER DE LA FOMRA 'd-m-Y'
-		// $fecha = $this->get_ultima_fecha_fin_turno_examen_regular($parametros);
-		// $fecha_formateada = date("d-m-Y", strtotime($fecha['FECHA']));
-		kernel::log()->add_debug('tiene_correlativas_cumplidas fecha', $parametros['fecha']);
+		/* --------- $parametros['fecha'] TIENE QUE SER DE LA FOMRA 'd-m-Y'  --------- */
+		// kernel::log()->add_debug('tiene_correlativas_cumplidas fecha', $parametros['fecha']);
 		$sql = " EXECUTE PROCEDURE ctr_corre_iex_fech(	{$parametros['_ua']}, 
 														{$parametros['carrera']}, 
 														{$parametros['legajo']}, 
 														{$parametros['materia']},
 														{$parametros['fecha']}) ";
 														// '$fecha_formateada') ";														
-		kernel::log()->add_debug('tiene_correlativas_cumplidas', $sql);
 		return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
 	}
 
-	// /**
-	//  * parametros: anio_academico, periodo
-	//  * cache: no
-	//  * filas: 1
-	//  */
-	// function get_ultima_fecha_fin_turno_examen_regular($parametros)
-	// {
-	// 	$sql = "SELECT MAX(T.fecha_fin) AS fecha
-	// 				FROM sga_turnos_examen T, sga_periodos_lect P
-	// 				WHERE 	P.anio_academico = {$parametros['anio_academico']}
-	// 						AND P.periodo_lectivo = {$parametros['periodo']}
-	// 						AND P.anio_academico = T.anio_academico
-	// 						AND tipo_de_turno = 'N'
-	// 						AND T.fecha_fin BETWEEN P.fecha_inicio AND P.fecha_fin ";
-	// 	return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-	// }
-
-	
 	/**
 	 * parametros: legajo, comision
 	 * cache: no
