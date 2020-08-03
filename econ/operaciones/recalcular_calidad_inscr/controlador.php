@@ -62,17 +62,17 @@ class controlador extends controlador_g3w2
                     if (!empty($materia)) {
                         $parametros['materia'] = $materia;
                     }
-                    //kernel::log()->add_debug('get_alumnos_calidad $parametros: ', $parametros);
                     $datos = catalogo::consultar('insc_cursadas', 'get_alumnos_calidad_inscripcion', $parametros);
                     $fecha = $this->get_fecha_ctr_correlativas($anio_academico_hash, $periodo_hash);
-                  
-                    //kernel::log()->add_debug('fecha_ctr_correlativas: ', $fecha);
+                    // kernel::log()->add_debug('fecha_ctr_correlativas: ', $fecha);
+                    
                     if (isset($fecha))
                     {
+                        $parametros['fecha'] = date("d-m-Y", strtotime($fecha));
                         $hoy = date("Y-m-d");
-                        $fin_turno = date("Y-m-d", strtotime($fecha));
+                        $fecha_ctr_correlativas = date("Y-m-d", strtotime($fecha));
                         
-                        if ($hoy > $fin_turno)
+                        if ($hoy >= $fecha_ctr_correlativas)
                         {
                             $resultado = array();
                             $cant = count($datos);

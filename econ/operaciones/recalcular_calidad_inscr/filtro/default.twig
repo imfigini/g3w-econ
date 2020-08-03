@@ -27,19 +27,24 @@
     {% endif %}
 
 	<div role='alert' class="alert">
-		<p>Sólo aplica a alumnos inscriptos a comisiones cuya escala de notas sea regulares y promocionales (4), pertenecientes a materias de planes vigentes. 
+		<p>Sólo aplica a alumnos inscriptos a comisiones cuya escala de notas sea regulares y promocionales (4). 
 			Esta operación permite recalcular la condición a la que pueden aspirar en la cursada, luego de la fecha límite a verificar si han cumplido con las correlativas aprobadas.
 		</p>
 	</div>
 
-	{% if(this.data.alumnos) %}
-		
+	{% if (this.data.fecha_limite) or (this.data.alumnos) %}
 		<div role='alert' class="alert">
-			<p>Fecha límite considerada: {% if (this.data.fecha_limite) %} {{this.data.fecha_limite|date("d/m/Y") }} {% else %} <em>No se recuperó ninguna fecha límite para control de correlativas cumplidas. Comuníquese con las Dirección de Docentes. </em> {% endif %} </p>
+			<p>Fecha límite considerada: 
+				{% if (this.data.fecha_limite) %} {{this.data.fecha_limite|date("d/m/Y") }} 
+				{% else %} <em>No se recuperó ninguna fecha límite para control de correlativas cumplidas. Comuníquese con la Dirección de Docentes. </em> 
+				{% endif %} </p>
 			<p><span class="puede_cambiar">Verde: </span> Se puede modificar sin problemas la calidad de inscirpción.</p>
 			<p><span class="puede_cambiar_con_advertencia">Amarillo: </span> AVISO! La modificación implica cambiar la calidad de inscripción de un alumno que tiene nota cargada en acta abierta. </p>
 			<p><span class="no_puede_cambiar">Rojo: </span> No puede modificar la calidad de inscirpción del alumno dado que el acta PROMO de la comisión está cerrada. </p>
 		</div>
+	{% endif %}
+
+	{% if (this.data.alumnos) %}
 		<form name="calidad_alumnos" /> 
 		<!-- method="post" action="{{this.data.form_url_grabar}}"> -->
 			<input type="hidden" id="anio_academico_hash" value="{{this.data.anio_academico_hash}}">

@@ -54,12 +54,6 @@ class insc_cursadas
 					and C.anio_academico = {$parametros['anio_academico']}
 					and C.periodo_lectivo = {$parametros['periodo']}
 					and C.escala_notas IN (4)
-					and I.plan IN
-							(SELECT plan FROM sga_planes
-							WHERE carrera = I.carrera
-								AND plan = I.plan
-								AND version_actual = I.version
-								AND estado = 'V')							
 					and A.unidad_academica = I.unidad_academica 
 					and A.carrera = I.carrera
 					and A.legajo = I.legajo
@@ -67,7 +61,13 @@ class insc_cursadas
 					and P.nro_inscripcion = A.nro_inscripcion
 					and R.carrera = I.carrera
 					and M.materia = C.materia ";
-					
+					// and I.plan IN
+					// 		(SELECT plan FROM sga_planes
+					// 		WHERE carrera = I.carrera
+					// 			AND plan = I.plan
+					// 			AND version_actual = I.version
+					// 			AND estado = 'V')							
+
 		if (isset($parametros['calidad']) && ($parametros['calidad'] == "'P'" || $parametros['calidad'] == "'R'")) {
 			$sql .= " AND calidad_insc = {$parametros['calidad']} ";
 		}

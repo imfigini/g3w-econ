@@ -197,15 +197,17 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	 */
 	function tiene_correlativas_cumplidas($parametros)
 	{
-		//$this->get_ultima_fecha_fin_turno_examen_regular($parametros);
-		// $fecha = catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
+		// $parametros['FECHA'] TIENE QUE SER DE LA FOMRA 'd-m-Y'
+		// $fecha = $this->get_ultima_fecha_fin_turno_examen_regular($parametros);
 		// $fecha_formateada = date("d-m-Y", strtotime($fecha['FECHA']));
+		kernel::log()->add_debug('tiene_correlativas_cumplidas fecha', $parametros['fecha']);
 		$sql = " EXECUTE PROCEDURE ctr_corre_iex_fech(	{$parametros['_ua']}, 
 														{$parametros['carrera']}, 
 														{$parametros['legajo']}, 
 														{$parametros['materia']},
 														{$parametros['fecha']}) ";
-														//'$fecha_formateada') ";
+														// '$fecha_formateada') ";														
+		kernel::log()->add_debug('tiene_correlativas_cumplidas', $sql);
 		return kernel::db()->consultar_fila($sql, db::FETCH_NUM);
 	}
 
