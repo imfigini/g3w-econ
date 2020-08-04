@@ -144,6 +144,15 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 
 	function puede_rendir_integrador($parametros)
 	{
+		//Si se está dentro del período del integrador, verifica que haya aceptado los términos y condiciones para rendir en la modalidad virtual
+		$periodo_integrador_actual = catalogo::consultar('terminos_condiciones', 'periodo_integrador', null);
+		if (isset($periodo_integrador_actual['FECHA_PRIMERA']) && isset($periodo_integrador_actual['FECHA_ULTIMA'])) {
+			$acepto_term_y_cond = catalogo::consultar('terminos_condiciones', 'acepto_terminos_y_condiciones', $parametros);
+			if (!isset($acepto_term_y_cond['FECHA'])) {
+				return false;
+			}
+		}
+				
 		$fecha = catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
 		$parametros['fecha'] = date("d-m-Y", strtotime($fecha['FECHA']));
 		$tiene_correlativas_cumplidas = catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
@@ -166,15 +175,6 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 		$prom_parciales = ( $nota_parcial1['NOTA'] + $nota_parcial2['NOTA'] ) / 2;
 		if ($prom_parciales < 6) {
 			return false;
-		}
-
-		//Si se está dentro del período del integrador, verifica que haya aceptado los términos y condiciones para rendir en la modalidad virtual
-		$periodo_integrador_actual = catalogo::consultar('terminos_condiciones', 'periodo_integrador', null);
-		if (isset($periodo_integrador_actual['FECHA_PRIMERA']) && isset($periodo_integrador_actual['FECHA_ULTIMA'])) {
-			$acepto_term_y_cond = catalogo::consultar('terminos_condiciones', 'acepto_terminos_y_condiciones', $parametros);
-			if (!isset($acepto_term_y_cond['FECHA'])) {
-				return false;
-			}
 		}
 
 		return true;
