@@ -102,13 +102,6 @@ class controlador extends \siu\operaciones\inicio_alumno\controlador
 		kernel::log()->add_debug('entro a grabar', $resultado);
 
 	}
-	// function info_lista_term_cond(){
 
-    //     $parametros['nro_inscripcion'] = kernel::persona()->get_nro_inscripcion();
-	// 	$pp = catalogo::consultar('persona', 'datos_basicos', $parametros);
-	// 	kernel::log()->add_debug('pp', $pp);
-	// 	return $pp;
-	// 	//catalogo::consultar('noticias', 'noticias_por_persona', $parametros);
-    // }
 }
 ?>

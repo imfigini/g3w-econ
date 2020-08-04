@@ -67,10 +67,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 										legajo: legajo, carrera: carrera, materia: materia, comision: comision, calidad_asignar: calidad_asignar},
 								type: 'get',
 								success: function(data) {
-									console.log(legajo);
-									console.log(data);
-									console.log(data.cont['resultado']);
-									console.log(data.cont['mensaje']);
+									// console.log(legajo);
+									// console.log(data.cont['mensaje']);
 									mensaje += '* '+data.cont['mensaje']+'\n';
 								},
 								error: function(response) {
@@ -81,9 +79,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 							});
 						}
 					}
-					console.log(mensaje);
 					alert(mensaje);
-					//location.reload();
+					location.reload();
 				});
 			}
 		}

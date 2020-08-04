@@ -236,6 +236,8 @@ class controlador extends controlador_g3w2
 
                             if ($parametros['calidad_asignar'] == 'P') // Cambio de R a P
                             {
+                                $parametros['fecha'] = date("d-m-Y", strtotime($fecha));
+                                //kernel::log()->add_debug('accion__grabar $resultado RaP parametros', $parametros);
                                 $resultado = $this->verificar_posible_cambio_R_a_P($alumno, $parametros);
                                 //kernel::log()->add_debug('accion__grabar $resultado RaP', $resultado);
 

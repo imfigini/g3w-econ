@@ -1,7 +1,7 @@
 {% extends "kernel/pagelet.twig" %}
 {% block contenido %}
 
-    <!-- {% if (this.data.is_periodo_integrador) %} -->
+    {% if (this.data.is_periodo_integrador) %}
 
         <table class='table table-condensed table-hover table-striped'>
             <input type="hidden" id="acepto_term_cond" value="{{this.data.acept_term_cond}}">                                
@@ -30,6 +30,6 @@
         </table>
         
 
-    <!-- {% endif %} -->
+    {% endif %}
 
 {% endblock %}
