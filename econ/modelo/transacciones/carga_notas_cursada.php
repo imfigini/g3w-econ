@@ -165,7 +165,9 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 								'periodo'=>$datos_comision['PERIODO_LECTIVO'], 
 								'legajo'=>$legajo, 
 								'carrera'=>$carrera_alumno['CARRERA'], 
-								'materia'=>$datos_comision['MATERIA'] );				
+								'materia'=>$datos_comision['MATERIA'] );
+		$fecha = catalogo::consultar('generales', 'get_fecha_ctr_correlativas', $parametros);
+		$parametros['fecha'] = date("d-m-Y", strtotime($fecha['FECHA']));
 		return catalogo::consultar('carga_evaluaciones_parciales', 'tiene_correlativas_cumplidas', $parametros);
 	}
 

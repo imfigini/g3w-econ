@@ -3131,7 +3131,7 @@ class _info_catalogo
 );
 	}
 
-	static function mixes__pertenece_mix_cincuentenario()
+	static function mixes__pertenece_mix_cincuentenario_80()
 	{
 		return array (
   'parametros' => 

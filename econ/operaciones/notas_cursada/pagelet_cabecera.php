@@ -12,7 +12,7 @@ class pagelet_cabecera extends \siu\operaciones\notas_cursada\pagelet_cabecera
     {
 		$this->data = array();
 		$this->data = $this->controlador->get_encabezado();
-		$this->data['IN_MIX'] = $this->controlador->pertenece_mix_cincuentenario($this->data['MATERIA']);
+		$this->data['IN_MIX'] = $this->controlador->pertenece_mix_cincuentenario_80($this->data['MATERIA']);
 		$this->add_var_js('msg_valor', kernel::traductor()->trans('valor'));
 		$this->add_var_js('msg_descripcion', kernel::traductor()->trans('descripcion'));
 		$this->add_var_js('msg_resultado', kernel::traductor()->trans('resultado'));

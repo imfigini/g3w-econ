@@ -180,10 +180,15 @@ class mixes
      * cache: no
      * filas: 1
      */
-	function pertenece_mix_cincuentenario($parametros)
+	function pertenece_mix_cincuentenario_80($parametros)
 	{
-		$sql = "SELECT COUNT(*)>0 AS pertenece FROM ufce_mixes
-					WHERE materia = {$parametros['materia']}";
+		$sql = "SELECT COUNT(*)>0 AS pertenece 
+                    FROM ufce_mixes X, sga_atrib_mat_plan A
+                    WHERE X.materia = A.materia
+                        AND X.plan = A.plan
+                        AND X.version = A.version
+                        AND A.carga_horaria_tot >= 80
+                        AND X.materia = {$parametros['materia']}";
 		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 		return $resultado['PERTENECE'];
     }

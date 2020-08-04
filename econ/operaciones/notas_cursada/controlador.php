@@ -27,9 +27,9 @@ class controlador extends \siu\operaciones\notas_cursada\controlador
 		}
 	}
 
-	function pertenece_mix_cincuentenario($materia)
+	function pertenece_mix_cincuentenario_80($materia)
 	{
-		return catalogo::consultar('mixes', 'pertenece_mix_cincuentenario', Array('materia'=>$materia));
+		return catalogo::consultar('mixes', 'pertenece_mix_cincuentenario_80', Array('materia'=>$materia));
 	}
 
 }

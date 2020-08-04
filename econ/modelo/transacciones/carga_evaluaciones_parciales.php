@@ -47,7 +47,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 		$nuevo = array();
 		//kernel::log()->add_debug('evaluacion_detalle', $datos);
 		if (count($datos) > 0) {
-			$materia_in_mix = catalogo::consultar('mixes', 'pertenece_mix_cincuentenario', Array('materia' => $datos[0][1]));
+			$materia_in_mix = catalogo::consultar('mixes', 'pertenece_mix_cincuentenario_80', Array('materia' => $datos[0][1]));
 		}
 
 		$id = 0;
