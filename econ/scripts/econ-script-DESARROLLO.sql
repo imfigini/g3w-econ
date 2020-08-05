@@ -27,10 +27,6 @@ UPDATE aca_usuarios_ag SET clave = '81dc9bdb52d04dc20036dbd8313ed055',
 			bloqueado = 'N'
 WHERE unidad_academica IS NOT NULL;
 
---Sino da error al actualizar calidad inscripción a cursada de alumno
---por SP: sp_param_sistema
-INSERT INTO sga_datos_usuarios (usuario, unidad_academica, sede)
-	VALUES ('informix', 'FCE', '00000');
 
 
 {
@@ -39,4 +35,10 @@ UPDATE sga_llamados_mesa SET habilitado ='S' WHERE anio_academico = 2020;
 UPDATE sga_exep_insc_llam SET fecha_inicio = CURRENT WHERE anio_academico = 2020;
 UPDATE par_cont_x_oper SET actua_como = 'A' WHERE operacion = 'exa00006' AND control IN (800573);
 UPDATE sga_turnos_examen SET fecha_inicio = TODAY-1 WHERE anio_academico = 2020;
+
+--Sino da error al actualizar calidad inscripción a cursada de alumno (con el usuario informix, no con el apache)
+--por SP: sp_param_sistema
+INSERT INTO sga_datos_usuarios (usuario, unidad_academica, sede)
+	VALUES ('informix', 'FCE', '00000');
+
 }

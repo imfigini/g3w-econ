@@ -15,8 +15,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
      */
     function listado_evaluaciones_parciales_econ($parametros)
     {
-        //Iris: En la consulta se agreg� al coordinador
-        //Iris: En la consulta se agreg� si pertenece o no la materia a alg�n plan del 50�
+        //Iris: En la consulta se agrego al coordinador
+        //Iris: En la consulta se agrego si pertenece o no la materia a algun plan del 50
 		$sql = "SELECT
 			sga_comisiones.materia,
 			sga_materias.nombre as materia_nombre,
@@ -116,7 +116,6 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 			}
 			
 		}
-                //var_dump($datos);
 		return $datos;
     }
 
@@ -249,7 +248,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	 */
     function tiene_asistencia($parametros)
     {
-		/* Dado un alumno, una comisi�n y un porcentaje m�nimo de asitencia requerido
+		/* Dado un alumno, una comision y un porcentaje minimo de asitencia requerido
 			retorna si el alumno cumple o no con dicho porcentaje 
 			0 <= porc_asist <= 100
 			*/
@@ -267,7 +266,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 	 */
     function get_cant_clases_al_dia_de_hoy($parametros)
     {
-		/* Retorna la cantidad de clases validas que ya han pasado hasta el d�a de la fecha incluido */
+		/* Retorna la cantidad de clases validas que ya han pasado hasta el dia de la fecha incluido */
 		$sql = "SELECT COUNT(*) AS cant_clases 
 					FROM sga_calendcursada 
 					WHERE comision = {$parametros['comision']}
@@ -353,9 +352,8 @@ class carga_evaluaciones_parciales extends \siu\modelo\datos\db\carga_evaluacion
 				FROM sga_cron_eval_parc
 				WHERE comision = {$parametros['comision']}
 				AND evaluacion = {$parametros['evaluacion']}";
-		kernel::log()->add_debug('paso_resultado_sql', $sql);
 		$resultado = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
-		kernel::log()->add_debug('paso_resultado', $resultado);
+//		kernel::log()->add_debug('paso_resultado', $resultado);
 		return $resultado['YA_PASO'];
 	}
 

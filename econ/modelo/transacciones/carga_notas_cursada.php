@@ -46,21 +46,22 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		$paso_parcial2 = catalogo::consultar('carga_evaluaciones_parciales', 'ya_paso_evaluacion', 
 									Array('comision' => $comision,	'evaluacion' => $eval['PARC_2']));
 
-		//Si todavi�a no paso la fecha del 2� parcial no se puede calcular nada
+		//Si todaviia no paso la fecha del 2do parcial no se puede calcular nada
 		if (!$paso_parcial2) {
 			return null;
 		}
 
 		$escala_nota = catalogo::consultar('carga_notas_cursada', 'get_escala_nota', Array('comision' => $comision));
+		// kernel::log()->add_debug('$escala_nota', $escala_nota);
 		/*
 			3	Reales Regular
-			4	Reales Promoci�
+			4	Reales Promocio
 		*/
 		if ($escala_nota['ESCALA_NOTAS'] == 3) {
-			return self::autocalcular_nota_alumno_regu($comision, $legajo);
+			return $this->autocalcular_nota_alumno_regu($comision, $legajo);
 		}
 		if ($escala_nota['ESCALA_NOTAS'] == 4) {
-			return self::autocalcular_nota_alumno_promo($comision, $legajo);
+			return $this->autocalcular_nota_alumno_promo($comision, $legajo);
 		}
 		return null;
 	}
@@ -70,17 +71,19 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		$eval = Array('PARC_1'=>22, 'PARC_2'=>23, 'RECUP'=>24, 'INTEG'=>14, 'TP'=>15);
 		$cond = Array('L'=>1, 'U'=>2, 'R'=>3, 'A'=>4, 'P'=>5);
 
-		$ponderaciones = self::get_ponderaciones_materia($comision);
+		$ponderaciones = $this->get_ponderaciones_materia($comision);
 		//kernel::log()->add_debug('ponderaciones', $ponderaciones);
+		
 		if (empty($ponderaciones['P']) || empty($ponderaciones['R']) ) {
 			return Array('estado'=>'falta_ponderacion');
 		}
 
-		$notas_eval_alumno = self::get_notas_eval_alumno($comision, $legajo);
-		//kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
+		// kernel::log()->add_debug('$legajo', $legajo);
+		$notas_eval_alumno = $this->get_notas_eval_alumno($comision, $legajo);
+		// kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
 
 		$porc_asistencia = catalogo::consultar('carga_evaluaciones_parciales', 'get_porc_asistencia', Array('comision'=>$comision, 'legajo'=>$legajo));
-		//$porc_asistencia = round($porc_asistencia, 2, PHP_ROUND_HALF_DOWN);
+		$porc_asistencia = round($porc_asistencia, 2, PHP_ROUND_HALF_DOWN);
 
 		if ($porc_asistencia < 60) {
 			return Array('nota'=>null, 'resultado'=>'U', 'condicion'=>$cond['U'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');
@@ -91,17 +94,16 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			return Array('nota'=>null, 'resultado'=>'U', 'condicion'=>$cond['U'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');
 		}
 
-		$tiene_correlativas_cumplidas = self::tiene_correlativas_cumplidas($comision, $legajo);
-		//kernel::log()->add_debug('tiene_correlativas_cumplidas', $tiene_correlativas_cumplidas);
+		$tiene_correlativas_cumplidas = $this->tiene_correlativas_cumplidas($comision, $legajo);
 
 		if ($tiene_correlativas_cumplidas[0] == 1) 
 		{
-			$nota = self::calcular_nota_A($legajo, $notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
+			$nota = $this->calcular_nota_A($notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
 			if (isset($nota)) {
 				return $nota;
 			}
 		}
-		$nota = self::calcular_nota_B($legajo, $notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
+		$nota = $this->calcular_nota_B($notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
 		if (isset($nota)) {
 			return $nota;
 		}
@@ -113,13 +115,13 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 		$eval = Array('PARC_1'=>22, 'PARC_2'=>23, 'RECUP'=>24, 'INTEG'=>14, 'TP'=>15);
 		$cond = Array('L'=>1, 'U'=>2, 'R'=>3, 'A'=>4, 'P'=>5);
 
-		$ponderaciones = self::get_ponderaciones_materia($comision);
+		$ponderaciones = $this->get_ponderaciones_materia($comision);
 		//kernel::log()->add_debug('ponderaciones', $ponderaciones);
 		if (empty($ponderaciones['R']) ) {
 			return Array('estado'=>'falta_ponderacion');
 		}
 
-		$notas_eval_alumno = self::get_notas_eval_alumno($comision, $legajo);
+		$notas_eval_alumno = $this->get_notas_eval_alumno($comision, $legajo);
 		//kernel::log()->add_debug('notas_eval_alumno', $notas_eval_alumno);
 
 		$porc_asistencia = catalogo::consultar('carga_evaluaciones_parciales', 'get_porc_asistencia', Array('comision'=>$comision, 'legajo'=>$legajo));
@@ -134,7 +136,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			return Array('nota'=>null, 'resultado'=>'U', 'condicion'=>$cond['U'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');
 		}
 
-		$nota = self::calcular_nota_B($legajo, $notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
+		$nota = $this->calcular_nota_B($notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision);
 		if (isset($nota)) {
 			return $nota;
 		}
@@ -214,7 +216,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 	}
 
 	/* Calculo de nota para alumnos que promocionan o al menos alcanzan la instacia de integrador */
-	function calcular_nota_A($legajo, $notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision)
+	function calcular_nota_A($notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision)
 	{
 		//Si falto al menos a alguno de los parciales no puede promocionar
 		if (!isset($notas_eval_alumno[$eval['PARC_1']]) || !isset($notas_eval_alumno[$eval['PARC_2']])) {
@@ -223,12 +225,13 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 
 		$prom_parciales = ($notas_eval_alumno[$eval['PARC_1']]['NOTA'] + $notas_eval_alumno[$eval['PARC_2']]['NOTA'] ) / 2;
 
-		$promo_directa = self::is_promo_directa($comision);
-	
+		$promo_directa = $this->is_promo_directa($comision);
+		//kernel::log()->add_debug('promo_directa', $promo_directa);
+
 		if ($promo_directa) {
 			if ($notas_eval_alumno[$eval['PARC_1']]['NOTA'] >= 8 && $notas_eval_alumno[$eval['PARC_2']]['NOTA'] >= 8) 
 			{	
-				$notas_eval_alumno[$eval['TP']] = self::verificar_nota_tp($notas_eval_alumno, $ponderaciones['D']['PORC_TRABAJOS'], $eval['TP']);
+				$notas_eval_alumno[$eval['TP']] = $this->verificar_nota_tp($notas_eval_alumno, $ponderaciones['D']['PORC_TRABAJOS'], $eval['TP']);
 		
 				//Si no tiene cargada la nota de TP
 				if ($notas_eval_alumno[$eval['TP']] == -1) {
@@ -252,17 +255,26 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			
 			if (isset($notas_eval_alumno[$eval['INTEG']]))
 			{
-				$notas_eval_alumno[$eval['TP']] = self::verificar_nota_tp($notas_eval_alumno, $ponderaciones['P']['PORC_TRABAJOS'], $eval['TP']);
-		
+				$notas_eval_alumno[$eval['TP']] = $this->verificar_nota_tp($notas_eval_alumno, $ponderaciones['P']['PORC_TRABAJOS'], $eval['TP']);
+
 				//Si no tiene cargada la nota de TP
 				if ($notas_eval_alumno[$eval['TP']] == -1) {
 					return Array('nota'=>'', 'resultado'=>'', 'condicion'=>'', 'asistencia'=>$porc_asistencia, 'estado'=>'falta_tp');
 				}
 		
+				// $n1 = $prom_parciales * $ponderaciones['P']['PORC_PARCIALES'] / 100;
+				// $n2 = $notas_eval_alumno[$eval['INTEG']]['NOTA'] * $ponderaciones['P']['PORC_INTEGRADOR'] / 100;
+				// $n3 = $notas_eval_alumno[$eval['TP']]['NOTA'] * $ponderaciones['P']['PORC_TRABAJOS'] / 100;
+				// kernel::log()->add_debug('n1', $n1);
+				// kernel::log()->add_debug('n2', $n2);
+				// kernel::log()->add_debug('n3', $n3);
 				$nota = $prom_parciales * $ponderaciones['P']['PORC_PARCIALES'] / 100
-						+ $notas_eval_alumno[$eval['INTEG']]['NOTA'] * $ponderaciones['P']['PORC_INTEGRADOR'] / 100;
+						+ $notas_eval_alumno[$eval['INTEG']]['NOTA'] * $ponderaciones['P']['PORC_INTEGRADOR'] / 100
 						+ $notas_eval_alumno[$eval['TP']]['NOTA'] * $ponderaciones['P']['PORC_TRABAJOS'] / 100;
+				// kernel::log()->add_debug('nota', $nota);
+
 				$nota = round($nota, 0, PHP_ROUND_HALF_DOWN);
+				// kernel::log()->add_debug('nota con redondeo', $nota);
 
 				if ($notas_eval_alumno[$eval['INTEG']]['NOTA'] >= 6) 
 				{
@@ -279,16 +291,22 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			}
 			else 
 			{
-				$notas_eval_alumno[$eval['TP']] = self::verificar_nota_tp($notas_eval_alumno, $ponderaciones['R']['PORC_TRABAJOS'], $eval['TP']);
+				$notas_eval_alumno[$eval['TP']] = $this->verificar_nota_tp($notas_eval_alumno, $ponderaciones['R']['PORC_TRABAJOS'], $eval['TP']);
 		
 				//Si no tiene cargada la nota de TP
 				if ($notas_eval_alumno[$eval['TP']] == -1) {
 					return Array('nota'=>'', 'resultado'=>'', 'condicion'=>'', 'asistencia'=>$porc_asistencia, 'estado'=>'falta_tp');
 				}
 
+				// $n1 = $prom_parciales * $ponderaciones['R']['PORC_PARCIALES'] / 100;
+				// $n2 = $notas_eval_alumno[$eval['TP']]['NOTA'] * $ponderaciones['R']['PORC_TRABAJOS'] / 100;
+				// kernel::log()->add_debug('n1', $n1);
+				// kernel::log()->add_debug('n2', $n2);
 				$nota = $prom_parciales * $ponderaciones['R']['PORC_PARCIALES'] / 100
 						+ $notas_eval_alumno[$eval['TP']]['NOTA'] * $ponderaciones['R']['PORC_TRABAJOS'] / 100;
+				// kernel::log()->add_debug('nota', $nota);
 				$nota = round($nota, 0, PHP_ROUND_HALF_DOWN);
+				// kernel::log()->add_debug('nota con redondeo', $nota);
 
 				if ($nota >= 4) {
 					return Array('nota'=>$nota, 'resultado'=>'A', 'condicion'=>$cond['A'], 'asistencia'=>$porc_asistencia, 'estado'=>'listo');
@@ -301,7 +319,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 	}	
 
 	/* Calculo de nota para alumnos regulares o que no alcazaron la instancia de promocion */
-	function calcular_nota_B($legajo, $notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision)
+	function calcular_nota_B($notas_eval_alumno, $porc_asistencia, $ponderaciones, $eval, $cond, $comision)
 	{
 		//Si falto a ambos parciales -> abandono
 		if (!isset($notas_eval_alumno[$eval['PARC_1']]) && !isset($notas_eval_alumno[$eval['PARC_2']])) 
@@ -309,7 +327,7 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			return Array('nota'=>null, 'resultado'=>'U', 'condicion'=>$cond['U'], 'asistencia'=>$porc_asistencia, 'estado'=>'abandono');
 		}
 
-		$notas_eval_alumno[$eval['TP']] = self::verificar_nota_tp($notas_eval_alumno, $ponderaciones['R']['PORC_TRABAJOS'], $eval['TP']);
+		$notas_eval_alumno[$eval['TP']] = $this->verificar_nota_tp($notas_eval_alumno, $ponderaciones['R']['PORC_TRABAJOS'], $eval['TP']);
 
 		//Si asistio a ambos parciales
 		if (isset($notas_eval_alumno[$eval['PARC_1']]) && isset($notas_eval_alumno[$eval['PARC_2']])) 
@@ -320,12 +338,19 @@ class carga_notas_cursada extends \siu\modelo\transacciones\carga_notas_cursada
 			}
 
 			$prom_parciales = ($notas_eval_alumno[$eval['PARC_1']]['NOTA'] + $notas_eval_alumno[$eval['PARC_2']]['NOTA'] ) / 2;
-			
+			// kernel::log()->add_debug('prom_parciales', $prom_parciales);
+
 			if ($prom_parciales >= 4) 
 			{
+				// $n1 = $prom_parciales * $ponderaciones['R']['PORC_PARCIALES'] / 100;
+				// $n2 = $notas_eval_alumno[$eval['TP']]['NOTA'] * $ponderaciones['R']['PORC_TRABAJOS'] / 100;
+				// kernel::log()->add_debug('n1', $n1);
+				// kernel::log()->add_debug('n2', $n2);
 				$nota = $prom_parciales * $ponderaciones['R']['PORC_PARCIALES'] / 100
 						+ $notas_eval_alumno[$eval['TP']]['NOTA'] * $ponderaciones['R']['PORC_TRABAJOS'] / 100;
+				// kernel::log()->add_debug('nota', $nota);
 				$nota = round($nota, 0, PHP_ROUND_HALF_DOWN);
+				// kernel::log()->add_debug('nota con redondeo', $nota);
 
 				if ($nota >= 4) {
 					return Array('nota'=>$nota, 'resultado'=>'A', 'condicion'=>$cond['A'], 'asistencia'=>$porc_asistencia, 'estado'=>'listo');
