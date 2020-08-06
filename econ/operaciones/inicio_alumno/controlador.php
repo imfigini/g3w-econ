@@ -99,8 +99,8 @@ class controlador extends \siu\operaciones\inicio_alumno\controlador
 	{
 		$parametros['legajo'] = kernel::persona()->get_id_legajo_activo();
 		$resultado = catalogo::consultar('terminos_condiciones', 'grabar_acept_term_cond', $parametros);
-		kernel::log()->add_debug('entro a grabar', $resultado);
-
+		//kernel::log()->add_debug('entro a grabar', $resultado);
+		$this->render_ajax($resultado);
 	}
 
 }

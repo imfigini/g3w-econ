@@ -7,8 +7,9 @@ kernel.renderer.registrar_pagelet('lista_term_cond', function(info) {
             var term = $('#acepto_term_cond').val();
             seleccionar(term);
 
-            $(id).delegate(".check-js", "click", function() {
-                var val = $(id).context.activeElement.value;
+            $('#check_terminos').click(function() {
+                var val = $('#check_terminos').val();
+                console.log(val);
                 if (val == 'off') {
                     $('#check_terminos').val('on');
                     console.log('grabar aceptacion');
@@ -16,6 +17,15 @@ kernel.renderer.registrar_pagelet('lista_term_cond', function(info) {
                     seleccionar(true);
                 }
             });
+            // $(id).delegate(".check-js", "click", function() {
+            //     var val = $(id).context.activeElement.value;
+            //     if (val == 'off') {
+            //         $('#check_terminos').val('on');
+            //         console.log('grabar aceptacion');
+            //         grabar_aceptacion();
+            //         seleccionar(true);
+            //     }
+            // });
 
         }
 
@@ -44,14 +54,12 @@ kernel.renderer.registrar_pagelet('lista_term_cond', function(info) {
             data: {},
             type: 'get',
             success: function(data) {
-                console.log(data.cont['resultado']);
-                console.log(data.cont['mensaje']);
-                kernel.ui.show_mensaje('Fue registrada su aceptacion de terminos y condiciones', {tipo: 'alert-info'});
-            },
-            error: function(response) {
-                console.log('Fallo');
-                console.log(response);
-                kernel.ui.show_mensaje(response.msj, {tipo: 'alert-error'});
+                //console.log(data.cont);
+                if (data.cont) {
+                    kernel.ui.show_mensaje('Fue registrada su aceptacion de terminos y condiciones', {tipo: 'alert-info'});
+                } else {
+                    kernel.ui.show_mensaje('Ocurrió un error al grabar. Comuníquese con la Dirección de Alumnos', {tipo: 'alert-error'});
+                }
             },
         });
     }
