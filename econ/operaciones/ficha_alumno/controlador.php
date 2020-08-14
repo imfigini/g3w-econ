@@ -30,12 +30,12 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 			return;
 		}
 		
-        $term = utf8_decode($term);
-		$parametros = array('term' => $term);
+        //$term = utf8_decode($term);
+		$parametros = array('term' => utf8_decode($term));
 		
-		/* Si el perfil dÃ³nde se estÃ¡ consultando la ficha del alumno es DOCENTE, sÃ³lo puede cosultar:
-			- los alumnos que estÃ©n en una de sus mesa de examen durante el turno del mismo
-			- los alumnos iscriptos a su comisiÃ³n, duarante el perÃ­odo del integrador
+		/* Si el perfil dónde se está consultando la ficha del alumno es DOCENTE, sólo puede cosultar:
+			- los alumnos que estén en una de sus mesa de examen durante el turno del mismo
+			- los alumnos iscriptos a su comisión, duarante el período del integrador
 		*/
 		if ($this->is_perfil_docente())
         {
@@ -57,9 +57,11 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 		{
 			$raw_data = catalogo::consultar('alumno', 'buscar_alumno', $parametros);
 		}
-				
+
+			
 		$data = array();
 		foreach ($raw_data as $alumno) {
+
 			$data[] = array(
 				'id' => kernel::vinculador()->crear('ficha_alumno', 'index', array(
 					0	=> $alumno['__ID__'],

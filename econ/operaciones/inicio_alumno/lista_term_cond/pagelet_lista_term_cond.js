@@ -17,29 +17,16 @@ kernel.renderer.registrar_pagelet('lista_term_cond', function(info) {
                     seleccionar(true);
                 }
             });
-            // $(id).delegate(".check-js", "click", function() {
-            //     var val = $(id).context.activeElement.value;
-            //     if (val == 'off') {
-            //         $('#check_terminos').val('on');
-            //         console.log('grabar aceptacion');
-            //         grabar_aceptacion();
-            //         seleccionar(true);
-            //     }
-            // });
-
         }
 
     }
     function seleccionar(ya_acepto)
     {
         if (ya_acepto) {
-            // console.log('entro por if');
-            // console.log(ya_acepto);
             $('#terminos').hide();
             $('#ya_acepto').show(500);
         }
         else {
-            //console.log('entro por else');
             $('#terminos').show(500);
             $('#ya_acepto').hide();
         }
@@ -54,11 +41,10 @@ kernel.renderer.registrar_pagelet('lista_term_cond', function(info) {
             data: {},
             type: 'get',
             success: function(data) {
-                //console.log(data.cont);
                 if (data.cont) {
                     kernel.ui.show_mensaje('Fue registrada su aceptacion de terminos y condiciones', {tipo: 'alert-info'});
                 } else {
-                    kernel.ui.show_mensaje('Ocurrió un error al grabar. Comuníquese con la Dirección de Alumnos', {tipo: 'alert-error'});
+                    kernel.ui.show_mensaje('Ocurrio un error al grabar. Comuniquese con la Direccion de Alumnos', {tipo: 'alert-error'});
                 }
             },
         });
