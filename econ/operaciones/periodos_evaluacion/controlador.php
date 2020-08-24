@@ -245,9 +245,9 @@ class controlador extends controlador_g3w2
     function grabar_fecha_ctr_correlat($anio_academico, $periodo)
     {
         $parametros['fecha_ctr_correlat'] = $this->validate_param("datepicker_ctr_correlat", 'post', validador::TIPO_TEXTO);
-        $parametros['anio_academico'] = $anio_academico;
-        $parametros['periodo'] = $periodo;
-        {
+        if (isset($parametros['fecha_ctr_correlat'])) {
+            $parametros['anio_academico'] = $anio_academico;
+            $parametros['periodo'] = $periodo;
             catalogo::consultar('generales', 'set_fecha_ctr_correlativas', $parametros);
         }
     }

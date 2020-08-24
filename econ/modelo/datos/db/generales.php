@@ -30,19 +30,22 @@ class generales
 	 */
 	function set_fecha_ctr_correlativas($parametros)
 	{
-		$fecha = $this->get_fecha_ctr_correlativas($parametros);
-		$nueva_fecha = self::strToMDY($parametros['fecha_ctr_correlat']);
-        if (isset($fecha['FECHA'])) {
-            $sql = "UPDATE ufce_fechas_ctr_correlat
-                        SET fecha = $nueva_fecha
-                    WHERE anio_academico = {$parametros['anio_academico']}
-                    AND periodo_lectivo = {$parametros['periodo']} ";    
-        }
-        else {
-            $sql = "INSERT INTO ufce_fechas_ctr_correlat (anio_academico, periodo_lectivo, fecha)
-                        VALUES ({$parametros['anio_academico']}, {$parametros['periodo']}, $nueva_fecha) ";  
+		if ($parametros['fecha_ctr_correlat'] != "''" ) 
+		{
+			$fecha = $this->get_fecha_ctr_correlativas($parametros);
+			$nueva_fecha = self::strToMDY($parametros['fecha_ctr_correlat']);
+			if (isset($fecha['FECHA'])) {
+				$sql = "UPDATE ufce_fechas_ctr_correlat
+							SET fecha = $nueva_fecha
+						WHERE anio_academico = {$parametros['anio_academico']}
+						AND periodo_lectivo = {$parametros['periodo']} ";    
+			}
+			else {
+				$sql = "INSERT INTO ufce_fechas_ctr_correlat (anio_academico, periodo_lectivo, fecha)
+							VALUES ({$parametros['anio_academico']}, {$parametros['periodo']}, $nueva_fecha) ";  
+			}
+			kernel::db()->ejecutar($sql);
 		}
-		kernel::db()->ejecutar($sql);
 	}
 
 	/**

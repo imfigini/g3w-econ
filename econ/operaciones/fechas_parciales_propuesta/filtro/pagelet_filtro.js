@@ -24,7 +24,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
             
             buscarPeriodos($('#formulario_filtro-anio_academico').val());
             
-            //Para que despliegue u oculte la información de las comisiones de cada materia. 
+            //Para que despliegue u oculte la informaciï¿½n de las comisiones de cada materia. 
             $(id).delegate(".link-js", "click", function() {
                         $(this).find('.toggle').toggleClass(function(){
                                 if ($(this).is('.icon-chevron-up')) {
@@ -110,6 +110,8 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         set_values(dp_parcial2, inicio_periodo[1], fin_periodo[1], posibles_fechas_parcial2);
 
         var dp_integ = 'datepicker_materia_integ_'+m;
+        // console.log(inicio_periodo);
+        // console.log(fin_periodo);
         var posibles_fechas_integ = get_posibles_fechas(dias_semana, inicio_periodo[1], fin_periodo[2], dias_ocupados, dias_no_validos);
 		set_values(dp_integ, inicio_periodo[1], fin_periodo[2], posibles_fechas_integ);
     }
@@ -188,7 +190,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         return posibles_fechas.substring(0, posibles_fechas.length-1) + ']';
     }
     
-    //  Verifica que ese mismo día no este ocupado por otra materia del mismo mix, y tampoco el día anterior o posterior consecutivo. 
+    //  Verifica que ese mismo dï¿½a no este ocupado por otra materia del mismo mix, y tampoco el dï¿½a anterior o posterior consecutivo. 
     function fecha_disponible_mix(fechas_no_disponibles, fecha)
     {
         var cant = Object.keys(fechas_no_disponibles).length;
@@ -214,7 +216,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
         return true;
 	}
 	
-	//  Verifica que ese mismo día no este invalidado
+	//  Verifica que ese mismo dï¿½a no este invalidado
     function fecha_disponible(fechas_no_disponibles, fecha)
     {
         var cant = Object.keys(fechas_no_disponibles).length;
@@ -265,7 +267,7 @@ kernel.renderer.registrar_pagelet('filtro', function (info) {
 });
 
 
-//Verifica la cronología de las fechas
+//Verifica la cronologï¿½a de las fechas
 function verifica_fechas_materia(componente)
 {
     var x = componente.id.split('_');
@@ -284,7 +286,7 @@ function verifica_fechas(componente, parcial1, parcial2, integ)
   
     if (!fechas_en_orden(parcial1, parcial2))
     {
-        alert ('La fecha para el 1er Parcial debe ser anterior a la del 2º Parcial');
+        alert ('La fecha para el 1er Parcial debe ser anterior a la del 2ï¿½ Parcial');
         componente.value = null;
     }
 

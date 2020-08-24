@@ -102,7 +102,7 @@ class controlador extends controlador_g3w2
 				
                 $tiene_notas_cargadas = catalogo::consultar('evaluaciones_parciales_calendario', 'tiene_notas_cargadas', $param);
                 if ($tiene_notas_cargadas) {
-                    throw new error_guarani('La comisión '.$param['comision'].' tiene notas cragadas. ');
+                    throw new error_guarani('La comisiï¿½n '.$param['comision'].' tiene notas cragadas. ');
                 }
 
 				$fecha_solicitada = catalogo::consultar('cursos', 'get_fecha_solicitada', $param);
@@ -121,7 +121,7 @@ class controlador extends controlador_g3w2
 				//$resultado['alta'] .= json_encode($alta['success']);
 
                 if (!$alta['success']) {
-                    throw new error_guarani('La comisión '.$param['comision'].' no pudo ser modificada. ');
+                    throw new error_guarani('La comisiï¿½n '.$param['comision'].' no pudo ser modificada. ');
                 }
             }
             $resultado['fecha'] = $parametros['fecha_dest'];
@@ -133,7 +133,7 @@ class controlador extends controlador_g3w2
         catch (error_guarani $e)
         {
             kernel::db()->abortar_transaccion();
-            $this->finalizar_request_con_notificaciones('No se puede modificar la fecha de la evaluación. ', $e);
+            $this->finalizar_request_con_notificaciones('No se puede modificar la fecha de la evaluaciï¿½n. ', $e);
         }
     }
 
@@ -176,7 +176,7 @@ class controlador extends controlador_g3w2
 
                     $alta = catalogo::consultar('cursos', 'alta_evaluacion_parcial', $param);
                     if (!$alta['success']) {
-                        throw new error_guarani('La evaluación para la comisión '.$dato['COMISION'].' no pudo ser creada. ');
+                        throw new error_guarani('La evaluaciï¿½n para la comisiï¿½n '.$dato['COMISION'].' no pudo ser creada. ');
                     }
                 }
                 else {
@@ -186,13 +186,13 @@ class controlador extends controlador_g3w2
 
             kernel::db()->cerrar_transaccion();
             //kernel::log()->add_debug('accion__confirmar_evaluacion: ', $resultado);
-            $resultado['mensaje'] = 'Se creó correctamente la evaluación para la materia '.$parametros['materia'];
+            $resultado['mensaje'] = 'Se creï¿½ correctamente la evaluaciï¿½n para la materia '.$parametros['materia'];
             $this->render_ajax('mensaje', $resultado);
         }
         catch (error_guarani $e)
         {
             kernel::db()->abortar_transaccion();
-            $this->finalizar_request_con_notificaciones('No se pudo crear la evaluación. ', $e);
+            $this->finalizar_request_con_notificaciones('No se pudo crear la evaluaciï¿½n. ', $e);
         }
     }
 
@@ -321,7 +321,7 @@ class controlador extends controlador_g3w2
 				$parametros = array('anio_academico'=>$anio_academico, 'periodo'=>$periodo);
 				$resultado = catalogo::consultar('evaluaciones_parciales', 'get_periodos_evaluacion', $parametros);
 				foreach ($resultado as $key=>$row) {
-					//Sólo me quedo con los períodos de evaluaciones parciales (1, 2, 3)
+					//Sï¿½lo me quedo con los perï¿½odos de evaluaciones parciales (1, 2, 3)
 					if ($row['ORDEN'] == 1 || $row['ORDEN'] == 2 || $row['ORDEN'] == 3) {
 						continue;
 					}
