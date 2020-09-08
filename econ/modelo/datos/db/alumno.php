@@ -117,7 +117,7 @@ class alumno extends \siu\modelo\datos\db\alumno
         }
 
 		//Iris: Se controla que sólo recupere alumnos inscriptos a las comisiones donde el docente forma parte
-		//Se toma 60 días antes al actual, para que tome el cuatrimetrse deseado, ya que los integradores se desfasaron del mismo por la pandemia
+		//Se toma 30 días antes al actual, para que tome el cuatrimetrse deseado, ya que los integradores se desfasaron del mismo por la pandemia
         $sql = "
 				SELECT
 					DISTINCT p.nro_inscripcion as nro_inscripcion,
@@ -130,7 +130,7 @@ class alumno extends \siu\modelo\datos\db\alumno
 				WHERE a.unidad_academica  = {$parametros['_ua']}
 					AND 	a.legajo IN (SELECT I.legajo 
 											FROM sga_insc_cursadas I, sga_comisiones C, sga_periodos_lect P, sga_docentes_com D
-											WHERE TODAY-60 BETWEEN P.fecha_inicio AND P.fecha_fin
+											WHERE TODAY BETWEEN P.fecha_inicio AND P.fecha_fin
 												AND C.anio_academico = P.anio_academico 
 												AND C.periodo_lectivo = P.periodo_lectivo
 												AND I.comision = C.comision

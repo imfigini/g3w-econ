@@ -15,7 +15,7 @@ class terminos_condiciones
 	 */
 	function periodo_integrador($parametros)
 	{
-		/*	Contabilizo 60 días antes al actual, para que tome el cuatrimetrse deseado, 
+		/*	Contabilizo 30 días antes al actual, para que tome el cuatrimetrse deseado, 
 			ya que los integradores se desfasaron del cuatrimestre por la pandemia */
 		$sql = "SELECT 	MIN(E.fecha_hora)::DATE AS fecha_primera, 
 						MAX(E.fecha_hora)::DATE AS fecha_ultima
@@ -23,7 +23,7 @@ class terminos_condiciones
 					WHERE E.comision = C.comision
 						AND C.anio_academico = P.anio_academico 
 						AND C.periodo_lectivo = P.periodo_lectivo
-						AND TODAY-60 BETWEEN P.fecha_inicio AND P.fecha_fin
+						AND TODAY BETWEEN P.fecha_inicio AND P.fecha_fin
 						AND E.evaluacion = 14 ";
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
@@ -35,13 +35,13 @@ class terminos_condiciones
 	 */
 	function acepto_terminos_y_condiciones($parametros)
 	{
-		/*	Contabilizo 60 días antes al actual, para que tome el cuatrimetrse deseado, 
+		/*	Contabilizo 30 días antes al actual, para que tome el cuatrimetrse deseado, 
 			ya que los integradores se desfasaron del cuatrimestre por la pandemia */
 		$sql = "SELECT fecha 
 				FROM ufce_acpt_term_cond T,  sga_periodos_lect P
 				WHERE T.anio_academico = P.anio_academico 
 					AND T.periodo_lectivo = P.periodo_lectivo 
-					AND TODAY-60 BETWEEN P.fecha_inicio AND P.fecha_fin
+					AND TODAY BETWEEN P.fecha_inicio AND P.fecha_fin
 					AND T.legajo = {$parametros['legajo']}	";
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
@@ -53,13 +53,13 @@ class terminos_condiciones
 	 */
 	function get_acepto_term_y_cond($parametros)
 	{
-		/*	Contabilizo 60 días antes al actual, para que tome el cuatrimetrse deseado, 
+		/*	Contabilizo 30 días antes al actual, para que tome el cuatrimetrse deseado, 
 			ya que los integradores se desfasaron del cuatrimestre por la pandemia */
 		$sql = "SELECT DISTINCT fecha 
 				FROM ufce_acpt_term_cond T, sga_alumnos A, sga_periodos_lect P
 				WHERE T.anio_academico = P.anio_academico 
 					AND T.periodo_lectivo = P.periodo_lectivo 
-					AND TODAY-60 BETWEEN P.fecha_inicio AND P.fecha_fin
+					AND TODAY BETWEEN P.fecha_inicio AND P.fecha_fin
 					AND T.legajo = A.legajo
 					AND A.nro_inscripcion = {$parametros['nro_inscripcion']} ";
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
@@ -72,11 +72,11 @@ class terminos_condiciones
 	 */
 	function grabar_acept_term_cond($parametros)
 	{
-		/*	Contabilizo 60 días antes al actual, para que tome el cuatrimetrse deseado, 
+		/*	Contabilizo 30 días antes al actual, para que tome el cuatrimetrse deseado, 
 			ya que los integradores se desfasaron del cuatrimestre por la pandemia */
 		$sql = "SELECT anio_academico, periodo_lectivo 
 					FROM sga_periodos_lect
-					WHERE TODAY-60 BETWEEN fecha_inicio AND fecha_fin ";
+					WHERE TODAY BETWEEN fecha_inicio AND fecha_fin ";
 		$datos = kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 		$anio = $datos['ANIO_ACADEMICO'];
 		$periodo = $datos['PERIODO_LECTIVO'];
