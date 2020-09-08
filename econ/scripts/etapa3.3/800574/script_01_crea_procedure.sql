@@ -38,7 +38,7 @@ BEGIN
 	
 --SET DEBUG FILE TO '/INFORMIXTMP/ctr_econ_10finales.sql';
 --TRACE ON;
-	-- Si la carrera es Auxiliar debe salir
+
 	-- recupero el (plan, version) actual de la carrera
 	EXECUTE PROCEDURE sp_plan_de_alumno (pUnidadAcademica, pCarrera, pLegajo, TODAY ) INTO vcPlan, vcVersion;
 	IF (vcPlan IS NULL OR vcVersion IS NULL) THEN
@@ -91,18 +91,10 @@ BEGIN
 				RETURN -1, vcMsg || ',' || ' No tiene orientación y debe más de 10 materias.' ;
 			END IF;
 
-			--Si tiene la cursada aprobada, lo dejo inscirbirse
-			IF EXISTS (SELECT * FROM sga_cursadas WHERE legajo = pLegajo
-								AND carrera = pCarrera
-								AND materia = pMateria
-								AND resultado = 'A')  THEN
-				RETURN iStatus,vcMsg;
-			END IF;
-
-			RETURN -1, vcMsg || ',' || ' No tiene orientación y no tiene aprobada la cursada de la materia a la que se está queriendo inscirbir.' ;
+			RETURN iStatus,vcMsg;
 		END IF;
 
-		-- Ahora debo ver qué materias le faltan dentro de la orientación
+		-- Si tiene elegida la orientación, debo ver qué materias le faltan dentro de la misma
 		SELECT 
 			sga_atrib_mat_plan.materia
 		FROM 
@@ -191,14 +183,20 @@ BEGIN
 		RETURN -1, vcMsg || ',' || ' Adeuda mas de 10 materias: (' || vc_faltantes || ')' ;
 	END IF;
 
-	IF i_faltantes = 0 THEN
-		DROP TABLE tmp_faltantes;
-		RETURN -1, vcMsg || ',' || ' No adeuda ninguna materia' ;
-	END IF;
-
-	--Si la materia a la que se está inscribiendo no es una de las faltantes, no puede
+	--Si la materia a la que se está inscribiendo no es una de las faltantes, salvo que sea el requisto de idioma, no lo dejo
 	IF NOT EXISTS (SELECT * FROM tmp_faltantes WHERE materia = pMateria) THEN
 		DROP TABLE tmp_faltantes;
+		--Si la materia que se quiere inscribir es "Taller de Idioma I" o "Taller de Idioma II"
+		IF pMateria = 'LT004' OR pMateria = 'LT005' THEN
+			--Y dicha materia es requisito en el plan del alumno, lo dejo inscirbirse
+			IF EXISTS (SELECT * FROM sga_atrib_mat_plan WHERE materia IN ('LT004', 'LT005')
+								AND carrera = pCarrera
+								AND plan = vcPlan
+								AND version = vcVersion 
+								AND obligatoria = 'N') THEN 
+				RETURN iStatus,vcMsg;	
+			END IF;
+		END IF;
 		RETURN -1, vcMsg || ',' || ' Debe elegir una materia de las faltantes: (' || vc_faltantes || ')' ;
 	END IF;
 
@@ -207,10 +205,6 @@ BEGIN
 
 --TRACE OFF;
 END;
-
-
-
-
 END PROCEDURE;
 
 {
@@ -219,6 +213,7 @@ END PROCEDURE;
 EXECUTE PROCEDURE "dba".ctr_econ_10finales ('FCE', 'CA001', 'FCE-160015', 'M0112');
 
 EXECUTE PROCEDURE "dba".ctr_econ_10finales ('FCE', 'CA002', 'FCE-630641', 'M0062');
+EXECUTE PROCEDURE "dba".ctr_econ_10finales ('FCE', 'CA002', 'FCE-630641', 'LT004');
 
 EXECUTE PROCEDURE "dba".ctr_econ_10finales ('FCE', 'CA002', 'FCE-492910', 'M0024');
 EXECUTE PROCEDURE "dba".ctr_econ_10finales ('FCE', 'CA002', 'FCE-492910', 'M0062');
