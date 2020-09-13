@@ -1,4 +1,4 @@
-# Tercera etapa de implementación
+# Etapa 3.3 de implementación
 
 > Tiempo requerido: 10 min
 

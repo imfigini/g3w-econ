@@ -33,9 +33,9 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
         //$term = utf8_decode($term);
 		$parametros = array('term' => utf8_decode($term));
 		
-		/* Si el perfil dónde se está consultando la ficha del alumno es DOCENTE, sólo puede cosultar:
-			- los alumnos que estén en una de sus mesa de examen durante el turno del mismo
-			- los alumnos iscriptos a su comisión, duarante el período del integrador
+		/* Si el perfil dï¿½nde se estï¿½ consultando la ficha del alumno es DOCENTE, sï¿½lo puede cosultar:
+			- los alumnos que estï¿½n en una de sus mesa de examen durante el turno del mismo
+			- los alumnos iscriptos a su comisiï¿½n, duarante el perï¿½odo del integrador
 		*/
 		if ($this->is_perfil_docente())
         {
@@ -58,7 +58,6 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 			$raw_data = catalogo::consultar('alumno', 'buscar_alumno', $parametros);
 		}
 
-			
 		$data = array();
 		foreach ($raw_data as $alumno) {
 
@@ -96,7 +95,8 @@ class controlador extends \siu\operaciones\ficha_alumno\controlador
 	{
 		$periodo_integrador_actual = catalogo::consultar('terminos_condiciones', 'periodo_integrador', null);
 		kernel::log()->add_debug('iris $periodo_integrador_actual', $periodo_integrador_actual);
-		if (isset($periodo_integrador_actual['FECHA_PRIMERA']) && isset($periodo_integrador_actual['FECHA_ULTIMA'])) {
+		if (isset($periodo_integrador_actual['FECHA_PRIMERA']) && isset($periodo_integrador_actual['FECHA_ULTIMA'])) 
+		{
 			$date1 = date_create($periodo_integrador_actual['FECHA_PRIMERA']);
 			$periodo_integrador_actual['FECHA_INICIO'] = date_format($date1, 'd/m/Y');
 			$date2 = date_create($periodo_integrador_actual['FECHA_ULTIMA']);

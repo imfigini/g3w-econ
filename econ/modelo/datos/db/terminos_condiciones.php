@@ -24,7 +24,8 @@ class terminos_condiciones
 						AND C.anio_academico = P.anio_academico 
 						AND C.periodo_lectivo = P.periodo_lectivo
 						AND TODAY BETWEEN P.fecha_inicio AND P.fecha_fin
-						AND E.evaluacion = 14 ";
+						AND E.evaluacion = 14 
+					HAVING TODAY BETWEEN MIN(E.fecha_hora)::DATE AND MAX(E.fecha_hora)::DATE ";
 		return kernel::db()->consultar_fila($sql, db::FETCH_ASSOC);
 	}
 
