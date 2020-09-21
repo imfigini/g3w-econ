@@ -2413,6 +2413,246 @@ class _info_catalogo
 );
 	}
 
+	static function docente__acta_cursadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'anio_academico',
+    3 => 'periodo_lectivo',
+    4 => 'nombre',
+  ),
+  'param_null' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo_lectivo',
+    2 => 'nombre',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__acta_examenes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'anio_academico',
+    3 => 'turno',
+    4 => 'nombre',
+  ),
+  'param_null' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'turno',
+    2 => 'nombre',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__acta_promociones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'anio_academico',
+    3 => 'periodo_lectivo',
+    4 => 'nombre',
+  ),
+  'param_null' => 
+  array (
+    0 => 'anio_academico',
+    1 => 'periodo_lectivo',
+    2 => 'nombre',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__agenda_cursadas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '600',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__agenda_examenes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '600',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__alum_inscriptos_comision()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'comision',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__alum_inscriptos_examen()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'materia',
+    2 => 'anio_academico',
+    3 => 'turno_examen',
+    4 => 'mesa_examen',
+    5 => 'llamado',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__detalle_acta_cursada()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__detalle_acta_examen()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'tipo_acta',
+    2 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__detalle_acta_promociones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'acta',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__get_tipo_mesa()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'MATERIA',
+    1 => 'ANIO_ACADEMICO',
+    2 => 'TURNO_EXAMEN',
+    3 => 'MESA_EXAMEN',
+  ),
+  'cache' => 'no',
+  'filas' => '1',
+);
+	}
+
+	static function docente__lista_comisiones()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '600',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__lista_comisiones_vigentes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'filtro_inscripciones',
+  ),
+  'cache' => 'memoria',
+  'cache_expiracion' => '600',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__lista_mesas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__lista_mesas_vigentes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'nro_inscripcion',
+    2 => 'filtro_inscripciones',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function docente__mensaje_turno()
+	{
+		return array (
+);
+	}
+
 	static function evaluaciones_parciales__existe_periodo_evaluacion()
 	{
 		return array (
@@ -3404,6 +3644,18 @@ class _info_catalogo
 	}
 
 	static function sistema__escala_notas_econ()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => 'escala_notas',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function sistema__escala_notas_econ_parcial()
 	{
 		return array (
   'parametros' => 

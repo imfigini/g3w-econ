@@ -40,6 +40,40 @@ class sistema extends \siu\modelo\datos\db\sistema
                 }
             }
             return $nuevo;	 
+    }	
+    
+    /**
+	 * parametros: escala_notas
+	 * cache: memoria
+	 * filas: n
+	 */
+	function escala_notas_econ_parcial($parametros)
+	{
+            $sql = " EXECUTE PROCEDURE sp_detalle_escala(  {$parametros['escala_notas']})";
+            $datos = kernel::db()->consultar($sql, db::FETCH_NUM);
+            $nuevo = array();
+            foreach($datos as $id => $dato) 
+            {
+                //Para las evaluaciones parciales de debe permitir a los docentes cargar notas enteras o con 0.50 centesimas
+                if ($dato[0] == 3 || $dato[0] == 4 || $dato[0] == 6) 
+                {
+                    if ( (!(strpos($dato[1], ',')) && (strlen($dato[1]) > 0)) || (strpos($dato[1], ',50')) )
+                    {
+                        $nuevo[$id]['ESCALA'] = $dato[0];
+                        $nuevo[$id]['DESCRIPCION'] = $dato[1];
+                        $nuevo[$id]['RESULTADO'] = $dato[2];
+                        $nuevo[$id]['VALOR'] = $dato[3];
+                    }
+                }
+                else
+                {
+                    $nuevo[$id]['ESCALA'] = $dato[0];
+                    $nuevo[$id]['DESCRIPCION'] = $dato[1];
+                    $nuevo[$id]['RESULTADO'] = $dato[2];
+                    $nuevo[$id]['VALOR'] = $dato[3];
+                }
+            }
+            return $nuevo;	 
 	}	
 }
 ?>

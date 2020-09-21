@@ -30,14 +30,15 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
     {
         $parametros = array('escala_notas' => $escala_notas);
         //return catalogo::consultar('carga_evaluaciones_parciales', 'escala_notas', $parametros);
-        return catalogo::consultar('sistema', 'escala_notas_econ', $parametros);
+		$datos = catalogo::consultar('sistema', 'escala_notas_econ_parcial', $parametros);
+		return $datos;
 	}
 	
 	function info__evaluacion_detalle($seleccion)
 	{
 		// Control derechos
 		$parametros = array();
-		kernel::log()->add_debug('info__evaluacion_detalle_seleccion: ', $seleccion);
+		//kernel::log()->add_debug('info__evaluacion_detalle_seleccion: ', $seleccion);
 		$datos_eval = $this->get_evaluacion_enviada($seleccion);
 		$parametros['comision'] = $datos_eval['COMISION'];
         $parametros['evaluacion'] = $datos_eval['EVALUACION'];
@@ -87,7 +88,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 			}
 			$id++;
 		}
-		kernel::log()->add_debug('info__evaluacion_detalle', $nuevo);
+		//kernel::log()->add_debug('info__evaluacion_detalle', $nuevo);
 		return $nuevo;	
 	}
 
@@ -238,7 +239,7 @@ class carga_evaluaciones_parciales extends \siu\modelo\transacciones\carga_evalu
 				}
 				$renglon['ESCALA_NOTAS'] = $datos['ESCALA_NOTAS'];	
 								
-                kernel::log()->add_debug('evt__procesar_evaluaciones renglon '.$k,$renglon);
+                //kernel::log()->add_debug('evt__procesar_evaluaciones renglon '.$k,$renglon);
                 $ok = catalogo::consultar('carga_evaluaciones_parciales', 'guardar_renglon', $renglon);
                 if($ok[0]) {
                     $parametros = array();

@@ -31,7 +31,7 @@ class pagelet_lista_notas extends \siu\operaciones\notas_parciales\pagelet_lista
 	
 	protected function get_renglones()
 	{
-		// se pide al controlador para hacer validación con los datos enviados al guardar
+		// se pide al controlador para hacer validaciï¿½n con los datos enviados al guardar
 		$renglones = $this->controlador->get_renglones();
 		return $renglones;
 	}
@@ -50,6 +50,7 @@ class pagelet_lista_notas extends \siu\operaciones\notas_parciales\pagelet_lista
 		$this->add_mensaje_js('nota_invalida', kernel::traductor()->trans('nota_invalida'));
 		$this->add_mensaje_js('asistencia_invalida', kernel::traductor()->trans('asistencia_invalida'));
 		$notas = $this->controlador->get_escala_js();
+
 		$this->add_var_js('escala', $notas);
 		$this->add_var_js('evaluacion_id', $this->get_evaluacion_id());
 
