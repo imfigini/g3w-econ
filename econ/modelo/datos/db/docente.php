@@ -176,7 +176,7 @@ class docente extends \siu\modelo\datos\db\docente
 			$nuevo[$id]['ANIO_ACADEMICO'] = $dato['ANIO_ACADEMICO'];
 			$nuevo[$id]['TURNO_EXAMEN'] = $dato['TURNO_EXAMEN'];
 			$nuevo[$id]['MESA_EXAMEN'] = $dato['MESA_EXAMEN'];
-			$nuevo[$id]['MESA_EXAMEN'] = $dato['TIPO_MESA'];
+			$nuevo[$id]['TIPO_MESA'] = $dato['TIPO_MESA'];
 			$nuevo[$id]['LLAMADO'] = $dato['LLAMADO'];
 			$nuevo[$id]['MOMENTO'] = $dato['MOMENTO'];
 			$nuevo[$id]['SEDE'] = $dato['SEDE'];
