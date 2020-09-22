@@ -11,7 +11,7 @@ class pagelet_reporte extends \siu\operaciones\inscriptos_examenes\pagelet_repor
 {
 	public function generar_excel()
 	{
-		//Se arregló para que los acentos los emita correctamente
+		//Se arreglï¿½ para que los acentos los emita correctamente
 		$excel = $this->get_generador_excel();		
 		$data_bruto = $this->datos_excel();
 		$titulos = $this->titulos_excel();
@@ -47,10 +47,23 @@ class pagelet_reporte extends \siu\operaciones\inscriptos_examenes\pagelet_repor
 		$estilo_titulo = array(
  			'font' => array('bold' => true),
  		);		
-		$excel->agregar_texto_estilos(utf8_encode('Inscripciones a Exámenes'),1, $estilo_titulo);		
+		$excel->agregar_texto_estilos(utf8_encode('Inscripciones a Exï¿½menes'),1, $estilo_titulo);		
 		$excel->agregar_tabla($data_bruto,$titulos,'');		
 		$excel->set_nombre_archivo($this->get_nombre_archivo());
 		$excel->generar();
+	}
+
+	public function get_columnas(){
+		$titulo = array();
+        $titulo['MATERIA_NOMBRE_COMPLETO'] = "Materia";
+		$titulo['TIPO_MESA'] = "Mesa";
+        $titulo['SEDE'] = "Sede";
+        $titulo['CANTIDAD_INSCR'] = "Cantidad de inscriptos ";
+        $titulo['ANIO_ACADEMICO'] = "AÃ±o";
+        $titulo['TURNO_EXAMEN'] = "Turno";
+        $titulo['LLAMADO'] = "Llamado";
+        $titulo['MOMENTO'] = "Fecha";
+		return $titulo;
 	}
 	
 }
