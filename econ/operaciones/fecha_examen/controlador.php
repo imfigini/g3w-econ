@@ -4,6 +4,7 @@ namespace econ\operaciones\fecha_examen;
 use kernel\error_kernel_validacion;
 use kernel\kernel;
 use siu\modelo\datos\catalogo;
+use kernel\util\validador;
 
 
 class controlador extends \siu\operaciones\fecha_examen\controlador {
@@ -18,10 +19,10 @@ class controlador extends \siu\operaciones\fecha_examen\controlador {
 		if (!$form->procesar('GET')) {
 			throw new error_kernel_validacion("Error al validar el filtro");
 		}
-
 		//si no se llega aca, aplican los valores default
 		$this->datos_filtro = $form->get_datos();
 	}
+
 	function accion__index()
 	{
 		$form = $this->get_form();
@@ -91,4 +92,24 @@ class controlador extends \siu\operaciones\fecha_examen\controlador {
 
 		$this->vista()->pagelet('filtro')->add_var_js('mostrar_seleccione_turno', $mostrar_seleccione_turno);
 	}
+
+	function accion__buscar_planes()
+	{
+        $carrera_hash = $this->validate_param('carrera', 'get', validador::TIPO_ALPHANUM);
+        $carrera = "";
+        if($carrera_hash != "") $carrera = $this->decodificar_carrera($carrera_hash);
+        $datos = array();
+        $datos['cod'] = 1;
+        $planes_todos = catalogo::consultar('plan_estudios', 'planes', array('carrera' => $carrera));
+        //Iris: Se decartan planes 1992 y 2002 por pedido de Chelo
+        $planes_activos = Array();
+        foreach($planes_todos as $plan) {
+            if ($plan['PLAN'] != '1992' && $plan['PLAN'] != '2002') {
+                $planes_activos[] = $plan;
+            }
+        }
+		$datos['planes'] = $planes_activos;
+        $this->render_raw_json($datos);
+    }
+		
 }

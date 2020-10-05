@@ -3395,6 +3395,88 @@ class _info_catalogo
 );
 	}
 
+	static function plan_estudios__carreras()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function plan_estudios__get_detalle_plan_estudios()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'version',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function plan_estudios__get_materias_genericas()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+    3 => 'version',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function plan_estudios__planes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
+	static function plan_estudios__planes_vigentes()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+  ),
+  'cache' => 'no',
+  'filas' => 'n',
+);
+	}
+
+	static function plan_estudios__versiones_de_plan()
+	{
+		return array (
+  'parametros' => 
+  array (
+    0 => '_ua',
+    1 => 'carrera',
+    2 => 'plan',
+  ),
+  'cache' => 'memoria',
+  'filas' => 'n',
+);
+	}
+
 	static function ponderacion_notas__eliminar_ponderacion()
 	{
 		return array (
