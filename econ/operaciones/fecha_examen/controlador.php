@@ -3,6 +3,7 @@ namespace econ\operaciones\fecha_examen;
 
 use kernel\error_kernel_validacion;
 use kernel\kernel;
+use kernel\util\validador;
 use siu\modelo\datos\catalogo;
 use kernel\util\validador;
 
