@@ -7,9 +7,8 @@ use siu\modelo\datos\catalogo;
 use kernel\util\validador;
 
 
-class controlador extends \siu\operaciones\fecha_examen\controlador {
-
-
+class controlador extends \siu\operaciones\fecha_examen\controlador 
+{
 	/**
 	 * Solo la vista 'vista' tiene el form. Falla en otro caso
 	 */
