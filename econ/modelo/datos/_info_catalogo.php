@@ -3450,19 +3450,6 @@ class _info_catalogo
 );
 	}
 
-	static function plan_estudios__planes_vigentes()
-	{
-		return array (
-  'parametros' => 
-  array (
-    0 => '_ua',
-    1 => 'carrera',
-  ),
-  'cache' => 'no',
-  'filas' => 'n',
-);
-	}
-
 	static function plan_estudios__versiones_de_plan()
 	{
 		return array (

@@ -1,4 +1,4 @@
-DROP VIEW "dba".vw_datos_censales_actuales;
+--DROP VIEW "dba".vw_datos_censales_actuales;
 
 CREATE VIEW "dba".vw_datos_censales_actuales (unidad_academica, nro_inscripcion, fecha_relevamiento, fecha_actualiz, estado_civil, turno_preferido, e_mail, tipo_visa, otorgamiento_visa, vencimiento_visa, tipo_residencia, tipo_res_per_lect, 
 	calle_per_lect, numero_per_lect, piso_per_lect, dpto_per_lect, unidad_per_lect, loc_per_lect, cp_per_lect, te_per_lect, calle_proc, numero_proc, piso_proc, dpto_proc, unidad_proc, loc_proc, cp_proc, te_proc, otros_estud_super, 

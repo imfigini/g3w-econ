@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /var/guarani3w/src/pers/econ/scripts/pruebas
+dbaccess siu_guarani vw_datos_censales_actuales.sql
+dbaccess siu_guarani rep_tablas.sql
+dbaccess siu_guarani sp_rep_nuevos_inscriptos.sql
